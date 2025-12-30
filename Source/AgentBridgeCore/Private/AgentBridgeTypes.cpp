@@ -20,7 +20,7 @@ FAgentPropertyValue FAgentPropertyValue::FromFloat(double Value)
 {
 	FAgentPropertyValue Result;
 	Result.Type = EAgentPropertyType::Double;
-	Result.StringValue = FString::Printf(TEXT("%f"), Value);
+	Result.StringValue = FString::Printf(TEXT("%.17g"), Value);
 	return Result;
 }
 
@@ -36,6 +36,22 @@ FAgentPropertyValue FAgentPropertyValue::FromVector(const FVector& Value)
 {
 	FAgentPropertyValue Result;
 	Result.Type = EAgentPropertyType::Vector;
+	Result.StringValue = Value.ToString();
+	return Result;
+}
+
+FAgentPropertyValue FAgentPropertyValue::FromRotator(const FRotator& Value)
+{
+	FAgentPropertyValue Result;
+	Result.Type = EAgentPropertyType::Rotator;
+	Result.StringValue = Value.ToString();
+	return Result;
+}
+
+FAgentPropertyValue FAgentPropertyValue::FromTransform(const FTransform& Value)
+{
+	FAgentPropertyValue Result;
+	Result.Type = EAgentPropertyType::Transform;
 	Result.StringValue = Value.ToString();
 	return Result;
 }
@@ -74,6 +90,20 @@ FString FAgentPropertyValue::AsString() const
 FVector FAgentPropertyValue::AsVector() const
 {
 	FVector Result;
+	Result.InitFromString(StringValue);
+	return Result;
+}
+
+FRotator FAgentPropertyValue::AsRotator() const
+{
+	FRotator Result;
+	Result.InitFromString(StringValue);
+	return Result;
+}
+
+FTransform FAgentPropertyValue::AsTransform() const
+{
+	FTransform Result;
 	Result.InitFromString(StringValue);
 	return Result;
 }

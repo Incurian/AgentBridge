@@ -1,9 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AgentBridgeTypes.generated.h"
 
-UENUM(BlueprintType)
+// Property type enumeration for transport
 enum class EAgentPropertyType : uint8
 {
 	None,
@@ -30,31 +29,17 @@ enum class EAgentPropertyType : uint8
 	Unknown
 };
 
-// Forward declaration for pointer usage
+// Forward declare for pointer members
 struct FAgentPropertyValue;
 
-// Container types for nested values (avoids incomplete type issues)
-using FAgentPropertyValueArray = TArray<TSharedPtr<FAgentPropertyValue>>;
-using FAgentPropertyValueMap = TMap<FString, TSharedPtr<FAgentPropertyValue>>;
-
-USTRUCT(BlueprintType)
+// Transport type for property values - supports nested structures
 struct AGENTBRIDGECORE_API FAgentPropertyValue
 {
-	GENERATED_BODY()
-
-	UPROPERTY()
 	EAgentPropertyType Type = EAgentPropertyType::None;
-
-	UPROPERTY()
 	FString StringValue;
-
-	UPROPERTY()
 	TArray<uint8> BinaryValue;
-
-	// Note: Self-referential members use TSharedPtr to avoid incomplete type issues
-	// Cannot be UPROPERTY due to UE reflection limitation with self-referential types
-	FAgentPropertyValueArray ArrayValue;
-	FAgentPropertyValueMap StructValue;
+	TArray<TSharedPtr<FAgentPropertyValue>> ArrayValue;
+	TMap<FString, TSharedPtr<FAgentPropertyValue>> StructValue;
 
 	// Convenience constructors
 	static FAgentPropertyValue FromBool(bool Value);
@@ -62,6 +47,8 @@ struct AGENTBRIDGECORE_API FAgentPropertyValue
 	static FAgentPropertyValue FromFloat(double Value);
 	static FAgentPropertyValue FromString(const FString& Value);
 	static FAgentPropertyValue FromVector(const FVector& Value);
+	static FAgentPropertyValue FromRotator(const FRotator& Value);
+	static FAgentPropertyValue FromTransform(const FTransform& Value);
 	static FAgentPropertyValue FromObject(UObject* Object);
 
 	// Convenience extractors
@@ -70,120 +57,60 @@ struct AGENTBRIDGECORE_API FAgentPropertyValue
 	double AsFloat() const;
 	FString AsString() const;
 	FVector AsVector() const;
+	FRotator AsRotator() const;
+	FTransform AsTransform() const;
 };
 
-USTRUCT(BlueprintType)
+// Property metadata for discovery
 struct AGENTBRIDGECORE_API FAgentPropertyInfo
 {
-	GENERATED_BODY()
-
-	UPROPERTY()
 	FString PropertyName;
-
-	UPROPERTY()
 	FString DisplayName;
-
-	UPROPERTY()
 	EAgentPropertyType Type = EAgentPropertyType::None;
-
-	UPROPERTY()
 	FString TypeName;
-
-	UPROPERTY()
 	bool bIsReadOnly = false;
-
-	UPROPERTY()
 	bool bIsEditorOnly = false;
-
-	UPROPERTY()
 	FString Category;
-
-	UPROPERTY()
 	FString Description;
 };
 
-USTRUCT(BlueprintType)
+// Class metadata for discovery
 struct AGENTBRIDGECORE_API FAgentClassInfo
 {
-	GENERATED_BODY()
-
-	UPROPERTY()
 	FString ClassName;
-
-	UPROPERTY()
 	FString DisplayName;
-
-	UPROPERTY()
 	FString ClassPath;
-
-	UPROPERTY()
 	bool bIsBlueprintClass = false;
-
-	UPROPERTY()
 	bool bIsAbstract = false;
-
-	UPROPERTY()
 	FString ParentClassName;
-
-	UPROPERTY()
 	TArray<FString> ImplementedInterfaces;
 };
 
-USTRUCT(BlueprintType)
+// Function signature for discovery
 struct AGENTBRIDGECORE_API FAgentFunctionSignature
 {
-	GENERATED_BODY()
-
-	UPROPERTY()
 	FString FunctionName;
-
-	UPROPERTY()
 	TArray<FAgentPropertyInfo> Parameters;
-
-	UPROPERTY()
 	FAgentPropertyInfo ReturnValue;
-
-	UPROPERTY()
 	bool bIsStatic = false;
-
-	UPROPERTY()
 	bool bIsBlueprintCallable = false;
-
-	UPROPERTY()
 	bool bNeedsWorldContext = false;
-
-	UPROPERTY()
 	FString Description;
 };
 
-USTRUCT(BlueprintType)
+// Function invocation result
 struct AGENTBRIDGECORE_API FAgentFunctionResult
 {
-	GENERATED_BODY()
-
-	UPROPERTY()
 	bool bSuccess = false;
-
-	UPROPERTY()
 	FString ErrorMessage;
-
-	// Note: Contains nested types, cannot be UPROPERTY
 	FAgentPropertyValue ReturnValue;
-
-	FAgentPropertyValueMap OutParams;
+	TMap<FString, TSharedPtr<FAgentPropertyValue>> OutParams;
 };
 
-USTRUCT(BlueprintType)
+// Enum value for discovery
 struct AGENTBRIDGECORE_API FAgentEnumValue
 {
-	GENERATED_BODY()
-
-	UPROPERTY()
 	FString Name;
-
-	UPROPERTY()
 	FString DisplayName;
-
-	UPROPERTY()
 	int64 Value = 0;
 };
