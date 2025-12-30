@@ -1,0 +1,29 @@
+# UE generated
+Binaries/
+Intermediate/
+DerivedDataCache/
+Saved/
+
+# Python
+Python/agentbridge/generated/
+Python/__pycache__/
+Python/*.egg-info/
+Python/.venv/
+*.pyc
+
+# IDE
+.vs/
+.vscode/
+*.sln
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Build artifacts
+*.pdb
+*.lib
+*.exp
