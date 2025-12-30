@@ -161,19 +161,32 @@ AsyncTask(ENamedThreads::GameThread, [WeakObj = TWeakObjectPtr<UObject>(MyObj)](
 
 ## Build Commands
 
-```batch
-:: Compile plugin (Development Editor)
-"D:\UE571\Engine\Build\BatchFiles\Build.bat" ^
-    VR_ProjectEditor Win64 Development ^
-    -Project="E:\UnrealProjects\VR_Project\VR_Project.uproject" ^
-    -WaitMutex -FromMsBuild
-
-:: Run automation tests
-"D:\UE571\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" ^
-    "E:\UnrealProjects\VR_Project\VR_Project.uproject" ^
-    -ExecCmds="Automation RunTests Project.AgentBridge" ^
-    -unattended -nopause -NullRHI
+```bash
+# Compile plugin (from bash/terminal)
+"D:/UE571/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe" \
+  VR_ProjectEditor Win64 Development \
+  -Project="E:/UnrealProjects/VR_Project/VR_Project.uproject" -WaitMutex
 ```
+
+## Testing Commands
+
+Run console commands headlessly (takes ~60-90s for editor startup):
+
+```bash
+# Run command and check log
+"D:/UE571/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" \
+  "E:/UnrealProjects/VR_Project/VR_Project.uproject" \
+  -ExecCmds="AgentBridge.ListWorlds,Quit" \
+  -unattended -NullRHI -nosplash -nosound
+
+# Then grep the log for output
+grep "LogAgentBridge" "E:/UnrealProjects/VR_Project/Saved/Logs/VR_Project.log"
+```
+
+**Available test commands:**
+- `AgentBridge.ListWorlds` - verify plugin loads, show world contexts
+- `AgentBridge.DumpActor Floor` - dump actor properties (55 actors in VRTemplateMap)
+- `AgentBridge.DumpClass StaticMeshActor` - dump class schema
 
 ## Common Build Errors
 
