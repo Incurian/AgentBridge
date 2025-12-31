@@ -11,6 +11,8 @@ public class AgentBridgeScripting : ModuleRules
 			"Core",
 			"CoreUObject",
 			"Engine",
+			"Json",
+			"JsonUtilities",
 			"AgentBridgeCore",
 			"AgentBridgeRuntime",
 		});

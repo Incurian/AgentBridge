@@ -12,7 +12,11 @@
       "Bash(\"D:/UE571/Engine/Binaries/Win64/UnrealEditor-Cmd.exe\" \"E:/UnrealProjects/VR_Project/VR_Project.uproject\" -ExecCmds=\"AgentBridge.ListWorlds,Quit\" -unattended -NullRHI -nosplash -nosound -noloadstartuppackages)",
       "Bash(ls:*)",
       "Bash(git commit:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(\"D:/UE571/Engine/Binaries/Win64/UnrealEditor-Cmd.exe\":*)",
+      "Bash(cat:*)",
+      "Bash(\"D:/UE571/Engine/Binaries/Win64/UnrealEditor-Cmd.exe\" \"E:/UnrealProjects/VR_Project/VR_Project.uproject\" -ExecCmds=\"AgentBridge.QueryActors Light 10,AgentBridge.GetPath Floor RootComponent,AgentBridge.CallFunc Floor K2_GetActorLocation,Quit\" -unattended -NullRHI -nosplash -nosound -noloadstartuppackages)",
+      "Bash(powershell:*)"
     ]
   }
 }
