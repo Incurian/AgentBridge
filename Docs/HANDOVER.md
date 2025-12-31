@@ -85,6 +85,38 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 
 ## Session Log
 
+### Dec 31 (Session 8) - Reflection Improvements
+**Feature:** Fixed bugs and expanded reflection capabilities based on naive Claude testing.
+
+**Why it matters:** A naive Claude couldn't complete the screenshot workflow because `get_actor` didn't return properties/components, `get_class_schema` returned empty arrays, and there was no way to call static Blueprint library functions.
+
+**Bug Fixes:**
+- `get_actor(include_properties=True)` now actually returns properties
+- `get_actor(include_components=True)` now actually returns components
+- `get_class_schema` now returns actual property/function data (was returning empty)
+
+**New Capabilities:**
+- `list_classes(base_class_name="ActorComponent")` - List component types
+- `get_class_schema("SceneCaptureComponent2D")` - Works for ANY class
+- `call_static_function` - Call Blueprint library functions (KismetRenderingLibrary, etc.)
+
+**New MCP Tool:**
+```python
+# Call static Blueprint library functions
+call_static_function("KismetSystemLibrary", "PrintString", {"InString": "Hello!"})
+call_static_function("KismetMathLibrary", "Abs", {"A": -42})  # Returns {"return_value": 42}
+```
+
+**Files Changed:**
+- `Python/mcp/services/agentbridge.py` - Fixed get_actor, added call_static_function, updated help
+- `Source/AgentBridgeScripting/Public/AgentCommands.h` - Added FGetClassSchemaResponse
+- `Source/AgentBridgeScripting/Private/CommandExecutor.cpp` - Implemented full schema extraction
+- `Source/AgentBridgeServer/Private/AgentBridgeServiceSubsystem.cpp` - Updated gRPC handler
+
+**Plan Document:** `Docs/REFLECTION_IMPROVEMENTS.md` - Full implementation plan with code snippets
+
+---
+
 ### Dec 31 (Session 7) - Self-Documenting Help System
 **Feature:** Added `help` MCP tool so AI agents can discover how to use AgentBridge without external documentation.
 

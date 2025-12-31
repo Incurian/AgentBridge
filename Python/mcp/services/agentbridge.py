@@ -267,13 +267,15 @@ TOOLS = [
     # =========================================================================
     {
         "name": "list_classes",
-        "description": "List available actor/component classes. Useful for discovering what types of objects can be spawned.",
+        "description": "List available classes (actors, components, or any UObject type). "
+                       "Use base_class_name='ActorComponent' for component classes, "
+                       "'Object' for all types, or any specific class name.",
         "inputSchema": {
             "type": "object",
             "properties": {
                 "base_class_name": {
                     "type": "string",
-                    "description": "Filter by base class (default: 'Actor')",
+                    "description": "Base class filter: 'Actor' (default), 'ActorComponent', 'Object', or specific class",
                     "default": "Actor",
                 },
                 "name_pattern": {
@@ -296,7 +298,8 @@ TOOLS = [
     },
     {
         "name": "get_class_schema",
-        "description": "Get the schema (properties and functions) for a class. Useful for understanding what properties can be set on an actor.",
+        "description": "Get the schema (properties and functions) for ANY class - actors, components, or UObjects. "
+                       "Works with 'PointLight', 'SceneCaptureComponent2D', 'TextureRenderTarget2D', etc.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -316,6 +319,35 @@ TOOLS = [
                 },
             },
             "required": ["class_name"],
+        },
+    },
+
+    # =========================================================================
+    # Static Function Invocation
+    # =========================================================================
+    {
+        "name": "call_static_function",
+        "description": "Call a static Blueprint library function. "
+                       "Examples: KismetRenderingLibrary::CreateRenderTarget2D, "
+                       "KismetSystemLibrary::PrintString, KismetMathLibrary::Abs.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "class_name": {
+                    "type": "string",
+                    "description": "Blueprint library class (e.g., 'KismetRenderingLibrary', 'KismetSystemLibrary')",
+                },
+                "function_name": {
+                    "type": "string",
+                    "description": "Static function name (e.g., 'CreateRenderTarget2D', 'PrintString')",
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "Function parameters as key-value pairs",
+                    "additionalProperties": True,
+                },
+            },
+            "required": ["class_name", "function_name"],
         },
     },
 
@@ -602,6 +634,22 @@ class AgentBridgeClient:
             include_functions=include_functions,
         ))
 
+    # Static function invocation
+    def call_static_function(self, class_name: str, function_name: str, parameters: dict = None):
+        """Call a static Blueprint library function."""
+        request = pb.CallFunctionRequest(
+            actor_id="",  # Empty for static functions
+            class_name=class_name,
+            function_name=function_name,
+        )
+        # Add parameters if provided
+        if parameters:
+            for key, value in parameters.items():
+                kv = request.parameters.add()
+                kv.key = key
+                _set_property_value(kv.value, value)
+        return self.stub.CallFunction(request)
+
     # World Partition methods
     def is_world_partitioned(self):
         return self.stub.IsWorldPartitioned(pb.IsWorldPartitionedRequest())
@@ -670,6 +718,122 @@ def _actor_to_dict(actor: ActorInfo) -> Dict[str, Any]:
     }
 
 
+def _property_value_to_dict(pv) -> Any:
+    """Convert PropertyValue protobuf to Python value."""
+    # Import here to avoid circular imports
+    from tempo.scripting_pb2 import Vector as ProtoVector, Rotation as ProtoRotation
+
+    # PropertyType enum values from AgentBridge.proto
+    PT_NONE = 0
+    PT_BOOL = 1
+    PT_INT = 2
+    PT_FLOAT = 3
+    PT_STRING = 4
+    PT_NAME = 5
+    PT_VECTOR = 6
+    PT_ROTATOR = 7
+    PT_TRANSFORM = 8
+    PT_COLOR = 9
+    PT_OBJECT = 10
+    PT_CLASS = 11
+    PT_STRUCT = 12
+    PT_ARRAY = 13
+    PT_MAP = 14
+    PT_ENUM = 15
+
+    t = pv.type
+    if t == PT_NONE:
+        return None
+    elif t == PT_BOOL:
+        return pv.bool_value
+    elif t == PT_INT:
+        return pv.int_value
+    elif t in (PT_FLOAT,):
+        return pv.float_value
+    elif t in (PT_STRING, PT_NAME):
+        return pv.string_value
+    elif t == PT_VECTOR:
+        v = pv.vector_value
+        return {"x": v.x, "y": v.y, "z": v.z}
+    elif t == PT_ROTATOR:
+        r = pv.rotation_value
+        return {"pitch": r.pitch, "yaw": r.yaw, "roll": r.roll}
+    elif t == PT_TRANSFORM:
+        tf = pv.transform_value
+        return {
+            "location": [tf.location.x, tf.location.y, tf.location.z],
+            "rotation": [tf.rotation.pitch, tf.rotation.yaw, tf.rotation.roll],
+            "scale": [tf.scale.x, tf.scale.y, tf.scale.z],
+        }
+    elif t == PT_COLOR:
+        c = pv.color_value
+        return {"r": c.r, "g": c.g, "b": c.b, "a": c.a}
+    elif t in (PT_OBJECT, PT_CLASS):
+        return pv.object_path if pv.object_path else None
+    elif t == PT_STRUCT:
+        return {kv.key: _property_value_to_dict(kv.value) for kv in pv.struct_values}
+    elif t == PT_ARRAY:
+        return [_property_value_to_dict(v) for v in pv.array_values]
+    elif t == PT_MAP:
+        return {kv.key: _property_value_to_dict(kv.value) for kv in pv.struct_values}
+    elif t == PT_ENUM:
+        return {"name": pv.enum_name, "value": pv.enum_value}
+    else:
+        return f"<unknown type {t}>"
+
+
+def _set_property_value(pv, value) -> None:
+    """Set a PropertyValue protobuf from a Python value."""
+    if value is None:
+        pv.type = 0  # PROPERTY_TYPE_NONE
+    elif isinstance(value, bool):
+        pv.type = 1  # PROPERTY_TYPE_BOOL
+        pv.bool_value = value
+    elif isinstance(value, int):
+        pv.type = 2  # PROPERTY_TYPE_INT
+        pv.int_value = value
+    elif isinstance(value, float):
+        pv.type = 3  # PROPERTY_TYPE_FLOAT
+        pv.float_value = value
+    elif isinstance(value, str):
+        pv.type = 4  # PROPERTY_TYPE_STRING
+        pv.string_value = value
+    elif isinstance(value, dict):
+        # Check for vector/rotator/color/transform patterns
+        if 'x' in value and 'y' in value and 'z' in value and len(value) == 3:
+            pv.type = 6  # PROPERTY_TYPE_VECTOR
+            pv.vector_value.x = float(value['x'])
+            pv.vector_value.y = float(value['y'])
+            pv.vector_value.z = float(value['z'])
+        elif 'pitch' in value and 'yaw' in value and 'roll' in value:
+            pv.type = 7  # PROPERTY_TYPE_ROTATOR
+            pv.rotation_value.pitch = float(value['pitch'])
+            pv.rotation_value.yaw = float(value['yaw'])
+            pv.rotation_value.roll = float(value['roll'])
+        elif 'r' in value and 'g' in value and 'b' in value:
+            pv.type = 9  # PROPERTY_TYPE_COLOR
+            pv.color_value.r = float(value.get('r', 0))
+            pv.color_value.g = float(value.get('g', 0))
+            pv.color_value.b = float(value.get('b', 0))
+            pv.color_value.a = float(value.get('a', 1.0))
+        else:
+            # Generic struct
+            pv.type = 12  # PROPERTY_TYPE_STRUCT
+            for k, v in value.items():
+                kv = pv.struct_values.add()
+                kv.key = str(k)
+                _set_property_value(kv.value, v)
+    elif isinstance(value, (list, tuple)):
+        pv.type = 13  # PROPERTY_TYPE_ARRAY
+        for item in value:
+            item_pv = pv.array_values.add()
+            _set_property_value(item_pv, item)
+    else:
+        # Try to convert to string
+        pv.type = 4  # PROPERTY_TYPE_STRING
+        pv.string_value = str(value)
+
+
 def _get_help_text(topic: str = "") -> Dict[str, Any]:
     """Generate help text for AI agents."""
 
@@ -700,6 +864,11 @@ TIPS:
 - Use get_class_schema to see what properties a class has
 - Use search_console_commands if you need to do something unusual
 - execute_console_command is the escape hatch for anything not covered
+
+ADVANCED CAPABILITIES:
+- list_classes(base_class_name="ActorComponent") - List component types
+- get_class_schema(class_name="SceneCaptureComponent2D") - Works for ANY class
+- call_static_function - Call Blueprint library functions (KismetRenderingLibrary, etc.)
 
 IMPORTANT - COMPONENT NAMES:
 - Components use INSTANCE names (LightComponent0), not class names (PointLightComponent)
@@ -847,6 +1016,17 @@ World Partition (large worlds):
 1. is_world_partitioned() - Check if WP is enabled
 2. query_all_actors(include_unloaded=True) - Find unloaded actors
 3. get_streaming_state(actor_guid) - Check if actor is loaded
+
+Calling static Blueprint library functions:
+1. get_class_schema("KismetSystemLibrary", include_functions=True) - See available functions
+2. call_static_function("KismetSystemLibrary", "PrintString", {"InString": "Hello!"})
+3. call_static_function("KismetMathLibrary", "Abs", {"A": -42})  # Returns {"return_value": 42}
+
+Examples of useful static functions:
+- KismetSystemLibrary::PrintString - Debug output
+- KismetSystemLibrary::ExecuteConsoleCommand - Run console commands
+- KismetRenderingLibrary::CreateRenderTarget2D - Create render targets
+- KismetMathLibrary::* - Math operations
 """
     }
 
@@ -917,7 +1097,35 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             return result
         if result.HasField("actor"):
             actor = client._parse_actor_descriptor(result.actor.actor_info)
-            return {"found": True, "actor": _actor_to_dict(actor)}
+            response = {"found": True, "actor": _actor_to_dict(actor)}
+
+            # Include properties if requested and present
+            if result.actor.properties:
+                response["properties"] = {
+                    kv.key: _property_value_to_dict(kv.value)
+                    for kv in result.actor.properties
+                }
+
+            # Include components if requested and present
+            if result.actor.components:
+                response["components"] = [
+                    {
+                        "name": c.name,
+                        "class_name": c.class_name,
+                        "is_scene_component": c.is_scene_component,
+                    }
+                    for c in result.actor.components
+                ]
+
+            # Include tags if present
+            if result.actor.tags:
+                response["tags"] = list(result.actor.tags)
+
+            # Include folder path if present
+            if result.actor.folder_path:
+                response["folder_path"] = result.actor.folder_path
+
+            return response
         return {"found": False, "error": f"Actor '{args['actor_id']}' not found"}
 
     elif tool_name == "spawn_actor":
@@ -1002,14 +1210,22 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         if isinstance(result, dict) and "error" in result:
             return result
         schema = result.schema
+        ci = schema.class_info
         return {
-            "class_name": schema.class_info.class_name,
+            "class_name": ci.class_name,
+            "display_name": ci.display_name,
+            "class_path": ci.class_path,
+            "parent_class_name": ci.parent_class_name,
+            "is_blueprint": ci.is_blueprint,
+            "is_abstract": ci.is_abstract,
             "properties": [
                 {
                     "name": p.name,
                     "display_name": p.display_name,
                     "type_name": p.type_name,
+                    "category": p.category,
                     "is_read_only": p.is_read_only,
+                    "is_blueprint_visible": p.is_blueprint_visible,
                 }
                 for p in schema.properties
             ],
@@ -1018,10 +1234,41 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
                     "name": f.function_name,
                     "description": f.description,
                     "is_static": f.is_static,
+                    "is_pure": f.is_pure,
+                    "parameters": [
+                        {"name": p.name, "type_name": p.type_name}
+                        for p in f.parameters
+                    ],
+                    "return_type": f.return_value.type_name if f.HasField("return_value") else None,
                 }
                 for f in schema.functions
             ],
         }
+
+    # Static Function Invocation
+    elif tool_name == "call_static_function":
+        result = safe_call(
+            client.call_static_function,
+            class_name=args["class_name"],
+            function_name=args["function_name"],
+            parameters=args.get("parameters", {}),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        response = {"success": True}
+
+        # Parse return value if present
+        if result.HasField("return_value") and result.return_value.type != 0:
+            response["return_value"] = _property_value_to_dict(result.return_value)
+
+        # Parse out parameters if present
+        if result.out_parameters:
+            response["out_parameters"] = {
+                kv.key: _property_value_to_dict(kv.value)
+                for kv in result.out_parameters
+            }
+
+        return response
 
     # World Partition & Streaming
     elif tool_name == "is_world_partitioned":

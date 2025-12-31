@@ -980,6 +980,15 @@ struct AGENTBRIDGESCRIPTING_API FClassInfo
 };
 
 /**
+ * FGetClassSchemaResponse - Response to GetClassSchema command.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetClassSchemaResponse : FAgentResponseBase
+{
+	/** Class info with full schema. */
+	FClassInfo Schema;
+};
+
+/**
  * FListClassesResponse - Response to ListClasses command.
  */
 struct AGENTBRIDGESCRIPTING_API FListClassesResponse : FAgentResponseBase

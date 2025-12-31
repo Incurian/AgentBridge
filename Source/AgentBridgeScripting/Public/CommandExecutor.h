@@ -116,7 +116,7 @@ public:
 	//~==============================================================================
 
 	static void Execute(const FFindClassCommand& Command, FAgentResponseBase& Response);
-	static void Execute(const FGetClassSchemaCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FGetClassSchemaCommand& Command, FGetClassSchemaResponse& Response);
 	static void Execute(const FListClassesCommand& Command, FListClassesResponse& Response);
 
 	//~==============================================================================

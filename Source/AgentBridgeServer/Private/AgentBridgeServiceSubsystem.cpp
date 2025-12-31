@@ -933,18 +933,66 @@ void UAgentBridgeServiceSubsystem::GetClassSchema(
 	Cmd.bIncludeInherited = Request.include_inherited();
 	Cmd.bIncludeFunctions = Request.include_functions();
 
-	FAgentResponseBase CmdResponse;
+	FGetClassSchemaResponse CmdResponse;
 	FCommandExecutor::Execute(Cmd, CmdResponse);
 
 	GetClassSchemaResponse Response;
 
 	if (CmdResponse.bSuccess)
 	{
-		// Note: Full schema requires FGetClassSchemaResponse with properties/functions
-		// Currently CommandExecutor only returns success/failure
-		// Use console command AgentBridge.DumpClass for detailed schema
-		Response.mutable_schema()->mutable_class_info()->set_class_name(
-			TCHAR_TO_UTF8(*Cmd.ClassName));
+		ClassSchema* Schema = Response.mutable_schema();
+		const FClassInfo& SrcSchema = CmdResponse.Schema;
+
+		// Class info
+		ClassInfo* ClassInfoProto = Schema->mutable_class_info();
+		ClassInfoProto->set_class_name(TCHAR_TO_UTF8(*SrcSchema.ClassName));
+		ClassInfoProto->set_display_name(TCHAR_TO_UTF8(*SrcSchema.DisplayName));
+		ClassInfoProto->set_class_path(TCHAR_TO_UTF8(*SrcSchema.ClassPath));
+		ClassInfoProto->set_parent_class_name(TCHAR_TO_UTF8(*SrcSchema.ParentClassName));
+		ClassInfoProto->set_is_blueprint(SrcSchema.bIsBlueprint);
+		ClassInfoProto->set_is_abstract(SrcSchema.bIsAbstract);
+
+		// Properties
+		for (const FAgentPropertyInfo& Prop : SrcSchema.Properties)
+		{
+			PropertyInfo* PropProto = Schema->add_properties();
+			PropProto->set_name(TCHAR_TO_UTF8(*Prop.PropertyName));
+			PropProto->set_display_name(TCHAR_TO_UTF8(*Prop.DisplayName));
+			PropProto->set_type_name(TCHAR_TO_UTF8(*Prop.TypeName));
+			PropProto->set_is_read_only(Prop.bIsReadOnly);
+			PropProto->set_category(TCHAR_TO_UTF8(*Prop.Category));
+			PropProto->set_description(TCHAR_TO_UTF8(*Prop.Description));
+		}
+
+		// Functions
+		for (const FAgentFunctionSignature& Func : SrcSchema.Functions)
+		{
+			FunctionSignature* FuncProto = Schema->add_functions();
+			FuncProto->set_function_name(TCHAR_TO_UTF8(*Func.FunctionName));
+			FuncProto->set_description(TCHAR_TO_UTF8(*Func.Description));
+			FuncProto->set_is_static(Func.bIsStatic);
+			FuncProto->set_is_blueprint_callable(Func.bIsBlueprintCallable);
+			FuncProto->set_needs_world_context(Func.bNeedsWorldContext);
+
+			// Parameters
+			for (const FAgentPropertyInfo& Param : Func.Parameters)
+			{
+				PropertyInfo* ParamProto = FuncProto->add_parameters();
+				ParamProto->set_name(TCHAR_TO_UTF8(*Param.PropertyName));
+				ParamProto->set_display_name(TCHAR_TO_UTF8(*Param.DisplayName));
+				ParamProto->set_type_name(TCHAR_TO_UTF8(*Param.TypeName));
+				ParamProto->set_is_read_only(Param.bIsReadOnly);
+			}
+
+			// Return value (check if populated by looking at PropertyName)
+			if (!Func.ReturnValue.PropertyName.IsEmpty())
+			{
+				PropertyInfo* RetProto = FuncProto->mutable_return_value();
+				RetProto->set_name(TCHAR_TO_UTF8(*Func.ReturnValue.PropertyName));
+				RetProto->set_type_name(TCHAR_TO_UTF8(*Func.ReturnValue.TypeName));
+			}
+		}
+
 		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 	}
 	else

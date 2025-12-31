@@ -731,7 +731,7 @@ void FCommandExecutor::Execute(const FFindClassCommand& Command, FAgentResponseB
 	Response.ExecutionTimeMs = EndTiming(StartTime);
 }
 
-void FCommandExecutor::Execute(const FGetClassSchemaCommand& Command, FAgentResponseBase& Response)
+void FCommandExecutor::Execute(const FGetClassSchemaCommand& Command, FGetClassSchemaResponse& Response)
 {
 	double StartTime = StartTiming();
 	Response.CommandId = Command.CommandId;
@@ -745,7 +745,87 @@ void FCommandExecutor::Execute(const FGetClassSchemaCommand& Command, FAgentResp
 		return;
 	}
 
-	// TODO: Return full schema in response
+	// Class info
+	FClassInfo& Schema = Response.Schema;
+	Schema.ClassName = Class->GetName();
+	Schema.DisplayName = Class->GetDisplayNameText().ToString();
+	Schema.ClassPath = Class->GetPathName();
+	Schema.ParentClassName = Class->GetSuperClass() ? Class->GetSuperClass()->GetName() : TEXT("");
+	Schema.bIsBlueprint = Class->HasAnyClassFlags(CLASS_CompiledFromBlueprint);
+	Schema.bIsAbstract = Class->HasAnyClassFlags(CLASS_Abstract);
+
+	// Properties - iterate using TFieldIterator
+	EFieldIteratorFlags::SuperClassFlags SuperFlag = Command.bIncludeInherited
+		? EFieldIteratorFlags::IncludeSuper
+		: EFieldIteratorFlags::ExcludeSuper;
+
+	for (TFieldIterator<FProperty> PropIt(Class, SuperFlag); PropIt; ++PropIt)
+	{
+		FProperty* Prop = *PropIt;
+
+		// Skip deprecated and hidden properties
+		if (Prop->HasAnyPropertyFlags(CPF_Deprecated))
+		{
+			continue;
+		}
+
+		FAgentPropertyInfo Info;
+		Info.PropertyName = Prop->GetName();
+		Info.DisplayName = Prop->GetDisplayNameText().ToString();
+		Info.TypeName = Prop->GetCPPType();
+		Info.bIsReadOnly = Prop->HasAnyPropertyFlags(CPF_BlueprintReadOnly);
+		Info.Category = Prop->GetMetaData(TEXT("Category"));
+		Info.Description = Prop->GetMetaData(TEXT("ToolTip"));
+
+		Schema.Properties.Add(MoveTemp(Info));
+	}
+
+	// Functions (if requested)
+	if (Command.bIncludeFunctions)
+	{
+		for (TFieldIterator<UFunction> FuncIt(Class, SuperFlag); FuncIt; ++FuncIt)
+		{
+			UFunction* Func = *FuncIt;
+
+			// Only include Blueprint-callable functions
+			if (!Func->HasAnyFunctionFlags(FUNC_BlueprintCallable))
+			{
+				continue;
+			}
+
+			FAgentFunctionSignature FuncInfo;
+			FuncInfo.FunctionName = Func->GetName();
+			FuncInfo.Description = Func->GetMetaData(TEXT("ToolTip"));
+			FuncInfo.bIsStatic = Func->HasAnyFunctionFlags(FUNC_Static);
+			FuncInfo.bIsBlueprintCallable = true;
+			FuncInfo.bNeedsWorldContext = Func->HasMetaData(TEXT("WorldContext"));
+
+			// Extract parameters and return value
+			for (TFieldIterator<FProperty> ParamIt(Func); ParamIt; ++ParamIt)
+			{
+				FProperty* Param = *ParamIt;
+
+				FAgentPropertyInfo ParamInfo;
+				ParamInfo.PropertyName = Param->GetName();
+				ParamInfo.DisplayName = Param->GetDisplayNameText().ToString();
+				ParamInfo.TypeName = Param->GetCPPType();
+				ParamInfo.bIsReadOnly = Param->HasAnyPropertyFlags(CPF_ConstParm);
+
+				if (Param->HasAnyPropertyFlags(CPF_ReturnParm))
+				{
+					FuncInfo.ReturnValue = MoveTemp(ParamInfo);
+				}
+				else if (!Param->HasAnyPropertyFlags(CPF_OutParm) || Param->HasAnyPropertyFlags(CPF_ReferenceParm))
+				{
+					// Input parameter (or in/out reference)
+					FuncInfo.Parameters.Add(MoveTemp(ParamInfo));
+				}
+			}
+
+			Schema.Functions.Add(MoveTemp(FuncInfo));
+		}
+	}
+
 	Response.bSuccess = true;
 	Response.ExecutionTimeMs = EndTiming(StartTime);
 }
