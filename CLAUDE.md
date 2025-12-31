@@ -5,23 +5,6 @@
 
 ---
 
-## Standing Instructions
-
-**Work Prioritization (until further notice):**
-1. **Focus on existing modules** - Flesh out features of existing systems rather than creating completely new modules
-2. **New features are OK** - If you think of a really good new feature, go ahead, but prioritize enhancement over expansion
-3. **When out of feature ideas** - Do thorough code review and deliberate testing
-4. **After code review** - Session can end
-
-**Todo List Management:**
-- Keep the todo list updated as you work
-- When completing a work session:
-  1. Update documentation (CLAUDE.md, Handover, StretchGoals) with new features
-  2. Re-read CLAUDE.md for any standing instructions
-  3. Commit changes with descriptive message
-
----
-
 ## Project Phases
 
 ### Phase 1: Core Implementation (COMPLETE)
@@ -167,8 +150,9 @@ Completed:
 ### Python Client (COMPLETE)
 | Component | Status | Notes |
 |-----------|--------|-------|
-| agentbridge package | Done | Full API coverage |
-| test_client.py | Done | All tests passing |
+| agentbridge package | Done | Full HTTP API coverage |
+| test_client.py | Done | HTTP tests (port 8080) |
+| test_grpc.py | Done | gRPC tests via Tempo (port 50051) |
 
 ---
 
@@ -250,7 +234,8 @@ Plugins/AgentBridge/
 │   │   └── generate_mcp_service.py  # Proto-to-MCP generator
 │   ├── mcp_config.json          # Claude Code config example
 │   ├── requirements.txt
-│   └── test_client.py           # HTTP test script
+│   ├── test_client.py           # HTTP test script
+│   └── test_grpc.py             # gRPC test script (tests via Tempo)
 └── Source/
     ├── AgentBridgeCore/         # Reflection primitives
     ├── AgentBridgeRuntime/      # World context, actor ops
@@ -391,10 +376,28 @@ cd D:/tempo/TempoSample/Scripts
 ## Testing
 
 ```bash
-# Run Python test suite
+# Run HTTP test suite (port 8080)
 cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
 python test_client.py
+
+# Run gRPC test suite (port 50051)
+python test_grpc.py [--host HOST] [--port PORT]
 ```
+
+### Test Scripts
+
+| Script | Protocol | Port | Description |
+|--------|----------|------|-------------|
+| `test_client.py` | HTTP/JSON | 8080 | Tests HTTP server endpoints |
+| `test_grpc.py` | gRPC/Protobuf | 50051 | Tests gRPC service via Tempo |
+
+The gRPC test script (`test_grpc.py`) provides comprehensive coverage:
+- World operations (ListWorlds)
+- Actor discovery (QueryActors, GetActor)
+- Actor manipulation (SpawnActor, SetActorTransform, DeleteActor)
+- Property operations (GetPropertyPath, SetPropertyPath)
+- Function invocation (CallFunction)
+- Type discovery (ListClasses)
 
 ---
 
@@ -489,7 +492,7 @@ from . import my_service  # in _auto_register()
 
 ---
 
-*Document Version: 9.0*
-*Last Updated: December 2024*
+*Document Version: 9.1*
+*Last Updated: December 31, 2024*
 *All Phases Complete - 12 Services, 65+ Tools*
-*Material/PCG Operations Added*
+*gRPC value conversions complete, test_grpc.py added*

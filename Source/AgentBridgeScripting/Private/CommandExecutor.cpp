@@ -944,7 +944,7 @@ void FCommandExecutor::Execute(const FGetDataAssetCommand& Command, FGetDataAsse
 		}
 
 		const void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Asset);
-		FAgentPropertyValue Value = FPropertyAccessor::ReadProperty(Property, ValuePtr, Command.PropertyDepth);
+		FAgentPropertyValue Value = FPropertyAccessor::ReadProperty(ValuePtr, Property, Command.PropertyDepth);
 		Response.Asset.Properties.Add(Property->GetName(), PropertyValueToJson(Value));
 	}
 
@@ -967,7 +967,7 @@ void FCommandExecutor::Execute(const FGetDataTableRowCommand& Command, FGetDataT
 		return;
 	}
 
-	UScriptStruct* RowStruct = DataTable->GetRowStruct();
+	const UScriptStruct* RowStruct = DataTable->GetRowStruct();
 	if (!RowStruct)
 	{
 		Response.bSuccess = false;
@@ -1002,7 +1002,7 @@ void FCommandExecutor::Execute(const FGetDataTableRowCommand& Command, FGetDataT
 		{
 			FProperty* Property = *PropIt;
 			const void* ValuePtr = Property->ContainerPtrToValuePtr<void>(*RowPtr);
-			FAgentPropertyValue Value = FPropertyAccessor::ReadProperty(Property, ValuePtr, 3);
+			FAgentPropertyValue Value = FPropertyAccessor::ReadProperty(ValuePtr, Property, 3);
 			RowInfo.Data.Add(Property->GetName(), PropertyValueToJson(Value));
 		}
 
@@ -1027,7 +1027,7 @@ void FCommandExecutor::Execute(const FGetDataTableRowCommand& Command, FGetDataT
 			{
 				FProperty* Property = *PropIt;
 				const void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Pair.Value);
-				FAgentPropertyValue Value = FPropertyAccessor::ReadProperty(Property, ValuePtr, 3);
+				FAgentPropertyValue Value = FPropertyAccessor::ReadProperty(ValuePtr, Property, 3);
 				RowInfo.Data.Add(Property->GetName(), PropertyValueToJson(Value));
 			}
 
@@ -1056,8 +1056,8 @@ namespace
 
 		if (ImageWrapper.IsValid() && ImageWrapper->SetRaw(Pixels.GetData(), Pixels.Num() * sizeof(FColor), Width, Height, ERGBFormat::BGRA, 8))
 		{
-			TArray64<uint8> CompressedData;
-			if (ImageWrapper->GetCompressed(CompressedData, 100))
+			TArray64<uint8> CompressedData = ImageWrapper->GetCompressed(100);
+			if (CompressedData.Num() > 0)
 			{
 				return FBase64::Encode(CompressedData.GetData(), CompressedData.Num());
 			}
@@ -1075,8 +1075,8 @@ namespace
 
 		if (ImageWrapper.IsValid() && ImageWrapper->SetRaw(Pixels.GetData(), Pixels.Num() * sizeof(FColor), Width, Height, ERGBFormat::BGRA, 8))
 		{
-			TArray64<uint8> CompressedData;
-			if (ImageWrapper->GetCompressed(CompressedData, 100))
+			TArray64<uint8> CompressedData = ImageWrapper->GetCompressed(100);
+			if (CompressedData.Num() > 0)
 			{
 				return FFileHelper::SaveArrayToFile(CompressedData, *FilePath);
 			}
@@ -1520,7 +1520,7 @@ void FCommandExecutor::Execute(const FGetMaterialInfoCommand& Command, FGetMater
 		Material->GetAllScalarParameterInfo(ParamInfos, Guids);
 		for (const FMaterialParameterInfo& ParamInfo : ParamInfos)
 		{
-			FMaterialParameterInfo Info;
+			FAgentMaterialParamInfo Info;
 			Info.Name = ParamInfo.Name.ToString();
 			Info.Type = TEXT("Scalar");
 
@@ -1539,7 +1539,7 @@ void FCommandExecutor::Execute(const FGetMaterialInfoCommand& Command, FGetMater
 		Material->GetAllVectorParameterInfo(ParamInfos, Guids);
 		for (const FMaterialParameterInfo& ParamInfo : ParamInfos)
 		{
-			FMaterialParameterInfo Info;
+			FAgentMaterialParamInfo Info;
 			Info.Name = ParamInfo.Name.ToString();
 			Info.Type = TEXT("Vector");
 
@@ -1558,7 +1558,7 @@ void FCommandExecutor::Execute(const FGetMaterialInfoCommand& Command, FGetMater
 		Material->GetAllTextureParameterInfo(ParamInfos, Guids);
 		for (const FMaterialParameterInfo& ParamInfo : ParamInfos)
 		{
-			FMaterialParameterInfo Info;
+			FAgentMaterialParamInfo Info;
 			Info.Name = ParamInfo.Name.ToString();
 			Info.Type = TEXT("Texture");
 
@@ -1604,7 +1604,8 @@ void FCommandExecutor::Execute(const FCreateMaterialInstanceCommand& Command, FC
 	}
 
 	// Create dynamic material instance
-	UMaterialInstanceDynamic* MID = UMaterialInstanceDynamic::Create(ParentMaterial, OwnerActor ? OwnerActor : GetTransientPackage());
+	UObject* Outer = OwnerActor ? static_cast<UObject*>(OwnerActor) : GetTransientPackage();
+	UMaterialInstanceDynamic* MID = UMaterialInstanceDynamic::Create(ParentMaterial, Outer);
 	if (!MID)
 	{
 		Response.bSuccess = false;
@@ -1705,14 +1706,14 @@ void FCommandExecutor::Execute(const FSetMaterialParameterCommand& Command, FAge
 	// Set parameter based on type
 	switch (Command.ParameterType)
 	{
-	case EMaterialParameterType::Scalar:
+	case EAgentMaterialParamType::Scalar:
 		{
 			float Value = FCString::Atof(*Command.Value);
 			MID->SetScalarParameterValue(FName(*Command.ParameterName), Value);
 		}
 		break;
 
-	case EMaterialParameterType::Vector:
+	case EAgentMaterialParamType::Vector:
 		{
 			TSharedPtr<FJsonObject> JsonObj;
 			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Command.Value);
@@ -1728,7 +1729,7 @@ void FCommandExecutor::Execute(const FSetMaterialParameterCommand& Command, FAge
 		}
 		break;
 
-	case EMaterialParameterType::Texture:
+	case EAgentMaterialParamType::Texture:
 		{
 			UTexture* Texture = LoadObject<UTexture>(nullptr, *Command.Value);
 			if (Texture)
@@ -2756,7 +2757,7 @@ FString FCommandExecutor::SerializeGetMaterialInfoResponse(const FGetMaterialInf
 		Obj->SetObjectField(TEXT("material"), MatObj);
 
 		TArray<TSharedPtr<FJsonValue>> ParamsArr;
-		for (const FMaterialParameterInfo& Param : Response.Parameters)
+		for (const FAgentMaterialParamInfo& Param : Response.Parameters)
 		{
 			TSharedPtr<FJsonObject> ParamObj = MakeShared<FJsonObject>();
 			ParamObj->SetStringField(TEXT("name"), Param.Name);
@@ -3315,15 +3316,15 @@ FString FCommandExecutor::ExecuteJson(const FString& CommandJson)
 		{
 			if (TypeString.Equals(TEXT("Vector"), ESearchCase::IgnoreCase))
 			{
-				Cmd.ParameterType = EMaterialParameterType::Vector;
+				Cmd.ParameterType = EAgentMaterialParamType::Vector;
 			}
 			else if (TypeString.Equals(TEXT("Texture"), ESearchCase::IgnoreCase))
 			{
-				Cmd.ParameterType = EMaterialParameterType::Texture;
+				Cmd.ParameterType = EAgentMaterialParamType::Texture;
 			}
 			else if (TypeString.Equals(TEXT("StaticSwitch"), ESearchCase::IgnoreCase))
 			{
-				Cmd.ParameterType = EMaterialParameterType::StaticSwitch;
+				Cmd.ParameterType = EAgentMaterialParamType::StaticSwitch;
 			}
 			// Default is Scalar
 		}

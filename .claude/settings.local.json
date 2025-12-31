@@ -25,7 +25,9 @@
       "Bash(./Scripts/Build.sh:*)",
       "WebSearch",
       "WebFetch(domain:github.com)",
-      "Bash(\"D:/UE571/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe\" TempoSampleEditor Win64 Development -Project=\"D:/tempo/TempoSample/TempoSample.uproject\" -WaitMutex)"
+      "Bash(\"D:/UE571/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe\" TempoSampleEditor Win64 Development -Project=\"D:/tempo/TempoSample/TempoSample.uproject\" -WaitMutex)",
+      "Bash(./Build.sh)"
     ]
-  }
+  },
+  "outputStyle": "Explanatory"
 }

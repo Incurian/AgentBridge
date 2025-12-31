@@ -5,6 +5,12 @@
 #include "ActorOperations.h"
 #include "TempoScriptingServer.h"
 
+// JSON includes for property value conversion
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonWriter.h"
+#include "Serialization/JsonSerializer.h"
+
 // gRPC includes
 #include <grpcpp/grpcpp.h>
 
@@ -188,6 +194,309 @@ namespace
 		SetProtoRotation(Transform->mutable_rotation(), Info.Rotation);
 		SetProtoScale(Transform->mutable_scale(), Info.Scale);
 	}
+
+	//--------------------------------------------------------------------------
+	// PropertyValue Conversion Helpers
+	//--------------------------------------------------------------------------
+
+	// Convert JSON value string to proto PropertyValue
+	// Handles the JSON format produced by CommandExecutor::PropertyValueToJson
+	void JsonToProtoPropertyValue(const FString& JsonStr, const FString& TypeName, PropertyValue* OutValue)
+	{
+		if (JsonStr.IsEmpty() || JsonStr == TEXT("null"))
+		{
+			OutValue->set_type(PROPERTY_TYPE_NONE);
+			return;
+		}
+
+		// Detect type from TypeName hint or JSON structure
+		if (TypeName.Contains(TEXT("Bool")) || JsonStr == TEXT("true") || JsonStr == TEXT("false"))
+		{
+			OutValue->set_type(PROPERTY_TYPE_BOOL);
+			OutValue->set_bool_value(JsonStr == TEXT("true"));
+		}
+		else if (TypeName.Contains(TEXT("Int")) || TypeName.Contains(TEXT("Byte")))
+		{
+			OutValue->set_type(PROPERTY_TYPE_INT);
+			OutValue->set_int_value(FCString::Atoi64(*JsonStr));
+		}
+		else if (TypeName.Contains(TEXT("Float")) || TypeName.Contains(TEXT("Double")))
+		{
+			OutValue->set_type(PROPERTY_TYPE_FLOAT);
+			OutValue->set_float_value(FCString::Atod(*JsonStr));
+		}
+		else if (TypeName.Contains(TEXT("Vector")) && JsonStr.StartsWith(TEXT("{")))
+		{
+			// Parse {"X":..., "Y":..., "Z":...}
+			OutValue->set_type(PROPERTY_TYPE_VECTOR);
+			TSharedPtr<FJsonObject> JsonObj;
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
+			if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+			{
+				TempoScripting::Vector* Vec = OutValue->mutable_vector_value();
+				Vec->set_x(JsonObj->GetNumberField(TEXT("X")));
+				Vec->set_y(JsonObj->GetNumberField(TEXT("Y")));
+				Vec->set_z(JsonObj->GetNumberField(TEXT("Z")));
+			}
+		}
+		else if (TypeName.Contains(TEXT("Rotator")) && JsonStr.StartsWith(TEXT("{")))
+		{
+			// Parse {"Pitch":..., "Yaw":..., "Roll":...}
+			OutValue->set_type(PROPERTY_TYPE_ROTATOR);
+			TSharedPtr<FJsonObject> JsonObj;
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
+			if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+			{
+				TempoScripting::Rotation* Rot = OutValue->mutable_rotation_value();
+				Rot->set_p(JsonObj->GetNumberField(TEXT("Pitch")));
+				Rot->set_y(JsonObj->GetNumberField(TEXT("Yaw")));
+				Rot->set_r(JsonObj->GetNumberField(TEXT("Roll")));
+			}
+		}
+		else if (TypeName.Contains(TEXT("Transform")) && JsonStr.StartsWith(TEXT("{")))
+		{
+			// Parse {"Location":{...}, "Rotation":{...}, "Scale":{...}}
+			OutValue->set_type(PROPERTY_TYPE_TRANSFORM);
+			TSharedPtr<FJsonObject> JsonObj;
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
+			if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+			{
+				ActorTransform* T = OutValue->mutable_transform_value();
+				if (const TSharedPtr<FJsonObject>* LocObj = nullptr; JsonObj->TryGetObjectField(TEXT("Location"), LocObj))
+				{
+					SetProtoVector(T->mutable_location(), FVector(
+						(*LocObj)->GetNumberField(TEXT("X")),
+						(*LocObj)->GetNumberField(TEXT("Y")),
+						(*LocObj)->GetNumberField(TEXT("Z"))
+					));
+				}
+				if (const TSharedPtr<FJsonObject>* RotObj = nullptr; JsonObj->TryGetObjectField(TEXT("Rotation"), RotObj))
+				{
+					T->mutable_rotation()->set_p((*RotObj)->GetNumberField(TEXT("Pitch")));
+					T->mutable_rotation()->set_y((*RotObj)->GetNumberField(TEXT("Yaw")));
+					T->mutable_rotation()->set_r((*RotObj)->GetNumberField(TEXT("Roll")));
+				}
+				if (const TSharedPtr<FJsonObject>* ScaleObj = nullptr; JsonObj->TryGetObjectField(TEXT("Scale"), ScaleObj))
+				{
+					SetProtoScale(T->mutable_scale(), FVector(
+						(*ScaleObj)->GetNumberField(TEXT("X")),
+						(*ScaleObj)->GetNumberField(TEXT("Y")),
+						(*ScaleObj)->GetNumberField(TEXT("Z"))
+					));
+				}
+			}
+		}
+		else if (TypeName.Contains(TEXT("Color")) && JsonStr.StartsWith(TEXT("{")))
+		{
+			// Parse {"r":..., "g":..., "b":..., "a":...}
+			OutValue->set_type(PROPERTY_TYPE_COLOR);
+			TSharedPtr<FJsonObject> JsonObj;
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
+			if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+			{
+				Color* C = OutValue->mutable_color_value();
+				C->set_r(static_cast<int32>(JsonObj->GetNumberField(TEXT("r")) * 255));
+				C->set_g(static_cast<int32>(JsonObj->GetNumberField(TEXT("g")) * 255));
+				C->set_b(static_cast<int32>(JsonObj->GetNumberField(TEXT("b")) * 255));
+				C->set_a(static_cast<int32>(JsonObj->GetNumberField(TEXT("a")) * 255));
+			}
+		}
+		else if (JsonStr.StartsWith(TEXT("[")))
+		{
+			// Array
+			OutValue->set_type(PROPERTY_TYPE_ARRAY);
+			TArray<TSharedPtr<FJsonValue>> JsonArray;
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
+			if (FJsonSerializer::Deserialize(Reader, JsonArray))
+			{
+				for (const TSharedPtr<FJsonValue>& Elem : JsonArray)
+				{
+					PropertyValue* ElemValue = OutValue->add_array_values();
+					FString ElemStr;
+					if (Elem->Type == EJson::String)
+					{
+						ElemStr = Elem->AsString();
+						ElemValue->set_type(PROPERTY_TYPE_STRING);
+						ElemValue->set_string_value(TCHAR_TO_UTF8(*ElemStr));
+					}
+					else if (Elem->Type == EJson::Number)
+					{
+						ElemValue->set_type(PROPERTY_TYPE_FLOAT);
+						ElemValue->set_float_value(Elem->AsNumber());
+					}
+					else if (Elem->Type == EJson::Boolean)
+					{
+						ElemValue->set_type(PROPERTY_TYPE_BOOL);
+						ElemValue->set_bool_value(Elem->AsBool());
+					}
+					else if (Elem->Type == EJson::Object)
+					{
+						// Nested object - recursively convert
+						const TSharedPtr<FJsonObject>* ObjPtr = nullptr;
+						if (Elem->TryGetObject(ObjPtr) && ObjPtr && ObjPtr->IsValid())
+						{
+							ElemValue->set_type(PROPERTY_TYPE_STRUCT);
+							for (const auto& KV : (*ObjPtr)->Values)
+							{
+								PropertyKeyValue* SubKV = ElemValue->add_struct_values();
+								SubKV->set_key(TCHAR_TO_UTF8(*KV.Key));
+								if (KV.Value->Type == EJson::String)
+								{
+									SubKV->mutable_value()->set_type(PROPERTY_TYPE_STRING);
+									SubKV->mutable_value()->set_string_value(TCHAR_TO_UTF8(*KV.Value->AsString()));
+								}
+								else if (KV.Value->Type == EJson::Number)
+								{
+									SubKV->mutable_value()->set_type(PROPERTY_TYPE_FLOAT);
+									SubKV->mutable_value()->set_float_value(KV.Value->AsNumber());
+								}
+								else
+								{
+									SubKV->mutable_value()->set_type(PROPERTY_TYPE_STRING);
+									SubKV->mutable_value()->set_string_value("(complex)");
+								}
+							}
+						}
+					}
+					else
+					{
+						// Other types - store as string placeholder
+						ElemValue->set_type(PROPERTY_TYPE_STRING);
+						ElemValue->set_string_value("(array/null)");
+					}
+				}
+			}
+		}
+		else if (JsonStr.StartsWith(TEXT("{")))
+		{
+			// Struct/Map - store as key-value pairs
+			OutValue->set_type(PROPERTY_TYPE_STRUCT);
+			TSharedPtr<FJsonObject> JsonObj;
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
+			if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+			{
+				for (const auto& Pair : JsonObj->Values)
+				{
+					PropertyKeyValue* KV = OutValue->add_struct_values();
+					KV->set_key(TCHAR_TO_UTF8(*Pair.Key));
+
+					FString ValStr;
+					if (Pair.Value->Type == EJson::String)
+					{
+						ValStr = Pair.Value->AsString();
+						KV->mutable_value()->set_type(PROPERTY_TYPE_STRING);
+						KV->mutable_value()->set_string_value(TCHAR_TO_UTF8(*ValStr));
+					}
+					else if (Pair.Value->Type == EJson::Number)
+					{
+						KV->mutable_value()->set_type(PROPERTY_TYPE_FLOAT);
+						KV->mutable_value()->set_float_value(Pair.Value->AsNumber());
+					}
+					else if (Pair.Value->Type == EJson::Boolean)
+					{
+						KV->mutable_value()->set_type(PROPERTY_TYPE_BOOL);
+						KV->mutable_value()->set_bool_value(Pair.Value->AsBool());
+					}
+					else if (Pair.Value->Type == EJson::Object)
+					{
+						// Nested object - store as struct
+						const TSharedPtr<FJsonObject>* ObjPtr = nullptr;
+						if (Pair.Value->TryGetObject(ObjPtr) && ObjPtr && ObjPtr->IsValid())
+						{
+							KV->mutable_value()->set_type(PROPERTY_TYPE_STRUCT);
+							for (const auto& SubPair : (*ObjPtr)->Values)
+							{
+								PropertyKeyValue* SubKV = KV->mutable_value()->add_struct_values();
+								SubKV->set_key(TCHAR_TO_UTF8(*SubPair.Key));
+								if (SubPair.Value->Type == EJson::Number)
+								{
+									SubKV->mutable_value()->set_type(PROPERTY_TYPE_FLOAT);
+									SubKV->mutable_value()->set_float_value(SubPair.Value->AsNumber());
+								}
+								else
+								{
+									SubKV->mutable_value()->set_type(PROPERTY_TYPE_STRING);
+									SubKV->mutable_value()->set_string_value(
+										SubPair.Value->Type == EJson::String ?
+										TCHAR_TO_UTF8(*SubPair.Value->AsString()) : "(complex)");
+								}
+							}
+						}
+					}
+					else
+					{
+						// Other types - store as placeholder
+						KV->mutable_value()->set_type(PROPERTY_TYPE_STRING);
+						KV->mutable_value()->set_string_value("(array/null)");
+					}
+				}
+			}
+		}
+		else if (JsonStr.StartsWith(TEXT("\"")) && JsonStr.EndsWith(TEXT("\"")))
+		{
+			// Quoted string
+			OutValue->set_type(PROPERTY_TYPE_STRING);
+			FString Unquoted = JsonStr.Mid(1, JsonStr.Len() - 2);
+			OutValue->set_string_value(TCHAR_TO_UTF8(*Unquoted));
+		}
+		else if (JsonStr.IsNumeric() || (JsonStr.StartsWith(TEXT("-")) && JsonStr.Mid(1).IsNumeric()))
+		{
+			// Numeric - check for decimal
+			if (JsonStr.Contains(TEXT(".")))
+			{
+				OutValue->set_type(PROPERTY_TYPE_FLOAT);
+				OutValue->set_float_value(FCString::Atod(*JsonStr));
+			}
+			else
+			{
+				OutValue->set_type(PROPERTY_TYPE_INT);
+				OutValue->set_int_value(FCString::Atoi64(*JsonStr));
+			}
+		}
+		else
+		{
+			// Default to string
+			OutValue->set_type(PROPERTY_TYPE_STRING);
+			OutValue->set_string_value(TCHAR_TO_UTF8(*JsonStr));
+		}
+	}
+
+	// Convert proto PropertyValue to JSON string for CommandExecutor
+	FString ProtoPropertyValueToJson(const PropertyValue& Value)
+	{
+		switch (Value.type())
+		{
+		case PROPERTY_TYPE_BOOL:
+			return Value.bool_value() ? TEXT("true") : TEXT("false");
+		case PROPERTY_TYPE_INT:
+			return FString::Printf(TEXT("%lld"), Value.int_value());
+		case PROPERTY_TYPE_FLOAT:
+			return FString::Printf(TEXT("%f"), Value.float_value());
+		case PROPERTY_TYPE_STRING:
+		case PROPERTY_TYPE_NAME:
+			return FString::Printf(TEXT("\"%s\""), UTF8_TO_TCHAR(Value.string_value().c_str()));
+		case PROPERTY_TYPE_VECTOR:
+			return FString::Printf(TEXT("{\"X\":%f,\"Y\":%f,\"Z\":%f}"),
+				Value.vector_value().x(), Value.vector_value().y(), Value.vector_value().z());
+		case PROPERTY_TYPE_ROTATOR:
+			return FString::Printf(TEXT("{\"Pitch\":%f,\"Yaw\":%f,\"Roll\":%f}"),
+				Value.rotation_value().p(), Value.rotation_value().y(), Value.rotation_value().r());
+		case PROPERTY_TYPE_COLOR:
+			return FString::Printf(TEXT("{\"r\":%f,\"g\":%f,\"b\":%f,\"a\":%f}"),
+				Value.color_value().r() / 255.0, Value.color_value().g() / 255.0,
+				Value.color_value().b() / 255.0, Value.color_value().a() / 255.0);
+		default:
+			return UTF8_TO_TCHAR(Value.string_value().c_str());
+		}
+	}
+
+	// Fill ComponentDescriptor from component info map entry
+	void FillComponentDescriptor(ComponentDescriptor* Desc, const FString& Name, const FString& ClassName)
+	{
+		Desc->set_name(TCHAR_TO_UTF8(*Name));
+		Desc->set_class_name(TCHAR_TO_UTF8(*ClassName));
+		Desc->set_is_scene_component(ClassName.Contains(TEXT("SceneComponent")));
+	}
 }
 
 //~==============================================================================
@@ -298,7 +607,19 @@ void UAgentBridgeServiceSubsystem::GetActor(
 		ActorDetails* Details = Response.mutable_actor();
 		FillActorDescriptor(Details->mutable_actor_info(), CmdResponse.Actor);
 
-		// TODO: Fill properties and components
+		// Fill properties (already as JSON strings from CommandExecutor)
+		for (const auto& Pair : CmdResponse.Actor.Properties)
+		{
+			PropertyKeyValue* KV = Details->add_properties();
+			KV->set_key(TCHAR_TO_UTF8(*Pair.Key));
+			JsonToProtoPropertyValue(Pair.Value, TEXT(""), KV->mutable_value());
+		}
+
+		// Fill components
+		for (const auto& Pair : CmdResponse.Actor.Components)
+		{
+			FillComponentDescriptor(Details->add_components(), Pair.Key, Pair.Value);
+		}
 
 		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 	}
@@ -415,8 +736,13 @@ void UAgentBridgeServiceSubsystem::SetActorProperties(
 	FSetActorPropertiesCommand Cmd;
 	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
 
-	// TODO: Convert PropertyValue proto to JSON strings
-	// For now, just report success/failure
+	// Convert PropertyValue proto to JSON strings
+	for (const auto& Prop : Request.properties())
+	{
+		FString Key = UTF8_TO_TCHAR(Prop.key().c_str());
+		FString JsonValue = ProtoPropertyValueToJson(Prop.value());
+		Cmd.Properties.Add(Key, JsonValue);
+	}
 
 	FAgentResponseBase CmdResponse;
 	FCommandExecutor::Execute(Cmd, CmdResponse);
@@ -455,8 +781,8 @@ void UAgentBridgeServiceSubsystem::GetPropertyPath(
 	if (CmdResponse.bSuccess)
 	{
 		Response.set_type_name(TCHAR_TO_UTF8(*CmdResponse.TypeName));
-		// TODO: Convert value properly
-		Response.mutable_value()->set_string_value(TCHAR_TO_UTF8(*CmdResponse.Value));
+		// Convert JSON value to typed PropertyValue using type hint
+		JsonToProtoPropertyValue(CmdResponse.Value, CmdResponse.TypeName, Response.mutable_value());
 		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 	}
 	else
@@ -474,11 +800,10 @@ void UAgentBridgeServiceSubsystem::SetPropertyPath(
 	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
 	Cmd.Path = UTF8_TO_TCHAR(Request.path().c_str());
 
-	// Convert PropertyValue to JSON string
-	// TODO: Proper conversion
+	// Convert PropertyValue proto to JSON string for CommandExecutor
 	if (Request.has_value())
 	{
-		Cmd.Value = UTF8_TO_TCHAR(Request.value().string_value().c_str());
+		Cmd.Value = ProtoPropertyValueToJson(Request.value());
 	}
 
 	FAgentResponseBase CmdResponse;
@@ -510,7 +835,13 @@ void UAgentBridgeServiceSubsystem::CallFunction(
 	Cmd.ClassName = UTF8_TO_TCHAR(Request.class_name().c_str());
 	Cmd.FunctionName = UTF8_TO_TCHAR(Request.function_name().c_str());
 
-	// TODO: Convert parameters
+	// Convert parameters from proto to JSON strings
+	for (const auto& Param : Request.parameters())
+	{
+		FString Key = UTF8_TO_TCHAR(Param.key().c_str());
+		FString JsonValue = ProtoPropertyValueToJson(Param.value());
+		Cmd.Parameters.Add(Key, JsonValue);
+	}
 
 	FFunctionCallResponse CmdResponse;
 	FCommandExecutor::Execute(Cmd, CmdResponse);
@@ -519,8 +850,17 @@ void UAgentBridgeServiceSubsystem::CallFunction(
 
 	if (CmdResponse.bSuccess)
 	{
-		// TODO: Convert return value and out params
-		Response.mutable_return_value()->set_string_value(TCHAR_TO_UTF8(*CmdResponse.ReturnValue));
+		// Convert return value (JSON string to proto PropertyValue)
+		JsonToProtoPropertyValue(CmdResponse.ReturnValue, TEXT(""), Response.mutable_return_value());
+
+		// Convert out parameters
+		for (const auto& Pair : CmdResponse.OutParameters)
+		{
+			PropertyKeyValue* KV = Response.add_out_parameters();
+			KV->set_key(TCHAR_TO_UTF8(*Pair.Key));
+			JsonToProtoPropertyValue(Pair.Value, TEXT(""), KV->mutable_value());
+		}
+
 		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 	}
 	else
@@ -550,7 +890,9 @@ void UAgentBridgeServiceSubsystem::FindClass(
 	{
 		ClassInfo* Info = Response.mutable_class_info();
 		Info->set_class_name(TCHAR_TO_UTF8(*Cmd.ClassName));
-		// TODO: Fill in more info
+		// Note: Full class info requires FFindClassResponse with FClassInfo
+		// Currently CommandExecutor only returns success/failure
+		// Extended class info available via ListClasses RPC instead
 		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 	}
 	else
@@ -576,7 +918,9 @@ void UAgentBridgeServiceSubsystem::GetClassSchema(
 
 	if (CmdResponse.bSuccess)
 	{
-		// TODO: Fill in schema details
+		// Note: Full schema requires FGetClassSchemaResponse with properties/functions
+		// Currently CommandExecutor only returns success/failure
+		// Use console command AgentBridge.DumpClass for detailed schema
 		Response.mutable_schema()->mutable_class_info()->set_class_name(
 			TCHAR_TO_UTF8(*Cmd.ClassName));
 		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);

@@ -12,6 +12,7 @@ public class AgentBridgeServer : TempoModuleRules
 			"CoreUObject",
 			"Engine",
 			"HTTPServer",
+			"Json",
 			"AgentBridgeCore",
 			"AgentBridgeRuntime",
 			"AgentBridgeScripting",

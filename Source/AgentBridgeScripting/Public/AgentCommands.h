@@ -600,9 +600,10 @@ struct AGENTBRIDGESCRIPTING_API FStopAudioCaptureCommand : FAgentCommandBase
 //~==============================================================================
 
 /**
- * EMaterialParameterType - Type of material parameter.
+ * EAgentMaterialParamType - Type of material parameter for AgentBridge.
+ * (Named to avoid collision with UE's EMaterialParameterType)
  */
-enum class EMaterialParameterType : uint8
+enum class EAgentMaterialParamType : uint8
 {
 	Scalar,
 	Vector,
@@ -687,7 +688,7 @@ struct AGENTBRIDGESCRIPTING_API FSetMaterialParameterCommand : FAgentCommandBase
 	FString ParameterName;
 
 	/** Parameter type. */
-	EMaterialParameterType ParameterType = EMaterialParameterType::Scalar;
+	EAgentMaterialParamType ParameterType = EAgentMaterialParamType::Scalar;
 
 	/** Value (scalar as number, vector as JSON object, texture as asset path). */
 	FString Value;
@@ -1236,9 +1237,10 @@ struct AGENTBRIDGESCRIPTING_API FStopAudioCaptureResponse : FAgentResponseBase
 //~==============================================================================
 
 /**
- * FMaterialParameterInfo - Information about a material parameter.
+ * FAgentMaterialParamInfo - Information about a material parameter.
+ * (Named to avoid collision with UE's FMaterialParameterInfo)
  */
-struct AGENTBRIDGESCRIPTING_API FMaterialParameterInfo
+struct AGENTBRIDGESCRIPTING_API FAgentMaterialParamInfo
 {
 	/** Parameter name. */
 	FString Name;
@@ -1298,7 +1300,7 @@ struct AGENTBRIDGESCRIPTING_API FGetMaterialInfoResponse : FAgentResponseBase
 	FMaterialInfo Material;
 
 	/** Parameters (if requested). */
-	TArray<FMaterialParameterInfo> Parameters;
+	TArray<FAgentMaterialParamInfo> Parameters;
 };
 
 /**

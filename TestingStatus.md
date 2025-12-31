@@ -125,6 +125,45 @@ This document tracks all implemented features and their testing status.
 
 ---
 
+## gRPC Server (AgentBridgeServiceSubsystem)
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| ListWorlds | Needs Editor | test_grpc.py ready |
+| SetTargetWorld | Needs Editor | test_grpc.py ready |
+| QueryActors | Needs Editor | test_grpc.py ready |
+| GetActor | Needs Editor | test_grpc.py ready |
+| SpawnActor | Needs Editor | test_grpc.py ready |
+| DeleteActor | Needs Editor | test_grpc.py ready |
+| SetActorTransform | Needs Editor | test_grpc.py ready |
+| SetActorProperties | Needs Editor | test_grpc.py ready |
+| GetPropertyPath | Needs Editor | test_grpc.py ready |
+| SetPropertyPath | Needs Editor | test_grpc.py ready |
+| CallFunction | Needs Editor | Known issue with return values |
+| FindClass | Needs Editor | test_grpc.py ready |
+| GetClassSchema | Needs Editor | test_grpc.py ready |
+| ListClasses | Needs Editor | test_grpc.py ready |
+| Value Conversions | Code Complete | JSON↔Proto in both directions |
+
+### gRPC Value Conversion (December 31, 2024)
+
+Added full bidirectional value conversion between JSON (used by CommandExecutor) and Protobuf PropertyValue types:
+
+**JSON → Proto (`JsonToProtoPropertyValue`):**
+- Bool, Int, Float, String types
+- Vector (`{"X":..., "Y":..., "Z":...}`)
+- Rotator (`{"Pitch":..., "Yaw":..., "Roll":...}`)
+- Transform (nested Location, Rotation, Scale)
+- Color (`{"r":..., "g":..., "b":..., "a":...}`)
+- Arrays (recursively converts elements)
+- Structs/Maps (converts to key-value pairs)
+
+**Proto → JSON (`ProtoPropertyValueToJson`):**
+- All PropertyValue types to JSON string format
+- Used for SetActorProperties, SetPropertyPath, CallFunction parameters
+
+---
+
 ## Extended Features
 
 ### DataAsset Support
@@ -187,6 +226,26 @@ This document tracks all implemented features and their testing status.
 
 4. **CVar HTTP Endpoints**: HTTP endpoint handlers for CVar operations not yet implemented (console commands work).
 
+
+
+---
+
+## Build Verification (December 31, 2024)
+
+**Issues Found and Fixed:**
+
+1. **Name Collision (FIXED)**: `EMaterialParameterType` and `FMaterialParameterInfo` collided with UE types. Renamed to `EAgentMaterialParamType` and `FAgentMaterialParamInfo`.
+
+2. **UE 5.6 API Change (FIXED)**: `IImageWrapper::GetCompressed()` now returns data directly instead of output parameter.
+
+3. **Type Mismatch (FIXED)**: `UMaterialInstanceDynamic::Create()` ternary fixed with explicit `UObject*` cast.
+
+4. **Argument Order (FIXED)**: `FPropertyAccessor::ReadProperty()` calls corrected to (Container, Property).
+
+5. **Const Qualification (FIXED)**: `DataTable->GetRowStruct()` returns `const UScriptStruct*`.
+
+**Build Status**: PASSED (UE 5.6 / TempoSample)
+
 ---
 
 ## Testing Requirements
@@ -198,8 +257,15 @@ This document tracks all implemented features and their testing status.
 
 ### Editor Testing (Manual)
 - Console commands work correctly
-- HTTP endpoints return valid data
+- HTTP endpoints return valid data (test_client.py)
+- gRPC endpoints return valid data (test_grpc.py)
 - Python client methods succeed with editor running
+
+### Test Scripts Available
+| Script | Protocol | Command |
+|--------|----------|---------|
+| `test_client.py` | HTTP/JSON | `python test_client.py` |
+| `test_grpc.py` | gRPC/Protobuf | `python test_grpc.py [--port 50051]` |
 
 ### Full Integration Testing
 - MCP server exposes tools correctly
@@ -208,4 +274,4 @@ This document tracks all implemented features and their testing status.
 
 ---
 
-*Last Updated: December 2024*
+*Last Updated: December 31, 2024*
