@@ -145,7 +145,7 @@ This document tracks all implemented features and their testing status.
 | ListClasses | Needs Editor | test_grpc.py ready |
 | Value Conversions | Code Complete | JSON↔Proto in both directions |
 
-### gRPC Value Conversion (December 31, 2024)
+### gRPC Value Conversion (December 31, 2025)
 
 Added full bidirectional value conversion between JSON (used by CommandExecutor) and Protobuf PropertyValue types:
 
@@ -230,7 +230,7 @@ Added full bidirectional value conversion between JSON (used by CommandExecutor)
 
 ---
 
-## Build Verification (December 31, 2024)
+## Build Verification (December 31, 2025)
 
 **Issues Found and Fixed:**
 
@@ -274,4 +274,4 @@ Added full bidirectional value conversion between JSON (used by CommandExecutor)
 
 ---
 
-*Last Updated: December 31, 2024*
+*Last Updated: December 31, 2025*
