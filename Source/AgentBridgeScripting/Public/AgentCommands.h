@@ -55,6 +55,18 @@ enum class EAgentCommandType : uint8
 	StartAudioCapture,
 	StopAudioCapture,
 
+	// Material Commands
+	ListMaterials,
+	GetMaterialInfo,
+	CreateMaterialInstance,
+	SetMaterialParameter,
+	ApplyMaterialToActor,
+
+	// PCG Commands
+	ListPCGActors,
+	RegeneratePCG,
+	SetPCGParameter,
+
 	// Batch Commands
 	BatchExecute,
 
@@ -584,6 +596,185 @@ struct AGENTBRIDGESCRIPTING_API FStopAudioCaptureCommand : FAgentCommandBase
 };
 
 //~==============================================================================
+// Material Commands
+//~==============================================================================
+
+/**
+ * EMaterialParameterType - Type of material parameter.
+ */
+enum class EMaterialParameterType : uint8
+{
+	Scalar,
+	Vector,
+	Texture,
+	StaticSwitch
+};
+
+/**
+ * FListMaterialsCommand - List materials in the project.
+ */
+struct AGENTBRIDGESCRIPTING_API FListMaterialsCommand : FAgentCommandBase
+{
+	FListMaterialsCommand() { Type = EAgentCommandType::ListMaterials; }
+
+	/** Wildcard filter for asset paths (e.g., "/Game/Materials/*"). */
+	FString PathFilter;
+
+	/** Filter for material instances only. */
+	bool bInstancesOnly = false;
+
+	/** Maximum results. */
+	int32 Limit = 100;
+};
+
+/**
+ * FGetMaterialInfoCommand - Get information about a material.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetMaterialInfoCommand : FAgentCommandBase
+{
+	FGetMaterialInfoCommand() { Type = EAgentCommandType::GetMaterialInfo; }
+
+	/** Material asset path or name. */
+	FString MaterialPath;
+
+	/** Include parameter values. */
+	bool bIncludeParameters = true;
+};
+
+/**
+ * FCreateMaterialInstanceCommand - Create a dynamic material instance.
+ *
+ * Note: Creates UMaterialInstanceDynamic which persists only in current session.
+ * For persistent material instances, use the Editor's asset creation tools.
+ */
+struct AGENTBRIDGESCRIPTING_API FCreateMaterialInstanceCommand : FAgentCommandBase
+{
+	FCreateMaterialInstanceCommand() { Type = EAgentCommandType::CreateMaterialInstance; }
+
+	/** Parent material asset path. */
+	FString ParentMaterialPath;
+
+	/** Name for the new instance (used for lookup). */
+	FString InstanceName;
+
+	/** Actor to own the material instance (for lifecycle management). */
+	FString OwnerActorId;
+
+	/** Initial scalar parameter values. */
+	TMap<FString, float> ScalarParameters;
+
+	/** Initial vector parameter values (as JSON objects with R,G,B,A). */
+	TMap<FString, FString> VectorParameters;
+};
+
+/**
+ * FSetMaterialParameterCommand - Set a parameter on a material instance.
+ */
+struct AGENTBRIDGESCRIPTING_API FSetMaterialParameterCommand : FAgentCommandBase
+{
+	FSetMaterialParameterCommand() { Type = EAgentCommandType::SetMaterialParameter; }
+
+	/** Actor with the material or material instance name. */
+	FString TargetId;
+
+	/** Component name (if actor has multiple mesh components). */
+	FString ComponentName;
+
+	/** Material slot index (0-based). */
+	int32 SlotIndex = 0;
+
+	/** Parameter name. */
+	FString ParameterName;
+
+	/** Parameter type. */
+	EMaterialParameterType ParameterType = EMaterialParameterType::Scalar;
+
+	/** Value (scalar as number, vector as JSON object, texture as asset path). */
+	FString Value;
+};
+
+/**
+ * FApplyMaterialToActorCommand - Apply a material to an actor's mesh.
+ */
+struct AGENTBRIDGESCRIPTING_API FApplyMaterialToActorCommand : FAgentCommandBase
+{
+	FApplyMaterialToActorCommand() { Type = EAgentCommandType::ApplyMaterialToActor; }
+
+	/** Target actor. */
+	FString ActorId;
+
+	/** Component name (optional, uses first mesh component if empty). */
+	FString ComponentName;
+
+	/** Material asset path or instance name. */
+	FString MaterialPath;
+
+	/** Material slot index (-1 for all slots). */
+	int32 SlotIndex = -1;
+};
+
+//~==============================================================================
+// PCG Commands
+//~==============================================================================
+
+/**
+ * FListPCGActorsCommand - List PCG actors in the world.
+ */
+struct AGENTBRIDGESCRIPTING_API FListPCGActorsCommand : FAgentCommandBase
+{
+	FListPCGActorsCommand() { Type = EAgentCommandType::ListPCGActors; }
+
+	/** Wildcard filter for actor names. */
+	FString NamePattern;
+
+	/** Include graph info. */
+	bool bIncludeGraphInfo = true;
+
+	/** Maximum results. */
+	int32 Limit = 100;
+};
+
+/**
+ * FRegeneratePCGCommand - Trigger PCG regeneration.
+ */
+struct AGENTBRIDGESCRIPTING_API FRegeneratePCGCommand : FAgentCommandBase
+{
+	FRegeneratePCGCommand() { Type = EAgentCommandType::RegeneratePCG; }
+
+	/** PCG actor identifier (name, label, or GUID). */
+	FString ActorId;
+
+	/** Component name if actor has multiple PCG components. */
+	FString ComponentName;
+
+	/** Force full regeneration (vs incremental). */
+	bool bForceRefresh = false;
+};
+
+/**
+ * FSetPCGParameterCommand - Set a PCG graph parameter.
+ *
+ * PCG graphs expose parameters through their PCGGraphParametersStruct.
+ * This command modifies those parameters before regeneration.
+ */
+struct AGENTBRIDGESCRIPTING_API FSetPCGParameterCommand : FAgentCommandBase
+{
+	FSetPCGParameterCommand() { Type = EAgentCommandType::SetPCGParameter; }
+
+	/** PCG actor identifier. */
+	FString ActorId;
+
+	/** Parameter name. */
+	FString ParameterName;
+
+	/** Value (JSON encoded). */
+	FString Value;
+
+	/** Auto-regenerate after setting parameter. */
+	bool bAutoRegenerate = true;
+};
+
+//~==============================================================================
 // Batch Commands
 //~==============================================================================
 
@@ -1038,4 +1229,135 @@ struct AGENTBRIDGESCRIPTING_API FStopAudioCaptureResponse : FAgentResponseBase
 
 	/** Size in bytes. */
 	int64 SizeBytes = 0;
+};
+
+//~==============================================================================
+// Material Response Structures
+//~==============================================================================
+
+/**
+ * FMaterialParameterInfo - Information about a material parameter.
+ */
+struct AGENTBRIDGESCRIPTING_API FMaterialParameterInfo
+{
+	/** Parameter name. */
+	FString Name;
+
+	/** Parameter type (Scalar, Vector, Texture). */
+	FString Type;
+
+	/** Current value as string. */
+	FString Value;
+
+	/** Parameter group. */
+	FString Group;
+};
+
+/**
+ * FMaterialInfo - Information about a material.
+ */
+struct AGENTBRIDGESCRIPTING_API FMaterialInfo
+{
+	/** Material asset path. */
+	FString AssetPath;
+
+	/** Material name. */
+	FString Name;
+
+	/** Whether this is a material instance. */
+	bool bIsMaterialInstance = false;
+
+	/** Parent material (if instance). */
+	FString ParentPath;
+
+	/** Two-sided rendering. */
+	bool bTwoSided = false;
+
+	/** Blend mode as string. */
+	FString BlendMode;
+};
+
+/**
+ * FListMaterialsResponse - Response to ListMaterials command.
+ */
+struct AGENTBRIDGESCRIPTING_API FListMaterialsResponse : FAgentResponseBase
+{
+	/** List of materials. */
+	TArray<FMaterialInfo> Materials;
+
+	/** Total count (may exceed limit). */
+	int32 TotalCount = 0;
+};
+
+/**
+ * FGetMaterialInfoResponse - Response to GetMaterialInfo command.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetMaterialInfoResponse : FAgentResponseBase
+{
+	/** Material information. */
+	FMaterialInfo Material;
+
+	/** Parameters (if requested). */
+	TArray<FMaterialParameterInfo> Parameters;
+};
+
+/**
+ * FCreateMaterialInstanceResponse - Response to CreateMaterialInstance command.
+ */
+struct AGENTBRIDGESCRIPTING_API FCreateMaterialInstanceResponse : FAgentResponseBase
+{
+	/** Instance name (for lookup). */
+	FString InstanceName;
+
+	/** Whether it's applied to owner actor. */
+	bool bAppliedToOwner = false;
+};
+
+//~==============================================================================
+// PCG Response Structures
+//~==============================================================================
+
+/**
+ * FPCGActorInfo - Information about a PCG actor.
+ */
+struct AGENTBRIDGESCRIPTING_API FPCGActorInfo
+{
+	/** Actor GUID. */
+	FString Guid;
+
+	/** Actor name. */
+	FString Name;
+
+	/** Actor label. */
+	FString Label;
+
+	/** Graph name. */
+	FString GraphName;
+
+	/** Is generated. */
+	bool bIsGenerated = false;
+
+	/** Generation status. */
+	FString Status;
+};
+
+/**
+ * FListPCGActorsResponse - Response to ListPCGActors command.
+ */
+struct AGENTBRIDGESCRIPTING_API FListPCGActorsResponse : FAgentResponseBase
+{
+	/** List of PCG actors. */
+	TArray<FPCGActorInfo> Actors;
+};
+
+/**
+ * FRegeneratePCGResponse - Response to RegeneratePCG command.
+ */
+struct AGENTBRIDGESCRIPTING_API FRegeneratePCGResponse : FAgentResponseBase
+{
+	/** Number of points/instances generated. */
+	int32 GeneratedCount = 0;
+
+	/** Generation time in milliseconds. */
+	double GenerationTimeMs = 0.0;
 };

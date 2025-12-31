@@ -143,6 +143,24 @@ public:
 	static void Execute(const FStopAudioCaptureCommand& Command, FStopAudioCaptureResponse& Response);
 
 	//~==============================================================================
+	// Typed Execution - Material Commands
+	//~==============================================================================
+
+	static void Execute(const FListMaterialsCommand& Command, FListMaterialsResponse& Response);
+	static void Execute(const FGetMaterialInfoCommand& Command, FGetMaterialInfoResponse& Response);
+	static void Execute(const FCreateMaterialInstanceCommand& Command, FCreateMaterialInstanceResponse& Response);
+	static void Execute(const FSetMaterialParameterCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FApplyMaterialToActorCommand& Command, FAgentResponseBase& Response);
+
+	//~==============================================================================
+	// Typed Execution - PCG Commands
+	//~==============================================================================
+
+	static void Execute(const FListPCGActorsCommand& Command, FListPCGActorsResponse& Response);
+	static void Execute(const FRegeneratePCGCommand& Command, FRegeneratePCGResponse& Response);
+	static void Execute(const FSetPCGParameterCommand& Command, FAgentResponseBase& Response);
+
+	//~==============================================================================
 	// JSON Serialization Helpers
 	//~==============================================================================
 
@@ -208,4 +226,9 @@ private:
 	static FString SerializeAudioAnalysisResponse(const FAudioAnalysisResponse& Response);
 	static FString SerializeStartAudioCaptureResponse(const FStartAudioCaptureResponse& Response);
 	static FString SerializeStopAudioCaptureResponse(const FStopAudioCaptureResponse& Response);
+	static FString SerializeListMaterialsResponse(const FListMaterialsResponse& Response);
+	static FString SerializeGetMaterialInfoResponse(const FGetMaterialInfoResponse& Response);
+	static FString SerializeCreateMaterialInstanceResponse(const FCreateMaterialInstanceResponse& Response);
+	static FString SerializeListPCGActorsResponse(const FListPCGActorsResponse& Response);
+	static FString SerializeRegeneratePCGResponse(const FRegeneratePCGResponse& Response);
 };

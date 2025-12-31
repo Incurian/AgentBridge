@@ -26,6 +26,14 @@
 #include "IImageWrapperModule.h"
 #include "Misc/FileHelper.h"
 
+// Material-related includes
+#include "Materials/MaterialInterface.h"
+#include "Materials/MaterialInstance.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Components/MeshComponent.h"
+#include "Engine/Texture.h"
+#include "EngineUtils.h"
+
 #if WITH_EDITOR
 #include "LevelEditorViewport.h"
 #include "Editor/EditorEngine.h"
@@ -1404,6 +1412,501 @@ void FCommandExecutor::Execute(const FStopAudioCaptureCommand& Command, FStopAud
 }
 
 //~==============================================================================
+// Material Commands
+//~==============================================================================
+
+void FCommandExecutor::Execute(const FListMaterialsCommand& Command, FListMaterialsResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+
+	// Build filter
+	FARFilter Filter;
+	if (Command.bInstancesOnly)
+	{
+		Filter.ClassPaths.Add(UMaterialInstance::StaticClass()->GetClassPathName());
+	}
+	else
+	{
+		Filter.ClassPaths.Add(UMaterialInterface::StaticClass()->GetClassPathName());
+		Filter.bRecursiveClasses = true;
+	}
+	Filter.bRecursivePaths = true;
+
+	if (!Command.PathFilter.IsEmpty())
+	{
+		// Extract path before wildcard
+		FString PathPrefix = Command.PathFilter;
+		int32 WildcardIndex;
+		if (PathPrefix.FindChar('*', WildcardIndex))
+		{
+			PathPrefix = PathPrefix.Left(WildcardIndex);
+		}
+		Filter.PackagePaths.Add(FName(*PathPrefix));
+	}
+
+	TArray<FAssetData> Assets;
+	AssetRegistry.GetAssets(Filter, Assets);
+
+	int32 Count = 0;
+	for (const FAssetData& Asset : Assets)
+	{
+		if (Count >= Command.Limit)
+		{
+			break;
+		}
+
+		// Apply path filter wildcard matching
+		if (!Command.PathFilter.IsEmpty())
+		{
+			FString AssetPath = Asset.GetSoftObjectPath().ToString();
+			if (!AssetPath.MatchesWildcard(Command.PathFilter))
+			{
+				continue;
+			}
+		}
+
+		FMaterialInfo Info;
+		Info.AssetPath = Asset.GetSoftObjectPath().ToString();
+		Info.Name = Asset.AssetName.ToString();
+		Info.bIsMaterialInstance = Asset.AssetClassPath == UMaterialInstance::StaticClass()->GetClassPathName();
+
+		Response.Materials.Add(Info);
+		Count++;
+	}
+
+	Response.TotalCount = Assets.Num();
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FGetMaterialInfoCommand& Command, FGetMaterialInfoResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Try to load the material
+	UMaterialInterface* Material = LoadObject<UMaterialInterface>(nullptr, *Command.MaterialPath);
+	if (!Material)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Material not found: %s"), *Command.MaterialPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	Response.Material.AssetPath = Command.MaterialPath;
+	Response.Material.Name = Material->GetName();
+	Response.Material.bIsMaterialInstance = Material->IsA<UMaterialInstance>();
+
+	if (UMaterialInstance* MatInst = Cast<UMaterialInstance>(Material))
+	{
+		if (MatInst->Parent)
+		{
+			Response.Material.ParentPath = MatInst->Parent->GetPathName();
+		}
+	}
+
+	// Get material parameters if requested
+	if (Command.bIncludeParameters)
+	{
+		TArray<FMaterialParameterInfo> ParamInfos;
+		TArray<FGuid> Guids;
+
+		// Scalar parameters
+		Material->GetAllScalarParameterInfo(ParamInfos, Guids);
+		for (const FMaterialParameterInfo& ParamInfo : ParamInfos)
+		{
+			FMaterialParameterInfo Info;
+			Info.Name = ParamInfo.Name.ToString();
+			Info.Type = TEXT("Scalar");
+
+			float Value;
+			if (Material->GetScalarParameterValue(ParamInfo, Value))
+			{
+				Info.Value = FString::Printf(TEXT("%f"), Value);
+			}
+			Response.Parameters.Add(Info);
+		}
+
+		ParamInfos.Empty();
+		Guids.Empty();
+
+		// Vector parameters
+		Material->GetAllVectorParameterInfo(ParamInfos, Guids);
+		for (const FMaterialParameterInfo& ParamInfo : ParamInfos)
+		{
+			FMaterialParameterInfo Info;
+			Info.Name = ParamInfo.Name.ToString();
+			Info.Type = TEXT("Vector");
+
+			FLinearColor Value;
+			if (Material->GetVectorParameterValue(ParamInfo, Value))
+			{
+				Info.Value = FString::Printf(TEXT("{\"r\":%f,\"g\":%f,\"b\":%f,\"a\":%f}"), Value.R, Value.G, Value.B, Value.A);
+			}
+			Response.Parameters.Add(Info);
+		}
+
+		ParamInfos.Empty();
+		Guids.Empty();
+
+		// Texture parameters
+		Material->GetAllTextureParameterInfo(ParamInfos, Guids);
+		for (const FMaterialParameterInfo& ParamInfo : ParamInfos)
+		{
+			FMaterialParameterInfo Info;
+			Info.Name = ParamInfo.Name.ToString();
+			Info.Type = TEXT("Texture");
+
+			UTexture* Value;
+			if (Material->GetTextureParameterValue(ParamInfo, Value) && Value)
+			{
+				Info.Value = Value->GetPathName();
+			}
+			Response.Parameters.Add(Info);
+		}
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FCreateMaterialInstanceCommand& Command, FCreateMaterialInstanceResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Load parent material
+	UMaterialInterface* ParentMaterial = LoadObject<UMaterialInterface>(nullptr, *Command.ParentMaterialPath);
+	if (!ParentMaterial)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Parent material not found: %s"), *Command.ParentMaterialPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find owner actor
+	AActor* OwnerActor = nullptr;
+	if (!Command.OwnerActorId.IsEmpty())
+	{
+		OwnerActor = ResolveActor(Command.OwnerActorId, &Response.ErrorMessage);
+		if (!OwnerActor)
+		{
+			Response.bSuccess = false;
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+	}
+
+	// Create dynamic material instance
+	UMaterialInstanceDynamic* MID = UMaterialInstanceDynamic::Create(ParentMaterial, OwnerActor ? OwnerActor : GetTransientPackage());
+	if (!MID)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to create material instance");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Set name for later lookup
+	if (!Command.InstanceName.IsEmpty())
+	{
+		MID->Rename(*Command.InstanceName);
+	}
+
+	// Apply initial scalar parameters
+	for (const auto& Param : Command.ScalarParameters)
+	{
+		MID->SetScalarParameterValue(FName(*Param.Key), Param.Value);
+	}
+
+	// Apply initial vector parameters (parse JSON)
+	for (const auto& Param : Command.VectorParameters)
+	{
+		TSharedPtr<FJsonObject> JsonObj;
+		TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Param.Value);
+		if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+		{
+			FLinearColor Color;
+			Color.R = JsonObj->GetNumberField(TEXT("r"));
+			Color.G = JsonObj->GetNumberField(TEXT("g"));
+			Color.B = JsonObj->GetNumberField(TEXT("b"));
+			Color.A = JsonObj->HasField(TEXT("a")) ? JsonObj->GetNumberField(TEXT("a")) : 1.0f;
+			MID->SetVectorParameterValue(FName(*Param.Key), Color);
+		}
+	}
+
+	Response.InstanceName = Command.InstanceName.IsEmpty() ? MID->GetName() : Command.InstanceName;
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FSetMaterialParameterCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Find target actor
+	AActor* Actor = ResolveActor(Command.TargetId, &Response.ErrorMessage);
+	if (!Actor)
+	{
+		Response.bSuccess = false;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find mesh component
+	UMeshComponent* MeshComp = nullptr;
+	if (Command.ComponentName.IsEmpty())
+	{
+		MeshComp = Actor->FindComponentByClass<UMeshComponent>();
+	}
+	else
+	{
+		for (UActorComponent* Comp : Actor->GetComponents())
+		{
+			if (Comp->GetName() == Command.ComponentName)
+			{
+				MeshComp = Cast<UMeshComponent>(Comp);
+				break;
+			}
+		}
+	}
+
+	if (!MeshComp)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("No mesh component found on actor");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Get or create dynamic material instance
+	UMaterialInstanceDynamic* MID = Cast<UMaterialInstanceDynamic>(MeshComp->GetMaterial(Command.SlotIndex));
+	if (!MID)
+	{
+		UMaterialInterface* BaseMat = MeshComp->GetMaterial(Command.SlotIndex);
+		if (!BaseMat)
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = FString::Printf(TEXT("No material at slot %d"), Command.SlotIndex);
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+		MID = UMaterialInstanceDynamic::Create(BaseMat, Actor);
+		MeshComp->SetMaterial(Command.SlotIndex, MID);
+	}
+
+	// Set parameter based on type
+	switch (Command.ParameterType)
+	{
+	case EMaterialParameterType::Scalar:
+		{
+			float Value = FCString::Atof(*Command.Value);
+			MID->SetScalarParameterValue(FName(*Command.ParameterName), Value);
+		}
+		break;
+
+	case EMaterialParameterType::Vector:
+		{
+			TSharedPtr<FJsonObject> JsonObj;
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Command.Value);
+			if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+			{
+				FLinearColor Color;
+				Color.R = JsonObj->GetNumberField(TEXT("r"));
+				Color.G = JsonObj->GetNumberField(TEXT("g"));
+				Color.B = JsonObj->GetNumberField(TEXT("b"));
+				Color.A = JsonObj->HasField(TEXT("a")) ? JsonObj->GetNumberField(TEXT("a")) : 1.0f;
+				MID->SetVectorParameterValue(FName(*Command.ParameterName), Color);
+			}
+		}
+		break;
+
+	case EMaterialParameterType::Texture:
+		{
+			UTexture* Texture = LoadObject<UTexture>(nullptr, *Command.Value);
+			if (Texture)
+			{
+				MID->SetTextureParameterValue(FName(*Command.ParameterName), Texture);
+			}
+		}
+		break;
+
+	default:
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Unsupported parameter type");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FApplyMaterialToActorCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Find target actor
+	AActor* Actor = ResolveActor(Command.ActorId, &Response.ErrorMessage);
+	if (!Actor)
+	{
+		Response.bSuccess = false;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Load material
+	UMaterialInterface* Material = LoadObject<UMaterialInterface>(nullptr, *Command.MaterialPath);
+	if (!Material)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Material not found: %s"), *Command.MaterialPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find mesh component
+	UMeshComponent* MeshComp = nullptr;
+	if (Command.ComponentName.IsEmpty())
+	{
+		MeshComp = Actor->FindComponentByClass<UMeshComponent>();
+	}
+	else
+	{
+		for (UActorComponent* Comp : Actor->GetComponents())
+		{
+			if (Comp->GetName() == Command.ComponentName)
+			{
+				MeshComp = Cast<UMeshComponent>(Comp);
+				break;
+			}
+		}
+	}
+
+	if (!MeshComp)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("No mesh component found on actor");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Apply material
+	if (Command.SlotIndex < 0)
+	{
+		// Apply to all slots
+		int32 NumMaterials = MeshComp->GetNumMaterials();
+		for (int32 i = 0; i < NumMaterials; i++)
+		{
+			MeshComp->SetMaterial(i, Material);
+		}
+	}
+	else
+	{
+		MeshComp->SetMaterial(Command.SlotIndex, Material);
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+//~==============================================================================
+// PCG Commands
+//~==============================================================================
+
+void FCommandExecutor::Execute(const FListPCGActorsCommand& Command, FListPCGActorsResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// PCG requires the PCG plugin. This is a stub that searches for actors
+	// with "PCG" in their class name as a heuristic.
+	UWorld* World = FWorldContextManager::Get().GetTargetWorld();
+	if (!World)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("No target world available");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	int32 Count = 0;
+	for (TActorIterator<AActor> It(World); It; ++It)
+	{
+		if (Count >= Command.Limit)
+		{
+			break;
+		}
+
+		AActor* Actor = *It;
+		FString ClassName = Actor->GetClass()->GetName();
+
+		// Check if this is a PCG actor by class name
+		if (!ClassName.Contains(TEXT("PCG")))
+		{
+			continue;
+		}
+
+		// Apply name filter
+		if (!Command.NamePattern.IsEmpty())
+		{
+			FString ActorLabel = Actor->GetActorLabel();
+			FString ActorName = Actor->GetName();
+			if (!ActorLabel.MatchesWildcard(Command.NamePattern) && !ActorName.MatchesWildcard(Command.NamePattern))
+			{
+				continue;
+			}
+		}
+
+		FPCGActorInfo Info;
+		Info.Guid = Actor->GetActorGuid().ToString();
+		Info.Name = Actor->GetName();
+		Info.Label = Actor->GetActorLabel();
+		Info.Status = TEXT("Unknown"); // Would need PCG module to determine
+
+		Response.Actors.Add(Info);
+		Count++;
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FRegeneratePCGCommand& Command, FRegeneratePCGResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// PCG regeneration requires the PCG plugin module
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("PCG regeneration requires the PCG plugin. "
+		"To use this feature, enable the PCG plugin and rebuild with PCG module dependency.");
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FSetPCGParameterCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// PCG parameter modification requires the PCG plugin module
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("PCG parameter modification requires the PCG plugin. "
+		"To use this feature, enable the PCG plugin and rebuild with PCG module dependency.");
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+//~==============================================================================
 // JSON Serialization
 //~==============================================================================
 
@@ -2195,6 +2698,162 @@ FString FCommandExecutor::SerializeStopAudioCaptureResponse(const FStopAudioCapt
 	return OutputString;
 }
 
+FString FCommandExecutor::SerializeListMaterialsResponse(const FListMaterialsResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		TArray<TSharedPtr<FJsonValue>> MaterialsArr;
+		for (const FMaterialInfo& Mat : Response.Materials)
+		{
+			TSharedPtr<FJsonObject> MatObj = MakeShared<FJsonObject>();
+			MatObj->SetStringField(TEXT("assetPath"), Mat.AssetPath);
+			MatObj->SetStringField(TEXT("name"), Mat.Name);
+			MatObj->SetBoolField(TEXT("isMaterialInstance"), Mat.bIsMaterialInstance);
+			MatObj->SetStringField(TEXT("parentPath"), Mat.ParentPath);
+			MatObj->SetBoolField(TEXT("twoSided"), Mat.bTwoSided);
+			MatObj->SetStringField(TEXT("blendMode"), Mat.BlendMode);
+			MaterialsArr.Add(MakeShared<FJsonValueObject>(MatObj));
+		}
+		Obj->SetArrayField(TEXT("materials"), MaterialsArr);
+		Obj->SetNumberField(TEXT("totalCount"), Response.TotalCount);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeGetMaterialInfoResponse(const FGetMaterialInfoResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		TSharedPtr<FJsonObject> MatObj = MakeShared<FJsonObject>();
+		MatObj->SetStringField(TEXT("assetPath"), Response.Material.AssetPath);
+		MatObj->SetStringField(TEXT("name"), Response.Material.Name);
+		MatObj->SetBoolField(TEXT("isMaterialInstance"), Response.Material.bIsMaterialInstance);
+		MatObj->SetStringField(TEXT("parentPath"), Response.Material.ParentPath);
+		MatObj->SetBoolField(TEXT("twoSided"), Response.Material.bTwoSided);
+		MatObj->SetStringField(TEXT("blendMode"), Response.Material.BlendMode);
+		Obj->SetObjectField(TEXT("material"), MatObj);
+
+		TArray<TSharedPtr<FJsonValue>> ParamsArr;
+		for (const FMaterialParameterInfo& Param : Response.Parameters)
+		{
+			TSharedPtr<FJsonObject> ParamObj = MakeShared<FJsonObject>();
+			ParamObj->SetStringField(TEXT("name"), Param.Name);
+			ParamObj->SetStringField(TEXT("type"), Param.Type);
+			ParamObj->SetStringField(TEXT("value"), Param.Value);
+			ParamObj->SetStringField(TEXT("group"), Param.Group);
+			ParamsArr.Add(MakeShared<FJsonValueObject>(ParamObj));
+		}
+		Obj->SetArrayField(TEXT("parameters"), ParamsArr);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeCreateMaterialInstanceResponse(const FCreateMaterialInstanceResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("instanceName"), Response.InstanceName);
+		Obj->SetBoolField(TEXT("appliedToOwner"), Response.bAppliedToOwner);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeListPCGActorsResponse(const FListPCGActorsResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		TArray<TSharedPtr<FJsonValue>> ActorsArr;
+		for (const FPCGActorInfo& Actor : Response.Actors)
+		{
+			TSharedPtr<FJsonObject> ActorObj = MakeShared<FJsonObject>();
+			ActorObj->SetStringField(TEXT("guid"), Actor.Guid);
+			ActorObj->SetStringField(TEXT("name"), Actor.Name);
+			ActorObj->SetStringField(TEXT("label"), Actor.Label);
+			ActorObj->SetStringField(TEXT("graphName"), Actor.GraphName);
+			ActorObj->SetBoolField(TEXT("isGenerated"), Actor.bIsGenerated);
+			ActorObj->SetStringField(TEXT("status"), Actor.Status);
+			ActorsArr.Add(MakeShared<FJsonValueObject>(ActorObj));
+		}
+		Obj->SetArrayField(TEXT("actors"), ActorsArr);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeRegeneratePCGResponse(const FRegeneratePCGResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetNumberField(TEXT("generatedCount"), Response.GeneratedCount);
+		Obj->SetNumberField(TEXT("generationTimeMs"), Response.GenerationTimeMs);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
 //~==============================================================================
 // JSON Command Execution
 //~==============================================================================
@@ -2581,6 +3240,147 @@ FString FCommandExecutor::ExecuteJson(const FString& CommandJson)
 		FStopAudioCaptureResponse Response;
 		Execute(Cmd, Response);
 		return SerializeStopAudioCaptureResponse(Response);
+	}
+	else if (TypeStr == TEXT("ListMaterials"))
+	{
+		FListMaterialsCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("pathFilter"), Cmd.PathFilter);
+		JsonObj->TryGetBoolField(TEXT("instancesOnly"), Cmd.bInstancesOnly);
+		JsonObj->TryGetNumberField(TEXT("limit"), Cmd.Limit);
+
+		FListMaterialsResponse Response;
+		Execute(Cmd, Response);
+		return SerializeListMaterialsResponse(Response);
+	}
+	else if (TypeStr == TEXT("GetMaterialInfo"))
+	{
+		FGetMaterialInfoCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("materialPath"), Cmd.MaterialPath);
+		JsonObj->TryGetBoolField(TEXT("includeParameters"), Cmd.bIncludeParameters);
+
+		FGetMaterialInfoResponse Response;
+		Execute(Cmd, Response);
+		return SerializeGetMaterialInfoResponse(Response);
+	}
+	else if (TypeStr == TEXT("CreateMaterialInstance"))
+	{
+		FCreateMaterialInstanceCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("parentMaterialPath"), Cmd.ParentMaterialPath);
+		JsonObj->TryGetStringField(TEXT("instanceName"), Cmd.InstanceName);
+		JsonObj->TryGetStringField(TEXT("ownerActorId"), Cmd.OwnerActorId);
+
+		// Parse scalar parameters
+		const TSharedPtr<FJsonObject>* ScalarParamsObj;
+		if (JsonObj->TryGetObjectField(TEXT("scalarParameters"), ScalarParamsObj))
+		{
+			for (const auto& Pair : (*ScalarParamsObj)->Values)
+			{
+				Cmd.ScalarParameters.Add(Pair.Key, Pair.Value->AsNumber());
+			}
+		}
+
+		// Parse vector parameters (as string values containing JSON)
+		const TSharedPtr<FJsonObject>* VectorParamsObj;
+		if (JsonObj->TryGetObjectField(TEXT("vectorParameters"), VectorParamsObj))
+		{
+			for (const auto& Pair : (*VectorParamsObj)->Values)
+			{
+				FString ValueStr;
+				TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ValueStr);
+				FJsonSerializer::Serialize(Pair.Value->AsObject().ToSharedRef(), Writer);
+				Cmd.VectorParameters.Add(Pair.Key, ValueStr);
+			}
+		}
+
+		FCreateMaterialInstanceResponse Response;
+		Execute(Cmd, Response);
+		return SerializeCreateMaterialInstanceResponse(Response);
+	}
+	else if (TypeStr == TEXT("SetMaterialParameter"))
+	{
+		FSetMaterialParameterCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("targetId"), Cmd.TargetId);
+		JsonObj->TryGetStringField(TEXT("componentName"), Cmd.ComponentName);
+		JsonObj->TryGetNumberField(TEXT("slotIndex"), Cmd.SlotIndex);
+		JsonObj->TryGetStringField(TEXT("parameterName"), Cmd.ParameterName);
+		JsonObj->TryGetStringField(TEXT("value"), Cmd.Value);
+
+		// Parse parameter type
+		FString TypeString;
+		if (JsonObj->TryGetStringField(TEXT("parameterType"), TypeString))
+		{
+			if (TypeString.Equals(TEXT("Vector"), ESearchCase::IgnoreCase))
+			{
+				Cmd.ParameterType = EMaterialParameterType::Vector;
+			}
+			else if (TypeString.Equals(TEXT("Texture"), ESearchCase::IgnoreCase))
+			{
+				Cmd.ParameterType = EMaterialParameterType::Texture;
+			}
+			else if (TypeString.Equals(TEXT("StaticSwitch"), ESearchCase::IgnoreCase))
+			{
+				Cmd.ParameterType = EMaterialParameterType::StaticSwitch;
+			}
+			// Default is Scalar
+		}
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("ApplyMaterialToActor"))
+	{
+		FApplyMaterialToActorCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("componentName"), Cmd.ComponentName);
+		JsonObj->TryGetStringField(TEXT("materialPath"), Cmd.MaterialPath);
+		JsonObj->TryGetNumberField(TEXT("slotIndex"), Cmd.SlotIndex);
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("ListPCGActors"))
+	{
+		FListPCGActorsCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("namePattern"), Cmd.NamePattern);
+		JsonObj->TryGetBoolField(TEXT("includeGraphInfo"), Cmd.bIncludeGraphInfo);
+		JsonObj->TryGetNumberField(TEXT("limit"), Cmd.Limit);
+
+		FListPCGActorsResponse Response;
+		Execute(Cmd, Response);
+		return SerializeListPCGActorsResponse(Response);
+	}
+	else if (TypeStr == TEXT("RegeneratePCG"))
+	{
+		FRegeneratePCGCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("componentName"), Cmd.ComponentName);
+		JsonObj->TryGetBoolField(TEXT("forceRefresh"), Cmd.bForceRefresh);
+
+		FRegeneratePCGResponse Response;
+		Execute(Cmd, Response);
+		return SerializeRegeneratePCGResponse(Response);
+	}
+	else if (TypeStr == TEXT("SetPCGParameter"))
+	{
+		FSetPCGParameterCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("parameterName"), Cmd.ParameterName);
+		JsonObj->TryGetStringField(TEXT("value"), Cmd.Value);
+		JsonObj->TryGetBoolField(TEXT("autoRegenerate"), Cmd.bAutoRegenerate);
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
 	}
 
 	return TEXT("{\"success\":false,\"error\":\"Unknown command type\"}");
