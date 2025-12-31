@@ -27,28 +27,30 @@ Completed:
 **gRPC Service Port:** Tempo default (typically 50051, configurable)
 
 ### Phase 3: MCP Integration (COMPLETE)
-**MCP server exposing AgentBridge to Claude and LLM agents**
+**MCP server exposing AgentBridge + Tempo to Claude and LLM agents**
 
 Completed:
-- [x] MCP server package (`Python/mcp/`)
-- [x] gRPC client wrapper with Pythonic API
-- [x] 11 MCP tools covering all operations
+- [x] Modular service architecture (`Python/mcp/services/`)
+- [x] Auto-discovery and registration of service modules
+- [x] 12 services with 64 total MCP tools
+- [x] Proto-to-MCP generator script
 - [x] Claude Code configuration example
 
-**MCP Tools:**
-| Tool | Description |
-|------|-------------|
-| `list_worlds` | List available world contexts |
-| `set_target_world` | Switch between Editor/PIE worlds |
-| `query_actors` | Search actors by class/name/tag |
-| `get_actor` | Get actor details |
-| `spawn_actor` | Create new actors |
-| `delete_actor` | Remove actors |
-| `set_actor_transform` | Move/rotate/scale actors |
-| `get_property` | Read property values |
-| `set_property` | Write property values |
-| `list_classes` | Discover available classes |
-| `get_class_schema` | Get class properties/functions |
+**Service Modules (12 services, 64 tools):**
+| Service | Tools | Description |
+|---------|-------|-------------|
+| `agentbridge` | 11 | World/actor manipulation via AgentBridge |
+| `tempo_time` | 6 | Simulation time control (play/pause/step) |
+| `tempo_actor_control` | 17 | Typed property setters and transforms |
+| `tempo_core` | 6 | Level loading, control mode, quit |
+| `tempo_core_editor` | 6 | PIE, simulate, save/open levels |
+| `tempo_geographic` | 5 | Date/time, geographic coordinates |
+| `tempo_movement` | 5 | Vehicle/pawn commands, navigation |
+| `tempo_world_state` | 2 | Actor state queries (velocity, bounds) |
+| `tempo_labels` | 1 | Semantic label mapping |
+| `tempo_sensors` | 1 | Sensor/camera discovery |
+| `tempo_map_query` | 3 | Lane and zone queries |
+| `tempo_agents_editor` | 1 | Zone graph builder |
 
 ---
 
@@ -179,9 +181,26 @@ Plugins/AgentBridge/
 │   ├── agentbridge/             # HTTP client package (Phase 1)
 │   ├── mcp/                     # MCP server package (Phase 3)
 │   │   ├── __init__.py
-│   │   ├── client.py            # gRPC client wrapper
-│   │   ├── tools.py             # MCP tool definitions
-│   │   └── server.py            # MCP server entry point
+│   │   ├── server.py            # MCP server - auto-discovers services
+│   │   ├── client.py            # Legacy gRPC client wrapper
+│   │   ├── tools.py             # Legacy tool definitions
+│   │   └── services/            # Modular service modules
+│   │       ├── __init__.py      # Service registry + auto-registration
+│   │       ├── base.py          # Shared utilities (create_channel, safe_call)
+│   │       ├── agentbridge.py   # AgentBridge gRPC service (11 tools)
+│   │       ├── tempo_time.py    # TimeService (6 tools)
+│   │       ├── tempo_actor_control.py  # ActorControlService (17 tools)
+│   │       ├── tempo_core.py    # TempoCoreService (6 tools)
+│   │       ├── tempo_core_editor.py    # TempoCoreEditorService (6 tools)
+│   │       ├── tempo_geographic.py     # GeographicService (5 tools)
+│   │       ├── tempo_movement.py       # MovementControlService (5 tools)
+│   │       ├── tempo_world_state.py    # WorldStateService (2 tools)
+│   │       ├── tempo_labels.py         # LabelService (1 tool)
+│   │       ├── tempo_sensors.py        # SensorService (1 tool)
+│   │       ├── tempo_map_query.py      # MapQueryService (3 tools)
+│   │       └── tempo_agents_editor.py  # TempoAgentsEditorService (1 tool)
+│   ├── scripts/
+│   │   └── generate_mcp_service.py  # Proto-to-MCP generator
 │   ├── mcp_config.json          # Claude Code config example
 │   ├── requirements.txt
 │   └── test_client.py           # HTTP test script
@@ -343,6 +362,74 @@ Tempo uses `GenProtos.sh` which:
 
 ---
 
-*Document Version: 6.0*
+## Adding New MCP Service Modules
+
+### Using the Generator Script
+
+Generate a stub from a proto file:
+
+```bash
+cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
+python scripts/generate_mcp_service.py \
+    "D:/tempo/TempoSample/Plugins/Tempo/TempoFoo/Source/TempoFoo/Public/Foo.proto" \
+    --output mcp/services/ \
+    --prefix tempo
+```
+
+This generates a stub that requires manual editing:
+1. Add parameter schemas to TOOLS based on proto message fields
+2. Implement request building in client methods
+3. Add result parsing in execute handlers
+
+### Manual Service Module Pattern
+
+Each service module must:
+1. Define `TOOLS` list with MCP tool schemas
+2. Create a client class wrapping the gRPC stub
+3. Implement `connect(host, port)` factory function
+4. Implement `execute(client, tool_name, args)` dispatcher
+5. Call `register_service(ServiceModule(...))` at module load
+
+Example minimal module:
+
+```python
+from . import register_service, ServiceModule
+from .base import create_channel, safe_call
+
+TOOLS = [
+    {
+        "name": "my_tool",
+        "description": "Does something",
+        "inputSchema": {"type": "object", "properties": {}, "required": []},
+    },
+]
+
+class MyClient:
+    def __init__(self, host, port):
+        self.channel = create_channel(host, port)
+        self.stub = MyServiceStub(self.channel)
+
+def connect(host, port): return MyClient(host, port)
+
+def execute(client, tool_name, args):
+    return json.dumps({"success": True})
+
+register_service(ServiceModule(
+    name="my_service",
+    description="My service",
+    tools=TOOLS,
+    execute=execute,
+    connect=connect,
+))
+```
+
+Then add to `services/__init__.py`:
+```python
+from . import my_service  # in _auto_register()
+```
+
+---
+
+*Document Version: 7.0*
 *Last Updated: December 2024*
-*All Phases Complete - Ready for Production*
+*All Phases Complete - 12 Services, 64 Tools*

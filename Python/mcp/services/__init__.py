@@ -41,9 +41,21 @@ def get_service(name: str) -> ServiceModule:
 # Auto-import all service modules to trigger registration
 def _auto_register():
     """Import all service modules to register them."""
+    # AgentBridge service
     from . import agentbridge
+
+    # Tempo services
     from . import tempo_time
     from . import tempo_actor_control
+    from . import tempo_core
+    from . import tempo_core_editor
+    from . import tempo_geographic
+    from . import tempo_movement
+    from . import tempo_world_state
+    from . import tempo_labels
+    from . import tempo_sensors
+    from . import tempo_map_query
+    from . import tempo_agents_editor
 
 
 _auto_register()
