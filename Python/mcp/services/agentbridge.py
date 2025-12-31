@@ -18,6 +18,24 @@ from TempoScripting import Geometry_pb2
 
 TOOLS = [
     # =========================================================================
+    # Help & Discovery
+    # =========================================================================
+    {
+        "name": "help",
+        "description": "Get help on using AgentBridge tools. Call this first if you're unsure how to interact with Unreal Engine.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "topic": {
+                    "type": "string",
+                    "description": "Optional topic: 'actors', 'properties', 'classes', 'console', 'workflows', or leave empty for overview",
+                },
+            },
+            "required": [],
+        },
+    },
+
+    # =========================================================================
     # World Operations
     # =========================================================================
     {
@@ -652,10 +670,176 @@ def _actor_to_dict(actor: ActorInfo) -> Dict[str, Any]:
     }
 
 
+def _get_help_text(topic: str = "") -> Dict[str, Any]:
+    """Generate help text for AI agents."""
+
+    overview = """
+AgentBridge - Unreal Engine control for AI agents
+
+QUICK START:
+1. query_actors - Find actors in the scene (e.g., name_pattern="Light*")
+2. spawn_actor - Create new actors (e.g., class_name="PointLight", location=[0,0,500])
+3. get_actor - Get detailed info about a specific actor
+4. set_actor_transform - Move/rotate/scale actors
+5. search_console_commands - Find commands by keyword (e.g., "shadow", "fps")
+
+COMMON CLASSES:
+- PointLight, SpotLight, DirectionalLight - Lights
+- StaticMeshActor - Static geometry
+- CameraActor - Cameras
+- PlayerStart - Spawn points
+- Blueprint: /Game/BP_Name.BP_Name_C (note the _C suffix!)
+
+UNITS:
+- Location: centimeters (100 = 1 meter)
+- Rotation: degrees [Pitch, Yaw, Roll]
+- Scale: multiplier [X, Y, Z] where 1.0 = normal
+
+TIPS:
+- Use query_actors first to explore what's in the scene
+- Use get_class_schema to see what properties a class has
+- Use search_console_commands if you need to do something unusual
+- execute_console_command is the escape hatch for anything not covered
+
+Use help(topic='actors|properties|classes|console|workflows') for detailed help.
+"""
+
+    topics = {
+        "actors": """
+ACTOR OPERATIONS:
+
+Finding actors:
+- query_actors(name_pattern="*Door*") - Wildcard search
+- query_actors(class_name="PointLight") - Filter by type
+- query_actors(tag="Interactive") - Filter by tag
+- get_actor(actor_id="MyLight", include_properties=True) - Full details
+
+Creating actors:
+- spawn_actor(class_name="PointLight", location=[0,0,500], label="MyLight")
+- spawn_actor(class_name="/Game/BP_Enemy.BP_Enemy_C", location=[100,0,0])
+
+Modifying actors:
+- set_actor_transform(actor_id="MyLight", location=[100,200,300])
+- set_property_path(actor_id="MyLight", path="LightComponent.Intensity", value=5000)
+- delete_actor(actor_id="MyLight")
+
+Identifying actors:
+- actor_id can be: name, label, path, or GUID
+- Labels are editor display names (human-readable)
+- Names are internal unique identifiers
+""",
+        "properties": """
+PROPERTY OPERATIONS:
+
+Reading properties:
+- get_actor(actor_id, include_properties=True) - All properties
+- get_property_path(actor_id, path="RootComponent.RelativeLocation") - Specific path
+
+Setting properties:
+- set_property_path(actor_id, path="LightComponent.Intensity", value=5000)
+- set_actor_properties(actor_id, properties=[{"key": "bHidden", "value": true}])
+
+Property paths:
+- Simple: "bHidden", "ActorLabel"
+- Nested: "RootComponent.RelativeLocation.X"
+- Array: "Materials[0]"
+- Component: "LightComponent.Intensity"
+
+Common light properties:
+- LightComponent.Intensity (float, default ~5000 for point lights)
+- LightComponent.LightColor (Color: R,G,B,A 0-255)
+- LightComponent.AttenuationRadius (float, cm)
+
+Use get_class_schema(class_name) to discover available properties!
+""",
+        "classes": """
+CLASS DISCOVERY:
+
+Finding classes:
+- list_classes(base_class_name="Light") - Find all light types
+- list_classes(name_pattern="*Vehicle*") - Wildcard search
+- find_class(class_name="PointLight") - Get class info
+- get_class_schema(class_name, include_functions=True) - Full schema
+
+Built-in classes (no path needed):
+- PointLight, SpotLight, DirectionalLight, RectLight
+- StaticMeshActor, SkeletalMeshActor
+- CameraActor, CineCameraActor
+- PlayerStart, TargetPoint, Note
+- TriggerBox, TriggerSphere, BlockingVolume
+
+Blueprint classes (need full path + _C):
+- /Game/Blueprints/BP_Enemy.BP_Enemy_C
+- /Game/Characters/BP_Player.BP_Player_C
+
+The _C suffix is required - it refers to the generated class, not the asset.
+""",
+        "console": """
+CONSOLE COMMANDS:
+
+Discovery:
+- search_console_commands(keyword="shadow") - Find shadow-related
+- search_console_commands(keyword="fps", search_help=True) - Search descriptions too
+- search_console_commands(keyword="r.", limit=20) - Find rendering CVars
+
+Execution:
+- execute_console_command(command="stat fps") - Show FPS overlay
+- execute_console_command(command="r.Shadow.MaxResolution 2048") - Set CVar
+
+Useful commands:
+- stat fps / stat unit - Performance stats
+- show collision - Toggle collision visualization
+- viewmode lit/unlit/wireframe - Change view mode
+- slomo 0.5 - Slow motion (0.0-1.0)
+
+AgentBridge commands (for debugging):
+- AgentBridge.ListWorlds - Show world contexts
+- AgentBridge.QueryActors Light 10 - Quick actor search
+- AgentBridge.DumpActor MyActor - Dump actor properties
+""",
+        "workflows": """
+COMMON WORKFLOWS:
+
+Building a simple scene:
+1. query_actors() - See what's already there
+2. spawn_actor(class_name="PointLight", location=[0,0,500], label="MainLight")
+3. spawn_actor(class_name="StaticMeshActor", location=[0,0,0], label="Floor")
+4. set_property_path("MainLight", "LightComponent.Intensity", 10000)
+
+Finding and modifying actors:
+1. query_actors(name_pattern="*Door*") - Find all doors
+2. get_actor("Door_01", include_properties=True) - Inspect one
+3. set_property_path("Door_01", "bLocked", True) - Modify it
+
+Exploring available options:
+1. list_classes(base_class_name="Light") - What lights exist?
+2. get_class_schema("SpotLight", include_functions=True) - What can I set?
+3. search_console_commands("shadow") - Any shadow settings?
+
+World Partition (large worlds):
+1. is_world_partitioned() - Check if WP is enabled
+2. query_all_actors(include_unloaded=True) - Find unloaded actors
+3. get_streaming_state(actor_guid) - Check if actor is loaded
+"""
+    }
+
+    topic = topic.lower().strip() if topic else ""
+
+    if topic and topic in topics:
+        return {"topic": topic, "help": topics[topic].strip()}
+    elif topic:
+        return {"error": f"Unknown topic '{topic}'", "available_topics": list(topics.keys())}
+    else:
+        return {"help": overview.strip(), "available_topics": list(topics.keys())}
+
+
 def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any]) -> Any:
     """Implementation of tool execution."""
 
-    if tool_name == "list_worlds":
+    if tool_name == "help":
+        return _get_help_text(args.get("topic", ""))
+
+    elif tool_name == "list_worlds":
         result = safe_call(client.list_worlds)
         if isinstance(result, dict) and "error" in result:
             return result

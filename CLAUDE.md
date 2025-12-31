@@ -54,10 +54,10 @@ Completed:
 - [x] Proto-to-MCP generator script
 - [x] Claude Code configuration example
 
-**Service Modules (12 services, 73 tools):**
+**Service Modules (12 services, 74 tools):**
 | Service | Tools | Description |
 |---------|-------|-------------|
-| `agentbridge` | 20 | World/actor manipulation, World Partition, console commands, command discovery |
+| `agentbridge` | 21 | World/actor manipulation, World Partition, console commands, help system |
 | `tempo_time` | 6 | Simulation time control (play/pause/step) |
 | `tempo_actor_control` | 17 | Typed property setters and transforms |
 | `tempo_core` | 6 | Level loading, control mode, quit |
@@ -544,9 +544,9 @@ from . import my_service  # in _auto_register()
 
 ---
 
-*Document Version: 11.0*
+*Document Version: 12.0*
 *Last Updated: December 31, 2025*
-*All 5 Phases Complete - 22 RPCs, 73 MCP Tools, Console Command Discovery*
+*All 5 Phases Complete - 22 RPCs, 74 MCP Tools, Self-Documenting Help System*
 
 ---
 

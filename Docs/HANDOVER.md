@@ -85,6 +85,38 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 
 ## Session Log
 
+### Dec 31 (Session 7) - Self-Documenting Help System
+**Feature:** Added `help` MCP tool so AI agents can discover how to use AgentBridge without external documentation.
+
+**Why it matters:** A naive Claude with MCP access but no documentation can now call `help()` to get oriented. Topics cover actors, properties, classes, console commands, and common workflows.
+
+**New Tool:**
+- `help` - Returns usage overview with topic-specific deep dives
+
+**Usage:**
+```python
+# Get overview
+result = client.help()
+
+# Get specific topic
+result = client.help(topic="workflows")  # or: actors, properties, classes, console
+```
+
+**Topics Available:**
+| Topic | Coverage |
+|-------|----------|
+| (none) | Quick start, common classes, units, tips |
+| `actors` | Finding, creating, modifying, identifying actors |
+| `properties` | Reading/setting properties, property paths |
+| `classes` | Class discovery, built-in vs Blueprint classes |
+| `console` | Command discovery and execution |
+| `workflows` | Step-by-step guides for common tasks |
+
+**Files Changed:**
+- `agentbridge.py` - Added `help` tool and `_get_help_text()` function
+
+---
+
 ### Dec 31 (Session 6) - Console Command Discovery
 **Feature:** Added `search_console_commands` tool for AI agents to discover available console commands and CVars.
 
@@ -274,7 +306,7 @@ Once connected, you have access to these service categories:
 
 | Service | Tools | Examples |
 |---------|-------|----------|
-| agentbridge | 20 | `list_worlds`, `spawn_actor`, `query_actors`, `search_console_commands` |
+| agentbridge | 21 | `help`, `list_worlds`, `spawn_actor`, `query_actors`, `search_console_commands` |
 | tempo_time | 6 | `play`, `pause`, `step_frame` |
 | tempo_actor_control | 17 | `set_actor_location`, `set_actor_rotation` |
 | tempo_core | 6 | `load_level`, `quit_editor` |
@@ -287,7 +319,9 @@ Once connected, you have access to these service categories:
 | tempo_map_query | 3 | `query_lanes`, `query_zones` |
 | tempo_agents_editor | 1 | `build_zone_graph` |
 
-**Total: 12 services, 73 tools**
+**Total: 12 services, 74 tools**
+
+**Self-Documenting:** Call `help()` for an overview, or `help(topic='workflows')` for detailed guidance.
 
 ---
 
