@@ -16,6 +16,18 @@
 
 ---
 
+## ⚠️ Maintenance Notes
+
+### Keep Help Text in Sync
+When adding or modifying MCP tools, **update the help system** in `Python/mcp/services/agentbridge.py`:
+- `_get_help_text()` function contains all help content
+- Topics: overview, actors, properties, classes, console, workflows
+- This is the primary documentation for naive AI agents without access to these docs
+
+**Check before committing:** Does your change affect how agents should use the tools?
+
+---
+
 ## Project Phases
 
 ### Phase 1: Core Implementation (COMPLETE)
