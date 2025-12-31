@@ -11,6 +11,7 @@ public class AgentBridgeServer : ModuleRules
 			"Core",
 			"CoreUObject",
 			"Engine",
+			"HTTPServer",
 			"AgentBridgeCore",
 			"AgentBridgeRuntime",
 			"AgentBridgeScripting",
@@ -18,7 +19,12 @@ public class AgentBridgeServer : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
-			"UnrealEd",
 		});
+
+		// Only available in editor
+		if (Target.bBuildEditor)
+		{
+			PrivateDependencyModuleNames.Add("UnrealEd");
+		}
 	}
 }

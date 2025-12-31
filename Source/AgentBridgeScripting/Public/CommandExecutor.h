@@ -162,4 +162,17 @@ private:
 	 * Ends timing and returns elapsed milliseconds.
 	 */
 	static double EndTiming(double StartTime);
+
+	//~==============================================================================
+	// Response Serialization
+	//~==============================================================================
+
+	static FString SerializeBaseResponse(const FAgentResponseBase& Response);
+	static FString SerializeListWorldsResponse(const FListWorldsResponse& Response);
+	static FString SerializeQueryActorsResponse(const FQueryActorsResponse& Response);
+	static FString SerializeGetActorResponse(const FGetActorResponse& Response);
+	static FString SerializeSpawnActorResponse(const FSpawnActorResponse& Response);
+	static FString SerializePropertyValueResponse(const FPropertyValueResponse& Response);
+	static FString SerializeFunctionCallResponse(const FFunctionCallResponse& Response);
+	static FString SerializeListClassesResponse(const FListClassesResponse& Response);
 };

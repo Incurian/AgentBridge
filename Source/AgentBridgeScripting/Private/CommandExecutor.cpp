@@ -956,6 +956,268 @@ FString FCommandExecutor::WorldInfoToJson(const FWorldInfo& Info)
 }
 
 //~==============================================================================
+// Response Serialization Helpers
+//~==============================================================================
+
+FString FCommandExecutor::SerializeBaseResponse(const FAgentResponseBase& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeListWorldsResponse(const FListWorldsResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+	Obj->SetNumberField(TEXT("currentWorldIndex"), Response.CurrentWorldIndex);
+
+	TArray<TSharedPtr<FJsonValue>> WorldsArray;
+	for (const FWorldInfo& World : Response.Worlds)
+	{
+		TSharedPtr<FJsonObject> WorldObj = MakeShared<FJsonObject>();
+		WorldObj->SetStringField(TEXT("worldType"), World.WorldType);
+		WorldObj->SetStringField(TEXT("worldName"), World.WorldName);
+		WorldObj->SetNumberField(TEXT("pieInstance"), World.PIEInstance);
+		WorldObj->SetBoolField(TEXT("hasBegunPlay"), World.bHasBegunPlay);
+		WorldObj->SetNumberField(TEXT("actorCount"), World.ActorCount);
+		WorldsArray.Add(MakeShared<FJsonValueObject>(WorldObj));
+	}
+	Obj->SetArrayField(TEXT("worlds"), WorldsArray);
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeQueryActorsResponse(const FQueryActorsResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+	Obj->SetNumberField(TEXT("totalCount"), Response.TotalCount);
+
+	TArray<TSharedPtr<FJsonValue>> ActorsArray;
+	for (const FActorInfo& Actor : Response.Actors)
+	{
+		TSharedPtr<FJsonObject> ActorObj = MakeShared<FJsonObject>();
+		ActorObj->SetStringField(TEXT("guid"), Actor.Guid);
+		ActorObj->SetStringField(TEXT("name"), Actor.Name);
+		ActorObj->SetStringField(TEXT("label"), Actor.Label);
+		ActorObj->SetStringField(TEXT("className"), Actor.ClassName);
+		ActorObj->SetBoolField(TEXT("hidden"), Actor.bHidden);
+
+		TSharedPtr<FJsonObject> LocObj = MakeShared<FJsonObject>();
+		LocObj->SetNumberField(TEXT("x"), Actor.Location.X);
+		LocObj->SetNumberField(TEXT("y"), Actor.Location.Y);
+		LocObj->SetNumberField(TEXT("z"), Actor.Location.Z);
+		ActorObj->SetObjectField(TEXT("location"), LocObj);
+
+		ActorsArray.Add(MakeShared<FJsonValueObject>(ActorObj));
+	}
+	Obj->SetArrayField(TEXT("actors"), ActorsArray);
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeGetActorResponse(const FGetActorResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	// Actor details
+	TSharedPtr<FJsonObject> ActorObj = MakeShared<FJsonObject>();
+	ActorObj->SetStringField(TEXT("guid"), Response.Actor.Guid);
+	ActorObj->SetStringField(TEXT("path"), Response.Actor.Path);
+	ActorObj->SetStringField(TEXT("name"), Response.Actor.Name);
+	ActorObj->SetStringField(TEXT("label"), Response.Actor.Label);
+	ActorObj->SetStringField(TEXT("className"), Response.Actor.ClassName);
+	ActorObj->SetBoolField(TEXT("hidden"), Response.Actor.bHidden);
+	ActorObj->SetStringField(TEXT("parentActorId"), Response.Actor.ParentActorId);
+
+	TSharedPtr<FJsonObject> LocObj = MakeShared<FJsonObject>();
+	LocObj->SetNumberField(TEXT("x"), Response.Actor.Location.X);
+	LocObj->SetNumberField(TEXT("y"), Response.Actor.Location.Y);
+	LocObj->SetNumberField(TEXT("z"), Response.Actor.Location.Z);
+	ActorObj->SetObjectField(TEXT("location"), LocObj);
+
+	TSharedPtr<FJsonObject> RotObj = MakeShared<FJsonObject>();
+	RotObj->SetNumberField(TEXT("pitch"), Response.Actor.Rotation.Pitch);
+	RotObj->SetNumberField(TEXT("yaw"), Response.Actor.Rotation.Yaw);
+	RotObj->SetNumberField(TEXT("roll"), Response.Actor.Rotation.Roll);
+	ActorObj->SetObjectField(TEXT("rotation"), RotObj);
+
+	TSharedPtr<FJsonObject> ScaleObj = MakeShared<FJsonObject>();
+	ScaleObj->SetNumberField(TEXT("x"), Response.Actor.Scale.X);
+	ScaleObj->SetNumberField(TEXT("y"), Response.Actor.Scale.Y);
+	ScaleObj->SetNumberField(TEXT("z"), Response.Actor.Scale.Z);
+	ActorObj->SetObjectField(TEXT("scale"), ScaleObj);
+
+	// Components
+	TSharedPtr<FJsonObject> ComponentsObj = MakeShared<FJsonObject>();
+	for (const auto& Pair : Response.Actor.Components)
+	{
+		ComponentsObj->SetStringField(Pair.Key, Pair.Value);
+	}
+	ActorObj->SetObjectField(TEXT("components"), ComponentsObj);
+
+	// Properties
+	TSharedPtr<FJsonObject> PropsObj = MakeShared<FJsonObject>();
+	for (const auto& Pair : Response.Actor.Properties)
+	{
+		PropsObj->SetStringField(Pair.Key, Pair.Value);
+	}
+	ActorObj->SetObjectField(TEXT("properties"), PropsObj);
+
+	Obj->SetObjectField(TEXT("actor"), ActorObj);
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeSpawnActorResponse(const FSpawnActorResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		TSharedPtr<FJsonObject> ActorObj = MakeShared<FJsonObject>();
+		ActorObj->SetStringField(TEXT("guid"), Response.Actor.Guid);
+		ActorObj->SetStringField(TEXT("name"), Response.Actor.Name);
+		ActorObj->SetStringField(TEXT("label"), Response.Actor.Label);
+		ActorObj->SetStringField(TEXT("className"), Response.Actor.ClassName);
+
+		TSharedPtr<FJsonObject> LocObj = MakeShared<FJsonObject>();
+		LocObj->SetNumberField(TEXT("x"), Response.Actor.Location.X);
+		LocObj->SetNumberField(TEXT("y"), Response.Actor.Location.Y);
+		LocObj->SetNumberField(TEXT("z"), Response.Actor.Location.Z);
+		ActorObj->SetObjectField(TEXT("location"), LocObj);
+
+		Obj->SetObjectField(TEXT("actor"), ActorObj);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializePropertyValueResponse(const FPropertyValueResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+	Obj->SetStringField(TEXT("value"), Response.Value);
+	Obj->SetStringField(TEXT("typeName"), Response.TypeName);
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeFunctionCallResponse(const FFunctionCallResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+	Obj->SetStringField(TEXT("returnValue"), Response.ReturnValue);
+
+	TSharedPtr<FJsonObject> OutParamsObj = MakeShared<FJsonObject>();
+	for (const auto& Pair : Response.OutParameters)
+	{
+		OutParamsObj->SetStringField(Pair.Key, Pair.Value);
+	}
+	Obj->SetObjectField(TEXT("outParameters"), OutParamsObj);
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeListClassesResponse(const FListClassesResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	TArray<TSharedPtr<FJsonValue>> ClassesArray;
+	for (const FClassInfo& Class : Response.Classes)
+	{
+		TSharedPtr<FJsonObject> ClassObj = MakeShared<FJsonObject>();
+		ClassObj->SetStringField(TEXT("className"), Class.ClassName);
+		ClassObj->SetStringField(TEXT("displayName"), Class.DisplayName);
+		ClassObj->SetStringField(TEXT("classPath"), Class.ClassPath);
+		ClassObj->SetStringField(TEXT("parentClassName"), Class.ParentClassName);
+		ClassObj->SetBoolField(TEXT("isBlueprint"), Class.bIsBlueprint);
+		ClassObj->SetBoolField(TEXT("isAbstract"), Class.bIsAbstract);
+		ClassesArray.Add(MakeShared<FJsonValueObject>(ClassObj));
+	}
+	Obj->SetArrayField(TEXT("classes"), ClassesArray);
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+//~==============================================================================
 // JSON Command Execution
 //~==============================================================================
 
@@ -981,9 +1243,206 @@ FString FCommandExecutor::ExecuteJson(const FString& CommandJson)
 		return TEXT("{\"success\":false,\"error\":\"Missing command type\"}");
 	}
 
-	// TODO: Dispatch based on type and return serialized response
-	// For now, return a placeholder
-	return TEXT("{\"success\":true,\"message\":\"Command received\"}");
+	// Get optional command ID
+	FString CommandId;
+	JsonObj->TryGetStringField(TEXT("commandId"), CommandId);
+
+	// Dispatch based on type
+	if (TypeStr == TEXT("ListWorlds"))
+	{
+		FListWorldsCommand Cmd;
+		Cmd.CommandId = CommandId;
+		FListWorldsResponse Response;
+		Execute(Cmd, Response);
+		return SerializeListWorldsResponse(Response);
+	}
+	else if (TypeStr == TEXT("SetTargetWorld"))
+	{
+		FSetTargetWorldCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("worldIdentifier"), Cmd.WorldIdentifier);
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("QueryActors"))
+	{
+		FQueryActorsCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("className"), Cmd.ClassName);
+		JsonObj->TryGetStringField(TEXT("namePattern"), Cmd.NamePattern);
+		JsonObj->TryGetStringField(TEXT("tag"), Cmd.Tag);
+		JsonObj->TryGetNumberField(TEXT("limit"), Cmd.Limit);
+		JsonObj->TryGetBoolField(TEXT("includeHidden"), Cmd.bIncludeHidden);
+		FQueryActorsResponse Response;
+		Execute(Cmd, Response);
+		return SerializeQueryActorsResponse(Response);
+	}
+	else if (TypeStr == TEXT("GetActor"))
+	{
+		FGetActorCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetBoolField(TEXT("includeProperties"), Cmd.bIncludeProperties);
+		JsonObj->TryGetBoolField(TEXT("includeComponents"), Cmd.bIncludeComponents);
+		JsonObj->TryGetNumberField(TEXT("propertyDepth"), Cmd.PropertyDepth);
+		FGetActorResponse Response;
+		Execute(Cmd, Response);
+		return SerializeGetActorResponse(Response);
+	}
+	else if (TypeStr == TEXT("SpawnActor"))
+	{
+		FSpawnActorCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("className"), Cmd.ClassName);
+		JsonObj->TryGetStringField(TEXT("label"), Cmd.Label);
+		JsonObj->TryGetStringField(TEXT("folderPath"), Cmd.FolderPath);
+
+		// Parse location
+		const TSharedPtr<FJsonObject>* LocObj;
+		if (JsonObj->TryGetObjectField(TEXT("location"), LocObj))
+		{
+			(*LocObj)->TryGetNumberField(TEXT("x"), Cmd.Location.X);
+			(*LocObj)->TryGetNumberField(TEXT("y"), Cmd.Location.Y);
+			(*LocObj)->TryGetNumberField(TEXT("z"), Cmd.Location.Z);
+		}
+
+		// Parse rotation
+		const TSharedPtr<FJsonObject>* RotObj;
+		if (JsonObj->TryGetObjectField(TEXT("rotation"), RotObj))
+		{
+			(*RotObj)->TryGetNumberField(TEXT("pitch"), Cmd.Rotation.Pitch);
+			(*RotObj)->TryGetNumberField(TEXT("yaw"), Cmd.Rotation.Yaw);
+			(*RotObj)->TryGetNumberField(TEXT("roll"), Cmd.Rotation.Roll);
+		}
+
+		// Parse scale
+		const TSharedPtr<FJsonObject>* ScaleObj;
+		if (JsonObj->TryGetObjectField(TEXT("scale"), ScaleObj))
+		{
+			(*ScaleObj)->TryGetNumberField(TEXT("x"), Cmd.Scale.X);
+			(*ScaleObj)->TryGetNumberField(TEXT("y"), Cmd.Scale.Y);
+			(*ScaleObj)->TryGetNumberField(TEXT("z"), Cmd.Scale.Z);
+		}
+
+		FSpawnActorResponse Response;
+		Execute(Cmd, Response);
+		return SerializeSpawnActorResponse(Response);
+	}
+	else if (TypeStr == TEXT("DeleteActor"))
+	{
+		FDeleteActorCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("SetActorTransform"))
+	{
+		FSetActorTransformCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetBoolField(TEXT("sweep"), Cmd.bSweep);
+
+		// Parse optional location
+		const TSharedPtr<FJsonObject>* LocObj;
+		if (JsonObj->TryGetObjectField(TEXT("location"), LocObj))
+		{
+			FVector Loc;
+			(*LocObj)->TryGetNumberField(TEXT("x"), Loc.X);
+			(*LocObj)->TryGetNumberField(TEXT("y"), Loc.Y);
+			(*LocObj)->TryGetNumberField(TEXT("z"), Loc.Z);
+			Cmd.Location = Loc;
+		}
+
+		// Parse optional rotation
+		const TSharedPtr<FJsonObject>* RotObj;
+		if (JsonObj->TryGetObjectField(TEXT("rotation"), RotObj))
+		{
+			FRotator Rot;
+			(*RotObj)->TryGetNumberField(TEXT("pitch"), Rot.Pitch);
+			(*RotObj)->TryGetNumberField(TEXT("yaw"), Rot.Yaw);
+			(*RotObj)->TryGetNumberField(TEXT("roll"), Rot.Roll);
+			Cmd.Rotation = Rot;
+		}
+
+		// Parse optional scale
+		const TSharedPtr<FJsonObject>* ScaleObj;
+		if (JsonObj->TryGetObjectField(TEXT("scale"), ScaleObj))
+		{
+			FVector Scale;
+			(*ScaleObj)->TryGetNumberField(TEXT("x"), Scale.X);
+			(*ScaleObj)->TryGetNumberField(TEXT("y"), Scale.Y);
+			(*ScaleObj)->TryGetNumberField(TEXT("z"), Scale.Z);
+			Cmd.Scale = Scale;
+		}
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("GetPropertyPath"))
+	{
+		FGetPropertyPathCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("path"), Cmd.Path);
+		FPropertyValueResponse Response;
+		Execute(Cmd, Response);
+		return SerializePropertyValueResponse(Response);
+	}
+	else if (TypeStr == TEXT("SetPropertyPath"))
+	{
+		FSetPropertyPathCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("path"), Cmd.Path);
+		JsonObj->TryGetStringField(TEXT("value"), Cmd.Value);
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("CallFunction"))
+	{
+		FCallFunctionCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("className"), Cmd.ClassName);
+		JsonObj->TryGetStringField(TEXT("functionName"), Cmd.FunctionName);
+
+		// Parse parameters
+		const TSharedPtr<FJsonObject>* ParamsObj;
+		if (JsonObj->TryGetObjectField(TEXT("parameters"), ParamsObj))
+		{
+			for (const auto& Pair : (*ParamsObj)->Values)
+			{
+				FString ValueStr;
+				TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ValueStr);
+				FJsonSerializer::Serialize(Pair.Value, Pair.Key, Writer);
+				Cmd.Parameters.Add(Pair.Key, ValueStr);
+			}
+		}
+
+		FFunctionCallResponse Response;
+		Execute(Cmd, Response);
+		return SerializeFunctionCallResponse(Response);
+	}
+	else if (TypeStr == TEXT("ListClasses"))
+	{
+		FListClassesCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("baseClassName"), Cmd.BaseClassName);
+		JsonObj->TryGetStringField(TEXT("namePattern"), Cmd.NamePattern);
+		JsonObj->TryGetBoolField(TEXT("includeBlueprint"), Cmd.bIncludeBlueprint);
+		JsonObj->TryGetBoolField(TEXT("includeAbstract"), Cmd.bIncludeAbstract);
+		JsonObj->TryGetNumberField(TEXT("limit"), Cmd.Limit);
+		FListClassesResponse Response;
+		Execute(Cmd, Response);
+		return SerializeListClassesResponse(Response);
+	}
+
+	return TEXT("{\"success\":false,\"error\":\"Unknown command type\"}");
 }
 
 FString FCommandExecutor::ExecuteBatchJson(const FString& CommandsJson, bool bStopOnError)

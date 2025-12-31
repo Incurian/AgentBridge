@@ -16,7 +16,12 @@
       "Bash(\"D:/UE571/Engine/Binaries/Win64/UnrealEditor-Cmd.exe\":*)",
       "Bash(cat:*)",
       "Bash(\"D:/UE571/Engine/Binaries/Win64/UnrealEditor-Cmd.exe\" \"E:/UnrealProjects/VR_Project/VR_Project.uproject\" -ExecCmds=\"AgentBridge.QueryActors Light 10,AgentBridge.GetPath Floor RootComponent,AgentBridge.CallFunc Floor K2_GetActorLocation,Quit\" -unattended -NullRHI -nosplash -nosound -noloadstartuppackages)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(find:*)",
+      "Bash(Select-Object Id, ProcessName)",
+      "Bash(curl:*)",
+      "Bash(python test_client.py:*)",
+      "Bash(python:*)"
     ]
   }
 }
