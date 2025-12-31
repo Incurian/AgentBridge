@@ -26,7 +26,26 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "Bash(\"D:/UE571/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe\" TempoSampleEditor Win64 Development -Project=\"D:/tempo/TempoSample/TempoSample.uproject\" -WaitMutex)",
-      "Bash(./Build.sh)"
+      "Bash(./Build.sh)",
+      "Bash(fsutil behavior query:*)",
+      "Bash(wmic logicaldisk:*)",
+      "Bash(claude --version:*)",
+      "Bash(claude.exe --version:*)",
+      "Bash(tasklist:*)",
+      "Bash(npm show:*)",
+      "Bash(claude update:*)",
+      "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo;D:/tempo/TempoSample/TempoEnv/Lib/site-packages\" python:*)",
+      "Bash(where:*)",
+      "Bash(D:/tempo/TempoSample/TempoEnv/Scripts/pip.exe list:*)",
+      "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" D:/tempo/TempoSample/TempoEnv/Scripts/python.exe:*)",
+      "Bash(timeout 5 PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" D:/tempo/TempoSample/TempoEnv/Scripts/python.exe:*)",
+      "Bash(D:/tempo/TempoSample/TempoEnv/Scripts/python.exe:*)",
+      "Bash(findstr:*)",
+      "Bash(source:*)",
+      "Bash(./Plugins/Tempo/TempoCore/Scripts/Build.sh:*)",
+      "Bash(./Plugins/Tempo/Scripts/Build.sh:*)",
+      "Bash(./Plugins/Tempo/Scripts/Run.sh:*)",
+      "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" python:*)"
     ]
   },
   "outputStyle": "Explanatory"

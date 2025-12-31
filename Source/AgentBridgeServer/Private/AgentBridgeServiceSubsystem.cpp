@@ -3,7 +3,9 @@
 #include "AgentCommands.h"
 #include "WorldContextManager.h"
 #include "ActorOperations.h"
+#include "WorldPartitionOps.h"
 #include "TempoScriptingServer.h"
+#include "HAL/IConsoleManager.h"
 
 // JSON includes for property value conversion
 #include "Dom/JsonObject.h"
@@ -105,7 +107,25 @@ void UAgentBridgeServiceSubsystem::RegisterScriptingServices(FTempoScriptingServ
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetClassSchema,
 			&UAgentBridgeServiceSubsystem::GetClassSchema),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestListClasses,
-			&UAgentBridgeServiceSubsystem::ListClasses)
+			&UAgentBridgeServiceSubsystem::ListClasses),
+
+		// World Partition & Streaming
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestIsWorldPartitioned,
+			&UAgentBridgeServiceSubsystem::IsWorldPartitioned),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestQueryAllActors,
+			&UAgentBridgeServiceSubsystem::QueryAllActors),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetStreamingState,
+			&UAgentBridgeServiceSubsystem::GetStreamingState),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestQueryLandscape,
+			&UAgentBridgeServiceSubsystem::QueryLandscape),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetDataLayers,
+			&UAgentBridgeServiceSubsystem::GetDataLayers),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetActorsInDataLayer,
+			&UAgentBridgeServiceSubsystem::GetActorsInDataLayer),
+
+		// Console Commands
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestExecuteConsoleCommand,
+			&UAgentBridgeServiceSubsystem::ExecuteConsoleCommand)
 	);
 }
 
@@ -969,4 +989,351 @@ void UAgentBridgeServiceSubsystem::ListClasses(
 		ResponseContinuation.ExecuteIfBound(Response,
 			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
 	}
+}
+
+//~==============================================================================
+// World Partition & Streaming
+//~==============================================================================
+
+namespace
+{
+	// Helper to fill StreamingActorInfo from FStreamingActorReference
+	void FillStreamingActorInfo(StreamingActorInfo* Info, const FStreamingActorReference& Ref)
+	{
+		// Fill basic actor info
+		ActorDescriptor* ActorInfo = Info->mutable_actor_info();
+		ActorInfo->set_guid(TCHAR_TO_UTF8(*Ref.Guid));
+		ActorInfo->set_path(TCHAR_TO_UTF8(*Ref.Path));
+		ActorInfo->set_name(TCHAR_TO_UTF8(*Ref.Name));
+		ActorInfo->set_label(TCHAR_TO_UTF8(*Ref.Label));
+		ActorInfo->set_class_name(TCHAR_TO_UTF8(*Ref.ClassName));
+
+		// Transform
+		ActorTransform* Transform = ActorInfo->mutable_transform();
+		SetProtoVector(Transform->mutable_location(), Ref.Transform.GetLocation());
+		SetProtoRotation(Transform->mutable_rotation(), Ref.Transform.Rotator());
+		SetProtoScale(Transform->mutable_scale(), Ref.Transform.GetScale3D());
+
+		// Streaming-specific fields
+		switch (Ref.StreamingState)
+		{
+		case EActorStreamingState::NotApplicable:
+			Info->set_streaming_state(STREAMING_STATE_NOT_APPLICABLE);
+			break;
+		case EActorStreamingState::Loaded:
+			Info->set_streaming_state(STREAMING_STATE_LOADED);
+			break;
+		case EActorStreamingState::Unloaded:
+			Info->set_streaming_state(STREAMING_STATE_UNLOADED);
+			break;
+		case EActorStreamingState::Invalid:
+			Info->set_streaming_state(STREAMING_STATE_INVALID);
+			break;
+		}
+
+		Info->set_streaming_cell(TCHAR_TO_UTF8(*Ref.StreamingCellName));
+		Info->set_is_spatially_loaded(Ref.bIsSpatiallyLoaded);
+
+		// Bounds
+		if (Ref.EditorBounds.IsValid)
+		{
+			BoundingBox* Bounds = Info->mutable_bounds();
+			SetProtoVector(Bounds->mutable_min(), Ref.EditorBounds.Min);
+			SetProtoVector(Bounds->mutable_max(), Ref.EditorBounds.Max);
+		}
+
+		// Data layers
+		for (const FName& Layer : Ref.DataLayers)
+		{
+			Info->add_data_layers(TCHAR_TO_UTF8(*Layer.ToString()));
+		}
+	}
+
+	StreamingState ToProtoStreamingState(EActorStreamingState State)
+	{
+		switch (State)
+		{
+		case EActorStreamingState::Loaded: return STREAMING_STATE_LOADED;
+		case EActorStreamingState::Unloaded: return STREAMING_STATE_UNLOADED;
+		case EActorStreamingState::Invalid: return STREAMING_STATE_INVALID;
+		default: return STREAMING_STATE_NOT_APPLICABLE;
+		}
+	}
+}
+
+void UAgentBridgeServiceSubsystem::IsWorldPartitioned(
+	const IsWorldPartitionedRequest& Request,
+	const TResponseDelegate<IsWorldPartitionedResponse>& ResponseContinuation)
+{
+	UWorld* World = GetWorld();
+	IsWorldPartitionedResponse Response;
+
+	Response.set_is_partitioned(FWorldPartitionOps::IsWorldPartitioned(World));
+	Response.set_world_name(TCHAR_TO_UTF8(*World->GetName()));
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::QueryAllActors(
+	const QueryAllActorsRequest& Request,
+	const TResponseDelegate<QueryAllActorsResponse>& ResponseContinuation)
+{
+	UWorld* World = GetWorld();
+
+	FWorldPartitionQueryParams Params;
+	Params.bIncludeLoaded = Request.include_loaded() || (!Request.include_loaded() && !Request.include_unloaded());
+	Params.bIncludeUnloaded = Request.include_unloaded() || (!Request.include_loaded() && !Request.include_unloaded());
+	Params.NamePattern = UTF8_TO_TCHAR(Request.name_pattern().c_str());
+	Params.Limit = Request.limit() > 0 ? Request.limit() : 1000;
+
+	if (!Request.data_layer().empty())
+	{
+		Params.DataLayerFilter = FName(UTF8_TO_TCHAR(Request.data_layer().c_str()));
+	}
+
+	if (Request.has_bounds_filter())
+	{
+		FBox Box;
+		Box.Min = FromProtoVector(Request.bounds_filter().min());
+		Box.Max = FromProtoVector(Request.bounds_filter().max());
+		Params.BoundsFilter = Box;
+	}
+
+	// Get class filter if specified
+	FString ClassName = UTF8_TO_TCHAR(Request.class_name().c_str());
+	if (!ClassName.IsEmpty())
+	{
+		// Try to find the class
+		UClass* ClassFilter = FindObject<UClass>(nullptr, *ClassName);
+		if (!ClassFilter)
+		{
+			ClassFilter = LoadClass<AActor>(nullptr, *ClassName);
+		}
+		if (ClassFilter)
+		{
+			Params.ClassFilter = ClassFilter;
+		}
+	}
+
+	TArray<FStreamingActorReference> Actors = FWorldPartitionOps::QueryAllActors(Params, World);
+
+	QueryAllActorsResponse Response;
+	int32 LoadedCount = 0;
+	int32 UnloadedCount = 0;
+
+	for (const FStreamingActorReference& Ref : Actors)
+	{
+		FillStreamingActorInfo(Response.add_actors(), Ref);
+
+		if (Ref.StreamingState == EActorStreamingState::Loaded)
+		{
+			LoadedCount++;
+		}
+		else if (Ref.StreamingState == EActorStreamingState::Unloaded)
+		{
+			UnloadedCount++;
+		}
+	}
+
+	Response.set_total_loaded(LoadedCount);
+	Response.set_total_unloaded(UnloadedCount);
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::GetStreamingState(
+	const GetStreamingStateRequest& Request,
+	const TResponseDelegate<GetStreamingStateResponse>& ResponseContinuation)
+{
+	UWorld* World = GetWorld();
+	FString GuidStr = UTF8_TO_TCHAR(Request.actor_guid().c_str());
+
+	FGuid ActorGuid;
+	if (!FGuid::Parse(GuidStr, ActorGuid))
+	{
+		GetStreamingStateResponse Response;
+		Response.set_state(STREAMING_STATE_INVALID);
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INVALID_ARGUMENT, "Invalid GUID format"));
+		return;
+	}
+
+	EActorStreamingState State = FWorldPartitionOps::GetActorStreamingState(ActorGuid, World);
+	FStreamingActorReference Ref = FWorldPartitionOps::FindActorByGuidEx(ActorGuid, World);
+
+	GetStreamingStateResponse Response;
+	Response.set_state(ToProtoStreamingState(State));
+
+	if (State != EActorStreamingState::Invalid)
+	{
+		FillStreamingActorInfo(Response.mutable_actor(), Ref);
+	}
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::QueryLandscape(
+	const QueryLandscapeRequest& Request,
+	const TResponseDelegate<QueryLandscapeResponse>& ResponseContinuation)
+{
+	UWorld* World = GetWorld();
+
+	TArray<FStreamingActorReference> Proxies = FWorldPartitionOps::QueryLandscapeProxies(
+		World, Request.include_unloaded());
+
+	QueryLandscapeResponse Response;
+	Response.set_total_count(Proxies.Num());
+
+	for (const FStreamingActorReference& Ref : Proxies)
+	{
+		FillStreamingActorInfo(Response.add_landscape_proxies(), Ref);
+	}
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::GetDataLayers(
+	const GetDataLayersRequest& Request,
+	const TResponseDelegate<GetDataLayersResponse>& ResponseContinuation)
+{
+	UWorld* World = GetWorld();
+
+	TArray<FName> Layers = FWorldPartitionOps::GetDataLayers(World);
+
+	GetDataLayersResponse Response;
+	for (const FName& Layer : Layers)
+	{
+		Response.add_data_layers(TCHAR_TO_UTF8(*Layer.ToString()));
+	}
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::GetActorsInDataLayer(
+	const GetActorsInDataLayerRequest& Request,
+	const TResponseDelegate<GetActorsInDataLayerResponse>& ResponseContinuation)
+{
+	UWorld* World = GetWorld();
+	FName LayerName = FName(UTF8_TO_TCHAR(Request.data_layer().c_str()));
+
+	TArray<FStreamingActorReference> Actors = FWorldPartitionOps::GetActorsInDataLayer(
+		LayerName, Request.include_unloaded(), World);
+
+	// Apply limit
+	int32 Limit = Request.limit() > 0 ? Request.limit() : 1000;
+	if (Actors.Num() > Limit)
+	{
+		Actors.SetNum(Limit);
+	}
+
+	GetActorsInDataLayerResponse Response;
+	Response.set_total_count(Actors.Num());
+
+	for (const FStreamingActorReference& Ref : Actors)
+	{
+		FillStreamingActorInfo(Response.add_actors(), Ref);
+	}
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+//~==============================================================================
+// Console Commands
+//~==============================================================================
+
+namespace
+{
+	/**
+	 * Custom output device that captures log messages to a string.
+	 * Used to capture UE_LOG output from console commands.
+	 */
+	class FLogCaptureOutputDevice : public FOutputDevice
+	{
+	public:
+		FString CapturedOutput;
+
+		virtual void Serialize(const TCHAR* V, ELogVerbosity::Type Verbosity, const FName& Category) override
+		{
+			// Format: [Category] Message
+			if (!CapturedOutput.IsEmpty())
+			{
+				CapturedOutput += TEXT("\n");
+			}
+			CapturedOutput += FString::Printf(TEXT("[%s] %s"), *Category.ToString(), V);
+		}
+
+		virtual void Serialize(const TCHAR* V, ELogVerbosity::Type Verbosity, const FName& Category, double Time) override
+		{
+			Serialize(V, Verbosity, Category);
+		}
+	};
+}
+
+void UAgentBridgeServiceSubsystem::ExecuteConsoleCommand(
+	const ExecuteConsoleCommandRequest& Request,
+	const TResponseDelegate<ExecuteConsoleCommandResponse>& ResponseContinuation)
+{
+	FString Command = UTF8_TO_TCHAR(Request.command().c_str());
+
+	ExecuteConsoleCommandResponse Response;
+
+	if (Command.IsEmpty())
+	{
+		Response.set_success(false);
+		Response.set_output("Empty command");
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INVALID_ARGUMENT, "Empty command"));
+		return;
+	}
+
+	// Create a log capture device to intercept UE_LOG output
+	FLogCaptureOutputDevice LogCapture;
+
+	// Add our capture device to GLog (output still goes to normal log too)
+	GLog->AddOutputDevice(&LogCapture);
+
+	// Also capture direct output from Exec
+	FStringOutputDevice DirectOutput;
+
+	// Execute the command using GEngine->Exec for broadest command support
+	// This handles console variables, registered console commands, and more
+	bool bSuccess = false;
+	UWorld* World = GetWorld();
+
+	if (GEngine)
+	{
+		// GEngine->Exec handles most console commands
+		bSuccess = GEngine->Exec(World, *Command, DirectOutput);
+	}
+
+	// If GEngine didn't handle it, try the world
+	if (!bSuccess && World)
+	{
+		bSuccess = World->Exec(World, *Command, DirectOutput);
+	}
+
+	// Remove our capture device
+	GLog->RemoveOutputDevice(&LogCapture);
+
+	// Combine outputs: direct output first, then captured log
+	FString CombinedOutput;
+	if (!DirectOutput.IsEmpty())
+	{
+		CombinedOutput = DirectOutput;
+	}
+	if (!LogCapture.CapturedOutput.IsEmpty())
+	{
+		if (!CombinedOutput.IsEmpty())
+		{
+			CombinedOutput += TEXT("\n");
+		}
+		CombinedOutput += LogCapture.CapturedOutput;
+	}
+
+	// Commands were executed - consider success even if Exec returns false
+	// (many commands don't return true even when they work)
+	Response.set_success(true);
+	Response.set_output(TCHAR_TO_UTF8(*CombinedOutput));
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 }

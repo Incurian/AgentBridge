@@ -12,6 +12,7 @@ public class AgentBridgeRuntime : ModuleRules
 			"CoreUObject",
 			"Engine",
 			"AgentBridgeCore",
+			"Landscape",  // For ALandscapeProxy, ALandscapeStreamingProxy
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]

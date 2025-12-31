@@ -5,6 +5,17 @@
 
 ---
 
+## Quick Links
+
+| Document | Purpose |
+|----------|---------|
+| [HANDOVER.md](Docs/HANDOVER.md) | **Start here** - Session context and next steps |
+| [TestingStrategy.md](Docs/TestingStrategy.md) | Manual testing guide for all features |
+| [StretchGoals.md](Docs/StretchGoals.md) | Future features and research notes |
+| [TempoIntegration.md](Docs/TempoIntegration.md) | gRPC/Tempo setup reference |
+
+---
+
 ## Project Phases
 
 ### Phase 1: Core Implementation (COMPLETE)
@@ -26,12 +37,12 @@
 
 Completed:
 - [x] AgentBridgeServer depends on TempoScripting (uses TempoModuleRules)
-- [x] AgentBridge.proto - gRPC service definition (14 RPCs)
+- [x] AgentBridge.proto - gRPC service definition (21 RPCs)
 - [x] UAgentBridgeServiceSubsystem - implements ITempoScriptable
 - [x] Auto-generated code via GenProtos.sh
 - [x] Build passes successfully
 
-**gRPC Service Port:** Tempo default (typically 50051, configurable)
+**gRPC Service Port:** 10001 (Tempo default, configurable in TempoCoreSettings)
 
 ### Phase 3: MCP Integration (COMPLETE)
 **MCP server exposing AgentBridge + Tempo to Claude and LLM agents**
@@ -39,14 +50,14 @@ Completed:
 Completed:
 - [x] Modular service architecture (`Python/mcp/services/`)
 - [x] Auto-discovery and registration of service modules
-- [x] 12 services with 64+ total MCP tools
+- [x] 12 services with 72 total MCP tools
 - [x] Proto-to-MCP generator script
 - [x] Claude Code configuration example
 
-**Service Modules (12 services, 64+ tools):**
+**Service Modules (12 services, 72 tools):**
 | Service | Tools | Description |
 |---------|-------|-------------|
-| `agentbridge` | 12 | World/actor manipulation via AgentBridge |
+| `agentbridge` | 19 | World/actor manipulation, World Partition, console commands |
 | `tempo_time` | 6 | Simulation time control (play/pause/step) |
 | `tempo_actor_control` | 17 | Typed property setters and transforms |
 | `tempo_core` | 6 | Level loading, control mode, quit |
@@ -81,6 +92,45 @@ Completed:
 | Property metadata | ✓ | ✓ | ✗ |
 
 **Critical:** `GIsEditor` remains TRUE during PIE! Use `World->WorldType` for accurate context detection.
+
+### Phase 5: World Partition & Landscape Streaming (COMPLETE)
+**Streaming-aware actor queries for large worlds**
+
+Completed:
+- [x] `FWorldPartitionOps` class with streaming-aware APIs
+- [x] `FStreamingActorReference` with streaming state, bounds, data layers
+- [x] Query actors in unloaded streaming cells via `ForEachActorDescInstance`
+- [x] Landscape streaming proxy support
+- [x] Data layer queries
+- [x] Console commands for WP debugging (5 new commands)
+- [x] gRPC integration (7 new RPCs)
+- [x] MCP tools (7 new tools including `execute_console_command`)
+
+**Key APIs:**
+| Function | Description |
+|----------|-------------|
+| `QueryAllActors()` | Query actors including unloaded |
+| `GetActorStreamingState()` | Check Loaded/Unloaded/Invalid |
+| `QueryLandscapeProxies()` | List all landscape proxies |
+| `LoadActor()` / `LoadRegion()` | Force-load actors (editor) |
+| `DeleteActorWP()` | Delete with WP cleanup |
+| `GetDataLayers()` | List data layers |
+
+**Console Commands:**
+- `AgentBridge.IsPartitioned` - Check if world uses WP
+- `AgentBridge.QueryAllActors [Pattern] [Limit]` - Query including unloaded
+- `AgentBridge.StreamingState <GUID>` - Get streaming state
+- `AgentBridge.QueryLandscape` - List landscape proxies
+- `AgentBridge.DataLayers` - List data layers
+
+**MCP Tools (new):**
+- `is_world_partitioned` - Check if world uses WP
+- `query_all_actors` - Query including unloaded actors
+- `get_streaming_state` - Get actor streaming state by GUID
+- `query_landscape` - List landscape proxies
+- `get_data_layers` - List data layers
+- `get_actors_in_data_layer` - Get actors in a data layer
+- `execute_console_command` - Run arbitrary console commands
 
 ---
 
@@ -152,7 +202,7 @@ Completed:
 |-----------|--------|-------|
 | agentbridge package | Done | Full HTTP API coverage |
 | test_client.py | Done | HTTP tests (port 8080) |
-| test_grpc.py | Done | gRPC tests via Tempo (port 50051) |
+| test_grpc.py | Done | gRPC tests via Tempo (port 10001) |
 
 ---
 
@@ -261,8 +311,8 @@ Plugins/AgentBridge/
 {
   "mcpServers": {
     "agentbridge": {
-      "command": "python",
-      "args": ["-m", "mcp"],
+      "command": "D:/tempo/TempoSample/TempoEnv/Scripts/python.exe",
+      "args": ["-m", "mcp", "--host", "localhost", "--port", "10001"],
       "cwd": "D:/tempo/TempoSample/Plugins/AgentBridge/Python",
       "env": {
         "PYTHONPATH": "D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo"
@@ -271,6 +321,8 @@ Plugins/AgentBridge/
   }
 }
 ```
+
+**IMPORTANT:** You must use the TempoEnv Python (`TempoEnv/Scripts/python.exe`), not the system Python. TempoEnv contains the required grpcio and protobuf packages built for the correct Python version.
 
 3. **Restart Claude Code** - tools will be available
 
@@ -380,7 +432,7 @@ cd D:/tempo/TempoSample/Scripts
 cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
 python test_client.py
 
-# Run gRPC test suite (port 50051)
+# Run gRPC test suite (port 10001)
 python test_grpc.py [--host HOST] [--port PORT]
 ```
 
@@ -389,7 +441,7 @@ python test_grpc.py [--host HOST] [--port PORT]
 | Script | Protocol | Port | Description |
 |--------|----------|------|-------------|
 | `test_client.py` | HTTP/JSON | 8080 | Tests HTTP server endpoints |
-| `test_grpc.py` | gRPC/Protobuf | 50051 | Tests gRPC service via Tempo |
+| `test_grpc.py` | gRPC/Protobuf | 10001 | Tests gRPC service via Tempo |
 
 The gRPC test script (`test_grpc.py`) provides comprehensive coverage:
 - World operations (ListWorlds)
@@ -492,10 +544,31 @@ from . import my_service  # in _auto_register()
 
 ---
 
-*Document Version: 9.1*
+*Document Version: 11.0*
 *Last Updated: December 31, 2025*
-*All Phases Complete - 12 Services, 65+ Tools*
-*gRPC value conversions complete, test_grpc.py added*
+*All 5 Phases Complete - 21 RPCs, 72 MCP Tools, Console Command Passthrough with Log Capture*
+
+---
+
+## Known Issues & Gotchas
+
+### Python Environment (TempoEnv)
+
+The MCP server **must** use TempoEnv's Python, not the system Python:
+- **TempoEnv location:** `D:/tempo/TempoSample/TempoEnv/`
+- **Python executable:** `TempoEnv/Scripts/python.exe` (Python 3.11)
+- **Required packages:** grpcio 1.62.2, protobuf 4.25.3 (pre-installed)
+
+**Why this matters:**
+1. System Python may not have grpcio/protobuf installed
+2. Even if installed, version mismatches cause `cygrpc` import errors
+3. Tempo's generated Python stubs expect specific protobuf versions
+
+**Quick test:**
+```bash
+D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c "import grpc; print(grpc.__version__)"
+# Should output: 1.62.2
+```
 
 ---
 

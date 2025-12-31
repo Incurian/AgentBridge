@@ -4,6 +4,7 @@
 #include "ActorOperations.h"
 #include "FunctionInvoker.h"
 #include "WorldContextManager.h"
+#include "WorldPartitionOps.h"
 #include "EngineUtils.h"
 #include "UObject/UObjectIterator.h"
 #include "Engine/World.h"
@@ -17,6 +18,11 @@
 #include "Components/MeshComponent.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "AssetRegistry/IAssetRegistry.h"
+#include "LandscapeProxy.h"
+
+#if WITH_EDITOR
+#include "WorldPartition/WorldPartition.h"
+#endif
 
 DEFINE_LOG_CATEGORY(LogAgentBridge);
 
@@ -142,7 +148,43 @@ void FAgentBridgeDebug::RegisterCommands()
 		ECVF_Default
 	));
 
-	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (16 commands)"));
+	// World Partition commands
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.IsPartitioned"),
+		TEXT("Check if current world uses World Partition"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_IsPartitioned),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.QueryAllActors"),
+		TEXT("Query all actors including unloaded. Usage: AgentBridge.QueryAllActors [Pattern] [Limit]"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_QueryAllActors),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.StreamingState"),
+		TEXT("Get streaming state of an actor. Usage: AgentBridge.StreamingState <ActorGuid>"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_StreamingState),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.QueryLandscape"),
+		TEXT("List all landscape proxies including streaming proxies"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_QueryLandscape),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.DataLayers"),
+		TEXT("List all data layers in the world"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_DataLayers),
+		ECVF_Default
+	));
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (21 commands)"));
 }
 
 void FAgentBridgeDebug::UnregisterCommands()
@@ -1575,4 +1617,277 @@ void FAgentBridgeDebug::Cmd_ListCVars(const TArray<FString>& Args)
 
 	UE_LOG(LogAgentBridge, Log, TEXT("Showing %d of %d matching CVars (total: %d)"),
 		Count, Pattern.IsEmpty() ? TotalCount : Count, TotalCount);
+}
+
+//~==============================================================================
+// World Partition Commands
+//~==============================================================================
+
+static FString StreamingStateToString(EActorStreamingState State)
+{
+	switch (State)
+	{
+	case EActorStreamingState::Loaded:
+		return TEXT("Loaded");
+	case EActorStreamingState::Unloaded:
+		return TEXT("Unloaded");
+	case EActorStreamingState::Invalid:
+		return TEXT("Invalid");
+	case EActorStreamingState::NotApplicable:
+	default:
+		return TEXT("N/A");
+	}
+}
+
+void FAgentBridgeDebug::Cmd_IsPartitioned(const TArray<FString>& Args, UWorld* World)
+{
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== IsPartitioned ==="));
+
+	bool bIsPartitioned = FWorldPartitionOps::IsWorldPartitioned(World);
+
+	UE_LOG(LogAgentBridge, Log, TEXT("  World: %s"), *World->GetName());
+	UE_LOG(LogAgentBridge, Log, TEXT("  Uses World Partition: %s"), bIsPartitioned ? TEXT("YES") : TEXT("NO"));
+
+	if (bIsPartitioned)
+	{
+		// Additional WP info
+#if WITH_EDITOR
+		if (UWorldPartition* WP = World->GetWorldPartition())
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  WorldPartition object: %s"), *WP->GetName());
+		}
+#endif
+	}
+}
+
+void FAgentBridgeDebug::Cmd_QueryAllActors(const TArray<FString>& Args, UWorld* World)
+{
+	FString Pattern;
+	int32 Limit = 20;
+
+	if (Args.Num() > 0)
+	{
+		Pattern = Args[0];
+	}
+	if (Args.Num() > 1)
+	{
+		Limit = FCString::Atoi(*Args[1]);
+	}
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== QueryAllActors (Pattern='%s', Limit=%d) ==="), *Pattern, Limit);
+	UE_LOG(LogAgentBridge, Log, TEXT("  World Partition: %s"),
+		FWorldPartitionOps::IsWorldPartitioned(World) ? TEXT("YES") : TEXT("NO"));
+
+	FWorldPartitionQueryParams Params;
+	Params.NamePattern = Pattern;
+	Params.Limit = Limit;
+	Params.bIncludeLoaded = true;
+	Params.bIncludeUnloaded = true;
+
+	TArray<FStreamingActorReference> Results = FWorldPartitionOps::QueryAllActors(Params, World);
+
+	int32 LoadedCount = 0;
+	int32 UnloadedCount = 0;
+
+	for (int32 i = 0; i < Results.Num(); ++i)
+	{
+		const FStreamingActorReference& Ref = Results[i];
+
+		FString StateStr = StreamingStateToString(Ref.StreamingState);
+		if (Ref.StreamingState == EActorStreamingState::Loaded)
+		{
+			LoadedCount++;
+		}
+		else if (Ref.StreamingState == EActorStreamingState::Unloaded)
+		{
+			UnloadedCount++;
+		}
+
+		UE_LOG(LogAgentBridge, Log, TEXT("  [%d] %s (%s) [%s]"),
+			i, *Ref.Label, *Ref.ClassName, *StateStr);
+
+		if (Ref.StreamingState == EActorStreamingState::Unloaded)
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("       GUID: %s"), *Ref.Guid);
+			UE_LOG(LogAgentBridge, Log, TEXT("       Bounds: %s"), *Ref.EditorBounds.ToString());
+		}
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Found %d actors (Loaded: %d, Unloaded: %d)"),
+		Results.Num(), LoadedCount, UnloadedCount);
+}
+
+void FAgentBridgeDebug::Cmd_StreamingState(const TArray<FString>& Args, UWorld* World)
+{
+	if (Args.Num() < 1)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.StreamingState <ActorGuid>"));
+		return;
+	}
+
+	FString GuidStr = Args[0];
+	FGuid ActorGuid;
+	if (!FGuid::Parse(GuidStr, ActorGuid))
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("Invalid GUID format: %s"), *GuidStr);
+		return;
+	}
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== StreamingState: %s ==="), *GuidStr);
+
+	EActorStreamingState State = FWorldPartitionOps::GetActorStreamingState(ActorGuid, World);
+	UE_LOG(LogAgentBridge, Log, TEXT("  State: %s"), *StreamingStateToString(State));
+
+	// Get extended info
+	FStreamingActorReference Ref = FWorldPartitionOps::FindActorByGuidEx(ActorGuid, World);
+	if (Ref.StreamingState != EActorStreamingState::Invalid)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Name: %s"), *Ref.Name);
+		UE_LOG(LogAgentBridge, Log, TEXT("  Label: %s"), *Ref.Label);
+		UE_LOG(LogAgentBridge, Log, TEXT("  Class: %s"), *Ref.ClassName);
+		UE_LOG(LogAgentBridge, Log, TEXT("  Bounds: %s"), *Ref.EditorBounds.ToString());
+		UE_LOG(LogAgentBridge, Log, TEXT("  Spatially Loaded: %s"), Ref.bIsSpatiallyLoaded ? TEXT("YES") : TEXT("NO"));
+
+		if (Ref.DataLayers.Num() > 0)
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  Data Layers:"));
+			for (const FName& Layer : Ref.DataLayers)
+			{
+				UE_LOG(LogAgentBridge, Log, TEXT("    - %s"), *Layer.ToString());
+			}
+		}
+	}
+}
+
+void FAgentBridgeDebug::Cmd_QueryLandscape(const TArray<FString>& Args, UWorld* World)
+{
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== QueryLandscape ==="));
+
+	TArray<FStreamingActorReference> Landscapes = FWorldPartitionOps::QueryLandscapeProxies(World, true);
+
+	int32 LoadedCount = 0;
+	int32 UnloadedCount = 0;
+
+	for (int32 i = 0; i < Landscapes.Num(); ++i)
+	{
+		const FStreamingActorReference& Ref = Landscapes[i];
+
+		FString StateStr = StreamingStateToString(Ref.StreamingState);
+		if (Ref.StreamingState == EActorStreamingState::Loaded)
+		{
+			LoadedCount++;
+		}
+		else if (Ref.StreamingState == EActorStreamingState::Unloaded)
+		{
+			UnloadedCount++;
+		}
+
+		UE_LOG(LogAgentBridge, Log, TEXT("  [%d] %s (%s) [%s]"),
+			i, *Ref.Label, *Ref.ClassName, *StateStr);
+
+		UE_LOG(LogAgentBridge, Log, TEXT("       Bounds: %s"), *Ref.EditorBounds.ToString());
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Found %d landscape proxies (Loaded: %d, Unloaded: %d)"),
+		Landscapes.Num(), LoadedCount, UnloadedCount);
+
+	// Also show main landscape
+	if (ALandscapeProxy* MainLandscape = FWorldPartitionOps::GetMainLandscape(World))
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("Main Landscape: %s (%s)"),
+			*MainLandscape->GetActorLabel(), *MainLandscape->GetClass()->GetName());
+	}
+	else
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("No main landscape found"));
+	}
+}
+
+void FAgentBridgeDebug::Cmd_DataLayers(const TArray<FString>& Args, UWorld* World)
+{
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== DataLayers ==="));
+
+	TArray<FName> DataLayers = FWorldPartitionOps::GetDataLayers(World);
+
+	if (DataLayers.Num() == 0)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  No data layers found (World Partition may not be enabled)"));
+		return;
+	}
+
+	for (int32 i = 0; i < DataLayers.Num(); ++i)
+	{
+		const FName& LayerName = DataLayers[i];
+
+		// Get actor count in this layer
+		TArray<FStreamingActorReference> ActorsInLayer = FWorldPartitionOps::GetActorsInDataLayer(LayerName, true, World);
+
+		int32 LoadedCount = 0;
+		int32 UnloadedCount = 0;
+		for (const FStreamingActorReference& Ref : ActorsInLayer)
+		{
+			if (Ref.StreamingState == EActorStreamingState::Loaded)
+			{
+				LoadedCount++;
+			}
+			else if (Ref.StreamingState == EActorStreamingState::Unloaded)
+			{
+				UnloadedCount++;
+			}
+		}
+
+		UE_LOG(LogAgentBridge, Log, TEXT("  [%d] %s - %d actors (Loaded: %d, Unloaded: %d)"),
+			i, *LayerName.ToString(), ActorsInLayer.Num(), LoadedCount, UnloadedCount);
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Found %d data layers"), DataLayers.Num());
 }

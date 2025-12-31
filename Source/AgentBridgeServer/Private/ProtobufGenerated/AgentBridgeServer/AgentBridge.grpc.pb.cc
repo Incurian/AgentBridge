@@ -36,6 +36,13 @@ static const char* AgentBridgeService_method_names[] = {
   "/AgentBridgeServer.AgentBridgeService/FindClass",
   "/AgentBridgeServer.AgentBridgeService/GetClassSchema",
   "/AgentBridgeServer.AgentBridgeService/ListClasses",
+  "/AgentBridgeServer.AgentBridgeService/IsWorldPartitioned",
+  "/AgentBridgeServer.AgentBridgeService/QueryAllActors",
+  "/AgentBridgeServer.AgentBridgeService/GetStreamingState",
+  "/AgentBridgeServer.AgentBridgeService/QueryLandscape",
+  "/AgentBridgeServer.AgentBridgeService/GetDataLayers",
+  "/AgentBridgeServer.AgentBridgeService/GetActorsInDataLayer",
+  "/AgentBridgeServer.AgentBridgeService/ExecuteConsoleCommand",
 };
 
 std::unique_ptr< AgentBridgeService::Stub> AgentBridgeService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -59,6 +66,13 @@ AgentBridgeService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>&
   , rpcmethod_FindClass_(AgentBridgeService_method_names[11], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_GetClassSchema_(AgentBridgeService_method_names[12], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_ListClasses_(AgentBridgeService_method_names[13], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_IsWorldPartitioned_(AgentBridgeService_method_names[14], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_QueryAllActors_(AgentBridgeService_method_names[15], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetStreamingState_(AgentBridgeService_method_names[16], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_QueryLandscape_(AgentBridgeService_method_names[17], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetDataLayers_(AgentBridgeService_method_names[18], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetActorsInDataLayer_(AgentBridgeService_method_names[19], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ExecuteConsoleCommand_(AgentBridgeService_method_names[20], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AgentBridgeService::Stub::ListWorlds(::grpc::ClientContext* context, const ::AgentBridgeServer::ListWorldsRequest& request, ::AgentBridgeServer::ListWorldsResponse* response) {
@@ -383,6 +397,167 @@ void AgentBridgeService::Stub::async::ListClasses(::grpc::ClientContext* context
   return result;
 }
 
+::grpc::Status AgentBridgeService::Stub::IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::AgentBridgeServer::IsWorldPartitionedResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::IsWorldPartitionedRequest, ::AgentBridgeServer::IsWorldPartitionedResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_IsWorldPartitioned_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::IsWorldPartitionedRequest, ::AgentBridgeServer::IsWorldPartitionedResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_IsWorldPartitioned_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_IsWorldPartitioned_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::IsWorldPartitionedResponse>* AgentBridgeService::Stub::PrepareAsyncIsWorldPartitionedRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::IsWorldPartitionedResponse, ::AgentBridgeServer::IsWorldPartitionedRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_IsWorldPartitioned_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::IsWorldPartitionedResponse>* AgentBridgeService::Stub::AsyncIsWorldPartitionedRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncIsWorldPartitionedRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::AgentBridgeServer::QueryAllActorsResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::QueryAllActorsRequest, ::AgentBridgeServer::QueryAllActorsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_QueryAllActors_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::QueryAllActorsRequest, ::AgentBridgeServer::QueryAllActorsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_QueryAllActors_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_QueryAllActors_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryAllActorsResponse>* AgentBridgeService::Stub::PrepareAsyncQueryAllActorsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::QueryAllActorsResponse, ::AgentBridgeServer::QueryAllActorsRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_QueryAllActors_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryAllActorsResponse>* AgentBridgeService::Stub::AsyncQueryAllActorsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncQueryAllActorsRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::AgentBridgeServer::GetStreamingStateResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::GetStreamingStateRequest, ::AgentBridgeServer::GetStreamingStateResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GetStreamingState_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::GetStreamingStateRequest, ::AgentBridgeServer::GetStreamingStateResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetStreamingState_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetStreamingState_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetStreamingStateResponse>* AgentBridgeService::Stub::PrepareAsyncGetStreamingStateRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::GetStreamingStateResponse, ::AgentBridgeServer::GetStreamingStateRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GetStreamingState_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetStreamingStateResponse>* AgentBridgeService::Stub::AsyncGetStreamingStateRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncGetStreamingStateRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::AgentBridgeServer::QueryLandscapeResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::QueryLandscapeRequest, ::AgentBridgeServer::QueryLandscapeResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_QueryLandscape_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::QueryLandscapeRequest, ::AgentBridgeServer::QueryLandscapeResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_QueryLandscape_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_QueryLandscape_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>* AgentBridgeService::Stub::PrepareAsyncQueryLandscapeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::QueryLandscapeResponse, ::AgentBridgeServer::QueryLandscapeRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_QueryLandscape_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>* AgentBridgeService::Stub::AsyncQueryLandscapeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncQueryLandscapeRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::AgentBridgeServer::GetDataLayersResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GetDataLayers_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetDataLayers_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetDataLayers_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetDataLayersResponse>* AgentBridgeService::Stub::PrepareAsyncGetDataLayersRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::GetDataLayersResponse, ::AgentBridgeServer::GetDataLayersRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GetDataLayers_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetDataLayersResponse>* AgentBridgeService::Stub::AsyncGetDataLayersRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncGetDataLayersRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GetActorsInDataLayer_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetActorsInDataLayer_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetActorsInDataLayer_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>* AgentBridgeService::Stub::PrepareAsyncGetActorsInDataLayerRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::GetActorsInDataLayerResponse, ::AgentBridgeServer::GetActorsInDataLayerRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GetActorsInDataLayer_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>* AgentBridgeService::Stub::AsyncGetActorsInDataLayerRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncGetActorsInDataLayerRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ExecuteConsoleCommand_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ExecuteConsoleCommand_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ExecuteConsoleCommand_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* AgentBridgeService::Stub::PrepareAsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::ExecuteConsoleCommandResponse, ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ExecuteConsoleCommand_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* AgentBridgeService::Stub::AsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncExecuteConsoleCommandRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 AgentBridgeService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AgentBridgeService_method_names[0],
@@ -524,6 +699,76 @@ AgentBridgeService::Service::Service() {
              ::AgentBridgeServer::ListClassesResponse* resp) {
                return service->ListClasses(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[14],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::IsWorldPartitionedRequest, ::AgentBridgeServer::IsWorldPartitionedResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::IsWorldPartitionedRequest* req,
+             ::AgentBridgeServer::IsWorldPartitionedResponse* resp) {
+               return service->IsWorldPartitioned(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[15],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::QueryAllActorsRequest, ::AgentBridgeServer::QueryAllActorsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::QueryAllActorsRequest* req,
+             ::AgentBridgeServer::QueryAllActorsResponse* resp) {
+               return service->QueryAllActors(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[16],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetStreamingStateRequest, ::AgentBridgeServer::GetStreamingStateResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::GetStreamingStateRequest* req,
+             ::AgentBridgeServer::GetStreamingStateResponse* resp) {
+               return service->GetStreamingState(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[17],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::QueryLandscapeRequest, ::AgentBridgeServer::QueryLandscapeResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::QueryLandscapeRequest* req,
+             ::AgentBridgeServer::QueryLandscapeResponse* resp) {
+               return service->QueryLandscape(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[18],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::GetDataLayersRequest* req,
+             ::AgentBridgeServer::GetDataLayersResponse* resp) {
+               return service->GetDataLayers(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[19],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::GetActorsInDataLayerRequest* req,
+             ::AgentBridgeServer::GetActorsInDataLayerResponse* resp) {
+               return service->GetActorsInDataLayer(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[20],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::ExecuteConsoleCommandRequest* req,
+             ::AgentBridgeServer::ExecuteConsoleCommandResponse* resp) {
+               return service->ExecuteConsoleCommand(ctx, req, resp);
+             }, this)));
 }
 
 AgentBridgeService::Service::~Service() {
@@ -621,6 +866,55 @@ AgentBridgeService::Service::~Service() {
 }
 
 ::grpc::Status AgentBridgeService::Service::ListClasses(::grpc::ServerContext* context, const ::AgentBridgeServer::ListClassesRequest* request, ::AgentBridgeServer::ListClassesResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::IsWorldPartitioned(::grpc::ServerContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::QueryAllActors(::grpc::ServerContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::GetStreamingState(::grpc::ServerContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::QueryLandscape(::grpc::ServerContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::GetDataLayers(::grpc::ServerContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::GetActorsInDataLayer(::grpc::ServerContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::ExecuteConsoleCommand(::grpc::ServerContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response) {
   (void) context;
   (void) request;
   (void) response;

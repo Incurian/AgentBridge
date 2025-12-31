@@ -113,6 +113,25 @@ struct ScaleDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ScaleDefaultTypeInternal _Scale_default_instance_;
 
+inline constexpr QueryLandscapeRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : include_unloaded_{false},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR QueryLandscapeRequest::QueryLandscapeRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct QueryLandscapeRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR QueryLandscapeRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~QueryLandscapeRequestDefaultTypeInternal() {}
+  union {
+    QueryLandscapeRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 QueryLandscapeRequestDefaultTypeInternal _QueryLandscapeRequest_default_instance_;
+
 inline constexpr QueryActorsRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : class_name_(
@@ -217,6 +236,61 @@ struct ListClassesRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListClassesRequestDefaultTypeInternal _ListClassesRequest_default_instance_;
 
+inline constexpr IsWorldPartitionedResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : world_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        is_partitioned_{false},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR IsWorldPartitionedResponse::IsWorldPartitionedResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct IsWorldPartitionedResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR IsWorldPartitionedResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~IsWorldPartitionedResponseDefaultTypeInternal() {}
+  union {
+    IsWorldPartitionedResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 IsWorldPartitionedResponseDefaultTypeInternal _IsWorldPartitionedResponse_default_instance_;
+      template <typename>
+PROTOBUF_CONSTEXPR IsWorldPartitionedRequest::IsWorldPartitionedRequest(::_pbi::ConstantInitialized) {}
+struct IsWorldPartitionedRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR IsWorldPartitionedRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~IsWorldPartitionedRequestDefaultTypeInternal() {}
+  union {
+    IsWorldPartitionedRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 IsWorldPartitionedRequestDefaultTypeInternal _IsWorldPartitionedRequest_default_instance_;
+
+inline constexpr GetStreamingStateRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : actor_guid_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR GetStreamingStateRequest::GetStreamingStateRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct GetStreamingStateRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GetStreamingStateRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GetStreamingStateRequestDefaultTypeInternal() {}
+  union {
+    GetStreamingStateRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetStreamingStateRequestDefaultTypeInternal _GetStreamingStateRequest_default_instance_;
+
 inline constexpr GetPropertyPathRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : actor_id_(
@@ -241,6 +315,37 @@ struct GetPropertyPathRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetPropertyPathRequestDefaultTypeInternal _GetPropertyPathRequest_default_instance_;
 
+inline constexpr GetDataLayersResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : data_layers_{},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR GetDataLayersResponse::GetDataLayersResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct GetDataLayersResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GetDataLayersResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GetDataLayersResponseDefaultTypeInternal() {}
+  union {
+    GetDataLayersResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetDataLayersResponseDefaultTypeInternal _GetDataLayersResponse_default_instance_;
+      template <typename>
+PROTOBUF_CONSTEXPR GetDataLayersRequest::GetDataLayersRequest(::_pbi::ConstantInitialized) {}
+struct GetDataLayersRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GetDataLayersRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GetDataLayersRequestDefaultTypeInternal() {}
+  union {
+    GetDataLayersRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetDataLayersRequestDefaultTypeInternal _GetDataLayersRequest_default_instance_;
+
 inline constexpr GetClassSchemaRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : class_name_(
@@ -263,6 +368,29 @@ struct GetClassSchemaRequestDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetClassSchemaRequestDefaultTypeInternal _GetClassSchemaRequest_default_instance_;
+
+inline constexpr GetActorsInDataLayerRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : data_layer_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        include_unloaded_{false},
+        limit_{0},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR GetActorsInDataLayerRequest::GetActorsInDataLayerRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct GetActorsInDataLayerRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GetActorsInDataLayerRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GetActorsInDataLayerRequestDefaultTypeInternal() {}
+  union {
+    GetActorsInDataLayerRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetActorsInDataLayerRequestDefaultTypeInternal _GetActorsInDataLayerRequest_default_instance_;
 
 inline constexpr GetActorRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -308,6 +436,49 @@ struct FindClassRequestDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FindClassRequestDefaultTypeInternal _FindClassRequest_default_instance_;
+
+inline constexpr ExecuteConsoleCommandResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : output_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        success_{false},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ExecuteConsoleCommandResponse::ExecuteConsoleCommandResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ExecuteConsoleCommandResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ExecuteConsoleCommandResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ExecuteConsoleCommandResponseDefaultTypeInternal() {}
+  union {
+    ExecuteConsoleCommandResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ExecuteConsoleCommandResponseDefaultTypeInternal _ExecuteConsoleCommandResponse_default_instance_;
+
+inline constexpr ExecuteConsoleCommandRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : command_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ExecuteConsoleCommandRequest::ExecuteConsoleCommandRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ExecuteConsoleCommandRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ExecuteConsoleCommandRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ExecuteConsoleCommandRequestDefaultTypeInternal() {}
+  union {
+    ExecuteConsoleCommandRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ExecuteConsoleCommandRequestDefaultTypeInternal _ExecuteConsoleCommandRequest_default_instance_;
 
 inline constexpr DeleteActorRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -475,6 +646,26 @@ struct FindClassResponseDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 FindClassResponseDefaultTypeInternal _FindClassResponse_default_instance_;
 
+inline constexpr BoundingBox::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        min_{nullptr},
+        max_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR BoundingBox::BoundingBox(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct BoundingBoxDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR BoundingBoxDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~BoundingBoxDefaultTypeInternal() {}
+  union {
+    BoundingBox _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BoundingBoxDefaultTypeInternal _BoundingBox_default_instance_;
+
 inline constexpr ActorTransform::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -519,6 +710,37 @@ struct SetActorTransformRequestDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SetActorTransformRequestDefaultTypeInternal _SetActorTransformRequest_default_instance_;
+
+inline constexpr QueryAllActorsRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        class_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        name_pattern_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        data_layer_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        bounds_filter_{nullptr},
+        include_loaded_{false},
+        include_unloaded_{false},
+        limit_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR QueryAllActorsRequest::QueryAllActorsRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct QueryAllActorsRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR QueryAllActorsRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~QueryAllActorsRequestDefaultTypeInternal() {}
+  union {
+    QueryAllActorsRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 QueryAllActorsRequestDefaultTypeInternal _QueryAllActorsRequest_default_instance_;
 
 inline constexpr PropertyKeyValue::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -667,6 +889,32 @@ struct ActorDescriptorDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ActorDescriptorDefaultTypeInternal _ActorDescriptor_default_instance_;
+
+inline constexpr StreamingActorInfo::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        data_layers_{},
+        streaming_cell_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        actor_info_{nullptr},
+        bounds_{nullptr},
+        streaming_state_{static_cast< ::AgentBridgeServer::StreamingState >(0)},
+        is_spatially_loaded_{false} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR StreamingActorInfo::StreamingActorInfo(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct StreamingActorInfoDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR StreamingActorInfoDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~StreamingActorInfoDefaultTypeInternal() {}
+  union {
+    StreamingActorInfo _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 StreamingActorInfoDefaultTypeInternal _StreamingActorInfo_default_instance_;
 
 inline constexpr SpawnActorResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -898,6 +1146,87 @@ struct ActorDetailsDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ActorDetailsDefaultTypeInternal _ActorDetails_default_instance_;
 
+inline constexpr QueryLandscapeResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : landscape_proxies_{},
+        total_count_{0},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR QueryLandscapeResponse::QueryLandscapeResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct QueryLandscapeResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR QueryLandscapeResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~QueryLandscapeResponseDefaultTypeInternal() {}
+  union {
+    QueryLandscapeResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 QueryLandscapeResponseDefaultTypeInternal _QueryLandscapeResponse_default_instance_;
+
+inline constexpr QueryAllActorsResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : actors_{},
+        total_loaded_{0},
+        total_unloaded_{0},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR QueryAllActorsResponse::QueryAllActorsResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct QueryAllActorsResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR QueryAllActorsResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~QueryAllActorsResponseDefaultTypeInternal() {}
+  union {
+    QueryAllActorsResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 QueryAllActorsResponseDefaultTypeInternal _QueryAllActorsResponse_default_instance_;
+
+inline constexpr GetStreamingStateResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        actor_{nullptr},
+        state_{static_cast< ::AgentBridgeServer::StreamingState >(0)} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR GetStreamingStateResponse::GetStreamingStateResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct GetStreamingStateResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GetStreamingStateResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GetStreamingStateResponseDefaultTypeInternal() {}
+  union {
+    GetStreamingStateResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetStreamingStateResponseDefaultTypeInternal _GetStreamingStateResponse_default_instance_;
+
+inline constexpr GetActorsInDataLayerResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : actors_{},
+        total_count_{0},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR GetActorsInDataLayerResponse::GetActorsInDataLayerResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct GetActorsInDataLayerResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR GetActorsInDataLayerResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~GetActorsInDataLayerResponseDefaultTypeInternal() {}
+  union {
+    GetActorsInDataLayerResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetActorsInDataLayerResponseDefaultTypeInternal _GetActorsInDataLayerResponse_default_instance_;
+
 inline constexpr GetActorResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -917,8 +1246,8 @@ struct GetActorResponseDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetActorResponseDefaultTypeInternal _GetActorResponse_default_instance_;
 }  // namespace AgentBridgeServer
-static ::_pb::Metadata file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[37];
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_AgentBridgeServer_2fAgentBridge_2eproto[1];
+static ::_pb::Metadata file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[53];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_AgentBridgeServer_2fAgentBridge_2eproto[2];
 static constexpr const ::_pb::ServiceDescriptor**
     file_level_service_descriptors_AgentBridgeServer_2fAgentBridge_2eproto = nullptr;
 const ::uint32_t TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(
@@ -1423,6 +1752,186 @@ const ::uint32_t TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets[] 
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetClassSchemaResponse, _impl_.schema_),
     0,
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BoundingBox, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BoundingBox, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BoundingBox, _impl_.min_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BoundingBox, _impl_.max_),
+    0,
+    1,
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::StreamingActorInfo, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::StreamingActorInfo, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::StreamingActorInfo, _impl_.actor_info_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::StreamingActorInfo, _impl_.streaming_state_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::StreamingActorInfo, _impl_.streaming_cell_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::StreamingActorInfo, _impl_.bounds_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::StreamingActorInfo, _impl_.data_layers_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::StreamingActorInfo, _impl_.is_spatially_loaded_),
+    0,
+    ~0u,
+    ~0u,
+    1,
+    ~0u,
+    ~0u,
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::IsWorldPartitionedRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::IsWorldPartitionedResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::IsWorldPartitionedResponse, _impl_.is_partitioned_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::IsWorldPartitionedResponse, _impl_.world_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _impl_.class_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _impl_.name_pattern_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _impl_.include_loaded_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _impl_.include_unloaded_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _impl_.data_layer_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _impl_.bounds_filter_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsRequest, _impl_.limit_),
+    ~0u,
+    ~0u,
+    ~0u,
+    ~0u,
+    ~0u,
+    0,
+    ~0u,
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsResponse, _impl_.actors_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsResponse, _impl_.total_loaded_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryAllActorsResponse, _impl_.total_unloaded_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetStreamingStateRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetStreamingStateRequest, _impl_.actor_guid_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetStreamingStateResponse, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetStreamingStateResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetStreamingStateResponse, _impl_.state_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetStreamingStateResponse, _impl_.actor_),
+    ~0u,
+    0,
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryLandscapeRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryLandscapeRequest, _impl_.include_unloaded_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryLandscapeResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryLandscapeResponse, _impl_.landscape_proxies_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::QueryLandscapeResponse, _impl_.total_count_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetDataLayersRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetDataLayersResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetDataLayersResponse, _impl_.data_layers_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetActorsInDataLayerRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetActorsInDataLayerRequest, _impl_.data_layer_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetActorsInDataLayerRequest, _impl_.include_unloaded_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetActorsInDataLayerRequest, _impl_.limit_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetActorsInDataLayerResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetActorsInDataLayerResponse, _impl_.actors_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetActorsInDataLayerResponse, _impl_.total_count_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ExecuteConsoleCommandRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ExecuteConsoleCommandRequest, _impl_.command_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ExecuteConsoleCommandResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ExecuteConsoleCommandResponse, _impl_.success_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ExecuteConsoleCommandResponse, _impl_.output_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -1464,6 +1973,22 @@ static const ::_pbi::MigrationSchema
         {452, 468, -1, sizeof(::AgentBridgeServer::FunctionSignature)},
         {476, 487, -1, sizeof(::AgentBridgeServer::ClassSchema)},
         {490, 499, -1, sizeof(::AgentBridgeServer::GetClassSchemaResponse)},
+        {500, 510, -1, sizeof(::AgentBridgeServer::BoundingBox)},
+        {512, 526, -1, sizeof(::AgentBridgeServer::StreamingActorInfo)},
+        {532, -1, -1, sizeof(::AgentBridgeServer::IsWorldPartitionedRequest)},
+        {540, -1, -1, sizeof(::AgentBridgeServer::IsWorldPartitionedResponse)},
+        {550, 565, -1, sizeof(::AgentBridgeServer::QueryAllActorsRequest)},
+        {572, -1, -1, sizeof(::AgentBridgeServer::QueryAllActorsResponse)},
+        {583, -1, -1, sizeof(::AgentBridgeServer::GetStreamingStateRequest)},
+        {592, 602, -1, sizeof(::AgentBridgeServer::GetStreamingStateResponse)},
+        {604, -1, -1, sizeof(::AgentBridgeServer::QueryLandscapeRequest)},
+        {613, -1, -1, sizeof(::AgentBridgeServer::QueryLandscapeResponse)},
+        {623, -1, -1, sizeof(::AgentBridgeServer::GetDataLayersRequest)},
+        {631, -1, -1, sizeof(::AgentBridgeServer::GetDataLayersResponse)},
+        {640, -1, -1, sizeof(::AgentBridgeServer::GetActorsInDataLayerRequest)},
+        {651, -1, -1, sizeof(::AgentBridgeServer::GetActorsInDataLayerResponse)},
+        {661, -1, -1, sizeof(::AgentBridgeServer::ExecuteConsoleCommandRequest)},
+        {670, -1, -1, sizeof(::AgentBridgeServer::ExecuteConsoleCommandResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -1504,6 +2029,22 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::AgentBridgeServer::_FunctionSignature_default_instance_._instance,
     &::AgentBridgeServer::_ClassSchema_default_instance_._instance,
     &::AgentBridgeServer::_GetClassSchemaResponse_default_instance_._instance,
+    &::AgentBridgeServer::_BoundingBox_default_instance_._instance,
+    &::AgentBridgeServer::_StreamingActorInfo_default_instance_._instance,
+    &::AgentBridgeServer::_IsWorldPartitionedRequest_default_instance_._instance,
+    &::AgentBridgeServer::_IsWorldPartitionedResponse_default_instance_._instance,
+    &::AgentBridgeServer::_QueryAllActorsRequest_default_instance_._instance,
+    &::AgentBridgeServer::_QueryAllActorsResponse_default_instance_._instance,
+    &::AgentBridgeServer::_GetStreamingStateRequest_default_instance_._instance,
+    &::AgentBridgeServer::_GetStreamingStateResponse_default_instance_._instance,
+    &::AgentBridgeServer::_QueryLandscapeRequest_default_instance_._instance,
+    &::AgentBridgeServer::_QueryLandscapeResponse_default_instance_._instance,
+    &::AgentBridgeServer::_GetDataLayersRequest_default_instance_._instance,
+    &::AgentBridgeServer::_GetDataLayersResponse_default_instance_._instance,
+    &::AgentBridgeServer::_GetActorsInDataLayerRequest_default_instance_._instance,
+    &::AgentBridgeServer::_GetActorsInDataLayerResponse_default_instance_._instance,
+    &::AgentBridgeServer::_ExecuteConsoleCommandRequest_default_instance_._instance,
+    &::AgentBridgeServer::_ExecuteConsoleCommandResponse_default_instance_._instance,
 };
 const char descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n#AgentBridgeServer/AgentBridge.proto\022\021A"
@@ -1627,51 +2168,112 @@ const char descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto[] P
     "r.PropertyInfo\0227\n\tfunctions\030\003 \003(\0132$.Agen"
     "tBridgeServer.FunctionSignature\"H\n\026GetCl"
     "assSchemaResponse\022.\n\006schema\030\001 \001(\0132\036.Agen"
-    "tBridgeServer.ClassSchema*\240\003\n\014PropertyTy"
-    "pe\022\026\n\022PROPERTY_TYPE_NONE\020\000\022\026\n\022PROPERTY_T"
-    "YPE_BOOL\020\001\022\025\n\021PROPERTY_TYPE_INT\020\002\022\027\n\023PRO"
-    "PERTY_TYPE_FLOAT\020\003\022\030\n\024PROPERTY_TYPE_STRI"
-    "NG\020\004\022\026\n\022PROPERTY_TYPE_NAME\020\005\022\030\n\024PROPERTY"
-    "_TYPE_VECTOR\020\006\022\031\n\025PROPERTY_TYPE_ROTATOR\020"
-    "\007\022\033\n\027PROPERTY_TYPE_TRANSFORM\020\010\022\027\n\023PROPER"
-    "TY_TYPE_COLOR\020\t\022\030\n\024PROPERTY_TYPE_OBJECT\020"
-    "\n\022\027\n\023PROPERTY_TYPE_CLASS\020\013\022\030\n\024PROPERTY_T"
-    "YPE_STRUCT\020\014\022\027\n\023PROPERTY_TYPE_ARRAY\020\r\022\025\n"
-    "\021PROPERTY_TYPE_MAP\020\016\022\026\n\022PROPERTY_TYPE_EN"
-    "UM\020\0172\246\n\n\022AgentBridgeService\022Y\n\nListWorld"
-    "s\022$.AgentBridgeServer.ListWorldsRequest\032"
-    "%.AgentBridgeServer.ListWorldsResponse\022Q"
-    "\n\016SetTargetWorld\022(.AgentBridgeServer.Set"
-    "TargetWorldRequest\032\025.TempoScripting.Empt"
-    "y\022\\\n\013QueryActors\022%.AgentBridgeServer.Que"
-    "ryActorsRequest\032&.AgentBridgeServer.Quer"
-    "yActorsResponse\022S\n\010GetActor\022\".AgentBridg"
-    "eServer.GetActorRequest\032#.AgentBridgeSer"
-    "ver.GetActorResponse\022Y\n\nSpawnActor\022$.Age"
-    "ntBridgeServer.SpawnActorRequest\032%.Agent"
-    "BridgeServer.SpawnActorResponse\022K\n\013Delet"
-    "eActor\022%.AgentBridgeServer.DeleteActorRe"
-    "quest\032\025.TempoScripting.Empty\022W\n\021SetActor"
-    "Transform\022+.AgentBridgeServer.SetActorTr"
-    "ansformRequest\032\025.TempoScripting.Empty\022q\n"
-    "\022SetActorProperties\022,.AgentBridgeServer."
-    "SetActorPropertiesRequest\032-.AgentBridgeS"
-    "erver.SetActorPropertiesResponse\022h\n\017GetP"
-    "ropertyPath\022).AgentBridgeServer.GetPrope"
-    "rtyPathRequest\032*.AgentBridgeServer.GetPr"
-    "opertyPathResponse\022S\n\017SetPropertyPath\022)."
-    "AgentBridgeServer.SetPropertyPathRequest"
-    "\032\025.TempoScripting.Empty\022_\n\014CallFunction\022"
-    "&.AgentBridgeServer.CallFunctionRequest\032"
-    "\'.AgentBridgeServer.CallFunctionResponse"
-    "\022V\n\tFindClass\022#.AgentBridgeServer.FindCl"
-    "assRequest\032$.AgentBridgeServer.FindClass"
-    "Response\022e\n\016GetClassSchema\022(.AgentBridge"
-    "Server.GetClassSchemaRequest\032).AgentBrid"
-    "geServer.GetClassSchemaResponse\022\\\n\013ListC"
-    "lasses\022%.AgentBridgeServer.ListClassesRe"
-    "quest\032&.AgentBridgeServer.ListClassesRes"
-    "ponseb\006proto3"
+    "tBridgeServer.ClassSchema\"W\n\013BoundingBox"
+    "\022#\n\003min\030\001 \001(\0132\026.TempoScripting.Vector\022#\n"
+    "\003max\030\002 \001(\0132\026.TempoScripting.Vector\"\202\002\n\022S"
+    "treamingActorInfo\0226\n\nactor_info\030\001 \001(\0132\"."
+    "AgentBridgeServer.ActorDescriptor\022:\n\017str"
+    "eaming_state\030\002 \001(\0162!.AgentBridgeServer.S"
+    "treamingState\022\026\n\016streaming_cell\030\003 \001(\t\022.\n"
+    "\006bounds\030\004 \001(\0132\036.AgentBridgeServer.Boundi"
+    "ngBox\022\023\n\013data_layers\030\005 \003(\t\022\033\n\023is_spatial"
+    "ly_loaded\030\006 \001(\010\"\033\n\031IsWorldPartitionedReq"
+    "uest\"H\n\032IsWorldPartitionedResponse\022\026\n\016is"
+    "_partitioned\030\001 \001(\010\022\022\n\nworld_name\030\002 \001(\t\"\315"
+    "\001\n\025QueryAllActorsRequest\022\022\n\nclass_name\030\001"
+    " \001(\t\022\024\n\014name_pattern\030\002 \001(\t\022\026\n\016include_lo"
+    "aded\030\003 \001(\010\022\030\n\020include_unloaded\030\004 \001(\010\022\022\n\n"
+    "data_layer\030\005 \001(\t\0225\n\rbounds_filter\030\006 \001(\0132"
+    "\036.AgentBridgeServer.BoundingBox\022\r\n\005limit"
+    "\030\007 \001(\005\"}\n\026QueryAllActorsResponse\0225\n\006acto"
+    "rs\030\001 \003(\0132%.AgentBridgeServer.StreamingAc"
+    "torInfo\022\024\n\014total_loaded\030\002 \001(\005\022\026\n\016total_u"
+    "nloaded\030\003 \001(\005\".\n\030GetStreamingStateReques"
+    "t\022\022\n\nactor_guid\030\001 \001(\t\"\203\001\n\031GetStreamingSt"
+    "ateResponse\0220\n\005state\030\001 \001(\0162!.AgentBridge"
+    "Server.StreamingState\0224\n\005actor\030\002 \001(\0132%.A"
+    "gentBridgeServer.StreamingActorInfo\"1\n\025Q"
+    "ueryLandscapeRequest\022\030\n\020include_unloaded"
+    "\030\001 \001(\010\"o\n\026QueryLandscapeResponse\022@\n\021land"
+    "scape_proxies\030\001 \003(\0132%.AgentBridgeServer."
+    "StreamingActorInfo\022\023\n\013total_count\030\002 \001(\005\""
+    "\026\n\024GetDataLayersRequest\",\n\025GetDataLayers"
+    "Response\022\023\n\013data_layers\030\001 \003(\t\"Z\n\033GetActo"
+    "rsInDataLayerRequest\022\022\n\ndata_layer\030\001 \001(\t"
+    "\022\030\n\020include_unloaded\030\002 \001(\010\022\r\n\005limit\030\003 \001("
+    "\005\"j\n\034GetActorsInDataLayerResponse\0225\n\006act"
+    "ors\030\001 \003(\0132%.AgentBridgeServer.StreamingA"
+    "ctorInfo\022\023\n\013total_count\030\002 \001(\005\"/\n\034Execute"
+    "ConsoleCommandRequest\022\017\n\007command\030\001 \001(\t\"@"
+    "\n\035ExecuteConsoleCommandResponse\022\017\n\007succe"
+    "ss\030\001 \001(\010\022\016\n\006output\030\002 \001(\t*\240\003\n\014PropertyTyp"
+    "e\022\026\n\022PROPERTY_TYPE_NONE\020\000\022\026\n\022PROPERTY_TY"
+    "PE_BOOL\020\001\022\025\n\021PROPERTY_TYPE_INT\020\002\022\027\n\023PROP"
+    "ERTY_TYPE_FLOAT\020\003\022\030\n\024PROPERTY_TYPE_STRIN"
+    "G\020\004\022\026\n\022PROPERTY_TYPE_NAME\020\005\022\030\n\024PROPERTY_"
+    "TYPE_VECTOR\020\006\022\031\n\025PROPERTY_TYPE_ROTATOR\020\007"
+    "\022\033\n\027PROPERTY_TYPE_TRANSFORM\020\010\022\027\n\023PROPERT"
+    "Y_TYPE_COLOR\020\t\022\030\n\024PROPERTY_TYPE_OBJECT\020\n"
+    "\022\027\n\023PROPERTY_TYPE_CLASS\020\013\022\030\n\024PROPERTY_TY"
+    "PE_STRUCT\020\014\022\027\n\023PROPERTY_TYPE_ARRAY\020\r\022\025\n\021"
+    "PROPERTY_TYPE_MAP\020\016\022\026\n\022PROPERTY_TYPE_ENU"
+    "M\020\017*\213\001\n\016StreamingState\022\"\n\036STREAMING_STAT"
+    "E_NOT_APPLICABLE\020\000\022\032\n\026STREAMING_STATE_LO"
+    "ADED\020\001\022\034\n\030STREAMING_STATE_UNLOADED\020\002\022\033\n\027"
+    "STREAMING_STATE_INVALID\020\0032\260\020\n\022AgentBridg"
+    "eService\022Y\n\nListWorlds\022$.AgentBridgeServ"
+    "er.ListWorldsRequest\032%.AgentBridgeServer"
+    ".ListWorldsResponse\022Q\n\016SetTargetWorld\022(."
+    "AgentBridgeServer.SetTargetWorldRequest\032"
+    "\025.TempoScripting.Empty\022\\\n\013QueryActors\022%."
+    "AgentBridgeServer.QueryActorsRequest\032&.A"
+    "gentBridgeServer.QueryActorsResponse\022S\n\010"
+    "GetActor\022\".AgentBridgeServer.GetActorReq"
+    "uest\032#.AgentBridgeServer.GetActorRespons"
+    "e\022Y\n\nSpawnActor\022$.AgentBridgeServer.Spaw"
+    "nActorRequest\032%.AgentBridgeServer.SpawnA"
+    "ctorResponse\022K\n\013DeleteActor\022%.AgentBridg"
+    "eServer.DeleteActorRequest\032\025.TempoScript"
+    "ing.Empty\022W\n\021SetActorTransform\022+.AgentBr"
+    "idgeServer.SetActorTransformRequest\032\025.Te"
+    "mpoScripting.Empty\022q\n\022SetActorProperties"
+    "\022,.AgentBridgeServer.SetActorPropertiesR"
+    "equest\032-.AgentBridgeServer.SetActorPrope"
+    "rtiesResponse\022h\n\017GetPropertyPath\022).Agent"
+    "BridgeServer.GetPropertyPathRequest\032*.Ag"
+    "entBridgeServer.GetPropertyPathResponse\022"
+    "S\n\017SetPropertyPath\022).AgentBridgeServer.S"
+    "etPropertyPathRequest\032\025.TempoScripting.E"
+    "mpty\022_\n\014CallFunction\022&.AgentBridgeServer"
+    ".CallFunctionRequest\032\'.AgentBridgeServer"
+    ".CallFunctionResponse\022V\n\tFindClass\022#.Age"
+    "ntBridgeServer.FindClassRequest\032$.AgentB"
+    "ridgeServer.FindClassResponse\022e\n\016GetClas"
+    "sSchema\022(.AgentBridgeServer.GetClassSche"
+    "maRequest\032).AgentBridgeServer.GetClassSc"
+    "hemaResponse\022\\\n\013ListClasses\022%.AgentBridg"
+    "eServer.ListClassesRequest\032&.AgentBridge"
+    "Server.ListClassesResponse\022q\n\022IsWorldPar"
+    "titioned\022,.AgentBridgeServer.IsWorldPart"
+    "itionedRequest\032-.AgentBridgeServer.IsWor"
+    "ldPartitionedResponse\022e\n\016QueryAllActors\022"
+    "(.AgentBridgeServer.QueryAllActorsReques"
+    "t\032).AgentBridgeServer.QueryAllActorsResp"
+    "onse\022n\n\021GetStreamingState\022+.AgentBridgeS"
+    "erver.GetStreamingStateRequest\032,.AgentBr"
+    "idgeServer.GetStreamingStateResponse\022e\n\016"
+    "QueryLandscape\022(.AgentBridgeServer.Query"
+    "LandscapeRequest\032).AgentBridgeServer.Que"
+    "ryLandscapeResponse\022b\n\rGetDataLayers\022\'.A"
+    "gentBridgeServer.GetDataLayersRequest\032(."
+    "AgentBridgeServer.GetDataLayersResponse\022"
+    "w\n\024GetActorsInDataLayer\022..AgentBridgeSer"
+    "ver.GetActorsInDataLayerRequest\032/.AgentB"
+    "ridgeServer.GetActorsInDataLayerResponse"
+    "\022z\n\025ExecuteConsoleCommand\022/.AgentBridgeS"
+    "erver.ExecuteConsoleCommandRequest\0320.Age"
+    "ntBridgeServer.ExecuteConsoleCommandResp"
+    "onseb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_deps[2] =
     {
@@ -1682,13 +2284,13 @@ static ::absl_tempo::once_flag descriptor_table_AgentBridgeServer_2fAgentBridge_
 const ::_pbi::DescriptorTable descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto = {
     false,
     false,
-    6613,
+    9052,
     descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto,
     "AgentBridgeServer/AgentBridge.proto",
     &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
     descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_deps,
     2,
-    37,
+    53,
     schemas,
     file_default_instances,
     TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets,
@@ -1723,6 +2325,15 @@ PROTOBUF_CONSTINIT const uint32_t PropertyType_internal_data_[] = {
     1048576u, 0u, };
 bool PropertyType_IsValid(int value) {
   return 0 <= value && value <= 15;
+}
+const ::google::protobuf_tempo::EnumDescriptor* StreamingState_descriptor() {
+  ::google::protobuf_tempo::internal::AssignDescriptors(&descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto);
+  return file_level_enum_descriptors_AgentBridgeServer_2fAgentBridge_2eproto[1];
+}
+PROTOBUF_CONSTINIT const uint32_t StreamingState_internal_data_[] = {
+    262144u, 0u, };
+bool StreamingState_IsValid(int value) {
+  return 0 <= value && value <= 3;
 }
 // ===================================================================
 
@@ -11838,6 +12449,3438 @@ void GetClassSchemaResponse::InternalSwap(GetClassSchemaResponse* PROTOBUF_RESTR
   return ::_pbi::AssignDescriptors(
       &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
       file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[36]);
+}
+// ===================================================================
+
+class BoundingBox::_Internal {
+ public:
+  using HasBits = decltype(std::declval<BoundingBox>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(BoundingBox, _impl_._has_bits_);
+  static const ::TempoScripting::Vector& min(const BoundingBox* msg);
+  static void set_has_min(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static const ::TempoScripting::Vector& max(const BoundingBox* msg);
+  static void set_has_max(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+};
+
+const ::TempoScripting::Vector& BoundingBox::_Internal::min(const BoundingBox* msg) {
+  return *msg->_impl_.min_;
+}
+const ::TempoScripting::Vector& BoundingBox::_Internal::max(const BoundingBox* msg) {
+  return *msg->_impl_.max_;
+}
+void BoundingBox::clear_min() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.min_ != nullptr) _impl_.min_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+void BoundingBox::clear_max() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.max_ != nullptr) _impl_.max_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000002u;
+}
+BoundingBox::BoundingBox(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.BoundingBox)
+}
+inline PROTOBUF_NDEBUG_INLINE BoundingBox::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+BoundingBox::BoundingBox(
+    ::google::protobuf_tempo::Arena* arena,
+    const BoundingBox& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  BoundingBox* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.min_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::TempoScripting::Vector>(arena, *from._impl_.min_)
+                : nullptr;
+  _impl_.max_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::TempoScripting::Vector>(arena, *from._impl_.max_)
+                : nullptr;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.BoundingBox)
+}
+inline PROTOBUF_NDEBUG_INLINE BoundingBox::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void BoundingBox::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, min_),
+           0,
+           offsetof(Impl_, max_) -
+               offsetof(Impl_, min_) +
+               sizeof(Impl_::max_));
+}
+BoundingBox::~BoundingBox() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.BoundingBox)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void BoundingBox::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.min_;
+  delete _impl_.max_;
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void BoundingBox::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.BoundingBox)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(_impl_.min_ != nullptr);
+      _impl_.min_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.max_ != nullptr);
+      _impl_.max_->Clear();
+    }
+  }
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* BoundingBox::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 2, 0, 2> BoundingBox::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(BoundingBox, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    2,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_BoundingBox_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // .TempoScripting.Vector max = 2;
+    {::_pbi::TcParser::FastMtS1,
+     {18, 1, 1, PROTOBUF_FIELD_OFFSET(BoundingBox, _impl_.max_)}},
+    // .TempoScripting.Vector min = 1;
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(BoundingBox, _impl_.min_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .TempoScripting.Vector min = 1;
+    {PROTOBUF_FIELD_OFFSET(BoundingBox, _impl_.min_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .TempoScripting.Vector max = 2;
+    {PROTOBUF_FIELD_OFFSET(BoundingBox, _impl_.max_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::TempoScripting::Vector>()},
+    {::_pbi::TcParser::GetTable<::TempoScripting::Vector>()},
+  }}, {{
+  }},
+};
+
+::uint8_t* BoundingBox::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.BoundingBox)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  // .TempoScripting.Vector min = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::min(this),
+        _Internal::min(this).GetCachedSize(), target, stream);
+  }
+
+  // .TempoScripting.Vector max = 2;
+  if (cached_has_bits & 0x00000002u) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::max(this),
+        _Internal::max(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.BoundingBox)
+  return target;
+}
+
+::size_t BoundingBox::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.BoundingBox)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // .TempoScripting.Vector min = 1;
+    if (cached_has_bits & 0x00000001u) {
+      total_size +=
+          1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.min_);
+    }
+
+    // .TempoScripting.Vector max = 2;
+    if (cached_has_bits & 0x00000002u) {
+      total_size +=
+          1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.max_);
+    }
+
+  }
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData BoundingBox::_class_data_ = {
+    BoundingBox::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* BoundingBox::GetClassData() const {
+  return &_class_data_;
+}
+
+void BoundingBox::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<BoundingBox*>(&to_msg);
+  auto& from = static_cast<const BoundingBox&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.BoundingBox)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_mutable_min()->::TempoScripting::Vector::MergeFrom(
+          from._internal_min());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_internal_mutable_max()->::TempoScripting::Vector::MergeFrom(
+          from._internal_max());
+    }
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void BoundingBox::CopyFrom(const BoundingBox& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.BoundingBox)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool BoundingBox::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* BoundingBox::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void BoundingBox::InternalSwap(BoundingBox* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(BoundingBox, _impl_.max_)
+      + sizeof(BoundingBox::_impl_.max_)
+      - PROTOBUF_FIELD_OFFSET(BoundingBox, _impl_.min_)>(
+          reinterpret_cast<char*>(&_impl_.min_),
+          reinterpret_cast<char*>(&other->_impl_.min_));
+}
+
+::google::protobuf_tempo::Metadata BoundingBox::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[37]);
+}
+// ===================================================================
+
+class StreamingActorInfo::_Internal {
+ public:
+  using HasBits = decltype(std::declval<StreamingActorInfo>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_._has_bits_);
+  static const ::AgentBridgeServer::ActorDescriptor& actor_info(const StreamingActorInfo* msg);
+  static void set_has_actor_info(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+  static const ::AgentBridgeServer::BoundingBox& bounds(const StreamingActorInfo* msg);
+  static void set_has_bounds(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
+};
+
+const ::AgentBridgeServer::ActorDescriptor& StreamingActorInfo::_Internal::actor_info(const StreamingActorInfo* msg) {
+  return *msg->_impl_.actor_info_;
+}
+const ::AgentBridgeServer::BoundingBox& StreamingActorInfo::_Internal::bounds(const StreamingActorInfo* msg) {
+  return *msg->_impl_.bounds_;
+}
+StreamingActorInfo::StreamingActorInfo(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.StreamingActorInfo)
+}
+inline PROTOBUF_NDEBUG_INLINE StreamingActorInfo::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        data_layers_{visibility, arena, from.data_layers_},
+        streaming_cell_(arena, from.streaming_cell_) {}
+
+StreamingActorInfo::StreamingActorInfo(
+    ::google::protobuf_tempo::Arena* arena,
+    const StreamingActorInfo& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  StreamingActorInfo* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.actor_info_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::AgentBridgeServer::ActorDescriptor>(arena, *from._impl_.actor_info_)
+                : nullptr;
+  _impl_.bounds_ = (cached_has_bits & 0x00000002u)
+                ? CreateMaybeMessage<::AgentBridgeServer::BoundingBox>(arena, *from._impl_.bounds_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, streaming_state_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, streaming_state_),
+           offsetof(Impl_, is_spatially_loaded_) -
+               offsetof(Impl_, streaming_state_) +
+               sizeof(Impl_::is_spatially_loaded_));
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.StreamingActorInfo)
+}
+inline PROTOBUF_NDEBUG_INLINE StreamingActorInfo::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : _cached_size_{0},
+        data_layers_{visibility, arena},
+        streaming_cell_(arena) {}
+
+inline void StreamingActorInfo::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, actor_info_),
+           0,
+           offsetof(Impl_, is_spatially_loaded_) -
+               offsetof(Impl_, actor_info_) +
+               sizeof(Impl_::is_spatially_loaded_));
+}
+StreamingActorInfo::~StreamingActorInfo() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.StreamingActorInfo)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void StreamingActorInfo::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.streaming_cell_.Destroy();
+  delete _impl_.actor_info_;
+  delete _impl_.bounds_;
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void StreamingActorInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.StreamingActorInfo)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.data_layers_.Clear();
+  _impl_.streaming_cell_.ClearToEmpty();
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      ABSL_DCHECK(_impl_.actor_info_ != nullptr);
+      _impl_.actor_info_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      ABSL_DCHECK(_impl_.bounds_ != nullptr);
+      _impl_.bounds_->Clear();
+    }
+  }
+  ::memset(&_impl_.streaming_state_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.is_spatially_loaded_) -
+      reinterpret_cast<char*>(&_impl_.streaming_state_)) + sizeof(_impl_.is_spatially_loaded_));
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* StreamingActorInfo::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 6, 2, 70, 2> StreamingActorInfo::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_._has_bits_),
+    0, // no _extensions_
+    6, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967232,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    6,  // num_field_entries
+    2,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_StreamingActorInfo_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // .AgentBridgeServer.ActorDescriptor actor_info = 1;
+    {::_pbi::TcParser::FastMtS1,
+     {10, 0, 0, PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.actor_info_)}},
+    // .AgentBridgeServer.StreamingState streaming_state = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(StreamingActorInfo, _impl_.streaming_state_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.streaming_state_)}},
+    // string streaming_cell = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.streaming_cell_)}},
+    // .AgentBridgeServer.BoundingBox bounds = 4;
+    {::_pbi::TcParser::FastMtS1,
+     {34, 1, 1, PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.bounds_)}},
+    // repeated string data_layers = 5;
+    {::_pbi::TcParser::FastUR1,
+     {42, 63, 0, PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.data_layers_)}},
+    // bool is_spatially_loaded = 6;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(StreamingActorInfo, _impl_.is_spatially_loaded_), 63>(),
+     {48, 63, 0, PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.is_spatially_loaded_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .AgentBridgeServer.ActorDescriptor actor_info = 1;
+    {PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.actor_info_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // .AgentBridgeServer.StreamingState streaming_state = 2;
+    {PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.streaming_state_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+    // string streaming_cell = 3;
+    {PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.streaming_cell_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .AgentBridgeServer.BoundingBox bounds = 4;
+    {PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.bounds_), _Internal::kHasBitsOffset + 1, 1,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // repeated string data_layers = 5;
+    {PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.data_layers_), -1, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+    // bool is_spatially_loaded = 6;
+    {PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.is_spatially_loaded_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::ActorDescriptor>()},
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::BoundingBox>()},
+  }}, {{
+    "\44\0\0\16\0\13\0\0"
+    "AgentBridgeServer.StreamingActorInfo"
+    "streaming_cell"
+    "data_layers"
+  }},
+};
+
+::uint8_t* StreamingActorInfo::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.StreamingActorInfo)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  // .AgentBridgeServer.ActorDescriptor actor_info = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::InternalWriteMessage(
+        1, _Internal::actor_info(this),
+        _Internal::actor_info(this).GetCachedSize(), target, stream);
+  }
+
+  // .AgentBridgeServer.StreamingState streaming_state = 2;
+  if (this->_internal_streaming_state() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        2, this->_internal_streaming_state(), target);
+  }
+
+  // string streaming_cell = 3;
+  if (!this->_internal_streaming_cell().empty()) {
+    const std::string& _s = this->_internal_streaming_cell();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.StreamingActorInfo.streaming_cell");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
+  }
+
+  // .AgentBridgeServer.BoundingBox bounds = 4;
+  if (cached_has_bits & 0x00000002u) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::InternalWriteMessage(
+        4, _Internal::bounds(this),
+        _Internal::bounds(this).GetCachedSize(), target, stream);
+  }
+
+  // repeated string data_layers = 5;
+  for (int i = 0, n = this->_internal_data_layers_size(); i < n; ++i) {
+    const auto& s = this->_internal_data_layers().Get(i);
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.StreamingActorInfo.data_layers");
+    target = stream->WriteString(5, s, target);
+  }
+
+  // bool is_spatially_loaded = 6;
+  if (this->_internal_is_spatially_loaded() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        6, this->_internal_is_spatially_loaded(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.StreamingActorInfo)
+  return target;
+}
+
+::size_t StreamingActorInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.StreamingActorInfo)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string data_layers = 5;
+  total_size += 1 * ::google::protobuf_tempo::internal::FromIntSize(_internal_data_layers().size());
+  for (int i = 0, n = _internal_data_layers().size(); i < n; ++i) {
+    total_size += ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+        _internal_data_layers().Get(i));
+  }
+  // string streaming_cell = 3;
+  if (!this->_internal_streaming_cell().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_streaming_cell());
+  }
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    // .AgentBridgeServer.ActorDescriptor actor_info = 1;
+    if (cached_has_bits & 0x00000001u) {
+      total_size +=
+          1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.actor_info_);
+    }
+
+    // .AgentBridgeServer.BoundingBox bounds = 4;
+    if (cached_has_bits & 0x00000002u) {
+      total_size +=
+          1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.bounds_);
+    }
+
+  }
+  // .AgentBridgeServer.StreamingState streaming_state = 2;
+  if (this->_internal_streaming_state() != 0) {
+    total_size += 1 +
+                  ::_pbi::WireFormatLite::EnumSize(this->_internal_streaming_state());
+  }
+
+  // bool is_spatially_loaded = 6;
+  if (this->_internal_is_spatially_loaded() != 0) {
+    total_size += 2;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData StreamingActorInfo::_class_data_ = {
+    StreamingActorInfo::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* StreamingActorInfo::GetClassData() const {
+  return &_class_data_;
+}
+
+void StreamingActorInfo::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<StreamingActorInfo*>(&to_msg);
+  auto& from = static_cast<const StreamingActorInfo&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.StreamingActorInfo)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_data_layers()->MergeFrom(from._internal_data_layers());
+  if (!from._internal_streaming_cell().empty()) {
+    _this->_internal_set_streaming_cell(from._internal_streaming_cell());
+  }
+  cached_has_bits = from._impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      _this->_internal_mutable_actor_info()->::AgentBridgeServer::ActorDescriptor::MergeFrom(
+          from._internal_actor_info());
+    }
+    if (cached_has_bits & 0x00000002u) {
+      _this->_internal_mutable_bounds()->::AgentBridgeServer::BoundingBox::MergeFrom(
+          from._internal_bounds());
+    }
+  }
+  if (from._internal_streaming_state() != 0) {
+    _this->_internal_set_streaming_state(from._internal_streaming_state());
+  }
+  if (from._internal_is_spatially_loaded() != 0) {
+    _this->_internal_set_is_spatially_loaded(from._internal_is_spatially_loaded());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void StreamingActorInfo::CopyFrom(const StreamingActorInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.StreamingActorInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool StreamingActorInfo::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* StreamingActorInfo::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void StreamingActorInfo::InternalSwap(StreamingActorInfo* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  _impl_.data_layers_.InternalSwap(&other->_impl_.data_layers_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.streaming_cell_, &other->_impl_.streaming_cell_, arena);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.is_spatially_loaded_)
+      + sizeof(StreamingActorInfo::_impl_.is_spatially_loaded_)
+      - PROTOBUF_FIELD_OFFSET(StreamingActorInfo, _impl_.actor_info_)>(
+          reinterpret_cast<char*>(&_impl_.actor_info_),
+          reinterpret_cast<char*>(&other->_impl_.actor_info_));
+}
+
+::google::protobuf_tempo::Metadata StreamingActorInfo::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[38]);
+}
+// ===================================================================
+
+class IsWorldPartitionedRequest::_Internal {
+ public:
+};
+
+IsWorldPartitionedRequest::IsWorldPartitionedRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::internal::ZeroFieldsBase(arena) {
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.IsWorldPartitionedRequest)
+}
+IsWorldPartitionedRequest::IsWorldPartitionedRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const IsWorldPartitionedRequest& from)
+    : ::google::protobuf_tempo::internal::ZeroFieldsBase(arena) {
+  IsWorldPartitionedRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.IsWorldPartitionedRequest)
+}
+
+
+
+
+
+
+
+
+
+::google::protobuf_tempo::Metadata IsWorldPartitionedRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[39]);
+}
+// ===================================================================
+
+class IsWorldPartitionedResponse::_Internal {
+ public:
+};
+
+IsWorldPartitionedResponse::IsWorldPartitionedResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.IsWorldPartitionedResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE IsWorldPartitionedResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : world_name_(arena, from.world_name_),
+        _cached_size_{0} {}
+
+IsWorldPartitionedResponse::IsWorldPartitionedResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const IsWorldPartitionedResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  IsWorldPartitionedResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.is_partitioned_ = from._impl_.is_partitioned_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.IsWorldPartitionedResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE IsWorldPartitionedResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : world_name_(arena),
+        _cached_size_{0} {}
+
+inline void IsWorldPartitionedResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.is_partitioned_ = {};
+}
+IsWorldPartitionedResponse::~IsWorldPartitionedResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.IsWorldPartitionedResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void IsWorldPartitionedResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.world_name_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void IsWorldPartitionedResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.IsWorldPartitionedResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.world_name_.ClearToEmpty();
+  _impl_.is_partitioned_ = false;
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* IsWorldPartitionedResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 63, 2> IsWorldPartitionedResponse::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_IsWorldPartitionedResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string world_name = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(IsWorldPartitionedResponse, _impl_.world_name_)}},
+    // bool is_partitioned = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(IsWorldPartitionedResponse, _impl_.is_partitioned_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(IsWorldPartitionedResponse, _impl_.is_partitioned_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // bool is_partitioned = 1;
+    {PROTOBUF_FIELD_OFFSET(IsWorldPartitionedResponse, _impl_.is_partitioned_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // string world_name = 2;
+    {PROTOBUF_FIELD_OFFSET(IsWorldPartitionedResponse, _impl_.world_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\54\0\12\0\0\0\0\0"
+    "AgentBridgeServer.IsWorldPartitionedResponse"
+    "world_name"
+  }},
+};
+
+::uint8_t* IsWorldPartitionedResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.IsWorldPartitionedResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // bool is_partitioned = 1;
+  if (this->_internal_is_partitioned() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        1, this->_internal_is_partitioned(), target);
+  }
+
+  // string world_name = 2;
+  if (!this->_internal_world_name().empty()) {
+    const std::string& _s = this->_internal_world_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.IsWorldPartitionedResponse.world_name");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.IsWorldPartitionedResponse)
+  return target;
+}
+
+::size_t IsWorldPartitionedResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.IsWorldPartitionedResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string world_name = 2;
+  if (!this->_internal_world_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_world_name());
+  }
+
+  // bool is_partitioned = 1;
+  if (this->_internal_is_partitioned() != 0) {
+    total_size += 2;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData IsWorldPartitionedResponse::_class_data_ = {
+    IsWorldPartitionedResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* IsWorldPartitionedResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void IsWorldPartitionedResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<IsWorldPartitionedResponse*>(&to_msg);
+  auto& from = static_cast<const IsWorldPartitionedResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.IsWorldPartitionedResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_world_name().empty()) {
+    _this->_internal_set_world_name(from._internal_world_name());
+  }
+  if (from._internal_is_partitioned() != 0) {
+    _this->_internal_set_is_partitioned(from._internal_is_partitioned());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void IsWorldPartitionedResponse::CopyFrom(const IsWorldPartitionedResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.IsWorldPartitionedResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool IsWorldPartitionedResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* IsWorldPartitionedResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void IsWorldPartitionedResponse::InternalSwap(IsWorldPartitionedResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.world_name_, &other->_impl_.world_name_, arena);
+        swap(_impl_.is_partitioned_, other->_impl_.is_partitioned_);
+}
+
+::google::protobuf_tempo::Metadata IsWorldPartitionedResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[40]);
+}
+// ===================================================================
+
+class QueryAllActorsRequest::_Internal {
+ public:
+  using HasBits = decltype(std::declval<QueryAllActorsRequest>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_._has_bits_);
+  static const ::AgentBridgeServer::BoundingBox& bounds_filter(const QueryAllActorsRequest* msg);
+  static void set_has_bounds_filter(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+};
+
+const ::AgentBridgeServer::BoundingBox& QueryAllActorsRequest::_Internal::bounds_filter(const QueryAllActorsRequest* msg) {
+  return *msg->_impl_.bounds_filter_;
+}
+QueryAllActorsRequest::QueryAllActorsRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.QueryAllActorsRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE QueryAllActorsRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        class_name_(arena, from.class_name_),
+        name_pattern_(arena, from.name_pattern_),
+        data_layer_(arena, from.data_layer_) {}
+
+QueryAllActorsRequest::QueryAllActorsRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const QueryAllActorsRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  QueryAllActorsRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.bounds_filter_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::AgentBridgeServer::BoundingBox>(arena, *from._impl_.bounds_filter_)
+                : nullptr;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, include_loaded_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, include_loaded_),
+           offsetof(Impl_, limit_) -
+               offsetof(Impl_, include_loaded_) +
+               sizeof(Impl_::limit_));
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.QueryAllActorsRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE QueryAllActorsRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : _cached_size_{0},
+        class_name_(arena),
+        name_pattern_(arena),
+        data_layer_(arena) {}
+
+inline void QueryAllActorsRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, bounds_filter_),
+           0,
+           offsetof(Impl_, limit_) -
+               offsetof(Impl_, bounds_filter_) +
+               sizeof(Impl_::limit_));
+}
+QueryAllActorsRequest::~QueryAllActorsRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.QueryAllActorsRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void QueryAllActorsRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.class_name_.Destroy();
+  _impl_.name_pattern_.Destroy();
+  _impl_.data_layer_.Destroy();
+  delete _impl_.bounds_filter_;
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void QueryAllActorsRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.QueryAllActorsRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.class_name_.ClearToEmpty();
+  _impl_.name_pattern_.ClearToEmpty();
+  _impl_.data_layer_.ClearToEmpty();
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.bounds_filter_ != nullptr);
+    _impl_.bounds_filter_->Clear();
+  }
+  ::memset(&_impl_.include_loaded_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.limit_) -
+      reinterpret_cast<char*>(&_impl_.include_loaded_)) + sizeof(_impl_.limit_));
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* QueryAllActorsRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 7, 1, 80, 2> QueryAllActorsRequest::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_._has_bits_),
+    0, // no _extensions_
+    7, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967168,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    7,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_QueryAllActorsRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string class_name = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.class_name_)}},
+    // string name_pattern = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.name_pattern_)}},
+    // bool include_loaded = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(QueryAllActorsRequest, _impl_.include_loaded_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.include_loaded_)}},
+    // bool include_unloaded = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(QueryAllActorsRequest, _impl_.include_unloaded_), 63>(),
+     {32, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.include_unloaded_)}},
+    // string data_layer = 5;
+    {::_pbi::TcParser::FastUS1,
+     {42, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.data_layer_)}},
+    // .AgentBridgeServer.BoundingBox bounds_filter = 6;
+    {::_pbi::TcParser::FastMtS1,
+     {50, 0, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.bounds_filter_)}},
+    // int32 limit = 7;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(QueryAllActorsRequest, _impl_.limit_), 63>(),
+     {56, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.limit_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string class_name = 1;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.class_name_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string name_pattern = 2;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.name_pattern_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // bool include_loaded = 3;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.include_loaded_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // bool include_unloaded = 4;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.include_unloaded_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // string data_layer = 5;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.data_layer_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .AgentBridgeServer.BoundingBox bounds_filter = 6;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.bounds_filter_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+    // int32 limit = 7;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.limit_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::BoundingBox>()},
+  }}, {{
+    "\47\12\14\0\0\12\0\0"
+    "AgentBridgeServer.QueryAllActorsRequest"
+    "class_name"
+    "name_pattern"
+    "data_layer"
+  }},
+};
+
+::uint8_t* QueryAllActorsRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.QueryAllActorsRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string class_name = 1;
+  if (!this->_internal_class_name().empty()) {
+    const std::string& _s = this->_internal_class_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.QueryAllActorsRequest.class_name");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string name_pattern = 2;
+  if (!this->_internal_name_pattern().empty()) {
+    const std::string& _s = this->_internal_name_pattern();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.QueryAllActorsRequest.name_pattern");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // bool include_loaded = 3;
+  if (this->_internal_include_loaded() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        3, this->_internal_include_loaded(), target);
+  }
+
+  // bool include_unloaded = 4;
+  if (this->_internal_include_unloaded() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        4, this->_internal_include_unloaded(), target);
+  }
+
+  // string data_layer = 5;
+  if (!this->_internal_data_layer().empty()) {
+    const std::string& _s = this->_internal_data_layer();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.QueryAllActorsRequest.data_layer");
+    target = stream->WriteStringMaybeAliased(5, _s, target);
+  }
+
+  cached_has_bits = _impl_._has_bits_[0];
+  // .AgentBridgeServer.BoundingBox bounds_filter = 6;
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::InternalWriteMessage(
+        6, _Internal::bounds_filter(this),
+        _Internal::bounds_filter(this).GetCachedSize(), target, stream);
+  }
+
+  // int32 limit = 7;
+  if (this->_internal_limit() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<7>(
+            stream, this->_internal_limit(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.QueryAllActorsRequest)
+  return target;
+}
+
+::size_t QueryAllActorsRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.QueryAllActorsRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string class_name = 1;
+  if (!this->_internal_class_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_class_name());
+  }
+
+  // string name_pattern = 2;
+  if (!this->_internal_name_pattern().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_name_pattern());
+  }
+
+  // string data_layer = 5;
+  if (!this->_internal_data_layer().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_data_layer());
+  }
+
+  // .AgentBridgeServer.BoundingBox bounds_filter = 6;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size +=
+        1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.bounds_filter_);
+  }
+
+  // bool include_loaded = 3;
+  if (this->_internal_include_loaded() != 0) {
+    total_size += 2;
+  }
+
+  // bool include_unloaded = 4;
+  if (this->_internal_include_unloaded() != 0) {
+    total_size += 2;
+  }
+
+  // int32 limit = 7;
+  if (this->_internal_limit() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_limit());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData QueryAllActorsRequest::_class_data_ = {
+    QueryAllActorsRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* QueryAllActorsRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void QueryAllActorsRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<QueryAllActorsRequest*>(&to_msg);
+  auto& from = static_cast<const QueryAllActorsRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.QueryAllActorsRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_class_name().empty()) {
+    _this->_internal_set_class_name(from._internal_class_name());
+  }
+  if (!from._internal_name_pattern().empty()) {
+    _this->_internal_set_name_pattern(from._internal_name_pattern());
+  }
+  if (!from._internal_data_layer().empty()) {
+    _this->_internal_set_data_layer(from._internal_data_layer());
+  }
+  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
+    _this->_internal_mutable_bounds_filter()->::AgentBridgeServer::BoundingBox::MergeFrom(
+        from._internal_bounds_filter());
+  }
+  if (from._internal_include_loaded() != 0) {
+    _this->_internal_set_include_loaded(from._internal_include_loaded());
+  }
+  if (from._internal_include_unloaded() != 0) {
+    _this->_internal_set_include_unloaded(from._internal_include_unloaded());
+  }
+  if (from._internal_limit() != 0) {
+    _this->_internal_set_limit(from._internal_limit());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void QueryAllActorsRequest::CopyFrom(const QueryAllActorsRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.QueryAllActorsRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool QueryAllActorsRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* QueryAllActorsRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void QueryAllActorsRequest::InternalSwap(QueryAllActorsRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.class_name_, &other->_impl_.class_name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_pattern_, &other->_impl_.name_pattern_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.data_layer_, &other->_impl_.data_layer_, arena);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.limit_)
+      + sizeof(QueryAllActorsRequest::_impl_.limit_)
+      - PROTOBUF_FIELD_OFFSET(QueryAllActorsRequest, _impl_.bounds_filter_)>(
+          reinterpret_cast<char*>(&_impl_.bounds_filter_),
+          reinterpret_cast<char*>(&other->_impl_.bounds_filter_));
+}
+
+::google::protobuf_tempo::Metadata QueryAllActorsRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[41]);
+}
+// ===================================================================
+
+class QueryAllActorsResponse::_Internal {
+ public:
+};
+
+QueryAllActorsResponse::QueryAllActorsResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.QueryAllActorsResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE QueryAllActorsResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : actors_{visibility, arena, from.actors_},
+        _cached_size_{0} {}
+
+QueryAllActorsResponse::QueryAllActorsResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const QueryAllActorsResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  QueryAllActorsResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, total_loaded_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, total_loaded_),
+           offsetof(Impl_, total_unloaded_) -
+               offsetof(Impl_, total_loaded_) +
+               sizeof(Impl_::total_unloaded_));
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.QueryAllActorsResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE QueryAllActorsResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : actors_{visibility, arena},
+        _cached_size_{0} {}
+
+inline void QueryAllActorsResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, total_loaded_),
+           0,
+           offsetof(Impl_, total_unloaded_) -
+               offsetof(Impl_, total_loaded_) +
+               sizeof(Impl_::total_unloaded_));
+}
+QueryAllActorsResponse::~QueryAllActorsResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.QueryAllActorsResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void QueryAllActorsResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void QueryAllActorsResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.QueryAllActorsResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.actors_.Clear();
+  ::memset(&_impl_.total_loaded_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.total_unloaded_) -
+      reinterpret_cast<char*>(&_impl_.total_loaded_)) + sizeof(_impl_.total_unloaded_));
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* QueryAllActorsResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> QueryAllActorsResponse::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_QueryAllActorsResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // repeated .AgentBridgeServer.StreamingActorInfo actors = 1;
+    {::_pbi::TcParser::FastMtR1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsResponse, _impl_.actors_)}},
+    // int32 total_loaded = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(QueryAllActorsResponse, _impl_.total_loaded_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsResponse, _impl_.total_loaded_)}},
+    // int32 total_unloaded = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(QueryAllActorsResponse, _impl_.total_unloaded_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(QueryAllActorsResponse, _impl_.total_unloaded_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated .AgentBridgeServer.StreamingActorInfo actors = 1;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsResponse, _impl_.actors_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // int32 total_loaded = 2;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsResponse, _impl_.total_loaded_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+    // int32 total_unloaded = 3;
+    {PROTOBUF_FIELD_OFFSET(QueryAllActorsResponse, _impl_.total_unloaded_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::StreamingActorInfo>()},
+  }}, {{
+  }},
+};
+
+::uint8_t* QueryAllActorsResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.QueryAllActorsResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // repeated .AgentBridgeServer.StreamingActorInfo actors = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_actors_size()); i < n; i++) {
+    const auto& repfield = this->_internal_actors().Get(i);
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // int32 total_loaded = 2;
+  if (this->_internal_total_loaded() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<2>(
+            stream, this->_internal_total_loaded(), target);
+  }
+
+  // int32 total_unloaded = 3;
+  if (this->_internal_total_unloaded() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<3>(
+            stream, this->_internal_total_unloaded(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.QueryAllActorsResponse)
+  return target;
+}
+
+::size_t QueryAllActorsResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.QueryAllActorsResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .AgentBridgeServer.StreamingActorInfo actors = 1;
+  total_size += 1UL * this->_internal_actors_size();
+  for (const auto& msg : this->_internal_actors()) {
+    total_size +=
+      ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(msg);
+  }
+  // int32 total_loaded = 2;
+  if (this->_internal_total_loaded() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_total_loaded());
+  }
+
+  // int32 total_unloaded = 3;
+  if (this->_internal_total_unloaded() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_total_unloaded());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData QueryAllActorsResponse::_class_data_ = {
+    QueryAllActorsResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* QueryAllActorsResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void QueryAllActorsResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<QueryAllActorsResponse*>(&to_msg);
+  auto& from = static_cast<const QueryAllActorsResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.QueryAllActorsResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_actors()->MergeFrom(
+      from._internal_actors());
+  if (from._internal_total_loaded() != 0) {
+    _this->_internal_set_total_loaded(from._internal_total_loaded());
+  }
+  if (from._internal_total_unloaded() != 0) {
+    _this->_internal_set_total_unloaded(from._internal_total_unloaded());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void QueryAllActorsResponse::CopyFrom(const QueryAllActorsResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.QueryAllActorsResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool QueryAllActorsResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* QueryAllActorsResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void QueryAllActorsResponse::InternalSwap(QueryAllActorsResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.actors_.InternalSwap(&other->_impl_.actors_);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(QueryAllActorsResponse, _impl_.total_unloaded_)
+      + sizeof(QueryAllActorsResponse::_impl_.total_unloaded_)
+      - PROTOBUF_FIELD_OFFSET(QueryAllActorsResponse, _impl_.total_loaded_)>(
+          reinterpret_cast<char*>(&_impl_.total_loaded_),
+          reinterpret_cast<char*>(&other->_impl_.total_loaded_));
+}
+
+::google::protobuf_tempo::Metadata QueryAllActorsResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[42]);
+}
+// ===================================================================
+
+class GetStreamingStateRequest::_Internal {
+ public:
+};
+
+GetStreamingStateRequest::GetStreamingStateRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.GetStreamingStateRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE GetStreamingStateRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : actor_guid_(arena, from.actor_guid_),
+        _cached_size_{0} {}
+
+GetStreamingStateRequest::GetStreamingStateRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const GetStreamingStateRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  GetStreamingStateRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.GetStreamingStateRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE GetStreamingStateRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : actor_guid_(arena),
+        _cached_size_{0} {}
+
+inline void GetStreamingStateRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+GetStreamingStateRequest::~GetStreamingStateRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.GetStreamingStateRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void GetStreamingStateRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.actor_guid_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void GetStreamingStateRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.GetStreamingStateRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.actor_guid_.ClearToEmpty();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* GetStreamingStateRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 61, 2> GetStreamingStateRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_GetStreamingStateRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string actor_guid = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(GetStreamingStateRequest, _impl_.actor_guid_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string actor_guid = 1;
+    {PROTOBUF_FIELD_OFFSET(GetStreamingStateRequest, _impl_.actor_guid_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\52\12\0\0\0\0\0\0"
+    "AgentBridgeServer.GetStreamingStateRequest"
+    "actor_guid"
+  }},
+};
+
+::uint8_t* GetStreamingStateRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.GetStreamingStateRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string actor_guid = 1;
+  if (!this->_internal_actor_guid().empty()) {
+    const std::string& _s = this->_internal_actor_guid();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.GetStreamingStateRequest.actor_guid");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.GetStreamingStateRequest)
+  return target;
+}
+
+::size_t GetStreamingStateRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.GetStreamingStateRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string actor_guid = 1;
+  if (!this->_internal_actor_guid().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_actor_guid());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData GetStreamingStateRequest::_class_data_ = {
+    GetStreamingStateRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* GetStreamingStateRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void GetStreamingStateRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<GetStreamingStateRequest*>(&to_msg);
+  auto& from = static_cast<const GetStreamingStateRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.GetStreamingStateRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_actor_guid().empty()) {
+    _this->_internal_set_actor_guid(from._internal_actor_guid());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetStreamingStateRequest::CopyFrom(const GetStreamingStateRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.GetStreamingStateRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool GetStreamingStateRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* GetStreamingStateRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void GetStreamingStateRequest::InternalSwap(GetStreamingStateRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.actor_guid_, &other->_impl_.actor_guid_, arena);
+}
+
+::google::protobuf_tempo::Metadata GetStreamingStateRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[43]);
+}
+// ===================================================================
+
+class GetStreamingStateResponse::_Internal {
+ public:
+  using HasBits = decltype(std::declval<GetStreamingStateResponse>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(GetStreamingStateResponse, _impl_._has_bits_);
+  static const ::AgentBridgeServer::StreamingActorInfo& actor(const GetStreamingStateResponse* msg);
+  static void set_has_actor(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+};
+
+const ::AgentBridgeServer::StreamingActorInfo& GetStreamingStateResponse::_Internal::actor(const GetStreamingStateResponse* msg) {
+  return *msg->_impl_.actor_;
+}
+GetStreamingStateResponse::GetStreamingStateResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.GetStreamingStateResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE GetStreamingStateResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0} {}
+
+GetStreamingStateResponse::GetStreamingStateResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const GetStreamingStateResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  GetStreamingStateResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.actor_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::AgentBridgeServer::StreamingActorInfo>(arena, *from._impl_.actor_)
+                : nullptr;
+  _impl_.state_ = from._impl_.state_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.GetStreamingStateResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE GetStreamingStateResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void GetStreamingStateResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, actor_),
+           0,
+           offsetof(Impl_, state_) -
+               offsetof(Impl_, actor_) +
+               sizeof(Impl_::state_));
+}
+GetStreamingStateResponse::~GetStreamingStateResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.GetStreamingStateResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void GetStreamingStateResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  delete _impl_.actor_;
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void GetStreamingStateResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.GetStreamingStateResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.actor_ != nullptr);
+    _impl_.actor_->Clear();
+  }
+  _impl_.state_ = 0;
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* GetStreamingStateResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 0, 2> GetStreamingStateResponse::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(GetStreamingStateResponse, _impl_._has_bits_),
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_GetStreamingStateResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // .AgentBridgeServer.StreamingActorInfo actor = 2;
+    {::_pbi::TcParser::FastMtS1,
+     {18, 0, 0, PROTOBUF_FIELD_OFFSET(GetStreamingStateResponse, _impl_.actor_)}},
+    // .AgentBridgeServer.StreamingState state = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(GetStreamingStateResponse, _impl_.state_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(GetStreamingStateResponse, _impl_.state_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // .AgentBridgeServer.StreamingState state = 1;
+    {PROTOBUF_FIELD_OFFSET(GetStreamingStateResponse, _impl_.state_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kOpenEnum)},
+    // .AgentBridgeServer.StreamingActorInfo actor = 2;
+    {PROTOBUF_FIELD_OFFSET(GetStreamingStateResponse, _impl_.actor_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::StreamingActorInfo>()},
+  }}, {{
+  }},
+};
+
+::uint8_t* GetStreamingStateResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.GetStreamingStateResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // .AgentBridgeServer.StreamingState state = 1;
+  if (this->_internal_state() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+        1, this->_internal_state(), target);
+  }
+
+  cached_has_bits = _impl_._has_bits_[0];
+  // .AgentBridgeServer.StreamingActorInfo actor = 2;
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::InternalWriteMessage(
+        2, _Internal::actor(this),
+        _Internal::actor(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.GetStreamingStateResponse)
+  return target;
+}
+
+::size_t GetStreamingStateResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.GetStreamingStateResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .AgentBridgeServer.StreamingActorInfo actor = 2;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size +=
+        1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.actor_);
+  }
+
+  // .AgentBridgeServer.StreamingState state = 1;
+  if (this->_internal_state() != 0) {
+    total_size += 1 +
+                  ::_pbi::WireFormatLite::EnumSize(this->_internal_state());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData GetStreamingStateResponse::_class_data_ = {
+    GetStreamingStateResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* GetStreamingStateResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void GetStreamingStateResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<GetStreamingStateResponse*>(&to_msg);
+  auto& from = static_cast<const GetStreamingStateResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.GetStreamingStateResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
+    _this->_internal_mutable_actor()->::AgentBridgeServer::StreamingActorInfo::MergeFrom(
+        from._internal_actor());
+  }
+  if (from._internal_state() != 0) {
+    _this->_internal_set_state(from._internal_state());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetStreamingStateResponse::CopyFrom(const GetStreamingStateResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.GetStreamingStateResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool GetStreamingStateResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* GetStreamingStateResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void GetStreamingStateResponse::InternalSwap(GetStreamingStateResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(GetStreamingStateResponse, _impl_.state_)
+      + sizeof(GetStreamingStateResponse::_impl_.state_)
+      - PROTOBUF_FIELD_OFFSET(GetStreamingStateResponse, _impl_.actor_)>(
+          reinterpret_cast<char*>(&_impl_.actor_),
+          reinterpret_cast<char*>(&other->_impl_.actor_));
+}
+
+::google::protobuf_tempo::Metadata GetStreamingStateResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[44]);
+}
+// ===================================================================
+
+class QueryLandscapeRequest::_Internal {
+ public:
+};
+
+QueryLandscapeRequest::QueryLandscapeRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.QueryLandscapeRequest)
+}
+QueryLandscapeRequest::QueryLandscapeRequest(
+    ::google::protobuf_tempo::Arena* arena, const QueryLandscapeRequest& from)
+    : QueryLandscapeRequest(arena) {
+  MergeFrom(from);
+}
+inline PROTOBUF_NDEBUG_INLINE QueryLandscapeRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : _cached_size_{0} {}
+
+inline void QueryLandscapeRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.include_unloaded_ = {};
+}
+QueryLandscapeRequest::~QueryLandscapeRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.QueryLandscapeRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void QueryLandscapeRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void QueryLandscapeRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.QueryLandscapeRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.include_unloaded_ = false;
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* QueryLandscapeRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 0, 2> QueryLandscapeRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_QueryLandscapeRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // bool include_unloaded = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(QueryLandscapeRequest, _impl_.include_unloaded_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(QueryLandscapeRequest, _impl_.include_unloaded_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // bool include_unloaded = 1;
+    {PROTOBUF_FIELD_OFFSET(QueryLandscapeRequest, _impl_.include_unloaded_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+  }},
+  // no aux_entries
+  {{
+  }},
+};
+
+::uint8_t* QueryLandscapeRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.QueryLandscapeRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // bool include_unloaded = 1;
+  if (this->_internal_include_unloaded() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        1, this->_internal_include_unloaded(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.QueryLandscapeRequest)
+  return target;
+}
+
+::size_t QueryLandscapeRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.QueryLandscapeRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // bool include_unloaded = 1;
+  if (this->_internal_include_unloaded() != 0) {
+    total_size += 2;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData QueryLandscapeRequest::_class_data_ = {
+    QueryLandscapeRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* QueryLandscapeRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void QueryLandscapeRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<QueryLandscapeRequest*>(&to_msg);
+  auto& from = static_cast<const QueryLandscapeRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.QueryLandscapeRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_include_unloaded() != 0) {
+    _this->_internal_set_include_unloaded(from._internal_include_unloaded());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void QueryLandscapeRequest::CopyFrom(const QueryLandscapeRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.QueryLandscapeRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool QueryLandscapeRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* QueryLandscapeRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void QueryLandscapeRequest::InternalSwap(QueryLandscapeRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+        swap(_impl_.include_unloaded_, other->_impl_.include_unloaded_);
+}
+
+::google::protobuf_tempo::Metadata QueryLandscapeRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[45]);
+}
+// ===================================================================
+
+class QueryLandscapeResponse::_Internal {
+ public:
+};
+
+QueryLandscapeResponse::QueryLandscapeResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.QueryLandscapeResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE QueryLandscapeResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : landscape_proxies_{visibility, arena, from.landscape_proxies_},
+        _cached_size_{0} {}
+
+QueryLandscapeResponse::QueryLandscapeResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const QueryLandscapeResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  QueryLandscapeResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.total_count_ = from._impl_.total_count_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.QueryLandscapeResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE QueryLandscapeResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : landscape_proxies_{visibility, arena},
+        _cached_size_{0} {}
+
+inline void QueryLandscapeResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.total_count_ = {};
+}
+QueryLandscapeResponse::~QueryLandscapeResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.QueryLandscapeResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void QueryLandscapeResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void QueryLandscapeResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.QueryLandscapeResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.landscape_proxies_.Clear();
+  _impl_.total_count_ = 0;
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* QueryLandscapeResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 0, 2> QueryLandscapeResponse::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_QueryLandscapeResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // int32 total_count = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(QueryLandscapeResponse, _impl_.total_count_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(QueryLandscapeResponse, _impl_.total_count_)}},
+    // repeated .AgentBridgeServer.StreamingActorInfo landscape_proxies = 1;
+    {::_pbi::TcParser::FastMtR1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(QueryLandscapeResponse, _impl_.landscape_proxies_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated .AgentBridgeServer.StreamingActorInfo landscape_proxies = 1;
+    {PROTOBUF_FIELD_OFFSET(QueryLandscapeResponse, _impl_.landscape_proxies_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // int32 total_count = 2;
+    {PROTOBUF_FIELD_OFFSET(QueryLandscapeResponse, _impl_.total_count_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::StreamingActorInfo>()},
+  }}, {{
+  }},
+};
+
+::uint8_t* QueryLandscapeResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.QueryLandscapeResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // repeated .AgentBridgeServer.StreamingActorInfo landscape_proxies = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_landscape_proxies_size()); i < n; i++) {
+    const auto& repfield = this->_internal_landscape_proxies().Get(i);
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // int32 total_count = 2;
+  if (this->_internal_total_count() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<2>(
+            stream, this->_internal_total_count(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.QueryLandscapeResponse)
+  return target;
+}
+
+::size_t QueryLandscapeResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.QueryLandscapeResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .AgentBridgeServer.StreamingActorInfo landscape_proxies = 1;
+  total_size += 1UL * this->_internal_landscape_proxies_size();
+  for (const auto& msg : this->_internal_landscape_proxies()) {
+    total_size +=
+      ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(msg);
+  }
+  // int32 total_count = 2;
+  if (this->_internal_total_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_total_count());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData QueryLandscapeResponse::_class_data_ = {
+    QueryLandscapeResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* QueryLandscapeResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void QueryLandscapeResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<QueryLandscapeResponse*>(&to_msg);
+  auto& from = static_cast<const QueryLandscapeResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.QueryLandscapeResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_landscape_proxies()->MergeFrom(
+      from._internal_landscape_proxies());
+  if (from._internal_total_count() != 0) {
+    _this->_internal_set_total_count(from._internal_total_count());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void QueryLandscapeResponse::CopyFrom(const QueryLandscapeResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.QueryLandscapeResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool QueryLandscapeResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* QueryLandscapeResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void QueryLandscapeResponse::InternalSwap(QueryLandscapeResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.landscape_proxies_.InternalSwap(&other->_impl_.landscape_proxies_);
+        swap(_impl_.total_count_, other->_impl_.total_count_);
+}
+
+::google::protobuf_tempo::Metadata QueryLandscapeResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[46]);
+}
+// ===================================================================
+
+class GetDataLayersRequest::_Internal {
+ public:
+};
+
+GetDataLayersRequest::GetDataLayersRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::internal::ZeroFieldsBase(arena) {
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.GetDataLayersRequest)
+}
+GetDataLayersRequest::GetDataLayersRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const GetDataLayersRequest& from)
+    : ::google::protobuf_tempo::internal::ZeroFieldsBase(arena) {
+  GetDataLayersRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.GetDataLayersRequest)
+}
+
+
+
+
+
+
+
+
+
+::google::protobuf_tempo::Metadata GetDataLayersRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[47]);
+}
+// ===================================================================
+
+class GetDataLayersResponse::_Internal {
+ public:
+};
+
+GetDataLayersResponse::GetDataLayersResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.GetDataLayersResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE GetDataLayersResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : data_layers_{visibility, arena, from.data_layers_},
+        _cached_size_{0} {}
+
+GetDataLayersResponse::GetDataLayersResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const GetDataLayersResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  GetDataLayersResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.GetDataLayersResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE GetDataLayersResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : data_layers_{visibility, arena},
+        _cached_size_{0} {}
+
+inline void GetDataLayersResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+GetDataLayersResponse::~GetDataLayersResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.GetDataLayersResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void GetDataLayersResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void GetDataLayersResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.GetDataLayersResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.data_layers_.Clear();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* GetDataLayersResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 59, 2> GetDataLayersResponse::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_GetDataLayersResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // repeated string data_layers = 1;
+    {::_pbi::TcParser::FastUR1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(GetDataLayersResponse, _impl_.data_layers_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated string data_layers = 1;
+    {PROTOBUF_FIELD_OFFSET(GetDataLayersResponse, _impl_.data_layers_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+  }},
+  // no aux_entries
+  {{
+    "\47\13\0\0\0\0\0\0"
+    "AgentBridgeServer.GetDataLayersResponse"
+    "data_layers"
+  }},
+};
+
+::uint8_t* GetDataLayersResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.GetDataLayersResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // repeated string data_layers = 1;
+  for (int i = 0, n = this->_internal_data_layers_size(); i < n; ++i) {
+    const auto& s = this->_internal_data_layers().Get(i);
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.GetDataLayersResponse.data_layers");
+    target = stream->WriteString(1, s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.GetDataLayersResponse)
+  return target;
+}
+
+::size_t GetDataLayersResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.GetDataLayersResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string data_layers = 1;
+  total_size += 1 * ::google::protobuf_tempo::internal::FromIntSize(_internal_data_layers().size());
+  for (int i = 0, n = _internal_data_layers().size(); i < n; ++i) {
+    total_size += ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+        _internal_data_layers().Get(i));
+  }
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData GetDataLayersResponse::_class_data_ = {
+    GetDataLayersResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* GetDataLayersResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void GetDataLayersResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<GetDataLayersResponse*>(&to_msg);
+  auto& from = static_cast<const GetDataLayersResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.GetDataLayersResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_data_layers()->MergeFrom(from._internal_data_layers());
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetDataLayersResponse::CopyFrom(const GetDataLayersResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.GetDataLayersResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool GetDataLayersResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* GetDataLayersResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void GetDataLayersResponse::InternalSwap(GetDataLayersResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.data_layers_.InternalSwap(&other->_impl_.data_layers_);
+}
+
+::google::protobuf_tempo::Metadata GetDataLayersResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[48]);
+}
+// ===================================================================
+
+class GetActorsInDataLayerRequest::_Internal {
+ public:
+};
+
+GetActorsInDataLayerRequest::GetActorsInDataLayerRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.GetActorsInDataLayerRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE GetActorsInDataLayerRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : data_layer_(arena, from.data_layer_),
+        _cached_size_{0} {}
+
+GetActorsInDataLayerRequest::GetActorsInDataLayerRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const GetActorsInDataLayerRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  GetActorsInDataLayerRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, include_unloaded_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, include_unloaded_),
+           offsetof(Impl_, limit_) -
+               offsetof(Impl_, include_unloaded_) +
+               sizeof(Impl_::limit_));
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.GetActorsInDataLayerRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE GetActorsInDataLayerRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : data_layer_(arena),
+        _cached_size_{0} {}
+
+inline void GetActorsInDataLayerRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, include_unloaded_),
+           0,
+           offsetof(Impl_, limit_) -
+               offsetof(Impl_, include_unloaded_) +
+               sizeof(Impl_::limit_));
+}
+GetActorsInDataLayerRequest::~GetActorsInDataLayerRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.GetActorsInDataLayerRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void GetActorsInDataLayerRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.data_layer_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void GetActorsInDataLayerRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.GetActorsInDataLayerRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.data_layer_.ClearToEmpty();
+  ::memset(&_impl_.include_unloaded_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.limit_) -
+      reinterpret_cast<char*>(&_impl_.include_unloaded_)) + sizeof(_impl_.limit_));
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* GetActorsInDataLayerRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 0, 64, 2> GetActorsInDataLayerRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_GetActorsInDataLayerRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string data_layer = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerRequest, _impl_.data_layer_)}},
+    // bool include_unloaded = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(GetActorsInDataLayerRequest, _impl_.include_unloaded_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerRequest, _impl_.include_unloaded_)}},
+    // int32 limit = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(GetActorsInDataLayerRequest, _impl_.limit_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerRequest, _impl_.limit_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string data_layer = 1;
+    {PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerRequest, _impl_.data_layer_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // bool include_unloaded = 2;
+    {PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerRequest, _impl_.include_unloaded_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // int32 limit = 3;
+    {PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerRequest, _impl_.limit_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+  }},
+  // no aux_entries
+  {{
+    "\55\12\0\0\0\0\0\0"
+    "AgentBridgeServer.GetActorsInDataLayerRequest"
+    "data_layer"
+  }},
+};
+
+::uint8_t* GetActorsInDataLayerRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.GetActorsInDataLayerRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string data_layer = 1;
+  if (!this->_internal_data_layer().empty()) {
+    const std::string& _s = this->_internal_data_layer();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.GetActorsInDataLayerRequest.data_layer");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // bool include_unloaded = 2;
+  if (this->_internal_include_unloaded() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        2, this->_internal_include_unloaded(), target);
+  }
+
+  // int32 limit = 3;
+  if (this->_internal_limit() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<3>(
+            stream, this->_internal_limit(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.GetActorsInDataLayerRequest)
+  return target;
+}
+
+::size_t GetActorsInDataLayerRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.GetActorsInDataLayerRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string data_layer = 1;
+  if (!this->_internal_data_layer().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_data_layer());
+  }
+
+  // bool include_unloaded = 2;
+  if (this->_internal_include_unloaded() != 0) {
+    total_size += 2;
+  }
+
+  // int32 limit = 3;
+  if (this->_internal_limit() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_limit());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData GetActorsInDataLayerRequest::_class_data_ = {
+    GetActorsInDataLayerRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* GetActorsInDataLayerRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void GetActorsInDataLayerRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<GetActorsInDataLayerRequest*>(&to_msg);
+  auto& from = static_cast<const GetActorsInDataLayerRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.GetActorsInDataLayerRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_data_layer().empty()) {
+    _this->_internal_set_data_layer(from._internal_data_layer());
+  }
+  if (from._internal_include_unloaded() != 0) {
+    _this->_internal_set_include_unloaded(from._internal_include_unloaded());
+  }
+  if (from._internal_limit() != 0) {
+    _this->_internal_set_limit(from._internal_limit());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetActorsInDataLayerRequest::CopyFrom(const GetActorsInDataLayerRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.GetActorsInDataLayerRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool GetActorsInDataLayerRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* GetActorsInDataLayerRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void GetActorsInDataLayerRequest::InternalSwap(GetActorsInDataLayerRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.data_layer_, &other->_impl_.data_layer_, arena);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerRequest, _impl_.limit_)
+      + sizeof(GetActorsInDataLayerRequest::_impl_.limit_)
+      - PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerRequest, _impl_.include_unloaded_)>(
+          reinterpret_cast<char*>(&_impl_.include_unloaded_),
+          reinterpret_cast<char*>(&other->_impl_.include_unloaded_));
+}
+
+::google::protobuf_tempo::Metadata GetActorsInDataLayerRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[49]);
+}
+// ===================================================================
+
+class GetActorsInDataLayerResponse::_Internal {
+ public:
+};
+
+GetActorsInDataLayerResponse::GetActorsInDataLayerResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.GetActorsInDataLayerResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE GetActorsInDataLayerResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : actors_{visibility, arena, from.actors_},
+        _cached_size_{0} {}
+
+GetActorsInDataLayerResponse::GetActorsInDataLayerResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const GetActorsInDataLayerResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  GetActorsInDataLayerResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.total_count_ = from._impl_.total_count_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.GetActorsInDataLayerResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE GetActorsInDataLayerResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : actors_{visibility, arena},
+        _cached_size_{0} {}
+
+inline void GetActorsInDataLayerResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.total_count_ = {};
+}
+GetActorsInDataLayerResponse::~GetActorsInDataLayerResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.GetActorsInDataLayerResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void GetActorsInDataLayerResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void GetActorsInDataLayerResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.GetActorsInDataLayerResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.actors_.Clear();
+  _impl_.total_count_ = 0;
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* GetActorsInDataLayerResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 1, 0, 2> GetActorsInDataLayerResponse::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_GetActorsInDataLayerResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // int32 total_count = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(GetActorsInDataLayerResponse, _impl_.total_count_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerResponse, _impl_.total_count_)}},
+    // repeated .AgentBridgeServer.StreamingActorInfo actors = 1;
+    {::_pbi::TcParser::FastMtR1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerResponse, _impl_.actors_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // repeated .AgentBridgeServer.StreamingActorInfo actors = 1;
+    {PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerResponse, _impl_.actors_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+    // int32 total_count = 2;
+    {PROTOBUF_FIELD_OFFSET(GetActorsInDataLayerResponse, _impl_.total_count_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::StreamingActorInfo>()},
+  }}, {{
+  }},
+};
+
+::uint8_t* GetActorsInDataLayerResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.GetActorsInDataLayerResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // repeated .AgentBridgeServer.StreamingActorInfo actors = 1;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_actors_size()); i < n; i++) {
+    const auto& repfield = this->_internal_actors().Get(i);
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  // int32 total_count = 2;
+  if (this->_internal_total_count() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<2>(
+            stream, this->_internal_total_count(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.GetActorsInDataLayerResponse)
+  return target;
+}
+
+::size_t GetActorsInDataLayerResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.GetActorsInDataLayerResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .AgentBridgeServer.StreamingActorInfo actors = 1;
+  total_size += 1UL * this->_internal_actors_size();
+  for (const auto& msg : this->_internal_actors()) {
+    total_size +=
+      ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(msg);
+  }
+  // int32 total_count = 2;
+  if (this->_internal_total_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_total_count());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData GetActorsInDataLayerResponse::_class_data_ = {
+    GetActorsInDataLayerResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* GetActorsInDataLayerResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void GetActorsInDataLayerResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<GetActorsInDataLayerResponse*>(&to_msg);
+  auto& from = static_cast<const GetActorsInDataLayerResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.GetActorsInDataLayerResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_actors()->MergeFrom(
+      from._internal_actors());
+  if (from._internal_total_count() != 0) {
+    _this->_internal_set_total_count(from._internal_total_count());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetActorsInDataLayerResponse::CopyFrom(const GetActorsInDataLayerResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.GetActorsInDataLayerResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool GetActorsInDataLayerResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* GetActorsInDataLayerResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void GetActorsInDataLayerResponse::InternalSwap(GetActorsInDataLayerResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.actors_.InternalSwap(&other->_impl_.actors_);
+        swap(_impl_.total_count_, other->_impl_.total_count_);
+}
+
+::google::protobuf_tempo::Metadata GetActorsInDataLayerResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[50]);
+}
+// ===================================================================
+
+class ExecuteConsoleCommandRequest::_Internal {
+ public:
+};
+
+ExecuteConsoleCommandRequest::ExecuteConsoleCommandRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.ExecuteConsoleCommandRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE ExecuteConsoleCommandRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : command_(arena, from.command_),
+        _cached_size_{0} {}
+
+ExecuteConsoleCommandRequest::ExecuteConsoleCommandRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const ExecuteConsoleCommandRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  ExecuteConsoleCommandRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.ExecuteConsoleCommandRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE ExecuteConsoleCommandRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : command_(arena),
+        _cached_size_{0} {}
+
+inline void ExecuteConsoleCommandRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+ExecuteConsoleCommandRequest::~ExecuteConsoleCommandRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.ExecuteConsoleCommandRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void ExecuteConsoleCommandRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.command_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void ExecuteConsoleCommandRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.ExecuteConsoleCommandRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.command_.ClearToEmpty();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* ExecuteConsoleCommandRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<0, 1, 0, 62, 2> ExecuteConsoleCommandRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    1, 0,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967294,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    1,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_ExecuteConsoleCommandRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string command = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ExecuteConsoleCommandRequest, _impl_.command_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string command = 1;
+    {PROTOBUF_FIELD_OFFSET(ExecuteConsoleCommandRequest, _impl_.command_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\56\7\0\0\0\0\0\0"
+    "AgentBridgeServer.ExecuteConsoleCommandRequest"
+    "command"
+  }},
+};
+
+::uint8_t* ExecuteConsoleCommandRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.ExecuteConsoleCommandRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string command = 1;
+  if (!this->_internal_command().empty()) {
+    const std::string& _s = this->_internal_command();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ExecuteConsoleCommandRequest.command");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.ExecuteConsoleCommandRequest)
+  return target;
+}
+
+::size_t ExecuteConsoleCommandRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.ExecuteConsoleCommandRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string command = 1;
+  if (!this->_internal_command().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_command());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData ExecuteConsoleCommandRequest::_class_data_ = {
+    ExecuteConsoleCommandRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* ExecuteConsoleCommandRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void ExecuteConsoleCommandRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<ExecuteConsoleCommandRequest*>(&to_msg);
+  auto& from = static_cast<const ExecuteConsoleCommandRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.ExecuteConsoleCommandRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_command().empty()) {
+    _this->_internal_set_command(from._internal_command());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ExecuteConsoleCommandRequest::CopyFrom(const ExecuteConsoleCommandRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.ExecuteConsoleCommandRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool ExecuteConsoleCommandRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* ExecuteConsoleCommandRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ExecuteConsoleCommandRequest::InternalSwap(ExecuteConsoleCommandRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.command_, &other->_impl_.command_, arena);
+}
+
+::google::protobuf_tempo::Metadata ExecuteConsoleCommandRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[51]);
+}
+// ===================================================================
+
+class ExecuteConsoleCommandResponse::_Internal {
+ public:
+};
+
+ExecuteConsoleCommandResponse::ExecuteConsoleCommandResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.ExecuteConsoleCommandResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE ExecuteConsoleCommandResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : output_(arena, from.output_),
+        _cached_size_{0} {}
+
+ExecuteConsoleCommandResponse::ExecuteConsoleCommandResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const ExecuteConsoleCommandResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  ExecuteConsoleCommandResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.success_ = from._impl_.success_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.ExecuteConsoleCommandResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE ExecuteConsoleCommandResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : output_(arena),
+        _cached_size_{0} {}
+
+inline void ExecuteConsoleCommandResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.success_ = {};
+}
+ExecuteConsoleCommandResponse::~ExecuteConsoleCommandResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.ExecuteConsoleCommandResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void ExecuteConsoleCommandResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.output_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void ExecuteConsoleCommandResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.ExecuteConsoleCommandResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.output_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* ExecuteConsoleCommandResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 62, 2> ExecuteConsoleCommandResponse::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_ExecuteConsoleCommandResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string output = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ExecuteConsoleCommandResponse, _impl_.output_)}},
+    // bool success = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ExecuteConsoleCommandResponse, _impl_.success_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ExecuteConsoleCommandResponse, _impl_.success_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // bool success = 1;
+    {PROTOBUF_FIELD_OFFSET(ExecuteConsoleCommandResponse, _impl_.success_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // string output = 2;
+    {PROTOBUF_FIELD_OFFSET(ExecuteConsoleCommandResponse, _impl_.output_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\57\0\6\0\0\0\0\0"
+    "AgentBridgeServer.ExecuteConsoleCommandResponse"
+    "output"
+  }},
+};
+
+::uint8_t* ExecuteConsoleCommandResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.ExecuteConsoleCommandResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        1, this->_internal_success(), target);
+  }
+
+  // string output = 2;
+  if (!this->_internal_output().empty()) {
+    const std::string& _s = this->_internal_output();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ExecuteConsoleCommandResponse.output");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.ExecuteConsoleCommandResponse)
+  return target;
+}
+
+::size_t ExecuteConsoleCommandResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.ExecuteConsoleCommandResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string output = 2;
+  if (!this->_internal_output().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_output());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 2;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData ExecuteConsoleCommandResponse::_class_data_ = {
+    ExecuteConsoleCommandResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* ExecuteConsoleCommandResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void ExecuteConsoleCommandResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<ExecuteConsoleCommandResponse*>(&to_msg);
+  auto& from = static_cast<const ExecuteConsoleCommandResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.ExecuteConsoleCommandResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_output().empty()) {
+    _this->_internal_set_output(from._internal_output());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ExecuteConsoleCommandResponse::CopyFrom(const ExecuteConsoleCommandResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.ExecuteConsoleCommandResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool ExecuteConsoleCommandResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* ExecuteConsoleCommandResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ExecuteConsoleCommandResponse::InternalSwap(ExecuteConsoleCommandResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.output_, &other->_impl_.output_, arena);
+        swap(_impl_.success_, other->_impl_.success_);
+}
+
+::google::protobuf_tempo::Metadata ExecuteConsoleCommandResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[52]);
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace AgentBridgeServer

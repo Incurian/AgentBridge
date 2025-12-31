@@ -33,6 +33,24 @@ namespace AgentBridgeServer
 	class GetClassSchemaResponse;
 	class ListClassesRequest;
 	class ListClassesResponse;
+
+	// World Partition types
+	class IsWorldPartitionedRequest;
+	class IsWorldPartitionedResponse;
+	class QueryAllActorsRequest;
+	class QueryAllActorsResponse;
+	class GetStreamingStateRequest;
+	class GetStreamingStateResponse;
+	class QueryLandscapeRequest;
+	class QueryLandscapeResponse;
+	class GetDataLayersRequest;
+	class GetDataLayersResponse;
+	class GetActorsInDataLayerRequest;
+	class GetActorsInDataLayerResponse;
+
+	// Console command types
+	class ExecuteConsoleCommandRequest;
+	class ExecuteConsoleCommandResponse;
 }
 
 namespace TempoScripting
@@ -153,4 +171,40 @@ public:
 	void ListClasses(
 		const AgentBridgeServer::ListClassesRequest& Request,
 		const TResponseDelegate<AgentBridgeServer::ListClassesResponse>& ResponseContinuation);
+
+	//~==============================================================================
+	// gRPC Service Handlers - World Partition & Streaming
+	//~==============================================================================
+
+	void IsWorldPartitioned(
+		const AgentBridgeServer::IsWorldPartitionedRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::IsWorldPartitionedResponse>& ResponseContinuation);
+
+	void QueryAllActors(
+		const AgentBridgeServer::QueryAllActorsRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::QueryAllActorsResponse>& ResponseContinuation);
+
+	void GetStreamingState(
+		const AgentBridgeServer::GetStreamingStateRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::GetStreamingStateResponse>& ResponseContinuation);
+
+	void QueryLandscape(
+		const AgentBridgeServer::QueryLandscapeRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::QueryLandscapeResponse>& ResponseContinuation);
+
+	void GetDataLayers(
+		const AgentBridgeServer::GetDataLayersRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::GetDataLayersResponse>& ResponseContinuation);
+
+	void GetActorsInDataLayer(
+		const AgentBridgeServer::GetActorsInDataLayerRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::GetActorsInDataLayerResponse>& ResponseContinuation);
+
+	//~==============================================================================
+	// gRPC Service Handlers - Console Commands
+	//~==============================================================================
+
+	void ExecuteConsoleCommand(
+		const AgentBridgeServer::ExecuteConsoleCommandRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::ExecuteConsoleCommandResponse>& ResponseContinuation);
 };

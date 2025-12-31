@@ -39,6 +39,13 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAgentBridge, Log, All);
  * - AgentBridge.SetCVar <Name> <Value> - Set console variable value
  * - AgentBridge.ListCVars [Pattern] [Limit] - List console variables
  *
+ * World Partition & Streaming:
+ * - AgentBridge.IsPartitioned - Check if current world uses World Partition
+ * - AgentBridge.QueryAllActors [Pattern] [Limit] - Query all actors including unloaded
+ * - AgentBridge.StreamingState <ActorGuid> - Get streaming state of an actor
+ * - AgentBridge.QueryLandscape - List all landscape proxies (including streaming)
+ * - AgentBridge.DataLayers - List all data layers in the world
+ *
  * Usage Notes:
  * - Run from editor console or via -ExecCmds for headless testing
  * - All output goes to LogAgentBridge category
@@ -123,6 +130,13 @@ private:
 	static void Cmd_GetCVar(const TArray<FString>& Args);
 	static void Cmd_SetCVar(const TArray<FString>& Args);
 	static void Cmd_ListCVars(const TArray<FString>& Args);
+
+	// World Partition commands
+	static void Cmd_IsPartitioned(const TArray<FString>& Args, UWorld* World);
+	static void Cmd_QueryAllActors(const TArray<FString>& Args, UWorld* World);
+	static void Cmd_StreamingState(const TArray<FString>& Args, UWorld* World);
+	static void Cmd_QueryLandscape(const TArray<FString>& Args, UWorld* World);
+	static void Cmd_DataLayers(const TArray<FString>& Args, UWorld* World);
 
 	//~==============================================================================
 	// Internal Helpers

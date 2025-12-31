@@ -149,6 +149,57 @@ class AgentBridgeService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListClassesResponse>> PrepareAsyncListClasses(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListClassesResponse>>(PrepareAsyncListClassesRaw(context, request, cq));
     }
+    // --- World Partition & Streaming ---
+    virtual ::grpc::Status IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::AgentBridgeServer::IsWorldPartitionedResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::IsWorldPartitionedResponse>> AsyncIsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::IsWorldPartitionedResponse>>(AsyncIsWorldPartitionedRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::IsWorldPartitionedResponse>> PrepareAsyncIsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::IsWorldPartitionedResponse>>(PrepareAsyncIsWorldPartitionedRaw(context, request, cq));
+    }
+    virtual ::grpc::Status QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::AgentBridgeServer::QueryAllActorsResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryAllActorsResponse>> AsyncQueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryAllActorsResponse>>(AsyncQueryAllActorsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryAllActorsResponse>> PrepareAsyncQueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryAllActorsResponse>>(PrepareAsyncQueryAllActorsRaw(context, request, cq));
+    }
+    virtual ::grpc::Status GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::AgentBridgeServer::GetStreamingStateResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetStreamingStateResponse>> AsyncGetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetStreamingStateResponse>>(AsyncGetStreamingStateRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetStreamingStateResponse>> PrepareAsyncGetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetStreamingStateResponse>>(PrepareAsyncGetStreamingStateRaw(context, request, cq));
+    }
+    virtual ::grpc::Status QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::AgentBridgeServer::QueryLandscapeResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryLandscapeResponse>> AsyncQueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryLandscapeResponse>>(AsyncQueryLandscapeRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryLandscapeResponse>> PrepareAsyncQueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryLandscapeResponse>>(PrepareAsyncQueryLandscapeRaw(context, request, cq));
+    }
+    virtual ::grpc::Status GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::AgentBridgeServer::GetDataLayersResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetDataLayersResponse>> AsyncGetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetDataLayersResponse>>(AsyncGetDataLayersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetDataLayersResponse>> PrepareAsyncGetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetDataLayersResponse>>(PrepareAsyncGetDataLayersRaw(context, request, cq));
+    }
+    virtual ::grpc::Status GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetActorsInDataLayerResponse>> AsyncGetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetActorsInDataLayerResponse>>(AsyncGetActorsInDataLayerRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetActorsInDataLayerResponse>> PrepareAsyncGetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetActorsInDataLayerResponse>>(PrepareAsyncGetActorsInDataLayerRaw(context, request, cq));
+    }
+    // --- Console Commands (for arbitrary operations) ---
+    virtual ::grpc::Status ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>> AsyncExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>>(AsyncExecuteConsoleCommandRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>> PrepareAsyncExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>>(PrepareAsyncExecuteConsoleCommandRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -186,6 +237,22 @@ class AgentBridgeService final {
       virtual void GetClassSchema(::grpc::ClientContext* context, const ::AgentBridgeServer::GetClassSchemaRequest* request, ::AgentBridgeServer::GetClassSchemaResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void ListClasses(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest* request, ::AgentBridgeServer::ListClassesResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void ListClasses(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest* request, ::AgentBridgeServer::ListClassesResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      // --- World Partition & Streaming ---
+      virtual void IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      // --- Console Commands (for arbitrary operations) ---
+      virtual void ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -219,6 +286,20 @@ class AgentBridgeService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetClassSchemaResponse>* PrepareAsyncGetClassSchemaRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetClassSchemaRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListClassesResponse>* AsyncListClassesRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListClassesResponse>* PrepareAsyncListClassesRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::IsWorldPartitionedResponse>* AsyncIsWorldPartitionedRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::IsWorldPartitionedResponse>* PrepareAsyncIsWorldPartitionedRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryAllActorsResponse>* AsyncQueryAllActorsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryAllActorsResponse>* PrepareAsyncQueryAllActorsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetStreamingStateResponse>* AsyncGetStreamingStateRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetStreamingStateResponse>* PrepareAsyncGetStreamingStateRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryLandscapeResponse>* AsyncQueryLandscapeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::QueryLandscapeResponse>* PrepareAsyncQueryLandscapeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetDataLayersResponse>* AsyncGetDataLayersRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetDataLayersResponse>* PrepareAsyncGetDataLayersRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetActorsInDataLayerResponse>* AsyncGetActorsInDataLayerRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetActorsInDataLayerResponse>* PrepareAsyncGetActorsInDataLayerRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* AsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* PrepareAsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -321,6 +402,55 @@ class AgentBridgeService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListClassesResponse>> PrepareAsyncListClasses(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListClassesResponse>>(PrepareAsyncListClassesRaw(context, request, cq));
     }
+    ::grpc::Status IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::AgentBridgeServer::IsWorldPartitionedResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::IsWorldPartitionedResponse>> AsyncIsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::IsWorldPartitionedResponse>>(AsyncIsWorldPartitionedRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::IsWorldPartitionedResponse>> PrepareAsyncIsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::IsWorldPartitionedResponse>>(PrepareAsyncIsWorldPartitionedRaw(context, request, cq));
+    }
+    ::grpc::Status QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::AgentBridgeServer::QueryAllActorsResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryAllActorsResponse>> AsyncQueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryAllActorsResponse>>(AsyncQueryAllActorsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryAllActorsResponse>> PrepareAsyncQueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryAllActorsResponse>>(PrepareAsyncQueryAllActorsRaw(context, request, cq));
+    }
+    ::grpc::Status GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::AgentBridgeServer::GetStreamingStateResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetStreamingStateResponse>> AsyncGetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetStreamingStateResponse>>(AsyncGetStreamingStateRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetStreamingStateResponse>> PrepareAsyncGetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetStreamingStateResponse>>(PrepareAsyncGetStreamingStateRaw(context, request, cq));
+    }
+    ::grpc::Status QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::AgentBridgeServer::QueryLandscapeResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>> AsyncQueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>>(AsyncQueryLandscapeRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>> PrepareAsyncQueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>>(PrepareAsyncQueryLandscapeRaw(context, request, cq));
+    }
+    ::grpc::Status GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::AgentBridgeServer::GetDataLayersResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetDataLayersResponse>> AsyncGetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetDataLayersResponse>>(AsyncGetDataLayersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetDataLayersResponse>> PrepareAsyncGetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetDataLayersResponse>>(PrepareAsyncGetDataLayersRaw(context, request, cq));
+    }
+    ::grpc::Status GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>> AsyncGetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>>(AsyncGetActorsInDataLayerRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>> PrepareAsyncGetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>>(PrepareAsyncGetActorsInDataLayerRaw(context, request, cq));
+    }
+    ::grpc::Status ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>> AsyncExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>>(AsyncExecuteConsoleCommandRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>> PrepareAsyncExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>>(PrepareAsyncExecuteConsoleCommandRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -352,6 +482,20 @@ class AgentBridgeService final {
       void GetClassSchema(::grpc::ClientContext* context, const ::AgentBridgeServer::GetClassSchemaRequest* request, ::AgentBridgeServer::GetClassSchemaResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void ListClasses(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest* request, ::AgentBridgeServer::ListClassesResponse* response, std::function<void(::grpc::Status)>) override;
       void ListClasses(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest* request, ::AgentBridgeServer::ListClassesResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response, std::function<void(::grpc::Status)>) override;
+      void IsWorldPartitioned(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response, std::function<void(::grpc::Status)>) override;
+      void QueryAllActors(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response, std::function<void(::grpc::Status)>) override;
+      void GetStreamingState(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response, std::function<void(::grpc::Status)>) override;
+      void QueryLandscape(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response, std::function<void(::grpc::Status)>) override;
+      void GetDataLayers(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response, std::function<void(::grpc::Status)>) override;
+      void GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, std::function<void(::grpc::Status)>) override;
+      void ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -391,6 +535,20 @@ class AgentBridgeService final {
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetClassSchemaResponse>* PrepareAsyncGetClassSchemaRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetClassSchemaRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListClassesResponse>* AsyncListClassesRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListClassesResponse>* PrepareAsyncListClassesRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListClassesRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::IsWorldPartitionedResponse>* AsyncIsWorldPartitionedRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::IsWorldPartitionedResponse>* PrepareAsyncIsWorldPartitionedRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryAllActorsResponse>* AsyncQueryAllActorsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryAllActorsResponse>* PrepareAsyncQueryAllActorsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryAllActorsRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetStreamingStateResponse>* AsyncGetStreamingStateRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetStreamingStateResponse>* PrepareAsyncGetStreamingStateRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetStreamingStateRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>* AsyncQueryLandscapeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>* PrepareAsyncQueryLandscapeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetDataLayersResponse>* AsyncGetDataLayersRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetDataLayersResponse>* PrepareAsyncGetDataLayersRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetDataLayersRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>* AsyncGetActorsInDataLayerRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>* PrepareAsyncGetActorsInDataLayerRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* AsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* PrepareAsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_ListWorlds_;
     const ::grpc::internal::RpcMethod rpcmethod_SetTargetWorld_;
     const ::grpc::internal::RpcMethod rpcmethod_QueryActors_;
@@ -405,6 +563,13 @@ class AgentBridgeService final {
     const ::grpc::internal::RpcMethod rpcmethod_FindClass_;
     const ::grpc::internal::RpcMethod rpcmethod_GetClassSchema_;
     const ::grpc::internal::RpcMethod rpcmethod_ListClasses_;
+    const ::grpc::internal::RpcMethod rpcmethod_IsWorldPartitioned_;
+    const ::grpc::internal::RpcMethod rpcmethod_QueryAllActors_;
+    const ::grpc::internal::RpcMethod rpcmethod_GetStreamingState_;
+    const ::grpc::internal::RpcMethod rpcmethod_QueryLandscape_;
+    const ::grpc::internal::RpcMethod rpcmethod_GetDataLayers_;
+    const ::grpc::internal::RpcMethod rpcmethod_GetActorsInDataLayer_;
+    const ::grpc::internal::RpcMethod rpcmethod_ExecuteConsoleCommand_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -432,6 +597,15 @@ class AgentBridgeService final {
     virtual ::grpc::Status FindClass(::grpc::ServerContext* context, const ::AgentBridgeServer::FindClassRequest* request, ::AgentBridgeServer::FindClassResponse* response);
     virtual ::grpc::Status GetClassSchema(::grpc::ServerContext* context, const ::AgentBridgeServer::GetClassSchemaRequest* request, ::AgentBridgeServer::GetClassSchemaResponse* response);
     virtual ::grpc::Status ListClasses(::grpc::ServerContext* context, const ::AgentBridgeServer::ListClassesRequest* request, ::AgentBridgeServer::ListClassesResponse* response);
+    // --- World Partition & Streaming ---
+    virtual ::grpc::Status IsWorldPartitioned(::grpc::ServerContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response);
+    virtual ::grpc::Status QueryAllActors(::grpc::ServerContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response);
+    virtual ::grpc::Status GetStreamingState(::grpc::ServerContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response);
+    virtual ::grpc::Status QueryLandscape(::grpc::ServerContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response);
+    virtual ::grpc::Status GetDataLayers(::grpc::ServerContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response);
+    virtual ::grpc::Status GetActorsInDataLayer(::grpc::ServerContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response);
+    // --- Console Commands (for arbitrary operations) ---
+    virtual ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_ListWorlds : public BaseClass {
@@ -713,7 +887,147 @@ class AgentBridgeService final {
       ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_ListWorlds<WithAsyncMethod_SetTargetWorld<WithAsyncMethod_QueryActors<WithAsyncMethod_GetActor<WithAsyncMethod_SpawnActor<WithAsyncMethod_DeleteActor<WithAsyncMethod_SetActorTransform<WithAsyncMethod_SetActorProperties<WithAsyncMethod_GetPropertyPath<WithAsyncMethod_SetPropertyPath<WithAsyncMethod_CallFunction<WithAsyncMethod_FindClass<WithAsyncMethod_GetClassSchema<WithAsyncMethod_ListClasses<Service > > > > > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_IsWorldPartitioned : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_IsWorldPartitioned() {
+      ::grpc::Service::MarkMethodAsync(14);
+    }
+    ~WithAsyncMethod_IsWorldPartitioned() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status IsWorldPartitioned(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::IsWorldPartitionedRequest* /*request*/, ::AgentBridgeServer::IsWorldPartitionedResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestIsWorldPartitioned(::grpc::ServerContext* context, ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::IsWorldPartitionedResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(14, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_QueryAllActors : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_QueryAllActors() {
+      ::grpc::Service::MarkMethodAsync(15);
+    }
+    ~WithAsyncMethod_QueryAllActors() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryAllActors(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryAllActorsRequest* /*request*/, ::AgentBridgeServer::QueryAllActorsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestQueryAllActors(::grpc::ServerContext* context, ::AgentBridgeServer::QueryAllActorsRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::QueryAllActorsResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(15, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GetStreamingState : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetStreamingState() {
+      ::grpc::Service::MarkMethodAsync(16);
+    }
+    ~WithAsyncMethod_GetStreamingState() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetStreamingState(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetStreamingStateRequest* /*request*/, ::AgentBridgeServer::GetStreamingStateResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetStreamingState(::grpc::ServerContext* context, ::AgentBridgeServer::GetStreamingStateRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::GetStreamingStateResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(16, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_QueryLandscape : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_QueryLandscape() {
+      ::grpc::Service::MarkMethodAsync(17);
+    }
+    ~WithAsyncMethod_QueryLandscape() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryLandscape(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryLandscapeRequest* /*request*/, ::AgentBridgeServer::QueryLandscapeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestQueryLandscape(::grpc::ServerContext* context, ::AgentBridgeServer::QueryLandscapeRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::QueryLandscapeResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(17, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GetDataLayers : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetDataLayers() {
+      ::grpc::Service::MarkMethodAsync(18);
+    }
+    ~WithAsyncMethod_GetDataLayers() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetDataLayers(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetDataLayersRequest* /*request*/, ::AgentBridgeServer::GetDataLayersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetDataLayers(::grpc::ServerContext* context, ::AgentBridgeServer::GetDataLayersRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::GetDataLayersResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(18, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GetActorsInDataLayer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetActorsInDataLayer() {
+      ::grpc::Service::MarkMethodAsync(19);
+    }
+    ~WithAsyncMethod_GetActorsInDataLayer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetActorsInDataLayer(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetActorsInDataLayerRequest* /*request*/, ::AgentBridgeServer::GetActorsInDataLayerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetActorsInDataLayer(::grpc::ServerContext* context, ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::GetActorsInDataLayerResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(19, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ExecuteConsoleCommand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ExecuteConsoleCommand() {
+      ::grpc::Service::MarkMethodAsync(20);
+    }
+    ~WithAsyncMethod_ExecuteConsoleCommand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestExecuteConsoleCommand(::grpc::ServerContext* context, ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(20, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_ListWorlds<WithAsyncMethod_SetTargetWorld<WithAsyncMethod_QueryActors<WithAsyncMethod_GetActor<WithAsyncMethod_SpawnActor<WithAsyncMethod_DeleteActor<WithAsyncMethod_SetActorTransform<WithAsyncMethod_SetActorProperties<WithAsyncMethod_GetPropertyPath<WithAsyncMethod_SetPropertyPath<WithAsyncMethod_CallFunction<WithAsyncMethod_FindClass<WithAsyncMethod_GetClassSchema<WithAsyncMethod_ListClasses<WithAsyncMethod_IsWorldPartitioned<WithAsyncMethod_QueryAllActors<WithAsyncMethod_GetStreamingState<WithAsyncMethod_QueryLandscape<WithAsyncMethod_GetDataLayers<WithAsyncMethod_GetActorsInDataLayer<WithAsyncMethod_ExecuteConsoleCommand<Service > > > > > > > > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_ListWorlds : public BaseClass {
    private:
@@ -1092,7 +1406,196 @@ class AgentBridgeService final {
     virtual ::grpc::ServerUnaryReactor* ListClasses(
       ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::ListClassesRequest* /*request*/, ::AgentBridgeServer::ListClassesResponse* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_ListWorlds<WithCallbackMethod_SetTargetWorld<WithCallbackMethod_QueryActors<WithCallbackMethod_GetActor<WithCallbackMethod_SpawnActor<WithCallbackMethod_DeleteActor<WithCallbackMethod_SetActorTransform<WithCallbackMethod_SetActorProperties<WithCallbackMethod_GetPropertyPath<WithCallbackMethod_SetPropertyPath<WithCallbackMethod_CallFunction<WithCallbackMethod_FindClass<WithCallbackMethod_GetClassSchema<WithCallbackMethod_ListClasses<Service > > > > > > > > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_IsWorldPartitioned : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_IsWorldPartitioned() {
+      ::grpc::Service::MarkMethodCallback(14,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::IsWorldPartitionedRequest, ::AgentBridgeServer::IsWorldPartitionedResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::IsWorldPartitionedRequest* request, ::AgentBridgeServer::IsWorldPartitionedResponse* response) { return this->IsWorldPartitioned(context, request, response); }));}
+    void SetMessageAllocatorFor_IsWorldPartitioned(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::IsWorldPartitionedRequest, ::AgentBridgeServer::IsWorldPartitionedResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(14);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::IsWorldPartitionedRequest, ::AgentBridgeServer::IsWorldPartitionedResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_IsWorldPartitioned() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status IsWorldPartitioned(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::IsWorldPartitionedRequest* /*request*/, ::AgentBridgeServer::IsWorldPartitionedResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* IsWorldPartitioned(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::IsWorldPartitionedRequest* /*request*/, ::AgentBridgeServer::IsWorldPartitionedResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_QueryAllActors : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_QueryAllActors() {
+      ::grpc::Service::MarkMethodCallback(15,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::QueryAllActorsRequest, ::AgentBridgeServer::QueryAllActorsResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::QueryAllActorsRequest* request, ::AgentBridgeServer::QueryAllActorsResponse* response) { return this->QueryAllActors(context, request, response); }));}
+    void SetMessageAllocatorFor_QueryAllActors(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::QueryAllActorsRequest, ::AgentBridgeServer::QueryAllActorsResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(15);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::QueryAllActorsRequest, ::AgentBridgeServer::QueryAllActorsResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_QueryAllActors() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryAllActors(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryAllActorsRequest* /*request*/, ::AgentBridgeServer::QueryAllActorsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* QueryAllActors(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::QueryAllActorsRequest* /*request*/, ::AgentBridgeServer::QueryAllActorsResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_GetStreamingState : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetStreamingState() {
+      ::grpc::Service::MarkMethodCallback(16,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::GetStreamingStateRequest, ::AgentBridgeServer::GetStreamingStateResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::GetStreamingStateRequest* request, ::AgentBridgeServer::GetStreamingStateResponse* response) { return this->GetStreamingState(context, request, response); }));}
+    void SetMessageAllocatorFor_GetStreamingState(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::GetStreamingStateRequest, ::AgentBridgeServer::GetStreamingStateResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(16);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::GetStreamingStateRequest, ::AgentBridgeServer::GetStreamingStateResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetStreamingState() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetStreamingState(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetStreamingStateRequest* /*request*/, ::AgentBridgeServer::GetStreamingStateResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetStreamingState(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::GetStreamingStateRequest* /*request*/, ::AgentBridgeServer::GetStreamingStateResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_QueryLandscape : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_QueryLandscape() {
+      ::grpc::Service::MarkMethodCallback(17,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::QueryLandscapeRequest, ::AgentBridgeServer::QueryLandscapeResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response) { return this->QueryLandscape(context, request, response); }));}
+    void SetMessageAllocatorFor_QueryLandscape(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::QueryLandscapeRequest, ::AgentBridgeServer::QueryLandscapeResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(17);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::QueryLandscapeRequest, ::AgentBridgeServer::QueryLandscapeResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_QueryLandscape() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryLandscape(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryLandscapeRequest* /*request*/, ::AgentBridgeServer::QueryLandscapeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* QueryLandscape(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::QueryLandscapeRequest* /*request*/, ::AgentBridgeServer::QueryLandscapeResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_GetDataLayers : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetDataLayers() {
+      ::grpc::Service::MarkMethodCallback(18,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::GetDataLayersRequest* request, ::AgentBridgeServer::GetDataLayersResponse* response) { return this->GetDataLayers(context, request, response); }));}
+    void SetMessageAllocatorFor_GetDataLayers(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(18);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetDataLayers() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetDataLayers(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetDataLayersRequest* /*request*/, ::AgentBridgeServer::GetDataLayersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetDataLayers(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::GetDataLayersRequest* /*request*/, ::AgentBridgeServer::GetDataLayersResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_GetActorsInDataLayer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetActorsInDataLayer() {
+      ::grpc::Service::MarkMethodCallback(19,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response) { return this->GetActorsInDataLayer(context, request, response); }));}
+    void SetMessageAllocatorFor_GetActorsInDataLayer(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(19);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetActorsInDataLayer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetActorsInDataLayer(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetActorsInDataLayerRequest* /*request*/, ::AgentBridgeServer::GetActorsInDataLayerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetActorsInDataLayer(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::GetActorsInDataLayerRequest* /*request*/, ::AgentBridgeServer::GetActorsInDataLayerResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ExecuteConsoleCommand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ExecuteConsoleCommand() {
+      ::grpc::Service::MarkMethodCallback(20,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response) { return this->ExecuteConsoleCommand(context, request, response); }));}
+    void SetMessageAllocatorFor_ExecuteConsoleCommand(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(20);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ExecuteConsoleCommand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ExecuteConsoleCommand(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_ListWorlds<WithCallbackMethod_SetTargetWorld<WithCallbackMethod_QueryActors<WithCallbackMethod_GetActor<WithCallbackMethod_SpawnActor<WithCallbackMethod_DeleteActor<WithCallbackMethod_SetActorTransform<WithCallbackMethod_SetActorProperties<WithCallbackMethod_GetPropertyPath<WithCallbackMethod_SetPropertyPath<WithCallbackMethod_CallFunction<WithCallbackMethod_FindClass<WithCallbackMethod_GetClassSchema<WithCallbackMethod_ListClasses<WithCallbackMethod_IsWorldPartitioned<WithCallbackMethod_QueryAllActors<WithCallbackMethod_GetStreamingState<WithCallbackMethod_QueryLandscape<WithCallbackMethod_GetDataLayers<WithCallbackMethod_GetActorsInDataLayer<WithCallbackMethod_ExecuteConsoleCommand<Service > > > > > > > > > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_ListWorlds : public BaseClass {
@@ -1328,6 +1831,125 @@ class AgentBridgeService final {
     }
     // disable synchronous version of this method
     ::grpc::Status ListClasses(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListClassesRequest* /*request*/, ::AgentBridgeServer::ListClassesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_IsWorldPartitioned : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_IsWorldPartitioned() {
+      ::grpc::Service::MarkMethodGeneric(14);
+    }
+    ~WithGenericMethod_IsWorldPartitioned() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status IsWorldPartitioned(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::IsWorldPartitionedRequest* /*request*/, ::AgentBridgeServer::IsWorldPartitionedResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_QueryAllActors : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_QueryAllActors() {
+      ::grpc::Service::MarkMethodGeneric(15);
+    }
+    ~WithGenericMethod_QueryAllActors() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryAllActors(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryAllActorsRequest* /*request*/, ::AgentBridgeServer::QueryAllActorsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_GetStreamingState : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetStreamingState() {
+      ::grpc::Service::MarkMethodGeneric(16);
+    }
+    ~WithGenericMethod_GetStreamingState() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetStreamingState(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetStreamingStateRequest* /*request*/, ::AgentBridgeServer::GetStreamingStateResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_QueryLandscape : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_QueryLandscape() {
+      ::grpc::Service::MarkMethodGeneric(17);
+    }
+    ~WithGenericMethod_QueryLandscape() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryLandscape(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryLandscapeRequest* /*request*/, ::AgentBridgeServer::QueryLandscapeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_GetDataLayers : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetDataLayers() {
+      ::grpc::Service::MarkMethodGeneric(18);
+    }
+    ~WithGenericMethod_GetDataLayers() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetDataLayers(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetDataLayersRequest* /*request*/, ::AgentBridgeServer::GetDataLayersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_GetActorsInDataLayer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetActorsInDataLayer() {
+      ::grpc::Service::MarkMethodGeneric(19);
+    }
+    ~WithGenericMethod_GetActorsInDataLayer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetActorsInDataLayer(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetActorsInDataLayerRequest* /*request*/, ::AgentBridgeServer::GetActorsInDataLayerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ExecuteConsoleCommand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ExecuteConsoleCommand() {
+      ::grpc::Service::MarkMethodGeneric(20);
+    }
+    ~WithGenericMethod_ExecuteConsoleCommand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1610,6 +2232,146 @@ class AgentBridgeService final {
     }
     void RequestListClasses(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_IsWorldPartitioned : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_IsWorldPartitioned() {
+      ::grpc::Service::MarkMethodRaw(14);
+    }
+    ~WithRawMethod_IsWorldPartitioned() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status IsWorldPartitioned(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::IsWorldPartitionedRequest* /*request*/, ::AgentBridgeServer::IsWorldPartitionedResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestIsWorldPartitioned(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(14, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_QueryAllActors : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_QueryAllActors() {
+      ::grpc::Service::MarkMethodRaw(15);
+    }
+    ~WithRawMethod_QueryAllActors() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryAllActors(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryAllActorsRequest* /*request*/, ::AgentBridgeServer::QueryAllActorsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestQueryAllActors(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(15, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GetStreamingState : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetStreamingState() {
+      ::grpc::Service::MarkMethodRaw(16);
+    }
+    ~WithRawMethod_GetStreamingState() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetStreamingState(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetStreamingStateRequest* /*request*/, ::AgentBridgeServer::GetStreamingStateResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetStreamingState(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(16, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_QueryLandscape : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_QueryLandscape() {
+      ::grpc::Service::MarkMethodRaw(17);
+    }
+    ~WithRawMethod_QueryLandscape() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryLandscape(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryLandscapeRequest* /*request*/, ::AgentBridgeServer::QueryLandscapeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestQueryLandscape(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(17, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GetDataLayers : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetDataLayers() {
+      ::grpc::Service::MarkMethodRaw(18);
+    }
+    ~WithRawMethod_GetDataLayers() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetDataLayers(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetDataLayersRequest* /*request*/, ::AgentBridgeServer::GetDataLayersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetDataLayers(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(18, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GetActorsInDataLayer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetActorsInDataLayer() {
+      ::grpc::Service::MarkMethodRaw(19);
+    }
+    ~WithRawMethod_GetActorsInDataLayer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetActorsInDataLayer(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetActorsInDataLayerRequest* /*request*/, ::AgentBridgeServer::GetActorsInDataLayerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetActorsInDataLayer(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(19, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ExecuteConsoleCommand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ExecuteConsoleCommand() {
+      ::grpc::Service::MarkMethodRaw(20);
+    }
+    ~WithRawMethod_ExecuteConsoleCommand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestExecuteConsoleCommand(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(20, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1918,6 +2680,160 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* ListClasses(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_IsWorldPartitioned : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_IsWorldPartitioned() {
+      ::grpc::Service::MarkMethodRawCallback(14,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->IsWorldPartitioned(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_IsWorldPartitioned() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status IsWorldPartitioned(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::IsWorldPartitionedRequest* /*request*/, ::AgentBridgeServer::IsWorldPartitionedResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* IsWorldPartitioned(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_QueryAllActors : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_QueryAllActors() {
+      ::grpc::Service::MarkMethodRawCallback(15,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->QueryAllActors(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_QueryAllActors() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryAllActors(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryAllActorsRequest* /*request*/, ::AgentBridgeServer::QueryAllActorsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* QueryAllActors(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GetStreamingState : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetStreamingState() {
+      ::grpc::Service::MarkMethodRawCallback(16,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetStreamingState(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetStreamingState() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetStreamingState(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetStreamingStateRequest* /*request*/, ::AgentBridgeServer::GetStreamingStateResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetStreamingState(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_QueryLandscape : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_QueryLandscape() {
+      ::grpc::Service::MarkMethodRawCallback(17,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->QueryLandscape(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_QueryLandscape() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status QueryLandscape(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryLandscapeRequest* /*request*/, ::AgentBridgeServer::QueryLandscapeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* QueryLandscape(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GetDataLayers : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetDataLayers() {
+      ::grpc::Service::MarkMethodRawCallback(18,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetDataLayers(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetDataLayers() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetDataLayers(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetDataLayersRequest* /*request*/, ::AgentBridgeServer::GetDataLayersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetDataLayers(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GetActorsInDataLayer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetActorsInDataLayer() {
+      ::grpc::Service::MarkMethodRawCallback(19,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetActorsInDataLayer(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetActorsInDataLayer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetActorsInDataLayer(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetActorsInDataLayerRequest* /*request*/, ::AgentBridgeServer::GetActorsInDataLayerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetActorsInDataLayer(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ExecuteConsoleCommand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ExecuteConsoleCommand() {
+      ::grpc::Service::MarkMethodRawCallback(20,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ExecuteConsoleCommand(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ExecuteConsoleCommand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ExecuteConsoleCommand(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -2298,9 +3214,198 @@ class AgentBridgeService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedListClasses(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::ListClassesRequest,::AgentBridgeServer::ListClassesResponse>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<Service > > > > > > > > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_IsWorldPartitioned : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_IsWorldPartitioned() {
+      ::grpc::Service::MarkMethodStreamed(14,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::IsWorldPartitionedRequest, ::AgentBridgeServer::IsWorldPartitionedResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::IsWorldPartitionedRequest, ::AgentBridgeServer::IsWorldPartitionedResponse>* streamer) {
+                       return this->StreamedIsWorldPartitioned(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_IsWorldPartitioned() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status IsWorldPartitioned(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::IsWorldPartitionedRequest* /*request*/, ::AgentBridgeServer::IsWorldPartitionedResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedIsWorldPartitioned(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::IsWorldPartitionedRequest,::AgentBridgeServer::IsWorldPartitionedResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_QueryAllActors : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_QueryAllActors() {
+      ::grpc::Service::MarkMethodStreamed(15,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::QueryAllActorsRequest, ::AgentBridgeServer::QueryAllActorsResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::QueryAllActorsRequest, ::AgentBridgeServer::QueryAllActorsResponse>* streamer) {
+                       return this->StreamedQueryAllActors(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_QueryAllActors() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status QueryAllActors(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryAllActorsRequest* /*request*/, ::AgentBridgeServer::QueryAllActorsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedQueryAllActors(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::QueryAllActorsRequest,::AgentBridgeServer::QueryAllActorsResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GetStreamingState : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetStreamingState() {
+      ::grpc::Service::MarkMethodStreamed(16,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::GetStreamingStateRequest, ::AgentBridgeServer::GetStreamingStateResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::GetStreamingStateRequest, ::AgentBridgeServer::GetStreamingStateResponse>* streamer) {
+                       return this->StreamedGetStreamingState(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetStreamingState() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetStreamingState(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetStreamingStateRequest* /*request*/, ::AgentBridgeServer::GetStreamingStateResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetStreamingState(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::GetStreamingStateRequest,::AgentBridgeServer::GetStreamingStateResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_QueryLandscape : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_QueryLandscape() {
+      ::grpc::Service::MarkMethodStreamed(17,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::QueryLandscapeRequest, ::AgentBridgeServer::QueryLandscapeResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::QueryLandscapeRequest, ::AgentBridgeServer::QueryLandscapeResponse>* streamer) {
+                       return this->StreamedQueryLandscape(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_QueryLandscape() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status QueryLandscape(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::QueryLandscapeRequest* /*request*/, ::AgentBridgeServer::QueryLandscapeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedQueryLandscape(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::QueryLandscapeRequest,::AgentBridgeServer::QueryLandscapeResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GetDataLayers : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetDataLayers() {
+      ::grpc::Service::MarkMethodStreamed(18,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse>* streamer) {
+                       return this->StreamedGetDataLayers(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetDataLayers() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetDataLayers(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetDataLayersRequest* /*request*/, ::AgentBridgeServer::GetDataLayersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetDataLayers(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::GetDataLayersRequest,::AgentBridgeServer::GetDataLayersResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GetActorsInDataLayer : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetActorsInDataLayer() {
+      ::grpc::Service::MarkMethodStreamed(19,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse>* streamer) {
+                       return this->StreamedGetActorsInDataLayer(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetActorsInDataLayer() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetActorsInDataLayer(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetActorsInDataLayerRequest* /*request*/, ::AgentBridgeServer::GetActorsInDataLayerResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetActorsInDataLayer(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::GetActorsInDataLayerRequest,::AgentBridgeServer::GetActorsInDataLayerResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ExecuteConsoleCommand : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ExecuteConsoleCommand() {
+      ::grpc::Service::MarkMethodStreamed(20,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse>* streamer) {
+                       return this->StreamedExecuteConsoleCommand(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ExecuteConsoleCommand() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedExecuteConsoleCommand(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::ExecuteConsoleCommandRequest,::AgentBridgeServer::ExecuteConsoleCommandResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<Service > > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<Service > > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<Service > > > > > > > > > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace AgentBridgeServer

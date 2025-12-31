@@ -300,6 +300,136 @@ TOOLS = [
             "required": ["class_name"],
         },
     },
+
+    # =========================================================================
+    # World Partition & Streaming
+    # =========================================================================
+    {
+        "name": "is_world_partitioned",
+        "description": "Check if the current world uses World Partition (UE5's streaming system for large worlds).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+        },
+    },
+    {
+        "name": "query_all_actors",
+        "description": "Query actors including those in unloaded streaming cells. Unlike query_actors, this can find actors that aren't currently loaded in memory.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "class_name": {
+                    "type": "string",
+                    "description": "Filter by class name (e.g., 'StaticMeshActor')",
+                },
+                "name_pattern": {
+                    "type": "string",
+                    "description": "Wildcard pattern for actor name/label",
+                },
+                "include_loaded": {
+                    "type": "boolean",
+                    "description": "Include loaded actors",
+                    "default": True,
+                },
+                "include_unloaded": {
+                    "type": "boolean",
+                    "description": "Include unloaded actors (metadata only)",
+                    "default": True,
+                },
+                "data_layer": {
+                    "type": "string",
+                    "description": "Filter by data layer name",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Maximum number of results",
+                    "default": 100,
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "get_streaming_state",
+        "description": "Get the streaming state of an actor by GUID. Returns whether the actor is Loaded, Unloaded, or Invalid.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_guid": {
+                    "type": "string",
+                    "description": "Actor GUID (from query_all_actors results)",
+                },
+            },
+            "required": ["actor_guid"],
+        },
+    },
+    {
+        "name": "query_landscape",
+        "description": "Query all landscape proxies in the world, including streaming landscape chunks.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "include_unloaded": {
+                    "type": "boolean",
+                    "description": "Include unloaded landscape proxies",
+                    "default": True,
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "get_data_layers",
+        "description": "Get all data layers defined in the world. Data layers are used to group actors for streaming.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+        },
+    },
+    {
+        "name": "get_actors_in_data_layer",
+        "description": "Get all actors in a specific data layer.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "data_layer": {
+                    "type": "string",
+                    "description": "Data layer name",
+                },
+                "include_unloaded": {
+                    "type": "boolean",
+                    "description": "Include unloaded actors",
+                    "default": True,
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Maximum number of results",
+                    "default": 100,
+                },
+            },
+            "required": ["data_layer"],
+        },
+    },
+
+    # =========================================================================
+    # Console Commands
+    # =========================================================================
+    {
+        "name": "execute_console_command",
+        "description": "Execute an arbitrary Unreal console command. Use this for operations not covered by other tools.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string",
+                    "description": "Console command to execute (e.g., 'stat fps', 'AgentBridge.ListWorlds')",
+                },
+            },
+            "required": ["command"],
+        },
+    },
 ]
 
 
@@ -424,6 +554,40 @@ class AgentBridgeClient:
             include_inherited=include_inherited,
             include_functions=include_functions,
         ))
+
+    # World Partition methods
+    def is_world_partitioned(self):
+        return self.stub.IsWorldPartitioned(pb.IsWorldPartitionedRequest())
+
+    def query_all_actors(self, class_name="", name_pattern="", include_loaded=True,
+                         include_unloaded=True, data_layer="", limit=100):
+        return self.stub.QueryAllActors(pb.QueryAllActorsRequest(
+            class_name=class_name,
+            name_pattern=name_pattern,
+            include_loaded=include_loaded,
+            include_unloaded=include_unloaded,
+            data_layer=data_layer,
+            limit=limit,
+        ))
+
+    def get_streaming_state(self, actor_guid: str):
+        return self.stub.GetStreamingState(pb.GetStreamingStateRequest(actor_guid=actor_guid))
+
+    def query_landscape(self, include_unloaded=True):
+        return self.stub.QueryLandscape(pb.QueryLandscapeRequest(include_unloaded=include_unloaded))
+
+    def get_data_layers(self):
+        return self.stub.GetDataLayers(pb.GetDataLayersRequest())
+
+    def get_actors_in_data_layer(self, data_layer: str, include_unloaded=True, limit=100):
+        return self.stub.GetActorsInDataLayer(pb.GetActorsInDataLayerRequest(
+            data_layer=data_layer,
+            include_unloaded=include_unloaded,
+            limit=limit,
+        ))
+
+    def execute_console_command(self, command: str):
+        return self.stub.ExecuteConsoleCommand(pb.ExecuteConsoleCommandRequest(command=command))
 
 
 def connect(host: str, port: int) -> AgentBridgeClient:
@@ -609,6 +773,120 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
                 }
                 for f in schema.functions
             ],
+        }
+
+    # World Partition & Streaming
+    elif tool_name == "is_world_partitioned":
+        result = safe_call(client.is_world_partitioned)
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "is_partitioned": result.is_partitioned,
+            "world_name": result.world_name,
+        }
+
+    elif tool_name == "query_all_actors":
+        result = safe_call(
+            client.query_all_actors,
+            class_name=args.get("class_name", ""),
+            name_pattern=args.get("name_pattern", ""),
+            include_loaded=args.get("include_loaded", True),
+            include_unloaded=args.get("include_unloaded", True),
+            data_layer=args.get("data_layer", ""),
+            limit=args.get("limit", 100),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "total_loaded": result.total_loaded,
+            "total_unloaded": result.total_unloaded,
+            "actors": [
+                {
+                    "name": a.actor_info.name,
+                    "label": a.actor_info.label,
+                    "class_name": a.actor_info.class_name,
+                    "guid": a.actor_info.guid,
+                    "streaming_state": ["NOT_APPLICABLE", "LOADED", "UNLOADED", "INVALID"][a.streaming_state],
+                    "is_spatially_loaded": a.is_spatially_loaded,
+                    "data_layers": list(a.data_layers),
+                    "location": [a.actor_info.transform.location.x,
+                                 a.actor_info.transform.location.y,
+                                 a.actor_info.transform.location.z] if a.actor_info.HasField("transform") else None,
+                }
+                for a in result.actors
+            ],
+        }
+
+    elif tool_name == "get_streaming_state":
+        result = safe_call(client.get_streaming_state, args["actor_guid"])
+        if isinstance(result, dict) and "error" in result:
+            return result
+        state_names = ["NOT_APPLICABLE", "LOADED", "UNLOADED", "INVALID"]
+        return {
+            "state": state_names[result.state],
+            "actor": {
+                "name": result.actor.actor_info.name,
+                "label": result.actor.actor_info.label,
+                "class_name": result.actor.actor_info.class_name,
+            } if result.HasField("actor") else None,
+        }
+
+    elif tool_name == "query_landscape":
+        result = safe_call(client.query_landscape, args.get("include_unloaded", True))
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "total_count": result.total_count,
+            "landscape_proxies": [
+                {
+                    "name": p.actor_info.name,
+                    "label": p.actor_info.label,
+                    "class_name": p.actor_info.class_name,
+                    "guid": p.actor_info.guid,
+                    "streaming_state": ["NOT_APPLICABLE", "LOADED", "UNLOADED", "INVALID"][p.streaming_state],
+                }
+                for p in result.landscape_proxies
+            ],
+        }
+
+    elif tool_name == "get_data_layers":
+        result = safe_call(client.get_data_layers)
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "data_layers": list(result.data_layers),
+        }
+
+    elif tool_name == "get_actors_in_data_layer":
+        result = safe_call(
+            client.get_actors_in_data_layer,
+            data_layer=args["data_layer"],
+            include_unloaded=args.get("include_unloaded", True),
+            limit=args.get("limit", 100),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "total_count": result.total_count,
+            "actors": [
+                {
+                    "name": a.actor_info.name,
+                    "label": a.actor_info.label,
+                    "class_name": a.actor_info.class_name,
+                    "guid": a.actor_info.guid,
+                    "streaming_state": ["NOT_APPLICABLE", "LOADED", "UNLOADED", "INVALID"][a.streaming_state],
+                }
+                for a in result.actors
+            ],
+        }
+
+    elif tool_name == "execute_console_command":
+        result = safe_call(client.execute_console_command, args["command"])
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "success": result.success,
+            "output": result.output,
         }
 
     else:
