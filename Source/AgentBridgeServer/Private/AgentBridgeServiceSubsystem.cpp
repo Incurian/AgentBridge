@@ -125,7 +125,9 @@ void UAgentBridgeServiceSubsystem::RegisterScriptingServices(FTempoScriptingServ
 
 		// Console Commands
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestExecuteConsoleCommand,
-			&UAgentBridgeServiceSubsystem::ExecuteConsoleCommand)
+			&UAgentBridgeServiceSubsystem::ExecuteConsoleCommand),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestSearchConsoleCommands,
+			&UAgentBridgeServiceSubsystem::SearchConsoleCommands)
 	);
 }
 
@@ -1335,5 +1337,113 @@ void UAgentBridgeServiceSubsystem::ExecuteConsoleCommand(
 	Response.set_success(true);
 	Response.set_output(TCHAR_TO_UTF8(*CombinedOutput));
 
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::SearchConsoleCommands(
+	const SearchConsoleCommandsRequest& Request,
+	const TResponseDelegate<SearchConsoleCommandsResponse>& ResponseContinuation)
+{
+	FString Keyword = UTF8_TO_TCHAR(Request.keyword().c_str());
+	int32 Limit = Request.limit() > 0 ? Request.limit() : 50;
+	bool bSearchHelp = Request.search_help();
+
+	SearchConsoleCommandsResponse Response;
+
+	if (Keyword.IsEmpty())
+	{
+		Response.set_total_scanned(0);
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INVALID_ARGUMENT, "Keyword is required"));
+		return;
+	}
+
+	int32 TotalScanned = 0;
+	int32 MatchCount = 0;
+
+	// Iterate all console objects
+	IConsoleManager::Get().ForEachConsoleObjectThatStartsWith(
+		FConsoleObjectVisitor::CreateLambda([&](const TCHAR* Name, IConsoleObject* ConsoleObj)
+		{
+			TotalScanned++;
+
+			if (MatchCount >= Limit)
+			{
+				return;
+			}
+
+			FString NameStr(Name);
+			const TCHAR* HelpText = ConsoleObj->GetHelp();
+			FString HelpStr = HelpText ? FString(HelpText) : TEXT("");
+
+			// Check if keyword matches name or (optionally) help text
+			bool bNameMatch = NameStr.Contains(Keyword, ESearchCase::IgnoreCase);
+			bool bHelpMatch = bSearchHelp && HelpStr.Contains(Keyword, ESearchCase::IgnoreCase);
+
+			if (!bNameMatch && !bHelpMatch)
+			{
+				return;
+			}
+
+			ConsoleCommandInfo* Info = Response.add_commands();
+			Info->set_name(TCHAR_TO_UTF8(*NameStr));
+
+			// Truncate help text for transport
+			if (HelpStr.Len() > 500)
+			{
+				HelpStr = HelpStr.Left(500) + TEXT("...");
+			}
+			HelpStr.ReplaceInline(TEXT("\n"), TEXT(" "));
+			HelpStr.ReplaceInline(TEXT("\r"), TEXT(""));
+			Info->set_help(TCHAR_TO_UTF8(*HelpStr));
+
+			// Check if it's a variable or command
+			IConsoleVariable* CVar = ConsoleObj->AsVariable();
+			if (CVar)
+			{
+				Info->set_is_variable(true);
+
+				FString ValueType;
+				FString CurrentValue;
+
+				if (CVar->IsVariableInt())
+				{
+					ValueType = TEXT("Int");
+					CurrentValue = FString::Printf(TEXT("%d"), CVar->GetInt());
+				}
+				else if (CVar->IsVariableFloat())
+				{
+					ValueType = TEXT("Float");
+					CurrentValue = FString::Printf(TEXT("%.4f"), CVar->GetFloat());
+				}
+				else if (CVar->IsVariableBool())
+				{
+					ValueType = TEXT("Bool");
+					CurrentValue = CVar->GetBool() ? TEXT("true") : TEXT("false");
+				}
+				else
+				{
+					ValueType = TEXT("String");
+					CurrentValue = CVar->GetString();
+					if (CurrentValue.Len() > 100)
+					{
+						CurrentValue = CurrentValue.Left(100) + TEXT("...");
+					}
+				}
+
+				Info->set_value_type(TCHAR_TO_UTF8(*ValueType));
+				Info->set_current_value(TCHAR_TO_UTF8(*CurrentValue));
+			}
+			else
+			{
+				Info->set_is_variable(false);
+			}
+
+			MatchCount++;
+		}),
+		TEXT("") // Start with all console objects
+	);
+
+	Response.set_total_scanned(TotalScanned);
 	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 }

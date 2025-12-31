@@ -200,6 +200,13 @@ class AgentBridgeService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>> PrepareAsyncExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>>(PrepareAsyncExecuteConsoleCommandRaw(context, request, cq));
     }
+    virtual ::grpc::Status SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::SearchConsoleCommandsResponse>> AsyncSearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::SearchConsoleCommandsResponse>>(AsyncSearchConsoleCommandsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::SearchConsoleCommandsResponse>> PrepareAsyncSearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::SearchConsoleCommandsResponse>>(PrepareAsyncSearchConsoleCommandsRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -253,6 +260,8 @@ class AgentBridgeService final {
       // --- Console Commands (for arbitrary operations) ---
       virtual void ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -300,6 +309,8 @@ class AgentBridgeService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::GetActorsInDataLayerResponse>* PrepareAsyncGetActorsInDataLayerRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* AsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* PrepareAsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::SearchConsoleCommandsResponse>* AsyncSearchConsoleCommandsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::SearchConsoleCommandsResponse>* PrepareAsyncSearchConsoleCommandsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -451,6 +462,13 @@ class AgentBridgeService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>> PrepareAsyncExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>>(PrepareAsyncExecuteConsoleCommandRaw(context, request, cq));
     }
+    ::grpc::Status SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::SearchConsoleCommandsResponse>> AsyncSearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::SearchConsoleCommandsResponse>>(AsyncSearchConsoleCommandsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::SearchConsoleCommandsResponse>> PrepareAsyncSearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::SearchConsoleCommandsResponse>>(PrepareAsyncSearchConsoleCommandsRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -496,6 +514,8 @@ class AgentBridgeService final {
       void GetActorsInDataLayer(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, std::function<void(::grpc::Status)>) override;
       void ExecuteConsoleCommand(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response, std::function<void(::grpc::Status)>) override;
+      void SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -549,6 +569,8 @@ class AgentBridgeService final {
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetActorsInDataLayerResponse>* PrepareAsyncGetActorsInDataLayerRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* AsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ExecuteConsoleCommandResponse>* PrepareAsyncExecuteConsoleCommandRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::SearchConsoleCommandsResponse>* AsyncSearchConsoleCommandsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::SearchConsoleCommandsResponse>* PrepareAsyncSearchConsoleCommandsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_ListWorlds_;
     const ::grpc::internal::RpcMethod rpcmethod_SetTargetWorld_;
     const ::grpc::internal::RpcMethod rpcmethod_QueryActors_;
@@ -570,6 +592,7 @@ class AgentBridgeService final {
     const ::grpc::internal::RpcMethod rpcmethod_GetDataLayers_;
     const ::grpc::internal::RpcMethod rpcmethod_GetActorsInDataLayer_;
     const ::grpc::internal::RpcMethod rpcmethod_ExecuteConsoleCommand_;
+    const ::grpc::internal::RpcMethod rpcmethod_SearchConsoleCommands_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -606,6 +629,7 @@ class AgentBridgeService final {
     virtual ::grpc::Status GetActorsInDataLayer(::grpc::ServerContext* context, const ::AgentBridgeServer::GetActorsInDataLayerRequest* request, ::AgentBridgeServer::GetActorsInDataLayerResponse* response);
     // --- Console Commands (for arbitrary operations) ---
     virtual ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response);
+    virtual ::grpc::Status SearchConsoleCommands(::grpc::ServerContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_ListWorlds : public BaseClass {
@@ -1027,7 +1051,27 @@ class AgentBridgeService final {
       ::grpc::Service::RequestAsyncUnary(20, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_ListWorlds<WithAsyncMethod_SetTargetWorld<WithAsyncMethod_QueryActors<WithAsyncMethod_GetActor<WithAsyncMethod_SpawnActor<WithAsyncMethod_DeleteActor<WithAsyncMethod_SetActorTransform<WithAsyncMethod_SetActorProperties<WithAsyncMethod_GetPropertyPath<WithAsyncMethod_SetPropertyPath<WithAsyncMethod_CallFunction<WithAsyncMethod_FindClass<WithAsyncMethod_GetClassSchema<WithAsyncMethod_ListClasses<WithAsyncMethod_IsWorldPartitioned<WithAsyncMethod_QueryAllActors<WithAsyncMethod_GetStreamingState<WithAsyncMethod_QueryLandscape<WithAsyncMethod_GetDataLayers<WithAsyncMethod_GetActorsInDataLayer<WithAsyncMethod_ExecuteConsoleCommand<Service > > > > > > > > > > > > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_SearchConsoleCommands : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SearchConsoleCommands() {
+      ::grpc::Service::MarkMethodAsync(21);
+    }
+    ~WithAsyncMethod_SearchConsoleCommands() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SearchConsoleCommands(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SearchConsoleCommandsRequest* /*request*/, ::AgentBridgeServer::SearchConsoleCommandsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSearchConsoleCommands(::grpc::ServerContext* context, ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::SearchConsoleCommandsResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(21, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_ListWorlds<WithAsyncMethod_SetTargetWorld<WithAsyncMethod_QueryActors<WithAsyncMethod_GetActor<WithAsyncMethod_SpawnActor<WithAsyncMethod_DeleteActor<WithAsyncMethod_SetActorTransform<WithAsyncMethod_SetActorProperties<WithAsyncMethod_GetPropertyPath<WithAsyncMethod_SetPropertyPath<WithAsyncMethod_CallFunction<WithAsyncMethod_FindClass<WithAsyncMethod_GetClassSchema<WithAsyncMethod_ListClasses<WithAsyncMethod_IsWorldPartitioned<WithAsyncMethod_QueryAllActors<WithAsyncMethod_GetStreamingState<WithAsyncMethod_QueryLandscape<WithAsyncMethod_GetDataLayers<WithAsyncMethod_GetActorsInDataLayer<WithAsyncMethod_ExecuteConsoleCommand<WithAsyncMethod_SearchConsoleCommands<Service > > > > > > > > > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_ListWorlds : public BaseClass {
    private:
@@ -1595,7 +1639,34 @@ class AgentBridgeService final {
     virtual ::grpc::ServerUnaryReactor* ExecuteConsoleCommand(
       ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_ListWorlds<WithCallbackMethod_SetTargetWorld<WithCallbackMethod_QueryActors<WithCallbackMethod_GetActor<WithCallbackMethod_SpawnActor<WithCallbackMethod_DeleteActor<WithCallbackMethod_SetActorTransform<WithCallbackMethod_SetActorProperties<WithCallbackMethod_GetPropertyPath<WithCallbackMethod_SetPropertyPath<WithCallbackMethod_CallFunction<WithCallbackMethod_FindClass<WithCallbackMethod_GetClassSchema<WithCallbackMethod_ListClasses<WithCallbackMethod_IsWorldPartitioned<WithCallbackMethod_QueryAllActors<WithCallbackMethod_GetStreamingState<WithCallbackMethod_QueryLandscape<WithCallbackMethod_GetDataLayers<WithCallbackMethod_GetActorsInDataLayer<WithCallbackMethod_ExecuteConsoleCommand<Service > > > > > > > > > > > > > > > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_SearchConsoleCommands : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_SearchConsoleCommands() {
+      ::grpc::Service::MarkMethodCallback(21,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response) { return this->SearchConsoleCommands(context, request, response); }));}
+    void SetMessageAllocatorFor_SearchConsoleCommands(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(21);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_SearchConsoleCommands() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SearchConsoleCommands(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SearchConsoleCommandsRequest* /*request*/, ::AgentBridgeServer::SearchConsoleCommandsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SearchConsoleCommands(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::SearchConsoleCommandsRequest* /*request*/, ::AgentBridgeServer::SearchConsoleCommandsResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_ListWorlds<WithCallbackMethod_SetTargetWorld<WithCallbackMethod_QueryActors<WithCallbackMethod_GetActor<WithCallbackMethod_SpawnActor<WithCallbackMethod_DeleteActor<WithCallbackMethod_SetActorTransform<WithCallbackMethod_SetActorProperties<WithCallbackMethod_GetPropertyPath<WithCallbackMethod_SetPropertyPath<WithCallbackMethod_CallFunction<WithCallbackMethod_FindClass<WithCallbackMethod_GetClassSchema<WithCallbackMethod_ListClasses<WithCallbackMethod_IsWorldPartitioned<WithCallbackMethod_QueryAllActors<WithCallbackMethod_GetStreamingState<WithCallbackMethod_QueryLandscape<WithCallbackMethod_GetDataLayers<WithCallbackMethod_GetActorsInDataLayer<WithCallbackMethod_ExecuteConsoleCommand<WithCallbackMethod_SearchConsoleCommands<Service > > > > > > > > > > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_ListWorlds : public BaseClass {
@@ -1950,6 +2021,23 @@ class AgentBridgeService final {
     }
     // disable synchronous version of this method
     ::grpc::Status ExecuteConsoleCommand(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* /*request*/, ::AgentBridgeServer::ExecuteConsoleCommandResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_SearchConsoleCommands : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SearchConsoleCommands() {
+      ::grpc::Service::MarkMethodGeneric(21);
+    }
+    ~WithGenericMethod_SearchConsoleCommands() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SearchConsoleCommands(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SearchConsoleCommandsRequest* /*request*/, ::AgentBridgeServer::SearchConsoleCommandsResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2372,6 +2460,26 @@ class AgentBridgeService final {
     }
     void RequestExecuteConsoleCommand(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(20, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_SearchConsoleCommands : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SearchConsoleCommands() {
+      ::grpc::Service::MarkMethodRaw(21);
+    }
+    ~WithRawMethod_SearchConsoleCommands() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SearchConsoleCommands(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SearchConsoleCommandsRequest* /*request*/, ::AgentBridgeServer::SearchConsoleCommandsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSearchConsoleCommands(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(21, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2834,6 +2942,28 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* ExecuteConsoleCommand(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_SearchConsoleCommands : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_SearchConsoleCommands() {
+      ::grpc::Service::MarkMethodRawCallback(21,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SearchConsoleCommands(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_SearchConsoleCommands() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SearchConsoleCommands(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SearchConsoleCommandsRequest* /*request*/, ::AgentBridgeServer::SearchConsoleCommandsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SearchConsoleCommands(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -3403,9 +3533,36 @@ class AgentBridgeService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedExecuteConsoleCommand(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::ExecuteConsoleCommandRequest,::AgentBridgeServer::ExecuteConsoleCommandResponse>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<Service > > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_SearchConsoleCommands : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_SearchConsoleCommands() {
+      ::grpc::Service::MarkMethodStreamed(21,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse>* streamer) {
+                       return this->StreamedSearchConsoleCommands(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_SearchConsoleCommands() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SearchConsoleCommands(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SearchConsoleCommandsRequest* /*request*/, ::AgentBridgeServer::SearchConsoleCommandsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedSearchConsoleCommands(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::SearchConsoleCommandsRequest,::AgentBridgeServer::SearchConsoleCommandsResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<Service > > > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<Service > > > > > > > > > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<Service > > > > > > > > > > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace AgentBridgeServer

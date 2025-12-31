@@ -148,6 +148,14 @@ void FAgentBridgeDebug::RegisterCommands()
 		ECVF_Default
 	));
 
+	// Command discovery
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.SearchCommands"),
+		TEXT("Search console commands/CVars by keyword. Usage: AgentBridge.SearchCommands <Keyword> [Limit] [SearchHelp]"),
+		FConsoleCommandWithArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_SearchCommands),
+		ECVF_Default
+	));
+
 	// World Partition commands
 	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
 		TEXT("AgentBridge.IsPartitioned"),
@@ -184,7 +192,7 @@ void FAgentBridgeDebug::RegisterCommands()
 		ECVF_Default
 	));
 
-	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (21 commands)"));
+	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (22 commands)"));
 }
 
 void FAgentBridgeDebug::UnregisterCommands()
@@ -1890,4 +1898,149 @@ void FAgentBridgeDebug::Cmd_DataLayers(const TArray<FString>& Args, UWorld* Worl
 	}
 
 	UE_LOG(LogAgentBridge, Log, TEXT("Found %d data layers"), DataLayers.Num());
+}
+
+//~==============================================================================
+// Command Discovery
+//~==============================================================================
+
+void FAgentBridgeDebug::Cmd_SearchCommands(const TArray<FString>& Args)
+{
+	if (Args.Num() < 1)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.SearchCommands <Keyword> [Limit] [SearchHelp]"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Keyword: Search term (searches command names, optionally help text)"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Limit: Max results (default: 50)"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  SearchHelp: 1 to also search in help text (default: 0)"));
+		UE_LOG(LogAgentBridge, Warning, TEXT(""));
+		UE_LOG(LogAgentBridge, Warning, TEXT("Examples:"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  AgentBridge.SearchCommands fps"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  AgentBridge.SearchCommands shadow 20"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  AgentBridge.SearchCommands lighting 50 1"));
+		return;
+	}
+
+	FString Keyword = Args[0];
+	int32 Limit = Args.Num() > 1 ? FCString::Atoi(*Args[1]) : 50;
+	bool bSearchHelp = Args.Num() > 2 ? (FCString::Atoi(*Args[2]) != 0) : false;
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== SearchCommands (Keyword='%s', Limit=%d, SearchHelp=%s) ==="),
+		*Keyword, Limit, bSearchHelp ? TEXT("Yes") : TEXT("No"));
+
+	// Collect matching commands
+	struct FCommandInfo
+	{
+		FString Name;
+		FString Help;
+		bool bIsVariable;
+		FString ValueType;
+		FString CurrentValue;
+	};
+	TArray<FCommandInfo> Results;
+	int32 TotalScanned = 0;
+
+	// Use ForEachConsoleObjectThatContains for name search
+	IConsoleManager::Get().ForEachConsoleObjectThatStartsWith(
+		FConsoleObjectVisitor::CreateLambda([&](const TCHAR* Name, IConsoleObject* ConsoleObj)
+		{
+			TotalScanned++;
+
+			if (Results.Num() >= Limit)
+			{
+				return;
+			}
+
+			FString NameStr(Name);
+			const TCHAR* HelpText = ConsoleObj->GetHelp();
+			FString HelpStr = HelpText ? FString(HelpText) : TEXT("");
+
+			// Check if keyword matches name or (optionally) help text
+			bool bNameMatch = NameStr.Contains(Keyword, ESearchCase::IgnoreCase);
+			bool bHelpMatch = bSearchHelp && HelpStr.Contains(Keyword, ESearchCase::IgnoreCase);
+
+			if (!bNameMatch && !bHelpMatch)
+			{
+				return;
+			}
+
+			FCommandInfo Info;
+			Info.Name = NameStr;
+			Info.Help = HelpStr;
+
+			// Check if it's a variable or command
+			IConsoleVariable* CVar = ConsoleObj->AsVariable();
+			if (CVar)
+			{
+				Info.bIsVariable = true;
+				if (CVar->IsVariableInt())
+				{
+					Info.ValueType = TEXT("Int");
+					Info.CurrentValue = FString::Printf(TEXT("%d"), CVar->GetInt());
+				}
+				else if (CVar->IsVariableFloat())
+				{
+					Info.ValueType = TEXT("Float");
+					Info.CurrentValue = FString::Printf(TEXT("%.4f"), CVar->GetFloat());
+				}
+				else if (CVar->IsVariableBool())
+				{
+					Info.ValueType = TEXT("Bool");
+					Info.CurrentValue = CVar->GetBool() ? TEXT("true") : TEXT("false");
+				}
+				else
+				{
+					Info.ValueType = TEXT("String");
+					Info.CurrentValue = CVar->GetString();
+					// Truncate long strings
+					if (Info.CurrentValue.Len() > 50)
+					{
+						Info.CurrentValue = Info.CurrentValue.Left(50) + TEXT("...");
+					}
+				}
+			}
+			else
+			{
+				Info.bIsVariable = false;
+			}
+
+			Results.Add(Info);
+		}),
+		TEXT("") // Start with all console objects
+	);
+
+	// Display results
+	UE_LOG(LogAgentBridge, Log, TEXT(""));
+	for (int32 i = 0; i < Results.Num(); ++i)
+	{
+		const FCommandInfo& Info = Results[i];
+
+		if (Info.bIsVariable)
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("[%d] %s = %s (%s)"),
+				i, *Info.Name, *Info.CurrentValue, *Info.ValueType);
+		}
+		else
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("[%d] %s (Command)"),
+				i, *Info.Name);
+		}
+
+		// Show help text (truncated)
+		if (!Info.Help.IsEmpty())
+		{
+			FString ShortHelp = Info.Help;
+			// Replace newlines with spaces
+			ShortHelp.ReplaceInline(TEXT("\n"), TEXT(" "));
+			ShortHelp.ReplaceInline(TEXT("\r"), TEXT(""));
+			if (ShortHelp.Len() > 100)
+			{
+				ShortHelp = ShortHelp.Left(100) + TEXT("...");
+			}
+			UE_LOG(LogAgentBridge, Log, TEXT("    Help: %s"), *ShortHelp);
+		}
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT(""));
+	UE_LOG(LogAgentBridge, Log, TEXT("Found %d matches (scanned %d console objects)"),
+		Results.Num(), TotalScanned);
 }

@@ -43,6 +43,7 @@ static const char* AgentBridgeService_method_names[] = {
   "/AgentBridgeServer.AgentBridgeService/GetDataLayers",
   "/AgentBridgeServer.AgentBridgeService/GetActorsInDataLayer",
   "/AgentBridgeServer.AgentBridgeService/ExecuteConsoleCommand",
+  "/AgentBridgeServer.AgentBridgeService/SearchConsoleCommands",
 };
 
 std::unique_ptr< AgentBridgeService::Stub> AgentBridgeService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -73,6 +74,7 @@ AgentBridgeService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>&
   , rpcmethod_GetDataLayers_(AgentBridgeService_method_names[18], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_GetActorsInDataLayer_(AgentBridgeService_method_names[19], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_ExecuteConsoleCommand_(AgentBridgeService_method_names[20], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SearchConsoleCommands_(AgentBridgeService_method_names[21], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AgentBridgeService::Stub::ListWorlds(::grpc::ClientContext* context, const ::AgentBridgeServer::ListWorldsRequest& request, ::AgentBridgeServer::ListWorldsResponse* response) {
@@ -558,6 +560,29 @@ void AgentBridgeService::Stub::async::ExecuteConsoleCommand(::grpc::ClientContex
   return result;
 }
 
+::grpc::Status AgentBridgeService::Stub::SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SearchConsoleCommands_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SearchConsoleCommands_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::SearchConsoleCommands(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SearchConsoleCommands_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::SearchConsoleCommandsResponse>* AgentBridgeService::Stub::PrepareAsyncSearchConsoleCommandsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::SearchConsoleCommandsResponse, ::AgentBridgeServer::SearchConsoleCommandsRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SearchConsoleCommands_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::SearchConsoleCommandsResponse>* AgentBridgeService::Stub::AsyncSearchConsoleCommandsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncSearchConsoleCommandsRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 AgentBridgeService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AgentBridgeService_method_names[0],
@@ -769,6 +794,16 @@ AgentBridgeService::Service::Service() {
              ::AgentBridgeServer::ExecuteConsoleCommandResponse* resp) {
                return service->ExecuteConsoleCommand(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[21],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::SearchConsoleCommandsRequest* req,
+             ::AgentBridgeServer::SearchConsoleCommandsResponse* resp) {
+               return service->SearchConsoleCommands(ctx, req, resp);
+             }, this)));
 }
 
 AgentBridgeService::Service::~Service() {
@@ -915,6 +950,13 @@ AgentBridgeService::Service::~Service() {
 }
 
 ::grpc::Status AgentBridgeService::Service::ExecuteConsoleCommand(::grpc::ServerContext* context, const ::AgentBridgeServer::ExecuteConsoleCommandRequest* request, ::AgentBridgeServer::ExecuteConsoleCommandResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::SearchConsoleCommands(::grpc::ServerContext* context, const ::AgentBridgeServer::SearchConsoleCommandsRequest* request, ::AgentBridgeServer::SearchConsoleCommandsResponse* response) {
   (void) context;
   (void) request;
   (void) response;

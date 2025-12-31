@@ -430,6 +430,30 @@ TOOLS = [
             "required": ["command"],
         },
     },
+    {
+        "name": "search_console_commands",
+        "description": "Search Unreal console commands and CVars by keyword. Use this to discover available commands when you need to do something but don't know the exact command name.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "keyword": {
+                    "type": "string",
+                    "description": "Search term (e.g., 'fps', 'shadow', 'light', 'vsync')",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Maximum results to return (default: 50)",
+                    "default": 50,
+                },
+                "search_help": {
+                    "type": "boolean",
+                    "description": "Also search in help/description text (default: false)",
+                    "default": False,
+                },
+            },
+            "required": ["keyword"],
+        },
+    },
 ]
 
 
@@ -588,6 +612,13 @@ class AgentBridgeClient:
 
     def execute_console_command(self, command: str):
         return self.stub.ExecuteConsoleCommand(pb.ExecuteConsoleCommandRequest(command=command))
+
+    def search_console_commands(self, keyword: str, limit: int = 50, search_help: bool = False):
+        return self.stub.SearchConsoleCommands(pb.SearchConsoleCommandsRequest(
+            keyword=keyword,
+            limit=limit,
+            search_help=search_help,
+        ))
 
 
 def connect(host: str, port: int) -> AgentBridgeClient:
@@ -887,6 +918,32 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         return {
             "success": result.success,
             "output": result.output,
+        }
+
+    elif tool_name == "search_console_commands":
+        result = safe_call(
+            client.search_console_commands,
+            args["keyword"],
+            args.get("limit", 50),
+            args.get("search_help", False),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        commands = []
+        for cmd in result.commands:
+            cmd_info = {
+                "name": cmd.name,
+                "help": cmd.help,
+                "is_variable": cmd.is_variable,
+            }
+            if cmd.is_variable:
+                cmd_info["value_type"] = cmd.value_type
+                cmd_info["current_value"] = cmd.current_value
+            commands.append(cmd_info)
+        return {
+            "commands": commands,
+            "total_scanned": result.total_scanned,
+            "count": len(commands),
         }
 
     else:

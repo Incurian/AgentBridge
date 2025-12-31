@@ -51,6 +51,8 @@ namespace AgentBridgeServer
 	// Console command types
 	class ExecuteConsoleCommandRequest;
 	class ExecuteConsoleCommandResponse;
+	class SearchConsoleCommandsRequest;
+	class SearchConsoleCommandsResponse;
 }
 
 namespace TempoScripting
@@ -207,4 +209,8 @@ public:
 	void ExecuteConsoleCommand(
 		const AgentBridgeServer::ExecuteConsoleCommandRequest& Request,
 		const TResponseDelegate<AgentBridgeServer::ExecuteConsoleCommandResponse>& ResponseContinuation);
+
+	void SearchConsoleCommands(
+		const AgentBridgeServer::SearchConsoleCommandsRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::SearchConsoleCommandsResponse>& ResponseContinuation);
 };

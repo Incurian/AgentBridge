@@ -39,6 +39,9 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAgentBridge, Log, All);
  * - AgentBridge.SetCVar <Name> <Value> - Set console variable value
  * - AgentBridge.ListCVars [Pattern] [Limit] - List console variables
  *
+ * Command Discovery:
+ * - AgentBridge.SearchCommands <Keyword> [Limit] [SearchHelp] - Search console commands by keyword
+ *
  * World Partition & Streaming:
  * - AgentBridge.IsPartitioned - Check if current world uses World Partition
  * - AgentBridge.QueryAllActors [Pattern] [Limit] - Query all actors including unloaded
@@ -130,6 +133,9 @@ private:
 	static void Cmd_GetCVar(const TArray<FString>& Args);
 	static void Cmd_SetCVar(const TArray<FString>& Args);
 	static void Cmd_ListCVars(const TArray<FString>& Args);
+
+	// Command discovery
+	static void Cmd_SearchCommands(const TArray<FString>& Args);
 
 	// World Partition commands
 	static void Cmd_IsPartitioned(const TArray<FString>& Args, UWorld* World);

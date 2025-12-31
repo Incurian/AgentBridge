@@ -90,6 +90,9 @@ AGENTBRIDGESERVER_API extern ColorDefaultTypeInternal _Color_default_instance_;
 class ComponentDescriptor;
 struct ComponentDescriptorDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern ComponentDescriptorDefaultTypeInternal _ComponentDescriptor_default_instance_;
+class ConsoleCommandInfo;
+struct ConsoleCommandInfoDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern ConsoleCommandInfoDefaultTypeInternal _ConsoleCommandInfo_default_instance_;
 class DeleteActorRequest;
 struct DeleteActorRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DeleteActorRequestDefaultTypeInternal _DeleteActorRequest_default_instance_;
@@ -192,6 +195,12 @@ AGENTBRIDGESERVER_API extern QueryLandscapeResponseDefaultTypeInternal _QueryLan
 class Scale;
 struct ScaleDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern ScaleDefaultTypeInternal _Scale_default_instance_;
+class SearchConsoleCommandsRequest;
+struct SearchConsoleCommandsRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern SearchConsoleCommandsRequestDefaultTypeInternal _SearchConsoleCommandsRequest_default_instance_;
+class SearchConsoleCommandsResponse;
+struct SearchConsoleCommandsResponseDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern SearchConsoleCommandsResponseDefaultTypeInternal _SearchConsoleCommandsResponse_default_instance_;
 class SetActorPropertiesRequest;
 struct SetActorPropertiesRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern SetActorPropertiesRequestDefaultTypeInternal _SetActorPropertiesRequest_default_instance_;
@@ -970,6 +979,211 @@ class AGENTBRIDGESERVER_API SetActorPropertiesResponse final :
     ::google::protobuf_tempo::RepeatedPtrField<std::string> failed_properties_;
     ::google::protobuf_tempo::RepeatedPtrField<std::string> error_messages_;
     ::int32_t properties_set_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API SearchConsoleCommandsRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.SearchConsoleCommandsRequest) */ {
+ public:
+  inline SearchConsoleCommandsRequest() : SearchConsoleCommandsRequest(nullptr) {}
+  ~SearchConsoleCommandsRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR SearchConsoleCommandsRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline SearchConsoleCommandsRequest(const SearchConsoleCommandsRequest& from)
+      : SearchConsoleCommandsRequest(nullptr, from) {}
+  SearchConsoleCommandsRequest(SearchConsoleCommandsRequest&& from) noexcept
+    : SearchConsoleCommandsRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SearchConsoleCommandsRequest& operator=(const SearchConsoleCommandsRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SearchConsoleCommandsRequest& operator=(SearchConsoleCommandsRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SearchConsoleCommandsRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SearchConsoleCommandsRequest* internal_default_instance() {
+    return reinterpret_cast<const SearchConsoleCommandsRequest*>(
+               &_SearchConsoleCommandsRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    54;
+
+  friend void swap(SearchConsoleCommandsRequest& a, SearchConsoleCommandsRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SearchConsoleCommandsRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SearchConsoleCommandsRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SearchConsoleCommandsRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SearchConsoleCommandsRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const SearchConsoleCommandsRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const SearchConsoleCommandsRequest& from) {
+    SearchConsoleCommandsRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(SearchConsoleCommandsRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.SearchConsoleCommandsRequest";
+  }
+  protected:
+  explicit SearchConsoleCommandsRequest(::google::protobuf_tempo::Arena* arena);
+  SearchConsoleCommandsRequest(::google::protobuf_tempo::Arena* arena, const SearchConsoleCommandsRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kKeywordFieldNumber = 1,
+    kLimitFieldNumber = 2,
+    kSearchHelpFieldNumber = 3,
+  };
+  // string keyword = 1;
+  void clear_keyword() ;
+  const std::string& keyword() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_keyword(Arg_&& arg, Args_... args);
+  std::string* mutable_keyword();
+  PROTOBUF_NODISCARD std::string* release_keyword();
+  void set_allocated_keyword(std::string* value);
+
+  private:
+  const std::string& _internal_keyword() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_keyword(
+      const std::string& value);
+  std::string* _internal_mutable_keyword();
+
+  public:
+  // int32 limit = 2;
+  void clear_limit() ;
+  ::int32_t limit() const;
+  void set_limit(::int32_t value);
+
+  private:
+  ::int32_t _internal_limit() const;
+  void _internal_set_limit(::int32_t value);
+
+  public:
+  // bool search_help = 3;
+  void clear_search_help() ;
+  bool search_help() const;
+  void set_search_help(bool value);
+
+  private:
+  bool _internal_search_help() const;
+  void _internal_set_search_help(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.SearchConsoleCommandsRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      2, 3, 0,
+      62, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr keyword_;
+    ::int32_t limit_;
+    bool search_help_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -4653,6 +4867,253 @@ class AGENTBRIDGESERVER_API DeleteActorRequest final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API ConsoleCommandInfo final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.ConsoleCommandInfo) */ {
+ public:
+  inline ConsoleCommandInfo() : ConsoleCommandInfo(nullptr) {}
+  ~ConsoleCommandInfo() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR ConsoleCommandInfo(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline ConsoleCommandInfo(const ConsoleCommandInfo& from)
+      : ConsoleCommandInfo(nullptr, from) {}
+  ConsoleCommandInfo(ConsoleCommandInfo&& from) noexcept
+    : ConsoleCommandInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline ConsoleCommandInfo& operator=(const ConsoleCommandInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ConsoleCommandInfo& operator=(ConsoleCommandInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ConsoleCommandInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ConsoleCommandInfo* internal_default_instance() {
+    return reinterpret_cast<const ConsoleCommandInfo*>(
+               &_ConsoleCommandInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    53;
+
+  friend void swap(ConsoleCommandInfo& a, ConsoleCommandInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ConsoleCommandInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ConsoleCommandInfo* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ConsoleCommandInfo* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ConsoleCommandInfo>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const ConsoleCommandInfo& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const ConsoleCommandInfo& from) {
+    ConsoleCommandInfo::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(ConsoleCommandInfo* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.ConsoleCommandInfo";
+  }
+  protected:
+  explicit ConsoleCommandInfo(::google::protobuf_tempo::Arena* arena);
+  ConsoleCommandInfo(::google::protobuf_tempo::Arena* arena, const ConsoleCommandInfo& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNameFieldNumber = 1,
+    kHelpFieldNumber = 2,
+    kValueTypeFieldNumber = 4,
+    kCurrentValueFieldNumber = 5,
+    kIsVariableFieldNumber = 3,
+  };
+  // string name = 1;
+  void clear_name() ;
+  const std::string& name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_name(Arg_&& arg, Args_... args);
+  std::string* mutable_name();
+  PROTOBUF_NODISCARD std::string* release_name();
+  void set_allocated_name(std::string* value);
+
+  private:
+  const std::string& _internal_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name(
+      const std::string& value);
+  std::string* _internal_mutable_name();
+
+  public:
+  // string help = 2;
+  void clear_help() ;
+  const std::string& help() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_help(Arg_&& arg, Args_... args);
+  std::string* mutable_help();
+  PROTOBUF_NODISCARD std::string* release_help();
+  void set_allocated_help(std::string* value);
+
+  private:
+  const std::string& _internal_help() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_help(
+      const std::string& value);
+  std::string* _internal_mutable_help();
+
+  public:
+  // string value_type = 4;
+  void clear_value_type() ;
+  const std::string& value_type() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_value_type(Arg_&& arg, Args_... args);
+  std::string* mutable_value_type();
+  PROTOBUF_NODISCARD std::string* release_value_type();
+  void set_allocated_value_type(std::string* value);
+
+  private:
+  const std::string& _internal_value_type() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_value_type(
+      const std::string& value);
+  std::string* _internal_mutable_value_type();
+
+  public:
+  // string current_value = 5;
+  void clear_current_value() ;
+  const std::string& current_value() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_current_value(Arg_&& arg, Args_... args);
+  std::string* mutable_current_value();
+  PROTOBUF_NODISCARD std::string* release_current_value();
+  void set_allocated_current_value(std::string* value);
+
+  private:
+  const std::string& _internal_current_value() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_current_value(
+      const std::string& value);
+  std::string* _internal_mutable_current_value();
+
+  public:
+  // bool is_variable = 3;
+  void clear_is_variable() ;
+  bool is_variable() const;
+  void set_is_variable(bool value);
+
+  private:
+  bool _internal_is_variable() const;
+  void _internal_set_is_variable(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.ConsoleCommandInfo)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      3, 5, 0,
+      76, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr help_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr value_type_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr current_value_;
+    bool is_variable_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API Color final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.Color) */ {
  public:
@@ -5158,6 +5619,201 @@ class AGENTBRIDGESERVER_API ClassInfo final :
     bool is_blueprint_;
     bool is_abstract_;
     bool is_placeable_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API SearchConsoleCommandsResponse final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.SearchConsoleCommandsResponse) */ {
+ public:
+  inline SearchConsoleCommandsResponse() : SearchConsoleCommandsResponse(nullptr) {}
+  ~SearchConsoleCommandsResponse() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR SearchConsoleCommandsResponse(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline SearchConsoleCommandsResponse(const SearchConsoleCommandsResponse& from)
+      : SearchConsoleCommandsResponse(nullptr, from) {}
+  SearchConsoleCommandsResponse(SearchConsoleCommandsResponse&& from) noexcept
+    : SearchConsoleCommandsResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline SearchConsoleCommandsResponse& operator=(const SearchConsoleCommandsResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SearchConsoleCommandsResponse& operator=(SearchConsoleCommandsResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SearchConsoleCommandsResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SearchConsoleCommandsResponse* internal_default_instance() {
+    return reinterpret_cast<const SearchConsoleCommandsResponse*>(
+               &_SearchConsoleCommandsResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    55;
+
+  friend void swap(SearchConsoleCommandsResponse& a, SearchConsoleCommandsResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SearchConsoleCommandsResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SearchConsoleCommandsResponse* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SearchConsoleCommandsResponse* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SearchConsoleCommandsResponse>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const SearchConsoleCommandsResponse& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const SearchConsoleCommandsResponse& from) {
+    SearchConsoleCommandsResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(SearchConsoleCommandsResponse* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.SearchConsoleCommandsResponse";
+  }
+  protected:
+  explicit SearchConsoleCommandsResponse(::google::protobuf_tempo::Arena* arena);
+  SearchConsoleCommandsResponse(::google::protobuf_tempo::Arena* arena, const SearchConsoleCommandsResponse& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCommandsFieldNumber = 1,
+    kTotalScannedFieldNumber = 2,
+  };
+  // repeated .AgentBridgeServer.ConsoleCommandInfo commands = 1;
+  int commands_size() const;
+  private:
+  int _internal_commands_size() const;
+
+  public:
+  void clear_commands() ;
+  ::AgentBridgeServer::ConsoleCommandInfo* mutable_commands(int index);
+  ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::ConsoleCommandInfo >*
+      mutable_commands();
+  private:
+  const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::ConsoleCommandInfo>& _internal_commands() const;
+  ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::ConsoleCommandInfo>* _internal_mutable_commands();
+  public:
+  const ::AgentBridgeServer::ConsoleCommandInfo& commands(int index) const;
+  ::AgentBridgeServer::ConsoleCommandInfo* add_commands();
+  const ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::ConsoleCommandInfo >&
+      commands() const;
+  // int32 total_scanned = 2;
+  void clear_total_scanned() ;
+  ::int32_t total_scanned() const;
+  void set_total_scanned(::int32_t value);
+
+  private:
+  ::int32_t _internal_total_scanned() const;
+  void _internal_set_total_scanned(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.SearchConsoleCommandsResponse)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      1, 2, 1,
+      0, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::ConsoleCommandInfo > commands_;
+    ::int32_t total_scanned_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -20497,6 +21153,424 @@ inline void ExecuteConsoleCommandResponse::set_allocated_output(std::string* val
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ExecuteConsoleCommandResponse.output)
+}
+
+// -------------------------------------------------------------------
+
+// ConsoleCommandInfo
+
+// string name = 1;
+inline void ConsoleCommandInfo::clear_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.name_.ClearToEmpty();
+}
+inline const std::string& ConsoleCommandInfo::name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConsoleCommandInfo.name)
+  return _internal_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConsoleCommandInfo::set_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConsoleCommandInfo.name)
+}
+inline std::string* ConsoleCommandInfo::mutable_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConsoleCommandInfo.name)
+  return _s;
+}
+inline const std::string& ConsoleCommandInfo::_internal_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.name_.Get();
+}
+inline void ConsoleCommandInfo::_internal_set_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.name_.Set(value, GetArena());
+}
+inline std::string* ConsoleCommandInfo::_internal_mutable_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.name_.Mutable( GetArena());
+}
+inline std::string* ConsoleCommandInfo::release_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConsoleCommandInfo.name)
+  return _impl_.name_.Release();
+}
+inline void ConsoleCommandInfo::set_allocated_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.name_.IsDefault()) {
+          _impl_.name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConsoleCommandInfo.name)
+}
+
+// string help = 2;
+inline void ConsoleCommandInfo::clear_help() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.help_.ClearToEmpty();
+}
+inline const std::string& ConsoleCommandInfo::help() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConsoleCommandInfo.help)
+  return _internal_help();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConsoleCommandInfo::set_help(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.help_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConsoleCommandInfo.help)
+}
+inline std::string* ConsoleCommandInfo::mutable_help() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_help();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConsoleCommandInfo.help)
+  return _s;
+}
+inline const std::string& ConsoleCommandInfo::_internal_help() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.help_.Get();
+}
+inline void ConsoleCommandInfo::_internal_set_help(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.help_.Set(value, GetArena());
+}
+inline std::string* ConsoleCommandInfo::_internal_mutable_help() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.help_.Mutable( GetArena());
+}
+inline std::string* ConsoleCommandInfo::release_help() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConsoleCommandInfo.help)
+  return _impl_.help_.Release();
+}
+inline void ConsoleCommandInfo::set_allocated_help(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.help_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.help_.IsDefault()) {
+          _impl_.help_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConsoleCommandInfo.help)
+}
+
+// bool is_variable = 3;
+inline void ConsoleCommandInfo::clear_is_variable() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.is_variable_ = false;
+}
+inline bool ConsoleCommandInfo::is_variable() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConsoleCommandInfo.is_variable)
+  return _internal_is_variable();
+}
+inline void ConsoleCommandInfo::set_is_variable(bool value) {
+  _internal_set_is_variable(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConsoleCommandInfo.is_variable)
+}
+inline bool ConsoleCommandInfo::_internal_is_variable() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.is_variable_;
+}
+inline void ConsoleCommandInfo::_internal_set_is_variable(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.is_variable_ = value;
+}
+
+// string value_type = 4;
+inline void ConsoleCommandInfo::clear_value_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.value_type_.ClearToEmpty();
+}
+inline const std::string& ConsoleCommandInfo::value_type() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConsoleCommandInfo.value_type)
+  return _internal_value_type();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConsoleCommandInfo::set_value_type(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.value_type_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConsoleCommandInfo.value_type)
+}
+inline std::string* ConsoleCommandInfo::mutable_value_type() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_value_type();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConsoleCommandInfo.value_type)
+  return _s;
+}
+inline const std::string& ConsoleCommandInfo::_internal_value_type() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.value_type_.Get();
+}
+inline void ConsoleCommandInfo::_internal_set_value_type(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.value_type_.Set(value, GetArena());
+}
+inline std::string* ConsoleCommandInfo::_internal_mutable_value_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.value_type_.Mutable( GetArena());
+}
+inline std::string* ConsoleCommandInfo::release_value_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConsoleCommandInfo.value_type)
+  return _impl_.value_type_.Release();
+}
+inline void ConsoleCommandInfo::set_allocated_value_type(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.value_type_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.value_type_.IsDefault()) {
+          _impl_.value_type_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConsoleCommandInfo.value_type)
+}
+
+// string current_value = 5;
+inline void ConsoleCommandInfo::clear_current_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.current_value_.ClearToEmpty();
+}
+inline const std::string& ConsoleCommandInfo::current_value() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConsoleCommandInfo.current_value)
+  return _internal_current_value();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConsoleCommandInfo::set_current_value(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.current_value_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConsoleCommandInfo.current_value)
+}
+inline std::string* ConsoleCommandInfo::mutable_current_value() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_current_value();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConsoleCommandInfo.current_value)
+  return _s;
+}
+inline const std::string& ConsoleCommandInfo::_internal_current_value() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.current_value_.Get();
+}
+inline void ConsoleCommandInfo::_internal_set_current_value(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.current_value_.Set(value, GetArena());
+}
+inline std::string* ConsoleCommandInfo::_internal_mutable_current_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.current_value_.Mutable( GetArena());
+}
+inline std::string* ConsoleCommandInfo::release_current_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConsoleCommandInfo.current_value)
+  return _impl_.current_value_.Release();
+}
+inline void ConsoleCommandInfo::set_allocated_current_value(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.current_value_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.current_value_.IsDefault()) {
+          _impl_.current_value_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConsoleCommandInfo.current_value)
+}
+
+// -------------------------------------------------------------------
+
+// SearchConsoleCommandsRequest
+
+// string keyword = 1;
+inline void SearchConsoleCommandsRequest::clear_keyword() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.keyword_.ClearToEmpty();
+}
+inline const std::string& SearchConsoleCommandsRequest::keyword() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SearchConsoleCommandsRequest.keyword)
+  return _internal_keyword();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void SearchConsoleCommandsRequest::set_keyword(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.keyword_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SearchConsoleCommandsRequest.keyword)
+}
+inline std::string* SearchConsoleCommandsRequest::mutable_keyword() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_keyword();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.SearchConsoleCommandsRequest.keyword)
+  return _s;
+}
+inline const std::string& SearchConsoleCommandsRequest::_internal_keyword() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.keyword_.Get();
+}
+inline void SearchConsoleCommandsRequest::_internal_set_keyword(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.keyword_.Set(value, GetArena());
+}
+inline std::string* SearchConsoleCommandsRequest::_internal_mutable_keyword() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.keyword_.Mutable( GetArena());
+}
+inline std::string* SearchConsoleCommandsRequest::release_keyword() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.SearchConsoleCommandsRequest.keyword)
+  return _impl_.keyword_.Release();
+}
+inline void SearchConsoleCommandsRequest::set_allocated_keyword(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.keyword_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.keyword_.IsDefault()) {
+          _impl_.keyword_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.SearchConsoleCommandsRequest.keyword)
+}
+
+// int32 limit = 2;
+inline void SearchConsoleCommandsRequest::clear_limit() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.limit_ = 0;
+}
+inline ::int32_t SearchConsoleCommandsRequest::limit() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SearchConsoleCommandsRequest.limit)
+  return _internal_limit();
+}
+inline void SearchConsoleCommandsRequest::set_limit(::int32_t value) {
+  _internal_set_limit(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SearchConsoleCommandsRequest.limit)
+}
+inline ::int32_t SearchConsoleCommandsRequest::_internal_limit() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.limit_;
+}
+inline void SearchConsoleCommandsRequest::_internal_set_limit(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.limit_ = value;
+}
+
+// bool search_help = 3;
+inline void SearchConsoleCommandsRequest::clear_search_help() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.search_help_ = false;
+}
+inline bool SearchConsoleCommandsRequest::search_help() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SearchConsoleCommandsRequest.search_help)
+  return _internal_search_help();
+}
+inline void SearchConsoleCommandsRequest::set_search_help(bool value) {
+  _internal_set_search_help(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SearchConsoleCommandsRequest.search_help)
+}
+inline bool SearchConsoleCommandsRequest::_internal_search_help() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.search_help_;
+}
+inline void SearchConsoleCommandsRequest::_internal_set_search_help(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.search_help_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// SearchConsoleCommandsResponse
+
+// repeated .AgentBridgeServer.ConsoleCommandInfo commands = 1;
+inline int SearchConsoleCommandsResponse::_internal_commands_size() const {
+  return _internal_commands().size();
+}
+inline int SearchConsoleCommandsResponse::commands_size() const {
+  return _internal_commands_size();
+}
+inline void SearchConsoleCommandsResponse::clear_commands() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.commands_.Clear();
+}
+inline ::AgentBridgeServer::ConsoleCommandInfo* SearchConsoleCommandsResponse::mutable_commands(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.SearchConsoleCommandsResponse.commands)
+  return _internal_mutable_commands()->Mutable(index);
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::ConsoleCommandInfo>* SearchConsoleCommandsResponse::mutable_commands()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:AgentBridgeServer.SearchConsoleCommandsResponse.commands)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  return _internal_mutable_commands();
+}
+inline const ::AgentBridgeServer::ConsoleCommandInfo& SearchConsoleCommandsResponse::commands(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SearchConsoleCommandsResponse.commands)
+  return _internal_commands().Get(index);
+}
+inline ::AgentBridgeServer::ConsoleCommandInfo* SearchConsoleCommandsResponse::add_commands() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::AgentBridgeServer::ConsoleCommandInfo* _add = _internal_mutable_commands()->Add();
+  // @@protoc_insertion_point(field_add:AgentBridgeServer.SearchConsoleCommandsResponse.commands)
+  return _add;
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::ConsoleCommandInfo>& SearchConsoleCommandsResponse::commands() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:AgentBridgeServer.SearchConsoleCommandsResponse.commands)
+  return _internal_commands();
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::ConsoleCommandInfo>&
+SearchConsoleCommandsResponse::_internal_commands() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.commands_;
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::ConsoleCommandInfo>*
+SearchConsoleCommandsResponse::_internal_mutable_commands() {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return &_impl_.commands_;
+}
+
+// int32 total_scanned = 2;
+inline void SearchConsoleCommandsResponse::clear_total_scanned() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.total_scanned_ = 0;
+}
+inline ::int32_t SearchConsoleCommandsResponse::total_scanned() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SearchConsoleCommandsResponse.total_scanned)
+  return _internal_total_scanned();
+}
+inline void SearchConsoleCommandsResponse::set_total_scanned(::int32_t value) {
+  _internal_set_total_scanned(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SearchConsoleCommandsResponse.total_scanned)
+}
+inline ::int32_t SearchConsoleCommandsResponse::_internal_total_scanned() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.total_scanned_;
+}
+inline void SearchConsoleCommandsResponse::_internal_set_total_scanned(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.total_scanned_ = value;
 }
 
 #ifdef __GNUC__

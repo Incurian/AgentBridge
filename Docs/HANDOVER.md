@@ -85,6 +85,35 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 
 ## Session Log
 
+### Dec 31 (Session 6) - Console Command Discovery
+**Feature:** Added `search_console_commands` tool for AI agents to discover available console commands and CVars.
+
+**Why it matters:** Unreal has ~9000+ console commands/CVars. An agent without web access can now ask "how do I enable vsync?" → search "vsync" → find `r.VSync` with its current value and help text.
+
+**New Components:**
+| Component | Description |
+|-----------|-------------|
+| `AgentBridge.SearchCommands` | Console command for testing |
+| `SearchConsoleCommands` RPC | gRPC RPC (22 total now) |
+| `search_console_commands` | MCP tool (73 tools total) |
+
+**Usage:**
+```python
+# Search for console commands by keyword
+result = client.search_console_commands("vsync", limit=10, search_help=True)
+for cmd in result.commands:
+    print(f"{cmd.name} = {cmd.current_value} ({cmd.value_type})")
+    print(f"  Help: {cmd.help}")
+```
+
+**Files Changed:**
+- `AgentBridgeDebug.h/.cpp` - Added `Cmd_SearchCommands`
+- `AgentBridge.proto` - Added `SearchConsoleCommands` RPC, `ConsoleCommandInfo` message
+- `AgentBridgeServiceSubsystem.h/.cpp` - Added handler
+- `agentbridge.py` - Added MCP tool
+
+---
+
 ### Dec 31 (Session 5) - gRPC/MCP Integration & Console Command Passthrough
 **Feature:** Full gRPC/MCP integration for World Partition APIs + console command passthrough with log capture.
 
@@ -239,7 +268,7 @@ Once connected, you have access to these service categories:
 
 | Service | Tools | Examples |
 |---------|-------|----------|
-| agentbridge | 11 | `list_worlds`, `spawn_actor`, `query_actors`, `set_property` |
+| agentbridge | 20 | `list_worlds`, `spawn_actor`, `query_actors`, `search_console_commands` |
 | tempo_time | 6 | `play`, `pause`, `step_frame` |
 | tempo_actor_control | 17 | `set_actor_location`, `set_actor_rotation` |
 | tempo_core | 6 | `load_level`, `quit_editor` |
@@ -252,7 +281,7 @@ Once connected, you have access to these service categories:
 | tempo_map_query | 3 | `query_lanes`, `query_zones` |
 | tempo_agents_editor | 1 | `build_zone_graph` |
 
-**Total: 12 services, 64 tools**
+**Total: 12 services, 73 tools**
 
 ---
 

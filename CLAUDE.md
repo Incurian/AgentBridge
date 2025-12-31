@@ -37,7 +37,7 @@
 
 Completed:
 - [x] AgentBridgeServer depends on TempoScripting (uses TempoModuleRules)
-- [x] AgentBridge.proto - gRPC service definition (21 RPCs)
+- [x] AgentBridge.proto - gRPC service definition (22 RPCs)
 - [x] UAgentBridgeServiceSubsystem - implements ITempoScriptable
 - [x] Auto-generated code via GenProtos.sh
 - [x] Build passes successfully
@@ -54,10 +54,10 @@ Completed:
 - [x] Proto-to-MCP generator script
 - [x] Claude Code configuration example
 
-**Service Modules (12 services, 72 tools):**
+**Service Modules (12 services, 73 tools):**
 | Service | Tools | Description |
 |---------|-------|-------------|
-| `agentbridge` | 19 | World/actor manipulation, World Partition, console commands |
+| `agentbridge` | 20 | World/actor manipulation, World Partition, console commands, command discovery |
 | `tempo_time` | 6 | Simulation time control (play/pause/step) |
 | `tempo_actor_control` | 17 | Typed property setters and transforms |
 | `tempo_core` | 6 | Level loading, control mode, quit |
@@ -546,7 +546,7 @@ from . import my_service  # in _auto_register()
 
 *Document Version: 11.0*
 *Last Updated: December 31, 2025*
-*All 5 Phases Complete - 21 RPCs, 72 MCP Tools, Console Command Passthrough with Log Capture*
+*All 5 Phases Complete - 22 RPCs, 73 MCP Tools, Console Command Discovery*
 
 ---
 

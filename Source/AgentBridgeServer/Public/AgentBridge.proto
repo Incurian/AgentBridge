@@ -408,6 +408,29 @@ message ExecuteConsoleCommandResponse {
 }
 
 //=============================================================================
+// Console Command Discovery
+//=============================================================================
+
+message ConsoleCommandInfo {
+  string name = 1;                     // Command/CVar name
+  string help = 2;                     // Help/description text
+  bool is_variable = 3;                // True if CVar, false if command
+  string value_type = 4;               // "Int", "Float", "String", "Bool", "" for commands
+  string current_value = 5;            // Current value (for CVars only)
+}
+
+message SearchConsoleCommandsRequest {
+  string keyword = 1;                  // Search term
+  int32 limit = 2;                     // Max results (default: 50)
+  bool search_help = 3;                // Also search in help text
+}
+
+message SearchConsoleCommandsResponse {
+  repeated ConsoleCommandInfo commands = 1;
+  int32 total_scanned = 2;             // Total console objects checked
+}
+
+//=============================================================================
 // AgentBridge Service Definition
 //=============================================================================
 
@@ -448,4 +471,5 @@ service AgentBridgeService {
 
   //--- Console Commands (for arbitrary operations) ---
   rpc ExecuteConsoleCommand(ExecuteConsoleCommandRequest) returns (ExecuteConsoleCommandResponse);
+  rpc SearchConsoleCommands(SearchConsoleCommandsRequest) returns (SearchConsoleCommandsResponse);
 }
