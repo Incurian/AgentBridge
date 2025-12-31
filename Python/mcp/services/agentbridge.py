@@ -701,6 +701,11 @@ TIPS:
 - Use search_console_commands if you need to do something unusual
 - execute_console_command is the escape hatch for anything not covered
 
+IMPORTANT - COMPONENT NAMES:
+- Components use INSTANCE names (LightComponent0), not class names (PointLightComponent)
+- Use tempo_get_components(actor) to find the correct component name
+- For colors, use tempo_set_color_property instead of set_property_path
+
 Use help(topic='actors|properties|classes|console|workflows') for detailed help.
 """
 
@@ -736,19 +741,34 @@ Reading properties:
 - get_property_path(actor_id, path="RootComponent.RelativeLocation") - Specific path
 
 Setting properties:
-- set_property_path(actor_id, path="LightComponent.Intensity", value=5000)
+- set_property_path(actor_id, path="LightComponent0.Intensity", value=5000)
 - set_actor_properties(actor_id, properties=[{"key": "bHidden", "value": true}])
 
 Property paths:
 - Simple: "bHidden", "ActorLabel"
 - Nested: "RootComponent.RelativeLocation.X"
 - Array: "Materials[0]"
-- Component: "LightComponent.Intensity"
+- Component: "LightComponent0.Intensity"
 
-Common light properties:
-- LightComponent.Intensity (float, default ~5000 for point lights)
-- LightComponent.LightColor (Color: R,G,B,A 0-255)
-- LightComponent.AttenuationRadius (float, cm)
+CRITICAL - COMPONENT NAMING:
+Component names are INSTANCE names, not class names!
+- WRONG: "PointLightComponent.Intensity" (class name)
+- RIGHT: "LightComponent0.Intensity" (instance name)
+
+To find component instance names:
+- get_actor(actor_id, include_components=True)
+- Or use: tempo_get_components(actor="MyLight")
+
+Common instance names:
+- PointLight -> LightComponent0
+- StaticMeshActor -> StaticMeshComponent0
+- CameraActor -> CameraComponent0
+
+TYPED vs GENERIC TOOLS:
+- For colors: Use tempo_set_color_property (easier, handles format)
+- For transforms: Use set_actor_transform (easier)
+- For simple values: set_property_path works fine
+- Generic set_property_path requires correct JSON value types
 
 Use get_class_schema(class_name) to discover available properties!
 """,
@@ -804,7 +824,14 @@ Building a simple scene:
 1. query_actors() - See what's already there
 2. spawn_actor(class_name="PointLight", location=[0,0,500], label="MainLight")
 3. spawn_actor(class_name="StaticMeshActor", location=[0,0,0], label="Floor")
-4. set_property_path("MainLight", "LightComponent.Intensity", 10000)
+4. set_property_path("MainLight", "LightComponent0.Intensity", 10000)
+
+Setting light colors (IMPORTANT - use typed tools!):
+1. spawn_actor(class_name="PointLight", location=[0,0,500], label="MyLight")
+2. tempo_get_components(actor="MyLight")  # Returns: LightComponent0
+3. tempo_set_color_property(actor="MyLight", component="LightComponent0",
+                            property="LightColor", r=255, g=0, b=0)
+Note: Use tempo_set_color_property, NOT set_property_path for colors!
 
 Finding and modifying actors:
 1. query_actors(name_pattern="*Door*") - Find all doors
