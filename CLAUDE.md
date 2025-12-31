@@ -496,3 +496,37 @@ from . import my_service  # in _auto_register()
 *Last Updated: December 31, 2025*
 *All Phases Complete - 12 Services, 65+ Tools*
 *gRPC value conversions complete, test_grpc.py added*
+
+---
+
+## Known Claude Code Issues
+
+### "File has been unexpectedly modified" Error (Windows)
+
+The Edit tool may fail with this error even immediately after reading a file. This is a known bug on Windows where NTFS Last Access Time updates cause false positives in modification detection.
+
+**Workarounds:**
+
+```bash
+# Use sed for simple replacements
+sed -i 's/old_text/new_text/g' file.txt
+
+# Use cat with heredoc for appending
+cat >> file.txt << 'HEREDOC'
+new content here
+HEREDOC
+
+# Use Python for complex edits
+python -c "
+content = open('file.txt').read()
+content = content.replace('old', 'new')
+open('file.txt', 'w').write(content)
+"
+```
+
+**Permanent fix (requires admin + reboot):**
+```powershell
+fsutil behavior set DisableLastAccess 1
+```
+
+See: [GitHub Issue #7443](https://github.com/anthropics/claude-code/issues/7443)
