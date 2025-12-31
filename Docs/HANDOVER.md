@@ -99,12 +99,18 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 
 **Usage:**
 ```python
-# Search for console commands by keyword
-result = client.search_console_commands("vsync", limit=10, search_help=True)
+# Search for console commands by keyword (with pagination)
+result = client.search_console_commands("fps", limit=5, offset=0, search_help=True)
+print(f"Showing {len(result.commands)} of {result.total_matches} matches")
 for cmd in result.commands:
     print(f"{cmd.name} = {cmd.current_value} ({cmd.value_type})")
-    print(f"  Help: {cmd.help}")
+
+# Get next page
+if result.has_more:
+    result = client.search_console_commands("fps", limit=5, offset=result.next_offset)
 ```
+
+**Pagination:** Use `offset` to get next page, `total_matches` shows how many exist.
 
 **Files Changed:**
 - `AgentBridgeDebug.h/.cpp` - Added `Cmd_SearchCommands`
