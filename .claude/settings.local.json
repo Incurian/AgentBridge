@@ -10,7 +10,9 @@
       "Bash(git commit -m \"$\\(cat <<''EOF''\nSimplify types to plain C++ structs\n\n- Remove USTRUCT/UPROPERTY macros \\(not needed for transport types\\)\n- Use TSharedPtr for self-referential nested containers\n- Add FromRotator/FromTransform/AsRotator/AsTransform helpers\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd debug console commands\n\n- AgentBridge.DumpActor <name> [depth] - dump actor properties\n- AgentBridge.DumpClass <name> - dump class schema \\(properties + functions\\)\n- AgentBridge.ListWorlds - list all world contexts\n\nFeatures:\n- Handles BP property name cleanup \\(GetAuthoredName\\)\n- Recursive property value printing with depth limit\n- Array/Map/Struct traversal\n- Common type pretty-printing \\(Vector, Rotator, Transform, Color\\)\n- Property and function flag display\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(\"D:/UE571/Engine/Binaries/Win64/UnrealEditor-Cmd.exe\" \"E:/UnrealProjects/VR_Project/VR_Project.uproject\" -ExecCmds=\"AgentBridge.ListWorlds,Quit\" -unattended -NullRHI -nosplash -nosound -noloadstartuppackages)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(git commit:*)",
+      "Bash(taskkill:*)"
     ]
   }
 }
