@@ -423,11 +423,13 @@ message SearchConsoleCommandsRequest {
   string keyword = 1;                  // Search term
   int32 limit = 2;                     // Max results (default: 50)
   bool search_help = 3;                // Also search in help text
+  int32 offset = 4;                    // Skip first N matches (for pagination)
 }
 
 message SearchConsoleCommandsResponse {
   repeated ConsoleCommandInfo commands = 1;
   int32 total_scanned = 2;             // Total console objects checked
+  int32 total_matches = 3;             // Total matches found (before limit/offset)
 }
 
 //=============================================================================

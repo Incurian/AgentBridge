@@ -99,6 +99,7 @@ inline constexpr SearchConsoleCommandsRequest::Impl_::Impl_(
             ::_pbi::ConstantInitialized()),
         limit_{0},
         search_help_{false},
+        offset_{0},
         _cached_size_{0} {}
 
 template <typename>
@@ -615,6 +616,7 @@ inline constexpr SearchConsoleCommandsResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : commands_{},
         total_scanned_{0},
+        total_matches_{0},
         _cached_size_{0} {}
 
 template <typename>
@@ -2030,6 +2032,7 @@ const ::uint32_t TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets[] 
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::SearchConsoleCommandsRequest, _impl_.keyword_),
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::SearchConsoleCommandsRequest, _impl_.limit_),
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::SearchConsoleCommandsRequest, _impl_.search_help_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::SearchConsoleCommandsRequest, _impl_.offset_),
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::SearchConsoleCommandsResponse, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -2040,6 +2043,7 @@ const ::uint32_t TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets[] 
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::SearchConsoleCommandsResponse, _impl_.commands_),
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::SearchConsoleCommandsResponse, _impl_.total_scanned_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::SearchConsoleCommandsResponse, _impl_.total_matches_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -2099,7 +2103,7 @@ static const ::_pbi::MigrationSchema
         {670, -1, -1, sizeof(::AgentBridgeServer::ExecuteConsoleCommandResponse)},
         {680, -1, -1, sizeof(::AgentBridgeServer::ConsoleCommandInfo)},
         {693, -1, -1, sizeof(::AgentBridgeServer::SearchConsoleCommandsRequest)},
-        {704, -1, -1, sizeof(::AgentBridgeServer::SearchConsoleCommandsResponse)},
+        {705, -1, -1, sizeof(::AgentBridgeServer::SearchConsoleCommandsResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -2323,12 +2327,13 @@ const char descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto[] P
     "ss\030\001 \001(\010\022\016\n\006output\030\002 \001(\t\"p\n\022ConsoleComma"
     "ndInfo\022\014\n\004name\030\001 \001(\t\022\014\n\004help\030\002 \001(\t\022\023\n\013is"
     "_variable\030\003 \001(\010\022\022\n\nvalue_type\030\004 \001(\t\022\025\n\rc"
-    "urrent_value\030\005 \001(\t\"S\n\034SearchConsoleComma"
+    "urrent_value\030\005 \001(\t\"c\n\034SearchConsoleComma"
     "ndsRequest\022\017\n\007keyword\030\001 \001(\t\022\r\n\005limit\030\002 \001"
-    "(\005\022\023\n\013search_help\030\003 \001(\010\"o\n\035SearchConsole"
-    "CommandsResponse\0227\n\010commands\030\001 \003(\0132%.Age"
-    "ntBridgeServer.ConsoleCommandInfo\022\025\n\rtot"
-    "al_scanned\030\002 \001(\005*\240\003\n\014PropertyType\022\026\n\022PRO"
+    "(\005\022\023\n\013search_help\030\003 \001(\010\022\016\n\006offset\030\004 \001(\005\""
+    "\206\001\n\035SearchConsoleCommandsResponse\0227\n\010com"
+    "mands\030\001 \003(\0132%.AgentBridgeServer.ConsoleC"
+    "ommandInfo\022\025\n\rtotal_scanned\030\002 \001(\005\022\025\n\rtot"
+    "al_matches\030\003 \001(\005*\240\003\n\014PropertyType\022\026\n\022PRO"
     "PERTY_TYPE_NONE\020\000\022\026\n\022PROPERTY_TYPE_BOOL\020"
     "\001\022\025\n\021PROPERTY_TYPE_INT\020\002\022\027\n\023PROPERTY_TYP"
     "E_FLOAT\020\003\022\030\n\024PROPERTY_TYPE_STRING\020\004\022\026\n\022P"
@@ -2409,7 +2414,7 @@ static ::absl_tempo::once_flag descriptor_table_AgentBridgeServer_2fAgentBridge_
 const ::_pbi::DescriptorTable descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto = {
     false,
     false,
-    9488,
+    9528,
     descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto,
     "AgentBridgeServer/AgentBridge.proto",
     &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
@@ -16342,9 +16347,9 @@ SearchConsoleCommandsRequest::SearchConsoleCommandsRequest(
                offsetof(Impl_, limit_),
            reinterpret_cast<const char *>(&from._impl_) +
                offsetof(Impl_, limit_),
-           offsetof(Impl_, search_help_) -
+           offsetof(Impl_, offset_) -
                offsetof(Impl_, limit_) +
-               sizeof(Impl_::search_help_));
+               sizeof(Impl_::offset_));
 
   // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.SearchConsoleCommandsRequest)
 }
@@ -16359,9 +16364,9 @@ inline void SearchConsoleCommandsRequest::SharedCtor(::_pb::Arena* arena) {
   ::memset(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, limit_),
            0,
-           offsetof(Impl_, search_help_) -
+           offsetof(Impl_, offset_) -
                offsetof(Impl_, limit_) +
-               sizeof(Impl_::search_help_));
+               sizeof(Impl_::offset_));
 }
 SearchConsoleCommandsRequest::~SearchConsoleCommandsRequest() {
   // @@protoc_insertion_point(destructor:AgentBridgeServer.SearchConsoleCommandsRequest)
@@ -16383,8 +16388,8 @@ PROTOBUF_NOINLINE void SearchConsoleCommandsRequest::Clear() {
 
   _impl_.keyword_.ClearToEmpty();
   ::memset(&_impl_.limit_, 0, static_cast<::size_t>(
-      reinterpret_cast<char*>(&_impl_.search_help_) -
-      reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.search_help_));
+      reinterpret_cast<char*>(&_impl_.offset_) -
+      reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.offset_));
   _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
 }
 
@@ -16396,21 +16401,23 @@ const char* SearchConsoleCommandsRequest::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 3, 0, 62, 2> SearchConsoleCommandsRequest::_table_ = {
+const ::_pbi::TcParseTable<2, 4, 0, 62, 2> SearchConsoleCommandsRequest::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
-    3, 24,  // max_field_number, fast_idx_mask
+    4, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967288,  // skipmap
+    4294967280,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    3,  // num_field_entries
+    4,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     &_SearchConsoleCommandsRequest_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // int32 offset = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(SearchConsoleCommandsRequest, _impl_.offset_), 63>(),
+     {32, 63, 0, PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsRequest, _impl_.offset_)}},
     // string keyword = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 63, 0, PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsRequest, _impl_.keyword_)}},
@@ -16432,6 +16439,9 @@ const ::_pbi::TcParseTable<2, 3, 0, 62, 2> SearchConsoleCommandsRequest::_table_
     // bool search_help = 3;
     {PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsRequest, _impl_.search_help_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // int32 offset = 4;
+    {PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsRequest, _impl_.offset_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
   }},
   // no aux_entries
   {{
@@ -16470,6 +16480,13 @@ const ::_pbi::TcParseTable<2, 3, 0, 62, 2> SearchConsoleCommandsRequest::_table_
         3, this->_internal_search_help(), target);
   }
 
+  // int32 offset = 4;
+  if (this->_internal_offset() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<4>(
+            stream, this->_internal_offset(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target =
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -16504,6 +16521,12 @@ const ::_pbi::TcParseTable<2, 3, 0, 62, 2> SearchConsoleCommandsRequest::_table_
     total_size += 2;
   }
 
+  // int32 offset = 4;
+  if (this->_internal_offset() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_offset());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -16532,6 +16555,9 @@ void SearchConsoleCommandsRequest::MergeImpl(::google::protobuf_tempo::Message& 
   if (from._internal_search_help() != 0) {
     _this->_internal_set_search_help(from._internal_search_help());
   }
+  if (from._internal_offset() != 0) {
+    _this->_internal_set_offset(from._internal_offset());
+  }
   _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -16556,8 +16582,8 @@ void SearchConsoleCommandsRequest::InternalSwap(SearchConsoleCommandsRequest* PR
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.keyword_, &other->_impl_.keyword_, arena);
   ::google::protobuf_tempo::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsRequest, _impl_.search_help_)
-      + sizeof(SearchConsoleCommandsRequest::_impl_.search_help_)
+      PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsRequest, _impl_.offset_)
+      + sizeof(SearchConsoleCommandsRequest::_impl_.offset_)
       - PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsRequest, _impl_.limit_)>(
           reinterpret_cast<char*>(&_impl_.limit_),
           reinterpret_cast<char*>(&other->_impl_.limit_));
@@ -16594,7 +16620,13 @@ SearchConsoleCommandsResponse::SearchConsoleCommandsResponse(
   _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
-  _impl_.total_scanned_ = from._impl_.total_scanned_;
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, total_scanned_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, total_scanned_),
+           offsetof(Impl_, total_matches_) -
+               offsetof(Impl_, total_scanned_) +
+               sizeof(Impl_::total_matches_));
 
   // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.SearchConsoleCommandsResponse)
 }
@@ -16606,7 +16638,12 @@ inline PROTOBUF_NDEBUG_INLINE SearchConsoleCommandsResponse::Impl_::Impl_(
 
 inline void SearchConsoleCommandsResponse::SharedCtor(::_pb::Arena* arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
-  _impl_.total_scanned_ = {};
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, total_scanned_),
+           0,
+           offsetof(Impl_, total_matches_) -
+               offsetof(Impl_, total_scanned_) +
+               sizeof(Impl_::total_matches_));
 }
 SearchConsoleCommandsResponse::~SearchConsoleCommandsResponse() {
   // @@protoc_insertion_point(destructor:AgentBridgeServer.SearchConsoleCommandsResponse)
@@ -16626,7 +16663,9 @@ PROTOBUF_NOINLINE void SearchConsoleCommandsResponse::Clear() {
   (void) cached_has_bits;
 
   _impl_.commands_.Clear();
-  _impl_.total_scanned_ = 0;
+  ::memset(&_impl_.total_scanned_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.total_matches_) -
+      reinterpret_cast<char*>(&_impl_.total_scanned_)) + sizeof(_impl_.total_matches_));
   _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
 }
 
@@ -16638,26 +16677,30 @@ const char* SearchConsoleCommandsResponse::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<1, 2, 1, 0, 2> SearchConsoleCommandsResponse::_table_ = {
+const ::_pbi::TcParseTable<2, 3, 1, 0, 2> SearchConsoleCommandsResponse::_table_ = {
   {
     0,  // no _has_bits_
     0, // no _extensions_
-    2, 8,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967292,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    2,  // num_field_entries
+    3,  // num_field_entries
     1,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     &_SearchConsoleCommandsResponse_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
-    // int32 total_scanned = 2;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(SearchConsoleCommandsResponse, _impl_.total_scanned_), 63>(),
-     {16, 63, 0, PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsResponse, _impl_.total_scanned_)}},
+    {::_pbi::TcParser::MiniParse, {}},
     // repeated .AgentBridgeServer.ConsoleCommandInfo commands = 1;
     {::_pbi::TcParser::FastMtR1,
      {10, 63, 0, PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsResponse, _impl_.commands_)}},
+    // int32 total_scanned = 2;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(SearchConsoleCommandsResponse, _impl_.total_scanned_), 63>(),
+     {16, 63, 0, PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsResponse, _impl_.total_scanned_)}},
+    // int32 total_matches = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(SearchConsoleCommandsResponse, _impl_.total_matches_), 63>(),
+     {24, 63, 0, PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsResponse, _impl_.total_matches_)}},
   }}, {{
     65535, 65535
   }}, {{
@@ -16666,6 +16709,9 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> SearchConsoleCommandsResponse::_table_
     (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
     // int32 total_scanned = 2;
     {PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsResponse, _impl_.total_scanned_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+    // int32 total_matches = 3;
+    {PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsResponse, _impl_.total_matches_), 0, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
   }}, {{
     {::_pbi::TcParser::GetTable<::AgentBridgeServer::ConsoleCommandInfo>()},
@@ -16693,6 +16739,13 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> SearchConsoleCommandsResponse::_table_
     target = ::google::protobuf_tempo::internal::WireFormatLite::
         WriteInt32ToArrayWithField<2>(
             stream, this->_internal_total_scanned(), target);
+  }
+
+  // int32 total_matches = 3;
+  if (this->_internal_total_matches() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<3>(
+            stream, this->_internal_total_matches(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -16724,6 +16777,12 @@ const ::_pbi::TcParseTable<1, 2, 1, 0, 2> SearchConsoleCommandsResponse::_table_
         this->_internal_total_scanned());
   }
 
+  // int32 total_matches = 3;
+  if (this->_internal_total_matches() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_total_matches());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -16748,6 +16807,9 @@ void SearchConsoleCommandsResponse::MergeImpl(::google::protobuf_tempo::Message&
   if (from._internal_total_scanned() != 0) {
     _this->_internal_set_total_scanned(from._internal_total_scanned());
   }
+  if (from._internal_total_matches() != 0) {
+    _this->_internal_set_total_matches(from._internal_total_matches());
+  }
   _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -16769,7 +16831,12 @@ void SearchConsoleCommandsResponse::InternalSwap(SearchConsoleCommandsResponse* 
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.commands_.InternalSwap(&other->_impl_.commands_);
-        swap(_impl_.total_scanned_, other->_impl_.total_scanned_);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsResponse, _impl_.total_matches_)
+      + sizeof(SearchConsoleCommandsResponse::_impl_.total_matches_)
+      - PROTOBUF_FIELD_OFFSET(SearchConsoleCommandsResponse, _impl_.total_scanned_)>(
+          reinterpret_cast<char*>(&_impl_.total_scanned_),
+          reinterpret_cast<char*>(&other->_impl_.total_scanned_));
 }
 
 ::google::protobuf_tempo::Metadata SearchConsoleCommandsResponse::GetMetadata() const {

@@ -432,7 +432,7 @@ TOOLS = [
     },
     {
         "name": "search_console_commands",
-        "description": "Search Unreal console commands and CVars by keyword. Use this to discover available commands when you need to do something but don't know the exact command name.",
+        "description": "Search Unreal console commands and CVars by keyword. Use this to discover available commands when you need to do something but don't know the exact command name. Supports pagination - use offset to get the next page of results.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -444,6 +444,11 @@ TOOLS = [
                     "type": "integer",
                     "description": "Maximum results to return (default: 50)",
                     "default": 50,
+                },
+                "offset": {
+                    "type": "integer",
+                    "description": "Skip first N matches for pagination (default: 0)",
+                    "default": 0,
                 },
                 "search_help": {
                     "type": "boolean",
@@ -613,10 +618,11 @@ class AgentBridgeClient:
     def execute_console_command(self, command: str):
         return self.stub.ExecuteConsoleCommand(pb.ExecuteConsoleCommandRequest(command=command))
 
-    def search_console_commands(self, keyword: str, limit: int = 50, search_help: bool = False):
+    def search_console_commands(self, keyword: str, limit: int = 50, offset: int = 0, search_help: bool = False):
         return self.stub.SearchConsoleCommands(pb.SearchConsoleCommandsRequest(
             keyword=keyword,
             limit=limit,
+            offset=offset,
             search_help=search_help,
         ))
 
@@ -921,10 +927,13 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         }
 
     elif tool_name == "search_console_commands":
+        limit = args.get("limit", 50)
+        offset = args.get("offset", 0)
         result = safe_call(
             client.search_console_commands,
             args["keyword"],
-            args.get("limit", 50),
+            limit,
+            offset,
             args.get("search_help", False),
         )
         if isinstance(result, dict) and "error" in result:
@@ -940,10 +949,14 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
                 cmd_info["value_type"] = cmd.value_type
                 cmd_info["current_value"] = cmd.current_value
             commands.append(cmd_info)
+        has_more = (offset + len(commands)) < result.total_matches
         return {
             "commands": commands,
-            "total_scanned": result.total_scanned,
             "count": len(commands),
+            "total_matches": result.total_matches,
+            "offset": offset,
+            "has_more": has_more,
+            "next_offset": offset + len(commands) if has_more else None,
         }
 
     else:

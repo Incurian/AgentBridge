@@ -1121,6 +1121,7 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsRequest final :
     kKeywordFieldNumber = 1,
     kLimitFieldNumber = 2,
     kSearchHelpFieldNumber = 3,
+    kOffsetFieldNumber = 4,
   };
   // string keyword = 1;
   void clear_keyword() ;
@@ -1158,13 +1159,23 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsRequest final :
   void _internal_set_search_help(bool value);
 
   public:
+  // int32 offset = 4;
+  void clear_offset() ;
+  ::int32_t offset() const;
+  void set_offset(::int32_t value);
+
+  private:
+  ::int32_t _internal_offset() const;
+  void _internal_set_offset(::int32_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:AgentBridgeServer.SearchConsoleCommandsRequest)
  private:
   class _Internal;
 
   friend class ::google::protobuf_tempo::internal::TcParser;
   static const ::google::protobuf_tempo::internal::TcParseTable<
-      2, 3, 0,
+      2, 4, 0,
       62, 2>
       _table_;
   friend class ::google::protobuf_tempo::MessageLite;
@@ -1184,6 +1195,7 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsRequest final :
     ::google::protobuf_tempo::internal::ArenaStringPtr keyword_;
     ::int32_t limit_;
     bool search_help_;
+    ::int32_t offset_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -5760,6 +5772,7 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsResponse final :
   enum : int {
     kCommandsFieldNumber = 1,
     kTotalScannedFieldNumber = 2,
+    kTotalMatchesFieldNumber = 3,
   };
   // repeated .AgentBridgeServer.ConsoleCommandInfo commands = 1;
   int commands_size() const;
@@ -5789,13 +5802,23 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsResponse final :
   void _internal_set_total_scanned(::int32_t value);
 
   public:
+  // int32 total_matches = 3;
+  void clear_total_matches() ;
+  ::int32_t total_matches() const;
+  void set_total_matches(::int32_t value);
+
+  private:
+  ::int32_t _internal_total_matches() const;
+  void _internal_set_total_matches(::int32_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:AgentBridgeServer.SearchConsoleCommandsResponse)
  private:
   class _Internal;
 
   friend class ::google::protobuf_tempo::internal::TcParser;
   static const ::google::protobuf_tempo::internal::TcParseTable<
-      1, 2, 1,
+      2, 3, 1,
       0, 2>
       _table_;
   friend class ::google::protobuf_tempo::MessageLite;
@@ -5814,6 +5837,7 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsResponse final :
                               ::google::protobuf_tempo::Arena* arena, const Impl_& from);
     ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::ConsoleCommandInfo > commands_;
     ::int32_t total_scanned_;
+    ::int32_t total_matches_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -21497,6 +21521,29 @@ inline void SearchConsoleCommandsRequest::_internal_set_search_help(bool value) 
   _impl_.search_help_ = value;
 }
 
+// int32 offset = 4;
+inline void SearchConsoleCommandsRequest::clear_offset() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.offset_ = 0;
+}
+inline ::int32_t SearchConsoleCommandsRequest::offset() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SearchConsoleCommandsRequest.offset)
+  return _internal_offset();
+}
+inline void SearchConsoleCommandsRequest::set_offset(::int32_t value) {
+  _internal_set_offset(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SearchConsoleCommandsRequest.offset)
+}
+inline ::int32_t SearchConsoleCommandsRequest::_internal_offset() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.offset_;
+}
+inline void SearchConsoleCommandsRequest::_internal_set_offset(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.offset_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // SearchConsoleCommandsResponse
@@ -21571,6 +21618,29 @@ inline void SearchConsoleCommandsResponse::_internal_set_total_scanned(::int32_t
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.total_scanned_ = value;
+}
+
+// int32 total_matches = 3;
+inline void SearchConsoleCommandsResponse::clear_total_matches() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.total_matches_ = 0;
+}
+inline ::int32_t SearchConsoleCommandsResponse::total_matches() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SearchConsoleCommandsResponse.total_matches)
+  return _internal_total_matches();
+}
+inline void SearchConsoleCommandsResponse::set_total_matches(::int32_t value) {
+  _internal_set_total_matches(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SearchConsoleCommandsResponse.total_matches)
+}
+inline ::int32_t SearchConsoleCommandsResponse::_internal_total_matches() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.total_matches_;
+}
+inline void SearchConsoleCommandsResponse::_internal_set_total_matches(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.total_matches_ = value;
 }
 
 #ifdef __GNUC__

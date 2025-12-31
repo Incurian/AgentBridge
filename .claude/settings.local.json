@@ -45,7 +45,10 @@
       "Bash(./Plugins/Tempo/TempoCore/Scripts/Build.sh:*)",
       "Bash(./Plugins/Tempo/Scripts/Build.sh:*)",
       "Bash(./Plugins/Tempo/Scripts/Run.sh:*)",
-      "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" python:*)"
+      "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" python:*)",
+      "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" TempoEnv/Scripts/python.exe:*)",
+      "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c \"\nimport sys; sys.path.insert\\(0, ''.''\\)\nfrom mcp.services.agentbridge import connect\nclient = connect\\(''localhost'', 10001\\)\n\n# Search for stat command directly\nprint\\(''=== Searching for \"\"stat\"\" as a standalone command ===''\\)\nresult = client.search_console_commands\\(''stat'', limit=50\\)\n# Filter to only show commands \\(not CVars\\) that are exactly ''stat'' or start with ''stat ''\nfor cmd in result.commands:\n    if not cmd.is_variable and cmd.name.lower\\(\\).startswith\\(''stat''\\):\n        print\\(f''  {cmd.name}''\\)\n        if cmd.help:\n            print\\(f''    Help: {cmd.help[:80]}...''\\)\n\")",
+      "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c:*)"
     ]
   },
   "outputStyle": "Explanatory"

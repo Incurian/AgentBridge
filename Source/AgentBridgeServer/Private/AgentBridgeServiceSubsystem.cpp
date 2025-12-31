@@ -1346,6 +1346,7 @@ void UAgentBridgeServiceSubsystem::SearchConsoleCommands(
 {
 	FString Keyword = UTF8_TO_TCHAR(Request.keyword().c_str());
 	int32 Limit = Request.limit() > 0 ? Request.limit() : 50;
+	int32 Offset = Request.offset() > 0 ? Request.offset() : 0;
 	bool bSearchHelp = Request.search_help();
 
 	SearchConsoleCommandsResponse Response;
@@ -1353,24 +1354,21 @@ void UAgentBridgeServiceSubsystem::SearchConsoleCommands(
 	if (Keyword.IsEmpty())
 	{
 		Response.set_total_scanned(0);
+		Response.set_total_matches(0);
 		ResponseContinuation.ExecuteIfBound(Response,
 			grpc::Status(grpc::INVALID_ARGUMENT, "Keyword is required"));
 		return;
 	}
 
 	int32 TotalScanned = 0;
-	int32 MatchCount = 0;
+	int32 TotalMatches = 0;
+	int32 AddedCount = 0;
 
-	// Iterate all console objects
+	// Iterate all console objects - we need to scan all to get total_matches
 	IConsoleManager::Get().ForEachConsoleObjectThatStartsWith(
 		FConsoleObjectVisitor::CreateLambda([&](const TCHAR* Name, IConsoleObject* ConsoleObj)
 		{
 			TotalScanned++;
-
-			if (MatchCount >= Limit)
-			{
-				return;
-			}
 
 			FString NameStr(Name);
 			const TCHAR* HelpText = ConsoleObj->GetHelp();
@@ -1381,6 +1379,21 @@ void UAgentBridgeServiceSubsystem::SearchConsoleCommands(
 			bool bHelpMatch = bSearchHelp && HelpStr.Contains(Keyword, ESearchCase::IgnoreCase);
 
 			if (!bNameMatch && !bHelpMatch)
+			{
+				return;
+			}
+
+			// This is a match
+			TotalMatches++;
+
+			// Skip if before offset
+			if (TotalMatches <= Offset)
+			{
+				return;
+			}
+
+			// Skip if we've already added enough
+			if (AddedCount >= Limit)
 			{
 				return;
 			}
@@ -1439,11 +1452,12 @@ void UAgentBridgeServiceSubsystem::SearchConsoleCommands(
 				Info->set_is_variable(false);
 			}
 
-			MatchCount++;
+			AddedCount++;
 		}),
 		TEXT("") // Start with all console objects
 	);
 
 	Response.set_total_scanned(TotalScanned);
+	Response.set_total_matches(TotalMatches);
 	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 }
