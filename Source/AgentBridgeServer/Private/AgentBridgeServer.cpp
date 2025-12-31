@@ -1,14 +1,17 @@
 #include "AgentBridgeServer.h"
 #include "AgentHttpServer.h"
+#include "AgentBridgeServiceSubsystem.h"
 
 #define LOCTEXT_NAMESPACE "FAgentBridgeServerModule"
 
 void FAgentBridgeServerModule::StartupModule()
 {
 	UE_LOG(LogAgentBridgeServer, Log, TEXT("AgentBridgeServer: Module started"));
+	UE_LOG(LogAgentBridgeServer, Log, TEXT("  gRPC service: AgentBridgeService (via TempoScripting)"));
+	UE_LOG(LogAgentBridgeServer, Log, TEXT("  HTTP fallback: http://localhost:8080/agentbridge/"));
 
-	// Auto-start HTTP server on default port
-	// Can be disabled via console or config in the future
+	// Auto-start HTTP server on default port (fallback/legacy)
+	// gRPC service is handled by UAgentBridgeServiceSubsystem
 	StartServer(8080);
 }
 

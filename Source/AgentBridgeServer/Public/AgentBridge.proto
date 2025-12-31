@@ -1,0 +1,348 @@
+// AgentBridge gRPC Service Definition
+// Copyright 2024. Licensed under MIT.
+//
+// Tempo-integrated gRPC interface for AI agent interaction with Unreal Engine.
+
+syntax = "proto3";
+
+import "TempoScripting/Empty.proto";
+import "TempoScripting/Geometry.proto";
+
+//=============================================================================
+// Extended Geometry Types (not in TempoScripting)
+//=============================================================================
+
+message Scale {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message ActorTransform {
+  TempoScripting.Vector location = 1;
+  TempoScripting.Rotation rotation = 2;
+  Scale scale = 3;
+}
+
+message Color {
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+  int32 a = 4;
+}
+
+//=============================================================================
+// Property Value - Generic property container for cross-language transport
+//=============================================================================
+
+enum PropertyType {
+  PROPERTY_TYPE_NONE = 0;
+  PROPERTY_TYPE_BOOL = 1;
+  PROPERTY_TYPE_INT = 2;
+  PROPERTY_TYPE_FLOAT = 3;
+  PROPERTY_TYPE_STRING = 4;
+  PROPERTY_TYPE_NAME = 5;
+  PROPERTY_TYPE_VECTOR = 6;
+  PROPERTY_TYPE_ROTATOR = 7;
+  PROPERTY_TYPE_TRANSFORM = 8;
+  PROPERTY_TYPE_COLOR = 9;
+  PROPERTY_TYPE_OBJECT = 10;
+  PROPERTY_TYPE_CLASS = 11;
+  PROPERTY_TYPE_STRUCT = 12;
+  PROPERTY_TYPE_ARRAY = 13;
+  PROPERTY_TYPE_MAP = 14;
+  PROPERTY_TYPE_ENUM = 15;
+}
+
+message PropertyValue {
+  PropertyType type = 1;
+
+  // Primitive values (use appropriate field based on type)
+  bool bool_value = 2;
+  int64 int_value = 3;
+  double float_value = 4;
+  string string_value = 5;
+
+  // Compound values
+  TempoScripting.Vector vector_value = 6;
+  TempoScripting.Rotation rotation_value = 7;
+  ActorTransform transform_value = 8;
+  Color color_value = 9;
+
+  // Object reference (path string)
+  string object_path = 10;
+
+  // Container values
+  repeated PropertyValue array_values = 11;
+  // Note: struct_values uses repeated KeyValuePair instead of map due to protobuf/tempo compatibility
+  repeated PropertyKeyValue struct_values = 12;
+
+  // Enum value (name + numeric value)
+  string enum_name = 13;
+  int32 enum_value = 14;
+}
+
+message PropertyKeyValue {
+  string key = 1;
+  PropertyValue value = 2;
+}
+
+//=============================================================================
+// World Operations
+//=============================================================================
+
+message WorldInfo {
+  string world_type = 1;        // "Editor", "PIE", "Game"
+  string world_name = 2;
+  int32 pie_instance = 3;       // -1 if not PIE
+  bool has_begun_play = 4;
+  int32 actor_count = 5;
+  bool is_current_target = 6;
+}
+
+message ListWorldsRequest {}
+
+message ListWorldsResponse {
+  repeated WorldInfo worlds = 1;
+  int32 current_world_index = 2;
+}
+
+message SetTargetWorldRequest {
+  string world_identifier = 1;  // Index, name, or "editor"/"pie"
+}
+
+//=============================================================================
+// Actor Discovery
+//=============================================================================
+
+message ActorDescriptor {
+  string guid = 1;
+  string path = 2;
+  string name = 3;
+  string label = 4;             // Editor display name
+  string class_name = 5;
+  ActorTransform transform = 6;
+  bool is_hidden = 7;
+  string parent_actor_id = 8;   // Empty if no parent
+}
+
+message QueryActorsRequest {
+  string class_name = 1;        // Filter by class (empty = all)
+  string name_pattern = 2;      // Wildcard pattern for name/label
+  string tag = 3;               // Filter by actor tag
+  int32 limit = 4;              // Max results (0 = use default)
+  bool include_hidden = 5;
+}
+
+message QueryActorsResponse {
+  repeated ActorDescriptor actors = 1;
+  int32 total_count = 2;        // May be > actors.size() due to limit
+}
+
+message GetActorRequest {
+  string actor_id = 1;          // Name, label, path, or GUID
+  bool include_properties = 2;
+  bool include_components = 3;
+  int32 property_depth = 4;     // Max recursion for nested properties
+}
+
+message ActorDetails {
+  ActorDescriptor actor_info = 1;
+  repeated PropertyKeyValue properties = 2;
+  repeated ComponentDescriptor components = 3;
+  repeated string tags = 4;
+  string folder_path = 5;       // World Outliner folder
+}
+
+message GetActorResponse {
+  ActorDetails actor = 1;
+}
+
+message ComponentDescriptor {
+  string name = 1;
+  string class_name = 2;
+  bool is_scene_component = 3;
+  ActorTransform relative_transform = 4;  // Only for scene components
+  string parent_component = 5;            // Attachment parent
+}
+
+//=============================================================================
+// Actor Manipulation
+//=============================================================================
+
+message SpawnActorRequest {
+  string class_name = 1;
+  ActorTransform transform = 2;
+  string label = 3;             // Editor display name
+  string folder_path = 4;       // World Outliner folder
+  repeated PropertyKeyValue initial_properties = 5;
+  bool deferred = 6;            // Defer BeginPlay until FinishSpawning
+}
+
+message SpawnActorResponse {
+  ActorDescriptor spawned_actor = 1;
+}
+
+message DeleteActorRequest {
+  string actor_id = 1;
+}
+
+message SetActorTransformRequest {
+  string actor_id = 1;
+  ActorTransform transform = 2;
+  bool sweep = 3;               // Check for collision
+  bool teleport = 4;            // Reset physics
+}
+
+message SetActorPropertiesRequest {
+  string actor_id = 1;
+  repeated PropertyKeyValue properties = 2;
+}
+
+message SetActorPropertiesResponse {
+  int32 properties_set = 1;
+  repeated string failed_properties = 2;
+  repeated string error_messages = 3;
+}
+
+//=============================================================================
+// Property Path Operations
+//=============================================================================
+
+message GetPropertyPathRequest {
+  string actor_id = 1;
+  string path = 2;              // e.g., "RootComponent.RelativeLocation.X"
+}
+
+message GetPropertyPathResponse {
+  PropertyValue value = 1;
+  string type_name = 2;         // Detailed type string
+}
+
+message SetPropertyPathRequest {
+  string actor_id = 1;
+  string path = 2;
+  PropertyValue value = 3;
+}
+
+//=============================================================================
+// Function Invocation
+//=============================================================================
+
+message CallFunctionRequest {
+  string actor_id = 1;          // Empty for static functions
+  string class_name = 2;        // Required for static functions
+  string function_name = 3;
+  repeated PropertyKeyValue parameters = 4;
+}
+
+message CallFunctionResponse {
+  PropertyValue return_value = 1;
+  repeated PropertyKeyValue out_parameters = 2;
+}
+
+//=============================================================================
+// Type Discovery
+//=============================================================================
+
+message PropertyInfo {
+  string name = 1;
+  string display_name = 2;
+  string type_name = 3;
+  PropertyType type = 4;
+  bool is_read_only = 5;
+  bool is_blueprint_visible = 6;
+  string category = 7;
+  string description = 8;
+}
+
+message ClassInfo {
+  string class_name = 1;
+  string display_name = 2;
+  string class_path = 3;
+  string parent_class_name = 4;
+  bool is_blueprint = 5;
+  bool is_abstract = 6;
+  bool is_placeable = 7;
+  repeated string implemented_interfaces = 8;
+}
+
+message FindClassRequest {
+  string class_name = 1;        // Name, display name, or path
+}
+
+message FindClassResponse {
+  ClassInfo class_info = 1;
+}
+
+message ListClassesRequest {
+  string base_class_name = 1;   // Filter by base class (empty = AActor)
+  string name_pattern = 2;      // Wildcard pattern
+  bool include_blueprint = 3;
+  bool include_abstract = 4;
+  int32 limit = 5;
+}
+
+message ListClassesResponse {
+  repeated ClassInfo classes = 1;
+  int32 total_count = 2;
+}
+
+message GetClassSchemaRequest {
+  string class_name = 1;
+  bool include_inherited = 2;
+  bool include_functions = 3;
+}
+
+message FunctionSignature {
+  string function_name = 1;
+  string description = 2;
+  repeated PropertyInfo parameters = 3;
+  PropertyInfo return_value = 4;
+  bool is_static = 5;
+  bool is_blueprint_callable = 6;
+  bool is_pure = 7;
+  bool needs_world_context = 8;
+}
+
+message ClassSchema {
+  ClassInfo class_info = 1;
+  repeated PropertyInfo properties = 2;
+  repeated FunctionSignature functions = 3;
+}
+
+message GetClassSchemaResponse {
+  ClassSchema schema = 1;
+}
+
+//=============================================================================
+// AgentBridge Service Definition
+//=============================================================================
+
+service AgentBridgeService {
+  //--- World Operations ---
+  rpc ListWorlds(ListWorldsRequest) returns (ListWorldsResponse);
+  rpc SetTargetWorld(SetTargetWorldRequest) returns (TempoScripting.Empty);
+
+  //--- Actor Discovery ---
+  rpc QueryActors(QueryActorsRequest) returns (QueryActorsResponse);
+  rpc GetActor(GetActorRequest) returns (GetActorResponse);
+
+  //--- Actor Manipulation ---
+  rpc SpawnActor(SpawnActorRequest) returns (SpawnActorResponse);
+  rpc DeleteActor(DeleteActorRequest) returns (TempoScripting.Empty);
+  rpc SetActorTransform(SetActorTransformRequest) returns (TempoScripting.Empty);
+  rpc SetActorProperties(SetActorPropertiesRequest) returns (SetActorPropertiesResponse);
+
+  //--- Property Path Operations ---
+  rpc GetPropertyPath(GetPropertyPathRequest) returns (GetPropertyPathResponse);
+  rpc SetPropertyPath(SetPropertyPathRequest) returns (TempoScripting.Empty);
+
+  //--- Function Invocation ---
+  rpc CallFunction(CallFunctionRequest) returns (CallFunctionResponse);
+
+  //--- Type Discovery ---
+  rpc FindClass(FindClassRequest) returns (FindClassResponse);
+  rpc GetClassSchema(GetClassSchemaRequest) returns (GetClassSchemaResponse);
+  rpc ListClasses(ListClassesRequest) returns (ListClassesResponse);
+}

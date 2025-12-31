@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "agentbridge": {
+      "command": "python",
+      "args": ["-m", "mcp", "--host", "localhost", "--port", "50051"],
+      "cwd": "D:/tempo/TempoSample/Plugins/AgentBridge/Python",
+      "env": {
+        "PYTHONPATH": "D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo;D:/tempo/TempoSample/TempoEnv/Lib/site-packages"
+      }
+    }
+  }
+}

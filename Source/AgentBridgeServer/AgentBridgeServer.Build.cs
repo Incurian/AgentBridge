@@ -1,6 +1,6 @@
 using UnrealBuildTool;
 
-public class AgentBridgeServer : ModuleRules
+public class AgentBridgeServer : TempoModuleRules
 {
 	public AgentBridgeServer(ReadOnlyTargetRules Target) : base(Target)
 	{
@@ -15,10 +15,12 @@ public class AgentBridgeServer : ModuleRules
 			"AgentBridgeCore",
 			"AgentBridgeRuntime",
 			"AgentBridgeScripting",
+			"TempoScripting",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
+			"TempoCoreShared",
 		});
 
 		// Only available in editor

@@ -2,7 +2,7 @@
 #include "PropertyAccessor.h"
 #include "UObject/UObjectIterator.h"
 #include "UObject/Package.h"
-#include "Engine/UserDefinedStruct.h"
+#include "StructUtils/UserDefinedStruct.h"
 #include "Engine/UserDefinedEnum.h"
 
 //~==============================================================================

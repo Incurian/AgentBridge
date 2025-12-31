@@ -1,6 +1,6 @@
 # AgentBridge Plugin — Complete Implementation Handover
 
-> **Purpose**: Unreal Engine 5.7 plugin exposing editor/runtime state to external AI agents via gRPC + MCP.  
+> **Purpose**: Unreal Engine 5.6 plugin exposing editor/runtime state to external AI agents via gRPC + MCP.  
 > **Primary Use Case**: "Build me a level" — agents need full read/write/discover capabilities.  
 > **Constraints**: Editor-first (runtime-ready architecture), high latency tolerance, single world initially, streaming desirable.
 
@@ -75,7 +75,7 @@
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Unreal Engine 5.7                            │
+│                    Unreal Engine 5.6                            │
 │              Reflection System, World, Actors                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -1788,4 +1788,4 @@ AsyncTask(ENamedThreads::GameThread, [WeakObj = TWeakObjectPtr<UObject>(MyObj)](
 
 *Document Version: 1.0*  
 *Last Updated: December 2024*  
-*Target Engine: Unreal Engine 5.7*
+*Target Engine: Unreal Engine 5.6*

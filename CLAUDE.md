@@ -1,6 +1,6 @@
 # AgentBridge Plugin
 
-> UE 5.7 plugin exposing editor/runtime state to external AI agents via gRPC + MCP.
+> UE 5.6 plugin exposing editor/runtime state to external AI agents via gRPC + MCP.
 > Primary use case: "Build me a level" - agents need full read/write/discover capabilities.
 
 ## Project Phases
@@ -14,47 +14,62 @@
 - [x] Design AgentBridge.proto service definition
 - [x] Python client for testing
 
-### Phase 2: Tempo Integration (REQUIRES EXPLICIT PERMISSION)
-**DO NOT BEGIN WITHOUT USER APPROVAL**
+### Phase 2: Tempo Integration (COMPLETE)
+**gRPC service integrated with TempoScripting infrastructure**
 
-**IMPORTANT:** Tempo currently only supports up to UE 5.6. Phase 2 requires either:
-- Waiting for Tempo 5.7 support, or
-- Using a UE 5.6 project for integration work
+Completed:
+- [x] AgentBridgeServer depends on TempoScripting (uses TempoModuleRules)
+- [x] AgentBridge.proto - gRPC service definition (14 RPCs)
+- [x] UAgentBridgeServiceSubsystem - implements ITempoScriptable
+- [x] Auto-generated code via GenProtos.sh
+- [x] Build passes successfully
 
-Phase 2 requires:
-1. **Separate project** - New test project for integration work (protects main project)
-2. **Engine modifications** - Install TempoModuleRules.cs to UBT
-3. **Tempo plugin** - Copy TempoCore plugin (TempoScripting, gRPC, TempoCoreShared)
+**gRPC Service Port:** Tempo default (typically 50051, configurable)
 
-**Tempo integration will provide:**
-- Pre-built gRPC libraries (Windows/Mac/Linux)
-- FTempoScriptingServer - async gRPC server with completion queue
-- Proto code generation via GenProtos.sh
-- ITempoScriptable interface for service registration
+### Phase 3: MCP Integration (COMPLETE)
+**MCP server exposing AgentBridge to Claude and LLM agents**
 
-### Phase 3: MCP Integration (Future)
-- MCP server wrapping gRPC client
-- Tool definitions for Claude/LLM agents
+Completed:
+- [x] MCP server package (`Python/mcp/`)
+- [x] gRPC client wrapper with Pythonic API
+- [x] 11 MCP tools covering all operations
+- [x] Claude Code configuration example
+
+**MCP Tools:**
+| Tool | Description |
+|------|-------------|
+| `list_worlds` | List available world contexts |
+| `set_target_world` | Switch between Editor/PIE worlds |
+| `query_actors` | Search actors by class/name/tag |
+| `get_actor` | Get actor details |
+| `spawn_actor` | Create new actors |
+| `delete_actor` | Remove actors |
+| `set_actor_transform` | Move/rotate/scale actors |
+| `get_property` | Read property values |
+| `set_property` | Write property values |
+| `list_classes` | Discover available classes |
+| `get_class_schema` | Get class properties/functions |
 
 ---
 
 ## Important Paths
 
 ### Engine
-- **Engine root:** `D:\UE571`
-- **Engine source:** `D:\UE571\Engine\Source\Runtime` (and `/Editor`, `/Developer`)
-- **Engine logs:** `D:\UE571\Engine\Saved\Logs\Unreal.log`
+- **Engine root:** `D:\EL_UE\UE_5.6`
+- **Engine source:** `D:\EL_UE\UE_5.6\Engine\Source\Runtime` (and `/Editor`, `/Developer`)
+- **Engine logs:** `D:\EL_UE\UE_5.6\Engine\Saved\Logs\` (if exists)
 
 ### Project
-- **Project root:** `E:\UnrealProjects\VR_Project`
-- **Project logs:** `E:\UnrealProjects\VR_Project\Saved\Logs\VR_Project.log` (most recent)
-- **Crash logs:** `E:\UnrealProjects\VR_Project\Saved\Crashes\`
-- **UBT config:** `E:\UnrealProjects\VR_Project\Saved\UnrealBuildTool\BuildConfiguration.xml`
+- **Project root:** `D:\tempo\TempoSample`
+- **Project logs:** `D:\tempo\TempoSample\Saved\Logs\TempoSample.log` (most recent)
+- **Crash logs:** `D:\tempo\TempoSample\Saved\Crashes\`
+- **UBT config:** `D:\tempo\TempoSample\Saved\UnrealBuildTool\BuildConfiguration.xml`
 
 ### Build
-- **UBT log:** `D:\UE571\Engine\Programs\UnrealBuildTool\Log.txt` (compile errors, linker errors, build config)
+- **UBT:** `D:\EL_UE\UE_5.6\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.exe`
+- **Build script:** `D:\tempo\TempoSample\Scripts\Build.sh` (~1 minute build time)
 
-### Tempo Reference (Read-Only)
+### Tempo Reference
 - **Tempo plugin:** `D:\tempo\TempoSample\Plugins\Tempo`
 - **TempoScripting:** `D:\tempo\TempoSample\Plugins\Tempo\TempoCore\Source\TempoScripting`
 - **gRPC libraries:** `D:\tempo\TempoSample\Plugins\Tempo\TempoCore\Source\ThirdParty\gRPC`
@@ -63,10 +78,9 @@ Phase 2 requires:
 ### When to Check Each Log
 | Log | When to Check |
 |-----|---------------|
-| `VR_Project.log` | Runtime errors, PIE issues, Blueprint errors, plugin load failures |
-| `Engine\Saved\Logs\Unreal.log` | Editor crashes, low-level engine issues |
+| `TempoSample.log` | Runtime errors, PIE issues, Blueprint errors, plugin load failures |
+| `Engine\Saved\Logs\` | Editor crashes, low-level engine issues |
 | `Saved\Crashes\` | Hard crashes with minidumps |
-| **UBT Log.txt** | **Compile errors, linker errors, missing includes** (persisted!) |
 
 ---
 
@@ -94,11 +108,12 @@ Phase 2 requires:
 | AgentCommands.h | Done | Command/response structures for all operations |
 | CommandExecutor | Done | JSON dispatch to Runtime layer, full serialization |
 
-### AgentBridgeServer (COMPLETE for Phase 1)
+### AgentBridgeServer (COMPLETE)
 | Component | Status | Notes |
 |-----------|--------|-------|
-| HTTP Server | Done | Uses UE HTTPServer module, port 8080 |
-| gRPC Server | Pending | Will use TempoScripting in Phase 2 |
+| HTTP Server | Done | Uses UE HTTPServer module, port 8080 (fallback) |
+| gRPC Server | Done | Via TempoScripting, UAgentBridgeServiceSubsystem |
+| AgentBridge.proto | Done | 14 RPCs for all operations |
 
 ### Python Client (COMPLETE)
 | Component | Status | Notes |
@@ -123,23 +138,31 @@ External Agents (Claude, LLMs)
          v
 MCP Server (Python) - Tools: spawn, modify, query
          |
-         v
-Python HTTP Client - agentbridge.AgentBridgeClient
-         |
-         v (HTTP/JSON over localhost:8080)
-AgentBridgeServer (UE Module) - HTTP server (Phase 1) / gRPC (Phase 2)
-         |
-         v
-AgentBridgeScripting (UE Module) - High-level commands, JSON serialization
-         |
-         v
+         +---------------------------+
+         |                           |
+         v                           v
+   Python gRPC Client          Python HTTP Client
+         |                           |
+         v (gRPC/protobuf)           v (HTTP/JSON)
+         |                           |
+         +---------------------------+
+                     |
+                     v
+AgentBridgeServer (UE Module)
+├── UAgentBridgeServiceSubsystem (gRPC via TempoScripting)
+└── FAgentHttpServer (HTTP fallback, port 8080)
+                     |
+                     v
+AgentBridgeScripting (UE Module) - FCommandExecutor
+                     |
+                     v
 AgentBridgeRuntime (UE Module) - World context, actor ops, property paths
-         |
-         v
+                     |
+                     v
 AgentBridgeCore (UE Module) - FProperty access, UFunction invoke, type discovery
-         |
-         v
-Unreal Engine 5.7 - Reflection System, World, Actors
+                     |
+                     v
+Unreal Engine 5.6 - Reflection System, World, Actors
 ```
 
 ---
@@ -148,27 +171,69 @@ Unreal Engine 5.7 - Reflection System, World, Actors
 
 ```
 Plugins/AgentBridge/
-├── AgentBridge.uplugin
+├── AgentBridge.uplugin          # Plugin descriptor (depends on TempoCore)
 ├── CLAUDE.md                    # This file
-├── AgentBridge_Handover.md      # Detailed implementation reference
-├── Protos/
-│   └── AgentBridge.proto        # gRPC service definition (Phase 2)
+├── Docs/
+│   └── TempoIntegration.md      # Tempo/gRPC integration guide
 ├── Python/
-│   ├── agentbridge/             # Python client package
+│   ├── agentbridge/             # HTTP client package (Phase 1)
+│   ├── mcp/                     # MCP server package (Phase 3)
 │   │   ├── __init__.py
-│   │   ├── client.py
-│   │   └── types.py
-│   └── test_client.py           # Test script
+│   │   ├── client.py            # gRPC client wrapper
+│   │   ├── tools.py             # MCP tool definitions
+│   │   └── server.py            # MCP server entry point
+│   ├── mcp_config.json          # Claude Code config example
+│   ├── requirements.txt
+│   └── test_client.py           # HTTP test script
 └── Source/
     ├── AgentBridgeCore/         # Reflection primitives
-    ├── AgentBridgeRuntime/      # Abstraction & helpers
-    ├── AgentBridgeScripting/    # High-level operations
-    └── AgentBridgeServer/       # HTTP/gRPC server
+    ├── AgentBridgeRuntime/      # World context, actor ops
+    ├── AgentBridgeScripting/    # Command layer
+    └── AgentBridgeServer/       # HTTP + gRPC server
+        ├── Public/
+        │   ├── AgentBridge.proto
+        │   ├── AgentBridgeServiceSubsystem.h
+        │   └── ProtobufGenerated/
+        └── Private/
 ```
 
 ---
 
-## Python Client Usage
+## MCP Server Usage (Claude Code)
+
+### Setup
+
+1. **Start Unreal Editor** with the TempoSample project
+2. **Add to Claude Code settings** (`~/.claude/settings.json`):
+
+```json
+{
+  "mcpServers": {
+    "agentbridge": {
+      "command": "python",
+      "args": ["-m", "mcp"],
+      "cwd": "D:/tempo/TempoSample/Plugins/AgentBridge/Python",
+      "env": {
+        "PYTHONPATH": "D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo"
+      }
+    }
+  }
+}
+```
+
+3. **Restart Claude Code** - tools will be available
+
+### Available Tools
+
+Once configured, Claude can use commands like:
+- "List all lights in the scene"
+- "Spawn a PointLight at position 100, 200, 300"
+- "Move the actor named 'MyLight' to 500, 500, 500"
+- "What properties does a PointLight have?"
+
+---
+
+## Python HTTP Client Usage (Legacy)
 
 ```python
 from agentbridge import AgentBridgeClient
@@ -233,10 +298,14 @@ FString BodyString(Converter.Length(), Converter.Get());
 ## Build Commands
 
 ```bash
-# Compile plugin (from bash/terminal)
-"D:/UE571/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe" \
-  VR_ProjectEditor Win64 Development \
-  -Project="E:/UnrealProjects/VR_Project/VR_Project.uproject" -WaitMutex
+# Build using Tempo's build script (~1 minute)
+cd D:/tempo/TempoSample/Scripts
+./Build.sh
+
+# Or compile plugin directly (from bash/terminal)
+"D:/EL_UE/UE_5.6/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe" \
+  TempoSampleEditor Win64 Development \
+  -Project="D:/tempo/TempoSample/TempoSample.uproject" -WaitMutex
 
 # Or with editor running, use Live Coding: Ctrl+Alt+F11
 ```
@@ -245,7 +314,7 @@ FString BodyString(Converter.Length(), Converter.Get());
 
 ```bash
 # Run Python test suite
-cd Plugins/AgentBridge/Python
+cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
 python test_client.py
 ```
 
@@ -253,17 +322,17 @@ python test_client.py
 
 ## Tempo Integration Notes (Phase 2 Reference)
 
-**Tempo only supports UE 5.6 currently.**
+**Environment ready - UE 5.6 with Tempo mods installed.**
 
-### Required Tempo Modules
+### Required Tempo Modules (Available)
 - `gRPC` - ThirdParty module with pre-built libraries
 - `TempoScripting` - gRPC server infrastructure
 - `TempoCoreShared` - Settings and utilities
 
-### Engine Modification Required
-Copy `TempoModuleRules.cs` to:
+### Engine Modification (DONE)
+TempoModuleRules.cs installed at:
 ```
-<Engine>/Source/Programs/UnrealBuildTool/Configuration/TempoModuleRules.cs
+D:\EL_UE\UE_5.6\TempoMods\
 ```
 
 ### Proto Generation
@@ -274,6 +343,6 @@ Tempo uses `GenProtos.sh` which:
 
 ---
 
-*Document Version: 3.0*
+*Document Version: 6.0*
 *Last Updated: December 2024*
-*Phase 1 Complete*
+*All Phases Complete - Ready for Production*
