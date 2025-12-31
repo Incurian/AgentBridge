@@ -24,6 +24,8 @@ from .types import (
     DataTableRowInfo,
     CaptureResult,
     SceneCaptureResult,
+    AudioAnalysisResult,
+    AudioCaptureResult,
     AgentBridgeError,
 )
 
@@ -739,3 +741,120 @@ class AgentBridgeClient:
             "format": format,
         })
         return SceneCaptureResult.from_dict(result)
+
+    # =========================================================================
+    # Audio Operations
+    # =========================================================================
+
+    def get_audio_analysis(
+        self,
+        source: str = "WorldAudio",
+        actor_id: str = "",
+        frequency_bands: int = 8,
+    ) -> AudioAnalysisResult:
+        """
+        Get real-time audio analysis data.
+
+        Note: This feature requires proper audio setup in the UE project.
+        Currently provides basic analysis of world audio.
+
+        Args:
+            source: Audio source ("WorldAudio", "PlayerMic", "Actor")
+            actor_id: Actor ID if source is "Actor"
+            frequency_bands: Number of frequency bands to analyze
+
+        Returns:
+            AudioAnalysisResult with volume and frequency data
+
+        Example:
+            # Get audio levels
+            analysis = client.get_audio_analysis()
+            print(f"Volume: {analysis.rms_volume:.2f}")
+            print(f"Bands: {analysis.frequency_bands}")
+        """
+        result = self._execute({
+            "type": "GetAudioAnalysis",
+            "source": source,
+            "actorId": actor_id,
+            "frequencyBands": frequency_bands,
+        })
+        return AudioAnalysisResult.from_dict(result)
+
+    def start_audio_capture(
+        self,
+        source: str = "WorldAudio",
+        actor_id: str = "",
+        max_duration: float = 30.0,
+        sample_rate: int = 44100,
+        channels: int = 2,
+    ) -> AudioCaptureResult:
+        """
+        Start recording audio.
+
+        Note: Full audio capture requires AudioCapture module setup.
+        This is a placeholder that indicates the feature structure.
+
+        Args:
+            source: Audio source ("WorldAudio", "PlayerMic", "Actor")
+            actor_id: Actor ID if source is "Actor"
+            max_duration: Maximum capture duration in seconds
+            sample_rate: Sample rate (44100, 48000, etc.)
+            channels: Number of audio channels (1=mono, 2=stereo)
+
+        Returns:
+            AudioCaptureResult with capture ID
+
+        Example:
+            # Start capture
+            result = client.start_audio_capture(max_duration=10.0)
+            capture_id = result.capture_id
+            # ... wait ...
+            # Stop and get audio
+            audio = client.stop_audio_capture(capture_id)
+        """
+        result = self._execute({
+            "type": "StartAudioCapture",
+            "source": source,
+            "actorId": actor_id,
+            "maxDuration": max_duration,
+            "sampleRate": sample_rate,
+            "channels": channels,
+        })
+        return AudioCaptureResult.from_dict(result)
+
+    def stop_audio_capture(
+        self,
+        capture_id: str,
+        output_path: str = "",
+    ) -> AudioCaptureResult:
+        """
+        Stop recording and retrieve audio data.
+
+        Note: Full audio capture requires AudioCapture module setup.
+        This is a placeholder that indicates the feature structure.
+
+        Args:
+            capture_id: Capture ID returned by start_audio_capture()
+            output_path: File path to save (empty = return base64 WAV)
+
+        Returns:
+            AudioCaptureResult with audio data or file path
+
+        Example:
+            # Stop capture and get as base64
+            audio = client.stop_audio_capture(capture_id)
+            if audio.audio_data:
+                import base64
+                wav_bytes = base64.b64decode(audio.audio_data)
+                with open("recording.wav", "wb") as f:
+                    f.write(wav_bytes)
+
+            # Stop capture and save to file
+            audio = client.stop_audio_capture(capture_id, output_path="/tmp/audio.wav")
+        """
+        result = self._execute({
+            "type": "StopAudioCapture",
+            "captureId": capture_id,
+            "outputPath": output_path,
+        })
+        return AudioCaptureResult.from_dict(result)

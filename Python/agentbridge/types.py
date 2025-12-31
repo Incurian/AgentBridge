@@ -395,6 +395,50 @@ class SceneCaptureResult(CaptureResult):
         )
 
 
+@dataclass
+class AudioAnalysisResult:
+    """Result of audio analysis."""
+    rms_volume: float = 0.0
+    peak_volume: float = 0.0
+    frequency_bands: List[float] = field(default_factory=list)
+    beat_detected: bool = False
+    current_time: float = 0.0
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "AudioAnalysisResult":
+        return cls(
+            rms_volume=d.get("rmsVolume", 0.0),
+            peak_volume=d.get("peakVolume", 0.0),
+            frequency_bands=d.get("frequencyBands", []),
+            beat_detected=d.get("beatDetected", False),
+            current_time=d.get("currentTime", 0.0),
+        )
+
+
+@dataclass
+class AudioCaptureResult:
+    """Result of audio capture operation."""
+    capture_id: str = ""
+    file_path: str = ""
+    audio_data: str = ""  # Base64-encoded WAV
+    format: str = "WAV"
+    sample_rate: int = 44100
+    channels: int = 2
+    duration: float = 0.0
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "AudioCaptureResult":
+        return cls(
+            capture_id=d.get("captureId", ""),
+            file_path=d.get("filePath", ""),
+            audio_data=d.get("audioData", ""),
+            format=d.get("format", "WAV"),
+            sample_rate=d.get("sampleRate", 44100),
+            channels=d.get("channels", 2),
+            duration=d.get("duration", 0.0),
+        )
+
+
 class AgentBridgeError(Exception):
     """Exception raised when an AgentBridge command fails."""
 

@@ -135,6 +135,14 @@ public:
 	static void Execute(const FCaptureSceneCommand& Command, FCaptureSceneResponse& Response);
 
 	//~==============================================================================
+	// Typed Execution - Audio Commands
+	//~==============================================================================
+
+	static void Execute(const FGetAudioAnalysisCommand& Command, FAudioAnalysisResponse& Response);
+	static void Execute(const FStartAudioCaptureCommand& Command, FStartAudioCaptureResponse& Response);
+	static void Execute(const FStopAudioCaptureCommand& Command, FStopAudioCaptureResponse& Response);
+
+	//~==============================================================================
 	// JSON Serialization Helpers
 	//~==============================================================================
 
@@ -197,4 +205,7 @@ private:
 	static FString SerializeGetDataTableRowResponse(const FGetDataTableRowResponse& Response);
 	static FString SerializeCaptureViewportResponse(const FCaptureViewportResponse& Response);
 	static FString SerializeCaptureSceneResponse(const FCaptureSceneResponse& Response);
+	static FString SerializeAudioAnalysisResponse(const FAudioAnalysisResponse& Response);
+	static FString SerializeStartAudioCaptureResponse(const FStartAudioCaptureResponse& Response);
+	static FString SerializeStopAudioCaptureResponse(const FStopAudioCaptureResponse& Response);
 };

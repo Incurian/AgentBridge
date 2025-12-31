@@ -50,6 +50,11 @@ enum class EAgentCommandType : uint8
 	CaptureViewport,
 	CaptureScene,
 
+	// Audio Commands
+	GetAudioAnalysis,
+	StartAudioCapture,
+	StopAudioCapture,
+
 	// Batch Commands
 	BatchExecute,
 
@@ -501,6 +506,84 @@ struct AGENTBRIDGESCRIPTING_API FCaptureSceneCommand : FAgentCommandBase
 };
 
 //~==============================================================================
+// Audio Commands
+//~==============================================================================
+
+/**
+ * EAudioCaptureSource - Source of audio to capture.
+ */
+enum class EAudioCaptureSource : uint8
+{
+	/** Audio from world/game (submix output). */
+	WorldAudio,
+
+	/** Audio from player's microphone. */
+	PlayerMic,
+
+	/** Audio from a specific actor with audio component. */
+	Actor
+};
+
+/**
+ * FGetAudioAnalysisCommand - Get real-time audio analysis data.
+ *
+ * This provides frequency bands, volume levels, and beat detection
+ * without recording full audio. Useful for visualizations or reactions.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetAudioAnalysisCommand : FAgentCommandBase
+{
+	FGetAudioAnalysisCommand() { Type = EAgentCommandType::GetAudioAnalysis; }
+
+	/** Source of audio to analyze. */
+	EAudioCaptureSource Source = EAudioCaptureSource::WorldAudio;
+
+	/** Actor ID if Source is Actor. */
+	FString ActorId;
+
+	/** Number of frequency bands to analyze (e.g., 4 for bass/low-mid/high-mid/treble). */
+	int32 FrequencyBands = 8;
+};
+
+/**
+ * FStartAudioCaptureCommand - Starts recording audio.
+ *
+ * Audio is captured until StopAudioCapture is called or max duration reached.
+ */
+struct AGENTBRIDGESCRIPTING_API FStartAudioCaptureCommand : FAgentCommandBase
+{
+	FStartAudioCaptureCommand() { Type = EAgentCommandType::StartAudioCapture; }
+
+	/** Source of audio to capture. */
+	EAudioCaptureSource Source = EAudioCaptureSource::WorldAudio;
+
+	/** Actor ID if Source is Actor. */
+	FString ActorId;
+
+	/** Maximum capture duration in seconds (0 = unlimited until stop). */
+	float MaxDuration = 30.0f;
+
+	/** Sample rate (44100, 48000, etc). */
+	int32 SampleRate = 44100;
+
+	/** Number of audio channels (1 = mono, 2 = stereo). */
+	int32 Channels = 2;
+};
+
+/**
+ * FStopAudioCaptureCommand - Stops recording and retrieves audio data.
+ */
+struct AGENTBRIDGESCRIPTING_API FStopAudioCaptureCommand : FAgentCommandBase
+{
+	FStopAudioCaptureCommand() { Type = EAgentCommandType::StopAudioCapture; }
+
+	/** Capture ID returned by StartAudioCapture. */
+	FString CaptureId;
+
+	/** Output file path (empty = return base64 WAV in response). */
+	FString OutputPath;
+};
+
+//~==============================================================================
 // Batch Commands
 //~==============================================================================
 
@@ -889,4 +972,70 @@ struct AGENTBRIDGESCRIPTING_API FCaptureSceneResponse : FAgentResponseBase
 
 	/** Camera rotation used for capture. */
 	FRotator CameraRotation = FRotator::ZeroRotator;
+};
+
+/**
+ * FAudioAnalysisResponse - Response to GetAudioAnalysis command.
+ */
+struct AGENTBRIDGESCRIPTING_API FAudioAnalysisResponse : FAgentResponseBase
+{
+	/** Frequency band values (normalized 0-1). */
+	TArray<float> FrequencyBands;
+
+	/** Current average volume (0-1). */
+	float AverageVolume = 0.0f;
+
+	/** Peak volume in this sample (0-1). */
+	float PeakVolume = 0.0f;
+
+	/** Whether a beat was detected (simple beat detection). */
+	bool bBeatDetected = false;
+
+	/** Current playback position in seconds (for audio components). */
+	float CurrentTime = 0.0f;
+};
+
+/**
+ * FStartAudioCaptureResponse - Response to StartAudioCapture command.
+ */
+struct AGENTBRIDGESCRIPTING_API FStartAudioCaptureResponse : FAgentResponseBase
+{
+	/** Unique capture ID for stopping/retrieving later. */
+	FString CaptureId;
+
+	/** Actual sample rate being used. */
+	int32 SampleRate = 0;
+
+	/** Actual number of channels. */
+	int32 Channels = 0;
+
+	/** Maximum duration in seconds. */
+	float MaxDuration = 0.0f;
+};
+
+/**
+ * FStopAudioCaptureResponse - Response to StopAudioCapture command.
+ */
+struct AGENTBRIDGESCRIPTING_API FStopAudioCaptureResponse : FAgentResponseBase
+{
+	/** File path if saved to disk. */
+	FString FilePath;
+
+	/** Base64-encoded WAV data if not saved to file. */
+	FString AudioData;
+
+	/** Audio format (WAV). */
+	FString Format = TEXT("WAV");
+
+	/** Duration in seconds. */
+	float Duration = 0.0f;
+
+	/** Sample rate. */
+	int32 SampleRate = 0;
+
+	/** Number of channels. */
+	int32 Channels = 0;
+
+	/** Size in bytes. */
+	int64 SizeBytes = 0;
 };

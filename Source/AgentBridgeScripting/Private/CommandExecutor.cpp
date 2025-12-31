@@ -1315,6 +1315,95 @@ void FCommandExecutor::Execute(const FCaptureSceneCommand& Command, FCaptureScen
 }
 
 //~==============================================================================
+// Audio Commands
+//~==============================================================================
+
+void FCommandExecutor::Execute(const FGetAudioAnalysisCommand& Command, FAudioAnalysisResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	UWorld* World = FWorldContextManager::Get().GetTargetWorld();
+	if (!World)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("No target world available");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Initialize frequency bands with zeros
+	Response.FrequencyBands.SetNum(Command.FrequencyBands);
+	for (int32 i = 0; i < Command.FrequencyBands; i++)
+	{
+		Response.FrequencyBands[i] = 0.0f;
+	}
+
+	// Get audio volume from FAudioDevice if available
+	if (FAudioDeviceHandle AudioDevice = World->GetAudioDevice())
+	{
+		// Note: Full audio analysis would require setting up a Submix listener
+		// or using AudioAnalysis plugin. For now, return basic info.
+		Response.AverageVolume = 0.0f; // Would need submix capture
+		Response.PeakVolume = 0.0f;
+		Response.bBeatDetected = false;
+		Response.CurrentTime = World->GetTimeSeconds();
+
+		Response.bSuccess = true;
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("No audio device available");
+	}
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FStartAudioCaptureCommand& Command, FStartAudioCaptureResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Audio capture requires AudioCapture or AudioMixer modules
+	// and proper platform-specific setup. This is a placeholder
+	// that indicates the feature structure.
+
+	if (Command.Source == EAudioCaptureSource::PlayerMic)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Player microphone capture requires Voice module setup. "
+			"Use IVoiceCapture interface or AudioCapture plugin.");
+	}
+	else if (Command.Source == EAudioCaptureSource::WorldAudio)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("World audio capture requires Audio Mixer Submix recording. "
+			"Use UAudioMixerBlueprintLibrary::StartRecordingOutput() in game code.");
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Actor-specific audio capture not yet implemented. "
+			"Consider using a SceneComponent with audio analysis capabilities.");
+	}
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FStopAudioCaptureCommand& Command, FStopAudioCaptureResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Placeholder - would stop an active capture and return audio data
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("No active audio capture to stop. Audio capture not yet fully implemented.");
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+//~==============================================================================
 // JSON Serialization
 //~==============================================================================
 
@@ -2022,6 +2111,90 @@ FString FCommandExecutor::SerializeCaptureSceneResponse(const FCaptureSceneRespo
 	return OutputString;
 }
 
+FString FCommandExecutor::SerializeAudioAnalysisResponse(const FAudioAnalysisResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		TArray<TSharedPtr<FJsonValue>> BandsArray;
+		for (float Band : Response.FrequencyBands)
+		{
+			BandsArray.Add(MakeShared<FJsonValueNumber>(Band));
+		}
+		Obj->SetArrayField(TEXT("frequencyBands"), BandsArray);
+		Obj->SetNumberField(TEXT("averageVolume"), Response.AverageVolume);
+		Obj->SetNumberField(TEXT("peakVolume"), Response.PeakVolume);
+		Obj->SetBoolField(TEXT("beatDetected"), Response.bBeatDetected);
+		Obj->SetNumberField(TEXT("currentTime"), Response.CurrentTime);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeStartAudioCaptureResponse(const FStartAudioCaptureResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("captureId"), Response.CaptureId);
+		Obj->SetNumberField(TEXT("sampleRate"), Response.SampleRate);
+		Obj->SetNumberField(TEXT("channels"), Response.Channels);
+		Obj->SetNumberField(TEXT("maxDuration"), Response.MaxDuration);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeStopAudioCaptureResponse(const FStopAudioCaptureResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("filePath"), Response.FilePath);
+		Obj->SetStringField(TEXT("audioData"), Response.AudioData);
+		Obj->SetStringField(TEXT("format"), Response.Format);
+		Obj->SetNumberField(TEXT("duration"), Response.Duration);
+		Obj->SetNumberField(TEXT("sampleRate"), Response.SampleRate);
+		Obj->SetNumberField(TEXT("channels"), Response.Channels);
+		Obj->SetNumberField(TEXT("sizeBytes"), Response.SizeBytes);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
 //~==============================================================================
 // JSON Command Execution
 //~==============================================================================
@@ -2337,6 +2510,77 @@ FString FCommandExecutor::ExecuteJson(const FString& CommandJson)
 		FCaptureSceneResponse Response;
 		Execute(Cmd, Response);
 		return SerializeCaptureSceneResponse(Response);
+	}
+	else if (TypeStr == TEXT("GetAudioAnalysis"))
+	{
+		FGetAudioAnalysisCommand Cmd;
+		Cmd.CommandId = CommandId;
+
+		// Parse source enum
+		FString SourceStr;
+		if (JsonObj->TryGetStringField(TEXT("source"), SourceStr))
+		{
+			if (SourceStr.Equals(TEXT("PlayerMic"), ESearchCase::IgnoreCase))
+			{
+				Cmd.Source = EAudioCaptureSource::PlayerMic;
+			}
+			else if (SourceStr.Equals(TEXT("Actor"), ESearchCase::IgnoreCase))
+			{
+				Cmd.Source = EAudioCaptureSource::Actor;
+			}
+			// Default is WorldAudio
+		}
+
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetNumberField(TEXT("frequencyBands"), Cmd.FrequencyBands);
+
+		FAudioAnalysisResponse Response;
+		Execute(Cmd, Response);
+		return SerializeAudioAnalysisResponse(Response);
+	}
+	else if (TypeStr == TEXT("StartAudioCapture"))
+	{
+		FStartAudioCaptureCommand Cmd;
+		Cmd.CommandId = CommandId;
+
+		// Parse source enum
+		FString SourceStr;
+		if (JsonObj->TryGetStringField(TEXT("source"), SourceStr))
+		{
+			if (SourceStr.Equals(TEXT("PlayerMic"), ESearchCase::IgnoreCase))
+			{
+				Cmd.Source = EAudioCaptureSource::PlayerMic;
+			}
+			else if (SourceStr.Equals(TEXT("Actor"), ESearchCase::IgnoreCase))
+			{
+				Cmd.Source = EAudioCaptureSource::Actor;
+			}
+		}
+
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+
+		double TempMaxDuration;
+		if (JsonObj->TryGetNumberField(TEXT("maxDuration"), TempMaxDuration))
+		{
+			Cmd.MaxDuration = static_cast<float>(TempMaxDuration);
+		}
+		JsonObj->TryGetNumberField(TEXT("sampleRate"), Cmd.SampleRate);
+		JsonObj->TryGetNumberField(TEXT("channels"), Cmd.Channels);
+
+		FStartAudioCaptureResponse Response;
+		Execute(Cmd, Response);
+		return SerializeStartAudioCaptureResponse(Response);
+	}
+	else if (TypeStr == TEXT("StopAudioCapture"))
+	{
+		FStopAudioCaptureCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("captureId"), Cmd.CaptureId);
+		JsonObj->TryGetStringField(TEXT("outputPath"), Cmd.OutputPath);
+
+		FStopAudioCaptureResponse Response;
+		Execute(Cmd, Response);
+		return SerializeStopAudioCaptureResponse(Response);
 	}
 
 	return TEXT("{\"success\":false,\"error\":\"Unknown command type\"}");
