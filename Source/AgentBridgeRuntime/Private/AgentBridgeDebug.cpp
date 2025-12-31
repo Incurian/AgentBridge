@@ -10,6 +10,14 @@
 #include "Engine/Engine.h"
 #include "GameFramework/Actor.h"
 
+// Material includes
+#include "Materials/MaterialInterface.h"
+#include "Materials/MaterialInstance.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Components/MeshComponent.h"
+#include "AssetRegistry/AssetRegistryModule.h"
+#include "AssetRegistry/IAssetRegistry.h"
+
 DEFINE_LOG_CATEGORY(LogAgentBridge);
 
 TArray<IConsoleObject*> FAgentBridgeDebug::RegisteredCommands;
@@ -82,7 +90,59 @@ void FAgentBridgeDebug::RegisterCommands()
 		ECVF_Default
 	));
 
-	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (9 commands)"));
+	// Material commands
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.ListMaterials"),
+		TEXT("List materials. Usage: AgentBridge.ListMaterials [PathFilter] [Limit]"),
+		FConsoleCommandWithArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_ListMaterials),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.GetMaterial"),
+		TEXT("Get material info. Usage: AgentBridge.GetMaterial <AssetPath>"),
+		FConsoleCommandWithArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_GetMaterial),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.SetMaterialParam"),
+		TEXT("Set material param on actor. Usage: AgentBridge.SetMaterialParam <Actor> <ParamName> <Value> [Scalar|Vector|Texture]"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_SetMaterialParam),
+		ECVF_Default
+	));
+
+	// PCG commands
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.ListPCG"),
+		TEXT("List PCG actors. Usage: AgentBridge.ListPCG [NamePattern]"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_ListPCG),
+		ECVF_Default
+	));
+
+	// CVar commands
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.GetCVar"),
+		TEXT("Get console variable value. Usage: AgentBridge.GetCVar <Name>"),
+		FConsoleCommandWithArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_GetCVar),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.SetCVar"),
+		TEXT("Set console variable value. Usage: AgentBridge.SetCVar <Name> <Value>"),
+		FConsoleCommandWithArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_SetCVar),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.ListCVars"),
+		TEXT("List console variables. Usage: AgentBridge.ListCVars [Pattern] [Limit]"),
+		FConsoleCommandWithArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_ListCVars),
+		ECVF_Default
+	));
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (16 commands)"));
 }
 
 void FAgentBridgeDebug::UnregisterCommands()
@@ -1056,4 +1116,463 @@ void FAgentBridgeDebug::Cmd_CallFunc(const TArray<FString>& Args, UWorld* World)
 	{
 		UE_LOG(LogAgentBridge, Error, TEXT("  Error: %s"), *Result.ErrorMessage);
 	}
+}
+
+//~==============================================================================
+// Material Commands
+//~==============================================================================
+
+void FAgentBridgeDebug::Cmd_ListMaterials(const TArray<FString>& Args)
+{
+	FString PathFilter;
+	int32 Limit = 20;
+
+	if (Args.Num() > 0)
+	{
+		PathFilter = Args[0];
+	}
+	if (Args.Num() > 1)
+	{
+		Limit = FCString::Atoi(*Args[1]);
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== ListMaterials (Filter='%s', Limit=%d) ==="), *PathFilter, Limit);
+
+	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+
+	FARFilter Filter;
+	Filter.ClassPaths.Add(UMaterialInterface::StaticClass()->GetClassPathName());
+	Filter.bRecursiveClasses = true;
+	Filter.bRecursivePaths = true;
+
+	TArray<FAssetData> Assets;
+	AssetRegistry.GetAssets(Filter, Assets);
+
+	int32 Count = 0;
+	for (const FAssetData& Asset : Assets)
+	{
+		if (Count >= Limit)
+		{
+			break;
+		}
+
+		FString AssetPath = Asset.GetSoftObjectPath().ToString();
+
+		// Apply filter
+		if (!PathFilter.IsEmpty() && !AssetPath.Contains(PathFilter))
+		{
+			continue;
+		}
+
+		bool bIsInstance = Asset.AssetClassPath == UMaterialInstance::StaticClass()->GetClassPathName();
+		UE_LOG(LogAgentBridge, Log, TEXT("  [%d] %s%s"),
+			Count, *AssetPath, bIsInstance ? TEXT(" (Instance)") : TEXT(""));
+		Count++;
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Showing %d of %d materials"), Count, Assets.Num());
+}
+
+void FAgentBridgeDebug::Cmd_GetMaterial(const TArray<FString>& Args)
+{
+	if (Args.Num() < 1)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.GetMaterial <AssetPath>"));
+		return;
+	}
+
+	const FString& MaterialPath = Args[0];
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== GetMaterial: %s ==="), *MaterialPath);
+
+	UMaterialInterface* Material = LoadObject<UMaterialInterface>(nullptr, *MaterialPath);
+	if (!Material)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  Material not found: %s"), *MaterialPath);
+		return;
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("  Name: %s"), *Material->GetName());
+	UE_LOG(LogAgentBridge, Log, TEXT("  Class: %s"), *Material->GetClass()->GetName());
+
+	if (UMaterialInstance* MatInst = Cast<UMaterialInstance>(Material))
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Parent: %s"), MatInst->Parent ? *MatInst->Parent->GetPathName() : TEXT("None"));
+	}
+
+	// List parameters
+	TArray<FMaterialParameterInfo> ParamInfos;
+	TArray<FGuid> Guids;
+
+	UE_LOG(LogAgentBridge, Log, TEXT("--- Scalar Parameters ---"));
+	Material->GetAllScalarParameterInfo(ParamInfos, Guids);
+	for (const FMaterialParameterInfo& Info : ParamInfos)
+	{
+		float Value;
+		if (Material->GetScalarParameterValue(Info, Value))
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  %s = %f"), *Info.Name.ToString(), Value);
+		}
+	}
+
+	ParamInfos.Empty();
+	Guids.Empty();
+
+	UE_LOG(LogAgentBridge, Log, TEXT("--- Vector Parameters ---"));
+	Material->GetAllVectorParameterInfo(ParamInfos, Guids);
+	for (const FMaterialParameterInfo& Info : ParamInfos)
+	{
+		FLinearColor Value;
+		if (Material->GetVectorParameterValue(Info, Value))
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  %s = (R=%f, G=%f, B=%f, A=%f)"),
+				*Info.Name.ToString(), Value.R, Value.G, Value.B, Value.A);
+		}
+	}
+
+	ParamInfos.Empty();
+	Guids.Empty();
+
+	UE_LOG(LogAgentBridge, Log, TEXT("--- Texture Parameters ---"));
+	Material->GetAllTextureParameterInfo(ParamInfos, Guids);
+	for (const FMaterialParameterInfo& Info : ParamInfos)
+	{
+		UTexture* Value;
+		if (Material->GetTextureParameterValue(Info, Value))
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  %s = %s"),
+				*Info.Name.ToString(), Value ? *Value->GetPathName() : TEXT("None"));
+		}
+	}
+}
+
+void FAgentBridgeDebug::Cmd_SetMaterialParam(const TArray<FString>& Args, UWorld* World)
+{
+	if (Args.Num() < 3)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.SetMaterialParam <Actor> <ParamName> <Value> [Scalar|Vector|Texture]"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Scalar example: AgentBridge.SetMaterialParam MyActor Metallic 0.8"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Vector example: AgentBridge.SetMaterialParam MyActor BaseColor 1,0,0,1 Vector"));
+		return;
+	}
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	const FString& ActorName = Args[0];
+	const FString& ParamName = Args[1];
+	const FString& Value = Args[2];
+	FString ParamType = Args.Num() > 3 ? Args[3] : TEXT("Scalar");
+
+	AActor* Actor = FindActorByName(World, ActorName);
+	if (!Actor)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Actor '%s' not found"), *ActorName);
+		return;
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== SetMaterialParam: %s.%s = %s (%s) ==="),
+		*Actor->GetName(), *ParamName, *Value, *ParamType);
+
+	// Find mesh component
+	UMeshComponent* MeshComp = Actor->FindComponentByClass<UMeshComponent>();
+	if (!MeshComp)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  No mesh component found on actor"));
+		return;
+	}
+
+	// Get or create dynamic material instance
+	UMaterialInstanceDynamic* MID = Cast<UMaterialInstanceDynamic>(MeshComp->GetMaterial(0));
+	if (!MID)
+	{
+		UMaterialInterface* BaseMat = MeshComp->GetMaterial(0);
+		if (!BaseMat)
+		{
+			UE_LOG(LogAgentBridge, Error, TEXT("  No material at slot 0"));
+			return;
+		}
+		MID = UMaterialInstanceDynamic::Create(BaseMat, Actor);
+		MeshComp->SetMaterial(0, MID);
+		UE_LOG(LogAgentBridge, Log, TEXT("  Created dynamic material instance"));
+	}
+
+	// Set parameter
+	if (ParamType.Equals(TEXT("Scalar"), ESearchCase::IgnoreCase))
+	{
+		float ScalarValue = FCString::Atof(*Value);
+		MID->SetScalarParameterValue(FName(*ParamName), ScalarValue);
+		UE_LOG(LogAgentBridge, Log, TEXT("  Set scalar %s = %f"), *ParamName, ScalarValue);
+	}
+	else if (ParamType.Equals(TEXT("Vector"), ESearchCase::IgnoreCase))
+	{
+		// Parse comma-separated RGBA values
+		TArray<FString> Components;
+		Value.ParseIntoArray(Components, TEXT(","));
+
+		FLinearColor Color(1, 1, 1, 1);
+		if (Components.Num() >= 1) Color.R = FCString::Atof(*Components[0]);
+		if (Components.Num() >= 2) Color.G = FCString::Atof(*Components[1]);
+		if (Components.Num() >= 3) Color.B = FCString::Atof(*Components[2]);
+		if (Components.Num() >= 4) Color.A = FCString::Atof(*Components[3]);
+
+		MID->SetVectorParameterValue(FName(*ParamName), Color);
+		UE_LOG(LogAgentBridge, Log, TEXT("  Set vector %s = (%f, %f, %f, %f)"),
+			*ParamName, Color.R, Color.G, Color.B, Color.A);
+	}
+	else if (ParamType.Equals(TEXT("Texture"), ESearchCase::IgnoreCase))
+	{
+		UTexture* Texture = LoadObject<UTexture>(nullptr, *Value);
+		if (Texture)
+		{
+			MID->SetTextureParameterValue(FName(*ParamName), Texture);
+			UE_LOG(LogAgentBridge, Log, TEXT("  Set texture %s = %s"), *ParamName, *Texture->GetPathName());
+		}
+		else
+		{
+			UE_LOG(LogAgentBridge, Error, TEXT("  Texture not found: %s"), *Value);
+		}
+	}
+	else
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  Unknown parameter type: %s (use Scalar, Vector, or Texture)"), *ParamType);
+	}
+}
+
+//~==============================================================================
+// PCG Commands
+//~==============================================================================
+
+void FAgentBridgeDebug::Cmd_ListPCG(const TArray<FString>& Args, UWorld* World)
+{
+	FString NamePattern;
+	if (Args.Num() > 0)
+	{
+		NamePattern = Args[0];
+	}
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== ListPCG (Pattern='%s') ==="), *NamePattern);
+
+	int32 Count = 0;
+	for (TActorIterator<AActor> It(World); It; ++It)
+	{
+		AActor* Actor = *It;
+		FString ClassName = Actor->GetClass()->GetName();
+
+		// Check if this looks like a PCG actor
+		if (!ClassName.Contains(TEXT("PCG")))
+		{
+			continue;
+		}
+
+		// Apply name filter
+		if (!NamePattern.IsEmpty())
+		{
+			if (!Actor->GetName().Contains(NamePattern) && !Actor->GetActorLabel().Contains(NamePattern))
+			{
+				continue;
+			}
+		}
+
+		UE_LOG(LogAgentBridge, Log, TEXT("  [%d] %s (%s)"),
+			Count, *Actor->GetActorLabel(), *ClassName);
+		UE_LOG(LogAgentBridge, Log, TEXT("      Location: %s"), *Actor->GetActorLocation().ToString());
+		Count++;
+	}
+
+	if (Count == 0)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  No PCG actors found. Make sure the PCG plugin is enabled."));
+	}
+	else
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("Found %d PCG actors"), Count);
+	}
+}
+
+//~==============================================================================
+// CVar Commands
+//~==============================================================================
+
+void FAgentBridgeDebug::Cmd_GetCVar(const TArray<FString>& Args)
+{
+	if (Args.Num() < 1)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.GetCVar <Name>"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Example: AgentBridge.GetCVar r.ScreenPercentage"));
+		return;
+	}
+
+	const FString& CVarName = Args[0];
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== GetCVar: %s ==="), *CVarName);
+
+	IConsoleVariable* CVar = IConsoleManager::Get().FindConsoleVariable(*CVarName);
+	if (!CVar)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  CVar not found: %s"), *CVarName);
+		return;
+	}
+
+	// Determine type and get value
+	if (CVar->IsVariableInt())
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Type: Int"));
+		UE_LOG(LogAgentBridge, Log, TEXT("  Value: %d"), CVar->GetInt());
+	}
+	else if (CVar->IsVariableFloat())
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Type: Float"));
+		UE_LOG(LogAgentBridge, Log, TEXT("  Value: %f"), CVar->GetFloat());
+	}
+	else
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Type: String"));
+		UE_LOG(LogAgentBridge, Log, TEXT("  Value: %s"), *CVar->GetString());
+	}
+
+	// Show help text if available
+	const TCHAR* HelpText = CVar->GetHelp();
+	if (HelpText && FCString::Strlen(HelpText) > 0)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Help: %s"), HelpText);
+	}
+}
+
+void FAgentBridgeDebug::Cmd_SetCVar(const TArray<FString>& Args)
+{
+	if (Args.Num() < 2)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.SetCVar <Name> <Value>"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Example: AgentBridge.SetCVar r.ScreenPercentage 100"));
+		return;
+	}
+
+	const FString& CVarName = Args[0];
+	const FString& Value = Args[1];
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== SetCVar: %s = %s ==="), *CVarName, *Value);
+
+	IConsoleVariable* CVar = IConsoleManager::Get().FindConsoleVariable(*CVarName);
+	if (!CVar)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  CVar not found: %s"), *CVarName);
+		return;
+	}
+
+	// Check if read-only
+	if (CVar->TestFlags(ECVF_ReadOnly))
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  CVar is read-only"));
+		return;
+	}
+
+	// Get old value for logging
+	FString OldValue = CVar->GetString();
+
+	// Set the value
+	CVar->Set(*Value, ECVF_SetByConsole);
+
+	UE_LOG(LogAgentBridge, Log, TEXT("  Old value: %s"), *OldValue);
+	UE_LOG(LogAgentBridge, Log, TEXT("  New value: %s"), *CVar->GetString());
+}
+
+void FAgentBridgeDebug::Cmd_ListCVars(const TArray<FString>& Args)
+{
+	FString Pattern;
+	int32 Limit = 50;
+
+	if (Args.Num() > 0)
+	{
+		Pattern = Args[0];
+	}
+	if (Args.Num() > 1)
+	{
+		Limit = FCString::Atoi(*Args[1]);
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== ListCVars (Pattern='%s', Limit=%d) ==="), *Pattern, Limit);
+
+	int32 Count = 0;
+	int32 TotalCount = 0;
+
+	IConsoleManager::Get().ForEachConsoleObjectThatStartsWith(
+		FConsoleObjectVisitor::CreateLambda([&](const TCHAR* Name, IConsoleObject* ConsoleObj)
+		{
+			// Only process console variables, not commands
+			IConsoleVariable* CVar = ConsoleObj->AsVariable();
+			if (!CVar)
+			{
+				return;
+			}
+
+			TotalCount++;
+
+			FString CVarName(Name);
+
+			// Apply pattern filter
+			if (!Pattern.IsEmpty() && !CVarName.Contains(Pattern))
+			{
+				return;
+			}
+
+			if (Count >= Limit)
+			{
+				return;
+			}
+
+			// Get type string
+			FString TypeStr;
+			if (CVar->IsVariableInt())
+			{
+				TypeStr = TEXT("Int");
+			}
+			else if (CVar->IsVariableFloat())
+			{
+				TypeStr = TEXT("Float");
+			}
+			else
+			{
+				TypeStr = TEXT("String");
+			}
+
+			// Check flags
+			FString Flags;
+			if (CVar->TestFlags(ECVF_ReadOnly))
+			{
+				Flags = TEXT(" [ReadOnly]");
+			}
+			if (CVar->TestFlags(ECVF_Cheat))
+			{
+				Flags += TEXT(" [Cheat]");
+			}
+
+			UE_LOG(LogAgentBridge, Log, TEXT("  [%d] %s = %s (%s)%s"),
+				Count, Name, *CVar->GetString(), *TypeStr, *Flags);
+			Count++;
+		})
+	);
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Showing %d of %d matching CVars (total: %d)"),
+		Count, Pattern.IsEmpty() ? TotalCount : Count, TotalCount);
 }

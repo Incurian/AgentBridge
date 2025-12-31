@@ -26,6 +26,12 @@ from .types import (
     SceneCaptureResult,
     AudioAnalysisResult,
     AudioCaptureResult,
+    MaterialInfo,
+    MaterialDetails,
+    MaterialInstanceResult,
+    PCGActorInfo,
+    PCGRegenerateResult,
+    CVarInfo,
     AgentBridgeError,
 )
 
@@ -858,3 +864,388 @@ class AgentBridgeClient:
             "outputPath": output_path,
         })
         return AudioCaptureResult.from_dict(result)
+
+    # =========================================================================
+    # Material Operations
+    # =========================================================================
+
+    def list_materials(
+        self,
+        path_filter: str = "",
+        instances_only: bool = False,
+        limit: int = 100,
+    ) -> List[MaterialInfo]:
+        """
+        List materials in the project.
+
+        Args:
+            path_filter: Wildcard filter for asset paths (e.g., "/Game/Materials/*")
+            instances_only: Only return material instances
+            limit: Maximum results
+
+        Returns:
+            List of MaterialInfo objects
+
+        Example:
+            # List all materials
+            materials = client.list_materials()
+
+            # List materials in a folder
+            materials = client.list_materials(path_filter="/Game/Materials/*")
+
+            # List only material instances
+            instances = client.list_materials(instances_only=True)
+        """
+        result = self._execute({
+            "type": "ListMaterials",
+            "pathFilter": path_filter,
+            "instancesOnly": instances_only,
+            "limit": limit,
+        })
+        return [MaterialInfo.from_dict(m) for m in result.get("materials", [])]
+
+    def get_material_info(
+        self,
+        material_path: str,
+        include_parameters: bool = True,
+    ) -> MaterialDetails:
+        """
+        Get detailed information about a material.
+
+        Args:
+            material_path: Full asset path to the material
+            include_parameters: Include parameter values
+
+        Returns:
+            MaterialDetails with material info and parameters
+
+        Example:
+            mat = client.get_material_info("/Game/Materials/M_Basic.M_Basic")
+            print(f"Material: {mat.name}")
+            for param in mat.parameters:
+                print(f"  {param.name} ({param.type}): {param.value}")
+        """
+        result = self._execute({
+            "type": "GetMaterialInfo",
+            "materialPath": material_path,
+            "includeParameters": include_parameters,
+        })
+        return MaterialDetails.from_dict(result)
+
+    def create_material_instance(
+        self,
+        parent_material_path: str,
+        instance_name: str = "",
+        owner_actor_id: str = "",
+        scalar_parameters: Optional[Dict[str, float]] = None,
+        vector_parameters: Optional[Dict[str, Dict[str, float]]] = None,
+    ) -> MaterialInstanceResult:
+        """
+        Create a dynamic material instance.
+
+        Note: Creates UMaterialInstanceDynamic which persists only in current session.
+
+        Args:
+            parent_material_path: Path to parent material
+            instance_name: Name for the instance (for later lookup)
+            owner_actor_id: Actor to own the instance (for lifecycle)
+            scalar_parameters: Initial scalar parameter values
+            vector_parameters: Initial vector parameters as {name: {r, g, b, a}}
+
+        Returns:
+            MaterialInstanceResult with instance name
+
+        Example:
+            # Create red material instance
+            result = client.create_material_instance(
+                "/Game/Materials/M_Basic.M_Basic",
+                instance_name="RedMaterial",
+                owner_actor_id="MyCube",
+                vector_parameters={"BaseColor": {"r": 1, "g": 0, "b": 0, "a": 1}}
+            )
+        """
+        result = self._execute({
+            "type": "CreateMaterialInstance",
+            "parentMaterialPath": parent_material_path,
+            "instanceName": instance_name,
+            "ownerActorId": owner_actor_id,
+            "scalarParameters": scalar_parameters or {},
+            "vectorParameters": vector_parameters or {},
+        })
+        return MaterialInstanceResult.from_dict(result)
+
+    def set_material_parameter(
+        self,
+        target_id: str,
+        parameter_name: str,
+        value: Any,
+        parameter_type: str = "Scalar",
+        component_name: str = "",
+        slot_index: int = 0,
+    ) -> None:
+        """
+        Set a parameter on an actor's material.
+
+        Automatically creates a dynamic material instance if needed.
+
+        Args:
+            target_id: Actor identifier
+            parameter_name: Name of the parameter
+            value: Value to set (float for Scalar, dict for Vector, path for Texture)
+            parameter_type: "Scalar", "Vector", or "Texture"
+            component_name: Specific component (optional)
+            slot_index: Material slot index
+
+        Example:
+            # Set roughness
+            client.set_material_parameter("MyCube", "Roughness", 0.5)
+
+            # Set color
+            client.set_material_parameter(
+                "MyCube", "BaseColor",
+                {"r": 1, "g": 0, "b": 0, "a": 1},
+                parameter_type="Vector"
+            )
+
+            # Set texture
+            client.set_material_parameter(
+                "MyCube", "DiffuseTexture",
+                "/Game/Textures/T_Wood.T_Wood",
+                parameter_type="Texture"
+            )
+        """
+        # Convert value to string for Vector type
+        if parameter_type == "Vector" and isinstance(value, dict):
+            value = json.dumps(value)
+        elif parameter_type == "Scalar":
+            value = str(value)
+
+        self._execute({
+            "type": "SetMaterialParameter",
+            "targetId": target_id,
+            "parameterName": parameter_name,
+            "value": value,
+            "parameterType": parameter_type,
+            "componentName": component_name,
+            "slotIndex": slot_index,
+        })
+
+    def apply_material_to_actor(
+        self,
+        actor_id: str,
+        material_path: str,
+        component_name: str = "",
+        slot_index: int = -1,
+    ) -> None:
+        """
+        Apply a material to an actor's mesh.
+
+        Args:
+            actor_id: Target actor
+            material_path: Material asset path
+            component_name: Specific component (uses first mesh if empty)
+            slot_index: Material slot (-1 for all slots)
+
+        Example:
+            # Apply to all slots
+            client.apply_material_to_actor("MyCube", "/Game/Materials/M_Red.M_Red")
+
+            # Apply to specific slot
+            client.apply_material_to_actor(
+                "MyMesh",
+                "/Game/Materials/M_Metal.M_Metal",
+                slot_index=0
+            )
+        """
+        self._execute({
+            "type": "ApplyMaterialToActor",
+            "actorId": actor_id,
+            "materialPath": material_path,
+            "componentName": component_name,
+            "slotIndex": slot_index,
+        })
+
+    # =========================================================================
+    # PCG Operations
+    # =========================================================================
+
+    def list_pcg_actors(
+        self,
+        name_pattern: str = "",
+        include_graph_info: bool = True,
+        limit: int = 100,
+    ) -> List[PCGActorInfo]:
+        """
+        List PCG actors in the world.
+
+        Args:
+            name_pattern: Wildcard filter for actor names
+            include_graph_info: Include PCG graph information
+            limit: Maximum results
+
+        Returns:
+            List of PCGActorInfo objects
+
+        Example:
+            pcg_actors = client.list_pcg_actors()
+            for actor in pcg_actors:
+                print(f"{actor.label}: {actor.status}")
+        """
+        result = self._execute({
+            "type": "ListPCGActors",
+            "namePattern": name_pattern,
+            "includeGraphInfo": include_graph_info,
+            "limit": limit,
+        })
+        return [PCGActorInfo.from_dict(a) for a in result.get("actors", [])]
+
+    def regenerate_pcg(
+        self,
+        actor_id: str,
+        component_name: str = "",
+        force_refresh: bool = False,
+    ) -> PCGRegenerateResult:
+        """
+        Trigger PCG regeneration.
+
+        Note: Requires PCG plugin. Currently returns a helpful error message.
+
+        Args:
+            actor_id: PCG actor identifier
+            component_name: Specific component if multiple
+            force_refresh: Force full regeneration
+
+        Returns:
+            PCGRegenerateResult with generation stats
+
+        Example:
+            result = client.regenerate_pcg("MyPCGActor")
+            print(f"Generated {result.generated_count} instances")
+        """
+        result = self._execute({
+            "type": "RegeneratePCG",
+            "actorId": actor_id,
+            "componentName": component_name,
+            "forceRefresh": force_refresh,
+        })
+        return PCGRegenerateResult.from_dict(result)
+
+    def set_pcg_parameter(
+        self,
+        actor_id: str,
+        parameter_name: str,
+        value: Any,
+        auto_regenerate: bool = True,
+    ) -> None:
+        """
+        Set a PCG graph parameter.
+
+        Note: Requires PCG plugin. Currently returns a helpful error message.
+
+        Args:
+            actor_id: PCG actor identifier
+            parameter_name: Parameter name
+            value: Value (will be JSON encoded)
+            auto_regenerate: Regenerate after setting
+
+        Example:
+            client.set_pcg_parameter("MyPCGActor", "Density", 0.5)
+        """
+        self._execute({
+            "type": "SetPCGParameter",
+            "actorId": actor_id,
+            "parameterName": parameter_name,
+            "value": json.dumps(value) if not isinstance(value, str) else value,
+            "autoRegenerate": auto_regenerate,
+        })
+
+    # =========================================================================
+    # Console Variable (CVar) Operations
+    # =========================================================================
+
+    def get_cvar(self, name: str) -> CVarInfo:
+        """
+        Get a console variable value.
+
+        Args:
+            name: CVar name (e.g., "r.ScreenPercentage")
+
+        Returns:
+            CVarInfo with name, value, type, and help text
+
+        Example:
+            cvar = client.get_cvar("r.ScreenPercentage")
+            print(f"{cvar.name} = {cvar.value} ({cvar.type})")
+        """
+        result = self._execute({
+            "type": "GetCVar",
+            "name": name,
+        })
+        return CVarInfo.from_dict(result)
+
+    def set_cvar(self, name: str, value: Any) -> CVarInfo:
+        """
+        Set a console variable value.
+
+        Args:
+            name: CVar name
+            value: New value (will be converted to string)
+
+        Returns:
+            CVarInfo with the new value
+
+        Raises:
+            AgentBridgeError: If CVar is read-only or not found
+
+        Example:
+            # Set an integer CVar
+            client.set_cvar("r.ScreenPercentage", 100)
+
+            # Set a float CVar
+            client.set_cvar("r.Streaming.PoolSize", 2048)
+
+            # Set a string CVar
+            client.set_cvar("r.DefaultFeature.Bloom", "0")
+        """
+        result = self._execute({
+            "type": "SetCVar",
+            "name": name,
+            "value": str(value),
+        })
+        return CVarInfo.from_dict(result)
+
+    def list_cvars(
+        self,
+        pattern: str = "",
+        limit: int = 100,
+    ) -> List[CVarInfo]:
+        """
+        List console variables.
+
+        Args:
+            pattern: Substring filter for CVar names
+            limit: Maximum results
+
+        Returns:
+            List of CVarInfo objects
+
+        Example:
+            # List all rendering CVars
+            cvars = client.list_cvars(pattern="r.")
+            for cvar in cvars:
+                flags = []
+                if cvar.is_read_only:
+                    flags.append("ReadOnly")
+                if cvar.is_cheat:
+                    flags.append("Cheat")
+                print(f"{cvar.name} = {cvar.value} {flags}")
+
+            # List shadow-related CVars
+            shadows = client.list_cvars(pattern="Shadow")
+        """
+        result = self._execute({
+            "type": "ListCVars",
+            "pattern": pattern,
+            "limit": limit,
+        })
+        return [CVarInfo.from_dict(c) for c in result.get("cvars", [])]

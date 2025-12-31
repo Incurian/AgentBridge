@@ -26,6 +26,19 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAgentBridge, Log, All);
  * FunctionInvoker Testing:
  * - AgentBridge.CallFunc <ActorName> <FunctionName> - Call a function
  *
+ * Material Testing:
+ * - AgentBridge.ListMaterials [Filter] [Limit] - List project materials
+ * - AgentBridge.GetMaterial <Path> - Get material info and parameters
+ * - AgentBridge.SetMaterialParam <Actor> <Param> <Value> [Type] - Set material parameter
+ *
+ * PCG Testing:
+ * - AgentBridge.ListPCG [Pattern] - List PCG actors in the world
+ *
+ * CVar Manipulation:
+ * - AgentBridge.GetCVar <Name> - Get console variable value
+ * - AgentBridge.SetCVar <Name> <Value> - Set console variable value
+ * - AgentBridge.ListCVars [Pattern] [Limit] - List console variables
+ *
  * Usage Notes:
  * - Run from editor console or via -ExecCmds for headless testing
  * - All output goes to LogAgentBridge category
@@ -97,6 +110,19 @@ private:
 
 	// FunctionInvoker commands
 	static void Cmd_CallFunc(const TArray<FString>& Args, UWorld* World);
+
+	// Material commands
+	static void Cmd_ListMaterials(const TArray<FString>& Args);
+	static void Cmd_GetMaterial(const TArray<FString>& Args);
+	static void Cmd_SetMaterialParam(const TArray<FString>& Args, UWorld* World);
+
+	// PCG commands
+	static void Cmd_ListPCG(const TArray<FString>& Args, UWorld* World);
+
+	// CVar commands
+	static void Cmd_GetCVar(const TArray<FString>& Args);
+	static void Cmd_SetCVar(const TArray<FString>& Args);
+	static void Cmd_ListCVars(const TArray<FString>& Args);
 
 	//~==============================================================================
 	// Internal Helpers

@@ -3,6 +3,25 @@
 > UE 5.6 plugin exposing editor/runtime state to external AI agents via gRPC + MCP.
 > Primary use case: "Build me a level" - agents need full read/write/discover capabilities.
 
+---
+
+## Standing Instructions
+
+**Work Prioritization (until further notice):**
+1. **Focus on existing modules** - Flesh out features of existing systems rather than creating completely new modules
+2. **New features are OK** - If you think of a really good new feature, go ahead, but prioritize enhancement over expansion
+3. **When out of feature ideas** - Do thorough code review and deliberate testing
+4. **After code review** - Session can end
+
+**Todo List Management:**
+- Keep the todo list updated as you work
+- When completing a work session:
+  1. Update documentation (CLAUDE.md, Handover, StretchGoals) with new features
+  2. Re-read CLAUDE.md for any standing instructions
+  3. Commit changes with descriptive message
+
+---
+
 ## Project Phases
 
 ### Phase 1: Core Implementation (COMPLETE)
@@ -13,6 +32,11 @@
 - [x] Debug console commands (DumpActor, DumpClass, ListWorlds, QueryActors, etc.)
 - [x] Design AgentBridge.proto service definition
 - [x] Python client for testing
+- [x] DataAsset support (list, inspect, query data tables)
+- [x] Viewport/SceneCapture support (capture images, depth, normals)
+- [x] Audio capture and analysis support
+- [x] Material operations (list, inspect, create instances, set parameters)
+- [x] PCG operations (list actors, regenerate, set parameters)
 
 ### Phase 2: Tempo Integration (COMPLETE)
 **gRPC service integrated with TempoScripting infrastructure**
@@ -300,6 +324,18 @@ client.set_actor_transform("MyLight", location=(500, 500, 500))
 
 # Delete actor
 client.delete_actor("MyLight")
+
+# Material operations
+materials = client.list_materials(filter_pattern="Wood", limit=20)
+mat_info = client.get_material_info("/Game/Materials/M_Wood")
+instance = client.create_material_instance("/Game/Materials/M_Wood", "MyWoodInstance")
+client.set_material_parameter("StaticMeshActor", "BaseColor", (1.0, 0.5, 0.2, 1.0), "Vector")
+client.apply_material_to_actor("StaticMeshActor", "/Game/Materials/M_Wood")
+
+# PCG operations
+pcg_actors = client.list_pcg_actors(pattern="Forest")
+result = client.regenerate_pcg("PCG_ForestGenerator")
+client.set_pcg_parameter("PCG_ForestGenerator", "Density", "0.5")
 ```
 
 ---
@@ -453,7 +489,7 @@ from . import my_service  # in _auto_register()
 
 ---
 
-*Document Version: 8.0*
+*Document Version: 9.0*
 *Last Updated: December 2024*
 *All Phases Complete - 12 Services, 65+ Tools*
-*PIE/Runtime Context Support Added*
+*Material/PCG Operations Added*

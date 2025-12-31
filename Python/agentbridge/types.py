@@ -439,6 +439,144 @@ class AudioCaptureResult:
         )
 
 
+@dataclass
+class MaterialParameterInfo:
+    """Information about a material parameter."""
+    name: str = ""
+    type: str = ""  # "Scalar", "Vector", "Texture"
+    value: str = ""
+    group: str = ""
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "MaterialParameterInfo":
+        return cls(
+            name=d.get("name", ""),
+            type=d.get("type", ""),
+            value=d.get("value", ""),
+            group=d.get("group", ""),
+        )
+
+
+@dataclass
+class MaterialInfo:
+    """Information about a material."""
+    asset_path: str = ""
+    name: str = ""
+    is_material_instance: bool = False
+    parent_path: str = ""
+    two_sided: bool = False
+    blend_mode: str = ""
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "MaterialInfo":
+        return cls(
+            asset_path=d.get("assetPath", ""),
+            name=d.get("name", ""),
+            is_material_instance=d.get("isMaterialInstance", False),
+            parent_path=d.get("parentPath", ""),
+            two_sided=d.get("twoSided", False),
+            blend_mode=d.get("blendMode", ""),
+        )
+
+
+@dataclass
+class MaterialDetails:
+    """Detailed information about a material including parameters."""
+    asset_path: str = ""
+    name: str = ""
+    is_material_instance: bool = False
+    parent_path: str = ""
+    two_sided: bool = False
+    blend_mode: str = ""
+    parameters: List[MaterialParameterInfo] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "MaterialDetails":
+        params = [MaterialParameterInfo.from_dict(p) for p in d.get("parameters", [])]
+        mat = d.get("material", d)  # Handle both nested and flat responses
+        return cls(
+            asset_path=mat.get("assetPath", ""),
+            name=mat.get("name", ""),
+            is_material_instance=mat.get("isMaterialInstance", False),
+            parent_path=mat.get("parentPath", ""),
+            two_sided=mat.get("twoSided", False),
+            blend_mode=mat.get("blendMode", ""),
+            parameters=params,
+        )
+
+
+@dataclass
+class MaterialInstanceResult:
+    """Result of creating a material instance."""
+    instance_name: str = ""
+    applied_to_owner: bool = False
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "MaterialInstanceResult":
+        return cls(
+            instance_name=d.get("instanceName", ""),
+            applied_to_owner=d.get("appliedToOwner", False),
+        )
+
+
+@dataclass
+class PCGActorInfo:
+    """Information about a PCG actor."""
+    guid: str = ""
+    name: str = ""
+    label: str = ""
+    graph_name: str = ""
+    is_generated: bool = False
+    status: str = ""
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "PCGActorInfo":
+        return cls(
+            guid=d.get("guid", ""),
+            name=d.get("name", ""),
+            label=d.get("label", ""),
+            graph_name=d.get("graphName", ""),
+            is_generated=d.get("isGenerated", False),
+            status=d.get("status", ""),
+        )
+
+
+@dataclass
+class PCGRegenerateResult:
+    """Result of PCG regeneration."""
+    generated_count: int = 0
+    generation_time_ms: float = 0.0
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "PCGRegenerateResult":
+        return cls(
+            generated_count=d.get("generatedCount", 0),
+            generation_time_ms=d.get("generationTimeMs", 0.0),
+        )
+
+
+@dataclass
+class CVarInfo:
+    """Information about a console variable."""
+    name: str = ""
+    value: str = ""
+    type: str = ""  # "Int", "Float", "String"
+    is_read_only: bool = False
+    is_cheat: bool = False
+    help_text: str = ""
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "CVarInfo":
+        return cls(
+            name=d.get("name", ""),
+            value=d.get("value", ""),
+            type=d.get("type", "String"),
+            is_read_only=d.get("isReadOnly", False),
+            is_cheat=d.get("isCheat", False),
+            help_text=d.get("helpText", ""),
+        )
+
+
 class AgentBridgeError(Exception):
     """Exception raised when an AgentBridge command fails."""
 

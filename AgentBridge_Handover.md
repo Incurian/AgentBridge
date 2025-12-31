@@ -22,10 +22,16 @@
 7. [Module 4: AgentBridgeServer (gRPC)](#module-4-agentbridgeserver)
 8. [Module 5: Python Client](#module-5-python-client)
 9. [Module 6: MCP Server](#module-6-mcp-server)
-10. [Debugging Utilities](#debugging-utilities)
-11. [Autonomous Compilation Setup](#autonomous-compilation-setup)
-12. [Implementation Order](#implementation-order)
-13. [Risk Mitigation](#risk-mitigation)
+10. [Extended Features](#extended-features)
+    - [DataAsset Support](#dataasset-support)
+    - [Viewport/Scene Capture](#viewportscene-capture)
+    - [Audio Capture](#audio-capture)
+    - [Material Operations](#material-operations)
+    - [PCG Operations](#pcg-operations)
+11. [Debugging Utilities](#debugging-utilities)
+12. [Autonomous Compilation Setup](#autonomous-compilation-setup)
+13. [Implementation Order](#implementation-order)
+14. [Risk Mitigation](#risk-mitigation)
 
 ---
 
@@ -1490,6 +1496,105 @@ private:
 
 ---
 
+## Extended Features
+
+### DataAsset Support
+
+Query and inspect UDataAsset instances and DataTables in the project.
+
+**Python Client Methods:**
+```python
+# List all data assets
+assets = client.list_data_assets(class_filter="GameDataAsset", limit=50)
+
+# Get detailed asset info
+details = client.get_data_asset_details("/Game/Data/DA_PlayerStats")
+
+# Query data table rows
+rows = client.get_data_table_rows("/Game/Data/DT_Items", row_filter="Weapon")
+```
+
+**Console Commands:**
+- `AgentBridge.ListDataAssets [ClassFilter] [Limit]` - List data assets
+- `AgentBridge.GetDataAsset <Path>` - Inspect data asset
+
+### Viewport/Scene Capture
+
+Capture viewport images and scene depth/normals for AI vision capabilities.
+
+**Python Client Methods:**
+```python
+# Capture viewport (returns PNG base64)
+capture = client.capture_viewport(width=1920, height=1080)
+
+# Capture from scene capture component
+result = client.capture_scene("SceneCaptureActor", capture_type="color")  # or "depth", "normals"
+```
+
+**Console Commands:**
+- `AgentBridge.CaptureViewport [Width] [Height]` - Capture editor viewport
+
+### Audio Capture
+
+Capture and analyze audio for understanding scene sounds.
+
+**Python Client Methods:**
+```python
+# Analyze audio at a location
+analysis = client.analyze_audio_at_location(x=100, y=200, z=300, radius=1000)
+
+# Capture audio stream
+audio = client.capture_audio(duration_ms=1000, sample_rate=44100)
+```
+
+### Material Operations
+
+Discover, inspect, and modify materials on actors.
+
+**Python Client Methods:**
+```python
+# List materials in project
+materials = client.list_materials(filter_pattern="Wood", limit=20)
+
+# Get material details
+info = client.get_material_info("/Game/Materials/M_Wood")
+
+# Create dynamic material instance
+instance = client.create_material_instance("/Game/Materials/M_Wood", "MyInstance")
+
+# Set material parameter on actor
+client.set_material_parameter("MyActor", "BaseColor", (1.0, 0.5, 0.2, 1.0), "Vector")
+
+# Apply material to actor
+client.apply_material_to_actor("MyActor", "/Game/Materials/M_Wood")
+```
+
+**Console Commands:**
+- `AgentBridge.ListMaterials [Filter] [Limit]` - List project materials
+- `AgentBridge.GetMaterial <Path>` - Get material info and parameters
+- `AgentBridge.SetMaterialParam <Actor> <Param> <Value> [Type]` - Set material parameter
+
+### PCG Operations
+
+Interact with Procedural Content Generation actors.
+
+**Python Client Methods:**
+```python
+# List PCG actors
+actors = client.list_pcg_actors(pattern="Forest")
+
+# Regenerate PCG graph
+result = client.regenerate_pcg("PCG_ForestGenerator")
+
+# Set PCG parameter
+client.set_pcg_parameter("PCG_ForestGenerator", "Density", "0.5")
+```
+
+**Console Commands:**
+- `AgentBridge.ListPCG [Pattern]` - List PCG actors in world
+
+---
+
 ## Debugging Utilities
 
 Build these utilities early—they'll save enormous time during development.
@@ -1818,7 +1923,7 @@ AsyncTask(ENamedThreads::GameThread, [WeakObj = TWeakObjectPtr<UObject>(MyObj)](
 
 ---
 
-*Document Version: 2.0*
+*Document Version: 3.0*
 *Last Updated: December 2024*
 *Target Engine: Unreal Engine 5.6*
-*Phase 4: PIE/Runtime Context Support Added*
+*Extended Features: DataAssets, Capture, Audio, Materials, PCG*

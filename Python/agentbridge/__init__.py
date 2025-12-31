@@ -44,10 +44,17 @@ from .types import (
     SceneCaptureResult,
     AudioAnalysisResult,
     AudioCaptureResult,
+    MaterialInfo,
+    MaterialDetails,
+    MaterialParameterInfo,
+    MaterialInstanceResult,
+    PCGActorInfo,
+    PCGRegenerateResult,
+    CVarInfo,
     AgentBridgeError,
 )
 
-__version__ = "1.3.0"
+__version__ = "1.5.0"
 __all__ = [
     "AgentBridgeClient",
     "AgentBridgeError",
@@ -67,4 +74,11 @@ __all__ = [
     "SceneCaptureResult",
     "AudioAnalysisResult",
     "AudioCaptureResult",
+    "MaterialInfo",
+    "MaterialDetails",
+    "MaterialParameterInfo",
+    "MaterialInstanceResult",
+    "PCGActorInfo",
+    "PCGRegenerateResult",
+    "CVarInfo",
 ]

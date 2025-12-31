@@ -29,7 +29,7 @@ Agent needs to:
 - Organize actors in folders
 - Save work (transactions for undo)
 
-**Status:** Mostly complete. Need to add more granular material/mesh operations.
+**Status:** COMPLETE. Material operations now implemented.
 
 ### 2. "Populate My Level with Data"
 Agent needs to:
@@ -38,7 +38,7 @@ Agent needs to:
 - Link actors to data (via soft references)
 - Batch operations for large datasets
 
-**Status:** Pending - DataAssets support needed.
+**Status:** COMPLETE. DataAssets support implemented (list, inspect, query data tables).
 
 ### 3. "Help Me Debug This"
 Agent needs to:
@@ -48,7 +48,7 @@ Agent needs to:
 - Capture screenshots of issues
 - Record gameplay sequences
 
-**Status:** Partial - PIE support done, visual capture needed.
+**Status:** COMPLETE. PIE support, visual capture (viewport + SceneCapture), and audio capture all implemented.
 
 ### 4. "Create a Procedural System"
 Agent needs to:
@@ -57,7 +57,7 @@ Agent needs to:
 - Configure PCG nodes and parameters
 - Preview PCG results
 
-**Status:** Not started - PCG module hooks needed.
+**Status:** PARTIAL. Can list PCG actors, regenerate graphs, and set parameters. Graph creation/modification not yet implemented.
 
 ### 5. "Set Up Materials and Visuals"
 Agent needs to:
@@ -66,7 +66,7 @@ Agent needs to:
 - Apply materials to meshes
 - Create/modify texture assets
 
-**Status:** Not started - Material editor hooks needed.
+**Status:** MOSTLY COMPLETE. Can list materials, create instances, set parameters, apply to actors. Texture asset creation not yet implemented.
 
 ### 6. "Record Audio/Capture Media"
 Agent needs to:
@@ -75,7 +75,7 @@ Agent needs to:
 - Record audio from world (for feedback)
 - Record player mic (for voice commands)
 
-**Status:** Not started - Visual and audio capture needed.
+**Status:** COMPLETE. Viewport capture, SceneCapture, audio capture, and audio analysis all implemented.
 
 ### 7. "Control Simulation/Testing"
 Agent needs to:
@@ -90,21 +90,26 @@ Agent needs to:
 
 ## Feature Roadmap
 
-### High Priority
-1. **DataAssets Support** - Critical for data-driven workflows
-2. **Visual Capture** - Screenshots and scene capture
-3. **AgentBridge.Capabilities Console Command** - Debug context info
+### High Priority - COMPLETE
+1. **DataAssets Support** - DONE: list, inspect, query data tables
+2. **Visual Capture** - DONE: viewport screenshots, SceneCapture
+3. **AgentBridge.Capabilities Console Command** - DONE
 
-### Medium Priority
-4. **Audio Capture** - World audio and player mic
-5. **Material Editor Integration** - Material instance manipulation
-6. **PCG Integration** - Procedural content generation
+### Medium Priority - MOSTLY COMPLETE
+4. **Audio Capture** - DONE: world audio capture and analysis
+5. **Material Editor Integration** - DONE: instances, parameters, apply
+6. **PCG Integration** - PARTIAL: list, regenerate, set params
 
 ### Lower Priority (Research First)
 7. **Sequencer Integration** - Cinematics control
 8. **Animation Blueprint Access** - Animation state machines
 9. **Niagara Integration** - Particle system control
 10. **Level Streaming** - Multi-level operations
+
+### New Medium Priority
+11. **CVar Manipulation** - Get/set console variables
+12. **Command Logging** - Log all executed commands for debugging
+13. **Blueprint Graph Editing** - Create/modify BP node graphs
 
 ---
 
@@ -488,16 +493,19 @@ Player->SetPlaybackPosition(FFrameTime(FrameNumber));
 | Actor manipulation | ✓ | ✓ | ✓ | - |
 | Property access | ✓ | ✓ | ✓ | - |
 | Type discovery | ✓ | ✓ | ✓ | - |
-| DataAssets | ◯ | ✗ | ◯ | HIGH |
-| Screenshots | ◯ | ✗ | ✓ | HIGH |
-| Audio capture | ◯ | ✗ | ◯ | MEDIUM |
+| DataAssets | ✓ | ✗ | ◯ | DONE |
+| Screenshots | ✓ | ✗ | ✓ | DONE |
+| Audio capture | ✓ | ✗ | ◯ | DONE |
+| Material ops | ✓ | ✗ | ◯ | DONE |
+| PCG ops | ◐ | ✗ | ✗ | PARTIAL |
 | Blueprint graphs | ✗ | ✓ | ✓ | MEDIUM |
+| CVars | ◯ | ✗ | ✓ | MEDIUM |
 | Niagara/VFX | ✗ | ✗ | ✓ | LOW |
 | Sequencer | ✗ | ✗ | ✓ | LOW |
 | Landscape | ✗ | ✗ | ✓ | LOW |
 | Behavior trees | ✗ | ✗ | ✓ | LOW |
 
-✓ = Implemented, ◯ = Planned, ✗ = Not implemented
+✓ = Implemented, ◐ = Partial, ◯ = Planned, ✗ = Not implemented
 
 ### Our Unique Advantages
 
@@ -523,6 +531,15 @@ Player->SetPlaybackPosition(FFrameTime(FrameNumber));
 - GetCapabilities command for agents
 - AgentBridgeServer changed to Runtime module type
 - Python client ContextCapabilities type
+
+#### December 2024 - Extended Features
+- DataAssets support (list, inspect, query data tables)
+- Viewport/SceneCapture support (capture images)
+- Audio capture and analysis support
+- Material operations (list, create instances, set parameters)
+- PCG operations (list actors, regenerate, set parameters)
+- Console commands for Material/PCG testing
+- Python client v1.4.0 with full API coverage
 
 ### Open Questions
 
@@ -568,6 +585,7 @@ Player->SetPlaybackPosition(FFrameTime(FrameNumber));
 
 ---
 
-*Document Version: 1.0*
-*Created: December 2024*
+*Document Version: 2.0*
+*Last Updated: December 2024*
 *Purpose: Research and planning for future features*
+*Extended Features Complete: DataAssets, Capture, Audio, Materials, PCG*
