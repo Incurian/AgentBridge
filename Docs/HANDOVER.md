@@ -265,6 +265,39 @@ Once connected, you have access to these service categories:
 
 ---
 
+## Build & Run Commands
+
+### Building
+```bash
+cd D:/tempo/TempoSample
+source TempoEnv/Scripts/activate   # Required - sets up Python for proto generation
+./Plugins/Tempo/Scripts/Build.sh   # Portable across Tempo projects
+```
+
+### Running the Editor
+```bash
+cd D:/tempo/TempoSample
+source TempoEnv/Scripts/activate   # Recommended
+./Plugins/Tempo/Scripts/Run.sh     # Launches UnrealEditor-Cmd.exe
+```
+
+**Startup Time:** ~30 seconds to full load with gRPC server ready.
+
+### Testing Python/MCP
+```bash
+cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
+PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo" \
+  D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c "
+import sys; sys.path.insert(0, '.')
+from mcp.services.agentbridge import connect
+client = connect('localhost', 10001)
+result = client.execute_console_command('AgentBridge.ListWorlds')
+print(result.output)
+"
+```
+
+---
+
 ## Test Artifact Naming Convention
 
 When testing, use these prefixes so artifacts are easy to find:
