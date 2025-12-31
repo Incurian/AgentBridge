@@ -595,6 +595,38 @@ Component->UpdateComponentToWorld();
 
 ### PIE and Runtime Contexts
 
+#### Context-Aware Operations (Phase 4)
+
+AgentBridge provides transparent handling of different world contexts through the `FWorldContextCapabilities` system. Agents can query capabilities via the `GetCapabilities` command:
+
+```cpp
+// Get capabilities for current context
+FWorldContextCapabilities Caps = FWorldContextManager::Get().GetCapabilities();
+
+if (Caps.bCanUseTransactions)
+{
+    // Safe to use undo/redo
+    FScopedAgentTransaction Trans(LOCTEXT("Modify", "Agent Modify"));
+    // ...
+}
+else
+{
+    // Skip transaction - we're in PIE or packaged build
+    UE_LOG(LogAgentBridge, Log, TEXT("Transactions unavailable: %s"),
+           *Caps.TransactionUnavailableReason);
+}
+```
+
+**Capability Matrix:**
+| Feature | Editor | PIE | Packaged | Check |
+|---------|--------|-----|----------|-------|
+| Property iteration | ✓ | ✓ | ✓ | `bCanIterateProperties` |
+| Function invocation | ✓ | ✓ | ✓ | `bCanInvokeFunctions` |
+| Spawn/Destroy | ✓ | ✓ | ✓ | `bCanSpawnActors` |
+| SetActorLabel | ✓ | ✓ | ✗ | `bCanSetActorLabel` |
+| Transactions | ✓ | ✗ | ✗ | `bCanUseTransactions` |
+| Metadata | ✓ | ✓ | ✗ | `bHasPropertyMetadata` |
+
 #### World Type Detection
 
 ```cpp
@@ -1786,6 +1818,7 @@ AsyncTask(ENamedThreads::GameThread, [WeakObj = TWeakObjectPtr<UObject>(MyObj)](
 
 ---
 
-*Document Version: 1.0*  
-*Last Updated: December 2024*  
+*Document Version: 2.0*
+*Last Updated: December 2024*
 *Target Engine: Unreal Engine 5.6*
+*Phase 4: PIE/Runtime Context Support Added*

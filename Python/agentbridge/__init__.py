@@ -34,10 +34,18 @@ from .types import (
     ClassInfo,
     PropertyValue,
     FunctionResult,
+    ContextCapabilities,
+    CoreCapabilities,
+    EditorCapabilities,
+    DataAssetInfo,
+    DataAssetDetails,
+    DataTableRowInfo,
+    CaptureResult,
+    SceneCaptureResult,
     AgentBridgeError,
 )
 
-__version__ = "1.0.0"
+__version__ = "1.2.0"
 __all__ = [
     "AgentBridgeClient",
     "AgentBridgeError",
@@ -47,4 +55,12 @@ __all__ = [
     "ClassInfo",
     "PropertyValue",
     "FunctionResult",
+    "ContextCapabilities",
+    "CoreCapabilities",
+    "EditorCapabilities",
+    "DataAssetInfo",
+    "DataAssetDetails",
+    "DataTableRowInfo",
+    "CaptureResult",
+    "SceneCaptureResult",
 ]

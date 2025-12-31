@@ -3,6 +3,67 @@
 #include "CoreMinimal.h"
 
 /**
+ * FWorldContextCapabilities - Reports available features in the current world context.
+ *
+ * Different contexts (Editor, PIE, Packaged) have different capabilities.
+ * This struct provides a clear way to query what's available and why.
+ *
+ * @see AgentBridge_Handover.md for the full capability matrix
+ */
+struct AGENTBRIDGERUNTIME_API FWorldContextCapabilities
+{
+	// Context identification
+	FString WorldType;           // "Editor", "PIE", "Game", "EditorPreview", "Unknown"
+	FString WorldName;           // Human-readable world name
+	bool bIsGameplayActive;      // True if HasBegunPlay (PIE or Game)
+	int32 PIEInstance;           // PIE instance number (-1 if not PIE)
+
+	// Core reflection (always available)
+	bool bCanIterateProperties;  // Always true
+	bool bCanInvokeFunctions;    // Always true
+	bool bCanSpawnActors;        // Always true
+	bool bCanDestroyActors;      // Always true
+	bool bCanModifyTransforms;   // Always true
+	bool bCanModifyProperties;   // Always true
+
+	// Editor-only features
+	bool bCanSetActorLabel;      // Editor/PIE only (WITH_EDITOR)
+	bool bCanSetActorFolder;     // Editor/PIE only (WITH_EDITOR)
+	bool bCanUseTransactions;    // Editor only (undo/redo)
+	bool bHasPropertyMetadata;   // Editor/PIE only (stripped in shipping)
+	bool bCanAccessEditorWorld;  // True if editor world exists
+
+	// Explanations for unavailable features
+	FString LabelUnavailableReason;
+	FString FolderUnavailableReason;
+	FString TransactionUnavailableReason;
+	FString MetadataUnavailableReason;
+
+	// Default constructor - assumes worst case (packaged build)
+	FWorldContextCapabilities()
+		: WorldType(TEXT("Unknown"))
+		, bIsGameplayActive(false)
+		, PIEInstance(-1)
+		, bCanIterateProperties(true)
+		, bCanInvokeFunctions(true)
+		, bCanSpawnActors(true)
+		, bCanDestroyActors(true)
+		, bCanModifyTransforms(true)
+		, bCanModifyProperties(true)
+		, bCanSetActorLabel(false)
+		, bCanSetActorFolder(false)
+		, bCanUseTransactions(false)
+		, bHasPropertyMetadata(false)
+		, bCanAccessEditorWorld(false)
+		, LabelUnavailableReason(TEXT("Not available in packaged builds"))
+		, FolderUnavailableReason(TEXT("Not available in packaged builds"))
+		, TransactionUnavailableReason(TEXT("Not available in packaged builds"))
+		, MetadataUnavailableReason(TEXT("Stripped in packaged builds"))
+	{
+	}
+};
+
+/**
  * FWorldContextManager - Manages target world selection across editor, PIE, and game contexts.
  *
  * Unreal Engine can have multiple worlds active simultaneously:
@@ -114,6 +175,23 @@ public:
 	 * @return True if gameplay is running.
 	 */
 	bool IsGameplayActive() const;
+
+	/**
+	 * Gets the full capabilities available in the current world context.
+	 *
+	 * This provides a complete picture of what operations are available
+	 * and why certain features may be unavailable.
+	 *
+	 * @return Capabilities struct describing available features.
+	 */
+	FWorldContextCapabilities GetCapabilities() const;
+
+	/**
+	 * Gets the world type as a human-readable string.
+	 *
+	 * @return "Editor", "PIE", "Game", "EditorPreview", or "Unknown".
+	 */
+	FString GetWorldTypeString() const;
 
 	//~==============================================================================
 	// Multi-World Support

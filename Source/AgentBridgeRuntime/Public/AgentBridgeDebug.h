@@ -13,6 +13,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAgentBridge, Log, All);
  * - AgentBridge.DumpActor <Name> [Depth] - Dump actor properties
  * - AgentBridge.DumpClass <Name> - Dump class schema (properties + functions)
  * - AgentBridge.ListWorlds - List all world contexts
+ * - AgentBridge.Capabilities - Show current context capabilities
  *
  * PropertyPath Testing:
  * - AgentBridge.GetPath <ActorName> <Path> - Read nested property path
@@ -84,6 +85,7 @@ private:
 	static void Cmd_DumpActor(const TArray<FString>& Args, UWorld* World);
 	static void Cmd_DumpClass(const TArray<FString>& Args, UWorld* World);
 	static void Cmd_ListWorlds(const TArray<FString>& Args);
+	static void Cmd_Capabilities(const TArray<FString>& Args);
 
 	// PropertyPath commands
 	static void Cmd_GetPath(const TArray<FString>& Args, UWorld* World);

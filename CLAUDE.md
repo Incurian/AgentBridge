@@ -32,14 +32,14 @@ Completed:
 Completed:
 - [x] Modular service architecture (`Python/mcp/services/`)
 - [x] Auto-discovery and registration of service modules
-- [x] 12 services with 64 total MCP tools
+- [x] 12 services with 64+ total MCP tools
 - [x] Proto-to-MCP generator script
 - [x] Claude Code configuration example
 
-**Service Modules (12 services, 64 tools):**
+**Service Modules (12 services, 64+ tools):**
 | Service | Tools | Description |
 |---------|-------|-------------|
-| `agentbridge` | 11 | World/actor manipulation via AgentBridge |
+| `agentbridge` | 12 | World/actor manipulation via AgentBridge |
 | `tempo_time` | 6 | Simulation time control (play/pause/step) |
 | `tempo_actor_control` | 17 | Typed property setters and transforms |
 | `tempo_core` | 6 | Level loading, control mode, quit |
@@ -51,6 +51,29 @@ Completed:
 | `tempo_sensors` | 1 | Sensor/camera discovery |
 | `tempo_map_query` | 3 | Lane and zone queries |
 | `tempo_agents_editor` | 1 | Zone graph builder |
+
+### Phase 4: PIE/Runtime Support (COMPLETE)
+**Transparent handling of different world contexts**
+
+Completed:
+- [x] `FWorldContextCapabilities` struct for reporting context-specific features
+- [x] `GetCapabilities` command for agents to query available features
+- [x] Proper detection of Editor/PIE/Game contexts via `World->WorldType`
+- [x] AgentBridgeServer module type changed from Editor to Runtime
+- [x] Python client `ContextCapabilities` type
+- [x] `AgentBridge.Capabilities` console command
+
+**Context Capability Matrix:**
+| Feature | Editor | PIE | Packaged |
+|---------|--------|-----|----------|
+| Property iteration | ✓ | ✓ | ✓ |
+| Function invocation | ✓ | ✓ | ✓ |
+| Spawn/Destroy actors | ✓ | ✓ | ✓ |
+| SetActorLabel/Folder | ✓ | ✓ | ✗ |
+| Transactions (Undo) | ✓ | ✗ | ✗ |
+| Property metadata | ✓ | ✓ | ✗ |
+
+**Critical:** `GIsEditor` remains TRUE during PIE! Use `World->WorldType` for accurate context detection.
 
 ---
 
@@ -99,10 +122,10 @@ Completed:
 ### AgentBridgeRuntime (COMPLETE)
 | Component | Status | Notes |
 |-----------|--------|-------|
-| WorldContextManager | Done | Multi-world support, PIE handling |
+| WorldContextManager | Done | Multi-world support, PIE handling, GetCapabilities() |
 | ActorOperations | Done | Query, spawn, delete, modify actors |
 | AgentPropertyPath | Done | Nested property resolution ("Mesh.Materials[0].Color") |
-| DebugCommands | Done | Console commands for testing |
+| DebugCommands | Done | Console commands for testing (Capabilities added) |
 
 ### AgentBridgeScripting (COMPLETE)
 | Component | Status | Notes |
@@ -430,6 +453,7 @@ from . import my_service  # in _auto_register()
 
 ---
 
-*Document Version: 7.0*
+*Document Version: 8.0*
 *Last Updated: December 2024*
-*All Phases Complete - 12 Services, 64 Tools*
+*All Phases Complete - 12 Services, 65+ Tools*
+*PIE/Runtime Context Support Added*

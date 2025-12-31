@@ -21,7 +21,11 @@
       "Bash(Select-Object Id, ProcessName)",
       "Bash(curl:*)",
       "Bash(python test_client.py:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(./Scripts/Build.sh:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(\"D:/UE571/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe\" TempoSampleEditor Win64 Development -Project=\"D:/tempo/TempoSample/TempoSample.uproject\" -WaitMutex)"
     ]
   }
 }

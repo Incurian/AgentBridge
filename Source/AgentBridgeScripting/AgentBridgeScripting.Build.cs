@@ -15,6 +15,10 @@ public class AgentBridgeScripting : ModuleRules
 			"JsonUtilities",
 			"AgentBridgeCore",
 			"AgentBridgeRuntime",
+			"AssetRegistry",
+			"ImageWrapper",
+			"RenderCore",
+			"RHI",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]

@@ -13,6 +13,7 @@ enum class EAgentCommandType : uint8
 	// World Commands
 	ListWorlds,
 	SetTargetWorld,
+	GetCapabilities,
 
 	// Actor Query Commands
 	QueryActors,
@@ -39,6 +40,15 @@ enum class EAgentCommandType : uint8
 	FindClass,
 	GetClassSchema,
 	ListClasses,
+
+	// DataAsset Commands
+	ListDataAssets,
+	GetDataAsset,
+	GetDataTableRow,
+
+	// Capture Commands
+	CaptureViewport,
+	CaptureScene,
 
 	// Batch Commands
 	BatchExecute,
@@ -87,6 +97,18 @@ struct AGENTBRIDGESCRIPTING_API FSetTargetWorldCommand : FAgentCommandBase
 
 	/** World identifier (index, name, or "editor"/"pie"). */
 	FString WorldIdentifier;
+};
+
+/**
+ * FGetCapabilitiesCommand - Gets context capabilities.
+ *
+ * Returns information about what operations are available in the current
+ * world context. This is useful for agents to understand what actions
+ * are possible (e.g., setting actor labels is only available in editor).
+ */
+struct AGENTBRIDGESCRIPTING_API FGetCapabilitiesCommand : FAgentCommandBase
+{
+	FGetCapabilitiesCommand() { Type = EAgentCommandType::GetCapabilities; }
 };
 
 //~==============================================================================
@@ -360,6 +382,125 @@ struct AGENTBRIDGESCRIPTING_API FListClassesCommand : FAgentCommandBase
 };
 
 //~==============================================================================
+// DataAsset Commands
+//~==============================================================================
+
+/**
+ * FListDataAssetsCommand - Lists DataAssets matching criteria.
+ */
+struct AGENTBRIDGESCRIPTING_API FListDataAssetsCommand : FAgentCommandBase
+{
+	FListDataAssetsCommand() { Type = EAgentCommandType::ListDataAssets; }
+
+	/** Base class to filter by (e.g., "DataAsset", "DataTable", "PrimaryDataAsset"). */
+	FString BaseClassName;
+
+	/** Path pattern to filter (e.g., "/Game/Data/*"). */
+	FString PathFilter;
+
+	/** Maximum results. */
+	int32 Limit = 100;
+};
+
+/**
+ * FGetDataAssetCommand - Gets a DataAsset and its properties.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetDataAssetCommand : FAgentCommandBase
+{
+	FGetDataAssetCommand() { Type = EAgentCommandType::GetDataAsset; }
+
+	/** Asset path (e.g., "/Game/Data/MyData.MyData"). */
+	FString AssetPath;
+
+	/** Max depth for nested property reading. */
+	int32 PropertyDepth = 3;
+};
+
+/**
+ * FGetDataTableRowCommand - Gets a specific row from a DataTable.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetDataTableRowCommand : FAgentCommandBase
+{
+	FGetDataTableRowCommand() { Type = EAgentCommandType::GetDataTableRow; }
+
+	/** DataTable asset path. */
+	FString TablePath;
+
+	/** Row name to get (empty = all rows). */
+	FString RowName;
+
+	/** Maximum rows to return if RowName is empty. */
+	int32 Limit = 100;
+};
+
+//~==============================================================================
+// Capture Commands
+//~==============================================================================
+
+/**
+ * FCaptureViewportCommand - Captures the current viewport.
+ *
+ * Note: Only available in Editor or PIE contexts where a viewport exists.
+ */
+struct AGENTBRIDGESCRIPTING_API FCaptureViewportCommand : FAgentCommandBase
+{
+	FCaptureViewportCommand() { Type = EAgentCommandType::CaptureViewport; }
+
+	/** Output file path (empty = return base64 in response). */
+	FString OutputPath;
+
+	/** Width override (0 = current viewport width). */
+	int32 Width = 0;
+
+	/** Height override (0 = current viewport height). */
+	int32 Height = 0;
+
+	/** Include UI elements in capture. */
+	bool bShowUI = false;
+
+	/** Image format (PNG, JPG, EXR). */
+	FString Format = TEXT("PNG");
+};
+
+/**
+ * FCaptureSceneCommand - Captures through a SceneCaptureComponent2D.
+ *
+ * This allows capturing from an arbitrary camera position without
+ * requiring a viewport. Works in all contexts (Editor, PIE, packaged).
+ */
+struct AGENTBRIDGESCRIPTING_API FCaptureSceneCommand : FAgentCommandBase
+{
+	FCaptureSceneCommand() { Type = EAgentCommandType::CaptureScene; }
+
+	/** Actor ID with SceneCaptureComponent2D (empty = create temporary). */
+	FString ActorId;
+
+	/** Component name if actor has multiple capture components. */
+	FString ComponentName;
+
+	/** Camera location (required if ActorId is empty). */
+	FVector Location = FVector::ZeroVector;
+
+	/** Camera rotation (required if ActorId is empty). */
+	FRotator Rotation = FRotator::ZeroRotator;
+
+	/** Field of view in degrees (0 = default 90). */
+	float FOV = 90.0f;
+
+	/** Capture width. */
+	int32 Width = 1280;
+
+	/** Capture height. */
+	int32 Height = 720;
+
+	/** Output file path (empty = return base64 in response). */
+	FString OutputPath;
+
+	/** Image format (PNG, JPG). */
+	FString Format = TEXT("PNG");
+};
+
+//~==============================================================================
 // Batch Commands
 //~==============================================================================
 
@@ -582,4 +723,170 @@ struct AGENTBRIDGESCRIPTING_API FBatchExecuteResponse : FAgentResponseBase
 
 	/** Index of first failed command (-1 if all succeeded). */
 	int32 FirstFailedIndex = -1;
+};
+
+/**
+ * FDataAssetInfo - Information about a DataAsset.
+ */
+struct AGENTBRIDGESCRIPTING_API FDataAssetInfo
+{
+	/** Asset path. */
+	FString AssetPath;
+
+	/** Asset name. */
+	FString AssetName;
+
+	/** Class name. */
+	FString ClassName;
+
+	/** Is this a DataTable. */
+	bool bIsDataTable = false;
+
+	/** Is this a PrimaryDataAsset. */
+	bool bIsPrimaryDataAsset = false;
+
+	/** Row count (for DataTables). */
+	int32 RowCount = 0;
+
+	/** Properties (name -> JSON value). */
+	TMap<FString, FString> Properties;
+};
+
+/**
+ * FDataTableRowInfo - Information about a DataTable row.
+ */
+struct AGENTBRIDGESCRIPTING_API FDataTableRowInfo
+{
+	/** Row name. */
+	FString RowName;
+
+	/** Row data (property name -> JSON value). */
+	TMap<FString, FString> Data;
+};
+
+/**
+ * FListDataAssetsResponse - Response to ListDataAssets command.
+ */
+struct AGENTBRIDGESCRIPTING_API FListDataAssetsResponse : FAgentResponseBase
+{
+	/** Matching assets. */
+	TArray<FDataAssetInfo> Assets;
+
+	/** Total count. */
+	int32 TotalCount = 0;
+};
+
+/**
+ * FGetDataAssetResponse - Response to GetDataAsset command.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetDataAssetResponse : FAgentResponseBase
+{
+	/** Asset info. */
+	FDataAssetInfo Asset;
+};
+
+/**
+ * FGetDataTableRowResponse - Response to GetDataTableRow command.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetDataTableRowResponse : FAgentResponseBase
+{
+	/** Row struct type name. */
+	FString RowStructName;
+
+	/** Rows data. */
+	TArray<FDataTableRowInfo> Rows;
+
+	/** Total row count in table. */
+	int32 TotalRowCount = 0;
+};
+
+/**
+ * FGetCapabilitiesResponse - Response to GetCapabilities command.
+ *
+ * Reports what operations are available in the current world context.
+ * This allows agents to adapt their behavior based on whether they're
+ * running in Editor, PIE, or packaged game contexts.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetCapabilitiesResponse : FAgentResponseBase
+{
+	// Context identification
+	FString WorldType;           // "Editor", "PIE", "Game", "EditorPreview", "None"
+	FString WorldName;           // Human-readable world name
+	bool bIsGameplayActive = false;  // True if HasBegunPlay (PIE or Game)
+	int32 PIEInstance = -1;      // PIE instance number (-1 if not PIE)
+
+	// Core reflection (always available)
+	bool bCanIterateProperties = true;
+	bool bCanInvokeFunctions = true;
+	bool bCanSpawnActors = true;
+	bool bCanDestroyActors = true;
+	bool bCanModifyTransforms = true;
+	bool bCanModifyProperties = true;
+
+	// Editor-only features
+	bool bCanSetActorLabel = false;
+	bool bCanSetActorFolder = false;
+	bool bCanUseTransactions = false;
+	bool bHasPropertyMetadata = false;
+	bool bCanAccessEditorWorld = false;
+
+	// Explanations for unavailable features
+	FString LabelUnavailableReason;
+	FString FolderUnavailableReason;
+	FString TransactionUnavailableReason;
+	FString MetadataUnavailableReason;
+};
+
+/**
+ * FCaptureViewportResponse - Response to CaptureViewport command.
+ */
+struct AGENTBRIDGESCRIPTING_API FCaptureViewportResponse : FAgentResponseBase
+{
+	/** File path if saved to disk. */
+	FString FilePath;
+
+	/** Base64-encoded image data if not saved to file. */
+	FString ImageData;
+
+	/** Image format (PNG, JPG, EXR). */
+	FString Format;
+
+	/** Image width. */
+	int32 Width = 0;
+
+	/** Image height. */
+	int32 Height = 0;
+
+	/** Size in bytes. */
+	int64 SizeBytes = 0;
+};
+
+/**
+ * FCaptureSceneResponse - Response to CaptureScene command.
+ */
+struct AGENTBRIDGESCRIPTING_API FCaptureSceneResponse : FAgentResponseBase
+{
+	/** File path if saved to disk. */
+	FString FilePath;
+
+	/** Base64-encoded image data if not saved to file. */
+	FString ImageData;
+
+	/** Image format (PNG, JPG). */
+	FString Format;
+
+	/** Image width. */
+	int32 Width = 0;
+
+	/** Image height. */
+	int32 Height = 0;
+
+	/** Size in bytes. */
+	int64 SizeBytes = 0;
+
+	/** Camera location used for capture. */
+	FVector CameraLocation = FVector::ZeroVector;
+
+	/** Camera rotation used for capture. */
+	FRotator CameraRotation = FRotator::ZeroRotator;
 };

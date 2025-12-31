@@ -200,6 +200,201 @@ class FunctionResult:
         )
 
 
+@dataclass
+class CoreCapabilities:
+    """Core reflection capabilities (always available)."""
+    can_iterate_properties: bool = True
+    can_invoke_functions: bool = True
+    can_spawn_actors: bool = True
+    can_destroy_actors: bool = True
+    can_modify_transforms: bool = True
+    can_modify_properties: bool = True
+
+    @classmethod
+    def from_dict(cls, d: Optional[Dict]) -> "CoreCapabilities":
+        if not d:
+            return cls()
+        return cls(
+            can_iterate_properties=d.get("canIterateProperties", True),
+            can_invoke_functions=d.get("canInvokeFunctions", True),
+            can_spawn_actors=d.get("canSpawnActors", True),
+            can_destroy_actors=d.get("canDestroyActors", True),
+            can_modify_transforms=d.get("canModifyTransforms", True),
+            can_modify_properties=d.get("canModifyProperties", True),
+        )
+
+
+@dataclass
+class EditorCapabilities:
+    """Editor-only capabilities (may be unavailable in PIE/packaged)."""
+    can_set_actor_label: bool = False
+    can_set_actor_folder: bool = False
+    can_use_transactions: bool = False
+    has_property_metadata: bool = False
+    can_access_editor_world: bool = False
+
+    @classmethod
+    def from_dict(cls, d: Optional[Dict]) -> "EditorCapabilities":
+        if not d:
+            return cls()
+        return cls(
+            can_set_actor_label=d.get("canSetActorLabel", False),
+            can_set_actor_folder=d.get("canSetActorFolder", False),
+            can_use_transactions=d.get("canUseTransactions", False),
+            has_property_metadata=d.get("hasPropertyMetadata", False),
+            can_access_editor_world=d.get("canAccessEditorWorld", False),
+        )
+
+
+@dataclass
+class ContextCapabilities:
+    """
+    Full capabilities of the current world context.
+
+    Use this to understand what operations are available and why
+    certain features may be unavailable in different contexts
+    (Editor vs PIE vs packaged game).
+    """
+    # Context identification
+    world_type: str = ""  # "Editor", "PIE", "Game", "EditorPreview", "None"
+    world_name: str = ""
+    is_gameplay_active: bool = False
+    pie_instance: int = -1
+
+    # Capabilities
+    core: CoreCapabilities = field(default_factory=CoreCapabilities)
+    editor: EditorCapabilities = field(default_factory=EditorCapabilities)
+
+    # Explanations for unavailable features
+    unavailable_reasons: Dict[str, str] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "ContextCapabilities":
+        return cls(
+            world_type=d.get("worldType", ""),
+            world_name=d.get("worldName", ""),
+            is_gameplay_active=d.get("isGameplayActive", False),
+            pie_instance=d.get("pieInstance", -1),
+            core=CoreCapabilities.from_dict(d.get("coreCapabilities")),
+            editor=EditorCapabilities.from_dict(d.get("editorCapabilities")),
+            unavailable_reasons=d.get("unavailableReasons", {}),
+        )
+
+    def is_editor(self) -> bool:
+        """Check if running in Editor context (not playing)."""
+        return self.world_type == "Editor"
+
+    def is_pie(self) -> bool:
+        """Check if running in Play-In-Editor context."""
+        return self.world_type == "PIE"
+
+    def is_game(self) -> bool:
+        """Check if running in standalone game context."""
+        return self.world_type == "Game"
+
+
+@dataclass
+class DataAssetInfo:
+    """Information about a DataAsset."""
+    asset_path: str = ""
+    asset_name: str = ""
+    class_name: str = ""
+    is_data_table: bool = False
+    is_primary_data_asset: bool = False
+    row_count: int = 0
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "DataAssetInfo":
+        return cls(
+            asset_path=d.get("assetPath", ""),
+            asset_name=d.get("assetName", ""),
+            class_name=d.get("className", ""),
+            is_data_table=d.get("isDataTable", False),
+            is_primary_data_asset=d.get("isPrimaryDataAsset", False),
+            row_count=d.get("rowCount", 0),
+        )
+
+
+@dataclass
+class DataAssetDetails:
+    """Detailed information about a DataAsset including properties."""
+    asset_path: str = ""
+    asset_name: str = ""
+    class_name: str = ""
+    is_data_table: bool = False
+    is_primary_data_asset: bool = False
+    row_count: int = 0
+    properties: Dict[str, str] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "DataAssetDetails":
+        return cls(
+            asset_path=d.get("assetPath", ""),
+            asset_name=d.get("assetName", ""),
+            class_name=d.get("className", ""),
+            is_data_table=d.get("isDataTable", False),
+            is_primary_data_asset=d.get("isPrimaryDataAsset", False),
+            row_count=d.get("rowCount", 0),
+            properties=d.get("properties", {}),
+        )
+
+
+@dataclass
+class DataTableRowInfo:
+    """Information about a DataTable row."""
+    row_name: str = ""
+    data: Dict[str, str] = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "DataTableRowInfo":
+        return cls(
+            row_name=d.get("rowName", ""),
+            data=d.get("data", {}),
+        )
+
+
+@dataclass
+class CaptureResult:
+    """Result of a capture operation."""
+    file_path: str = ""
+    image_data: str = ""  # Base64-encoded PNG
+    format: str = "PNG"
+    width: int = 0
+    height: int = 0
+    size_bytes: int = 0
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "CaptureResult":
+        return cls(
+            file_path=d.get("filePath", ""),
+            image_data=d.get("imageData", ""),
+            format=d.get("format", "PNG"),
+            width=d.get("width", 0),
+            height=d.get("height", 0),
+            size_bytes=d.get("sizeBytes", 0),
+        )
+
+
+@dataclass
+class SceneCaptureResult(CaptureResult):
+    """Result of a scene capture operation with camera info."""
+    camera_location: Vector = field(default_factory=Vector)
+    camera_rotation: Rotator = field(default_factory=Rotator)
+
+    @classmethod
+    def from_dict(cls, d: Dict) -> "SceneCaptureResult":
+        return cls(
+            file_path=d.get("filePath", ""),
+            image_data=d.get("imageData", ""),
+            format=d.get("format", "PNG"),
+            width=d.get("width", 0),
+            height=d.get("height", 0),
+            size_bytes=d.get("sizeBytes", 0),
+            camera_location=Vector.from_dict(d.get("cameraLocation")),
+            camera_rotation=Rotator.from_dict(d.get("cameraRotation")),
+        )
+
+
 class AgentBridgeError(Exception):
     """Exception raised when an AgentBridge command fails."""
 

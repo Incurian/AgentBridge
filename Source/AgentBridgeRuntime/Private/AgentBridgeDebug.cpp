@@ -37,6 +37,13 @@ void FAgentBridgeDebug::RegisterCommands()
 		ECVF_Default
 	));
 
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.Capabilities"),
+		TEXT("Show current world context capabilities"),
+		FConsoleCommandWithArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_Capabilities),
+		ECVF_Default
+	));
+
 	// PropertyPath commands
 	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
 		TEXT("AgentBridge.GetPath"),
@@ -75,7 +82,7 @@ void FAgentBridgeDebug::RegisterCommands()
 		ECVF_Default
 	));
 
-	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (8 commands)"));
+	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (9 commands)"));
 }
 
 void FAgentBridgeDebug::UnregisterCommands()
@@ -176,6 +183,55 @@ void FAgentBridgeDebug::Cmd_DumpClass(const TArray<FString>& Args, UWorld* World
 void FAgentBridgeDebug::Cmd_ListWorlds(const TArray<FString>& Args)
 {
 	ListWorlds();
+}
+
+void FAgentBridgeDebug::Cmd_Capabilities(const TArray<FString>& Args)
+{
+	FWorldContextCapabilities Caps = FWorldContextManager::Get().GetCapabilities();
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== World Context Capabilities ==="));
+	UE_LOG(LogAgentBridge, Log, TEXT(""));
+	UE_LOG(LogAgentBridge, Log, TEXT("Context:"));
+	UE_LOG(LogAgentBridge, Log, TEXT("  World Type: %s"), *Caps.WorldType);
+	UE_LOG(LogAgentBridge, Log, TEXT("  World Name: %s"), *Caps.WorldName);
+	UE_LOG(LogAgentBridge, Log, TEXT("  Gameplay Active: %s"), Caps.bIsGameplayActive ? TEXT("Yes") : TEXT("No"));
+	if (Caps.PIEInstance >= 0)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  PIE Instance: %d"), Caps.PIEInstance);
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT(""));
+	UE_LOG(LogAgentBridge, Log, TEXT("Core Capabilities (always available):"));
+	UE_LOG(LogAgentBridge, Log, TEXT("  Iterate Properties: %s"), Caps.bCanIterateProperties ? TEXT("Yes") : TEXT("No"));
+	UE_LOG(LogAgentBridge, Log, TEXT("  Invoke Functions: %s"), Caps.bCanInvokeFunctions ? TEXT("Yes") : TEXT("No"));
+	UE_LOG(LogAgentBridge, Log, TEXT("  Spawn Actors: %s"), Caps.bCanSpawnActors ? TEXT("Yes") : TEXT("No"));
+	UE_LOG(LogAgentBridge, Log, TEXT("  Destroy Actors: %s"), Caps.bCanDestroyActors ? TEXT("Yes") : TEXT("No"));
+	UE_LOG(LogAgentBridge, Log, TEXT("  Modify Transforms: %s"), Caps.bCanModifyTransforms ? TEXT("Yes") : TEXT("No"));
+	UE_LOG(LogAgentBridge, Log, TEXT("  Modify Properties: %s"), Caps.bCanModifyProperties ? TEXT("Yes") : TEXT("No"));
+
+	UE_LOG(LogAgentBridge, Log, TEXT(""));
+	UE_LOG(LogAgentBridge, Log, TEXT("Editor Capabilities:"));
+
+	auto LogCapability = [](const TCHAR* Name, bool bAvailable, const FString& Reason)
+	{
+		if (bAvailable)
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  %s: Yes"), Name);
+		}
+		else
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  %s: No - %s"), Name, *Reason);
+		}
+	};
+
+	LogCapability(TEXT("Set Actor Label"), Caps.bCanSetActorLabel, Caps.LabelUnavailableReason);
+	LogCapability(TEXT("Set Actor Folder"), Caps.bCanSetActorFolder, Caps.FolderUnavailableReason);
+	LogCapability(TEXT("Use Transactions (Undo)"), Caps.bCanUseTransactions, Caps.TransactionUnavailableReason);
+	LogCapability(TEXT("Property Metadata"), Caps.bHasPropertyMetadata, Caps.MetadataUnavailableReason);
+	UE_LOG(LogAgentBridge, Log, TEXT("  Access Editor World: %s"), Caps.bCanAccessEditorWorld ? TEXT("Yes") : TEXT("No"));
+
+	UE_LOG(LogAgentBridge, Log, TEXT(""));
+	UE_LOG(LogAgentBridge, Log, TEXT("================================="));
 }
 
 void FAgentBridgeDebug::DumpObject(UObject* Object, int32 MaxDepth)

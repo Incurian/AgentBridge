@@ -78,6 +78,7 @@ public:
 
 	static void Execute(const FListWorldsCommand& Command, FListWorldsResponse& Response);
 	static void Execute(const FSetTargetWorldCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FGetCapabilitiesCommand& Command, FGetCapabilitiesResponse& Response);
 
 	//~==============================================================================
 	// Typed Execution - Actor Queries
@@ -117,6 +118,21 @@ public:
 	static void Execute(const FFindClassCommand& Command, FAgentResponseBase& Response);
 	static void Execute(const FGetClassSchemaCommand& Command, FAgentResponseBase& Response);
 	static void Execute(const FListClassesCommand& Command, FListClassesResponse& Response);
+
+	//~==============================================================================
+	// Typed Execution - DataAsset Commands
+	//~==============================================================================
+
+	static void Execute(const FListDataAssetsCommand& Command, FListDataAssetsResponse& Response);
+	static void Execute(const FGetDataAssetCommand& Command, FGetDataAssetResponse& Response);
+	static void Execute(const FGetDataTableRowCommand& Command, FGetDataTableRowResponse& Response);
+
+	//~==============================================================================
+	// Typed Execution - Capture Commands
+	//~==============================================================================
+
+	static void Execute(const FCaptureViewportCommand& Command, FCaptureViewportResponse& Response);
+	static void Execute(const FCaptureSceneCommand& Command, FCaptureSceneResponse& Response);
 
 	//~==============================================================================
 	// JSON Serialization Helpers
@@ -175,4 +191,10 @@ private:
 	static FString SerializePropertyValueResponse(const FPropertyValueResponse& Response);
 	static FString SerializeFunctionCallResponse(const FFunctionCallResponse& Response);
 	static FString SerializeListClassesResponse(const FListClassesResponse& Response);
+	static FString SerializeGetCapabilitiesResponse(const FGetCapabilitiesResponse& Response);
+	static FString SerializeListDataAssetsResponse(const FListDataAssetsResponse& Response);
+	static FString SerializeGetDataAssetResponse(const FGetDataAssetResponse& Response);
+	static FString SerializeGetDataTableRowResponse(const FGetDataTableRowResponse& Response);
+	static FString SerializeCaptureViewportResponse(const FCaptureViewportResponse& Response);
+	static FString SerializeCaptureSceneResponse(const FCaptureSceneResponse& Response);
 };

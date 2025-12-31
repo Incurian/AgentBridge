@@ -18,6 +18,12 @@ from .types import (
     ClassInfo,
     PropertyValue,
     FunctionResult,
+    ContextCapabilities,
+    DataAssetInfo,
+    DataAssetDetails,
+    DataTableRowInfo,
+    CaptureResult,
+    SceneCaptureResult,
     AgentBridgeError,
 )
 
@@ -144,6 +150,26 @@ class AgentBridgeClient:
             "type": "SetTargetWorld",
             "worldIdentifier": world_identifier,
         })
+
+    def get_capabilities(self) -> ContextCapabilities:
+        """
+        Get the capabilities available in the current world context.
+
+        This is useful for understanding what operations are available
+        based on whether you're in Editor, PIE, or a packaged game.
+
+        Returns:
+            ContextCapabilities object describing available features
+
+        Example:
+            caps = client.get_capabilities()
+            if caps.is_pie():
+                print(f"Running in PIE instance {caps.pie_instance}")
+            if not caps.editor.can_use_transactions:
+                print(f"Undo not available: {caps.unavailable_reasons.get('transaction', 'unknown')}")
+        """
+        result = self._execute({"type": "GetCapabilities"})
+        return ContextCapabilities.from_dict(result)
 
     # =========================================================================
     # Actor Discovery
@@ -468,3 +494,248 @@ class AgentBridgeClient:
             x, y, z: New location coordinates
         """
         self.set_actor_transform(actor_id, location=(x, y, z))
+
+    # =========================================================================
+    # DataAsset Operations
+    # =========================================================================
+
+    def list_data_assets(
+        self,
+        base_class_name: str = "",
+        path_filter: str = "",
+        limit: int = 100,
+    ) -> List[DataAssetInfo]:
+        """
+        List DataAssets in the project.
+
+        Args:
+            base_class_name: Filter by class (e.g., "DataTable", specific DataAsset type)
+            path_filter: Wildcard filter for asset paths (e.g., "/Game/Data/*")
+            limit: Maximum results
+
+        Returns:
+            List of DataAssetInfo objects
+
+        Example:
+            # List all DataTables
+            tables = client.list_data_assets(base_class_name="DataTable")
+
+            # List DataAssets in a specific folder
+            assets = client.list_data_assets(path_filter="/Game/Items/*")
+        """
+        result = self._execute({
+            "type": "ListDataAssets",
+            "baseClassName": base_class_name,
+            "pathFilter": path_filter,
+            "limit": limit,
+        })
+        return [DataAssetInfo.from_dict(a) for a in result.get("assets", [])]
+
+    def get_data_asset(
+        self,
+        asset_path: str,
+        property_depth: int = 3,
+    ) -> DataAssetDetails:
+        """
+        Get detailed information about a DataAsset.
+
+        Args:
+            asset_path: Full asset path (e.g., "/Game/Data/MyData.MyData")
+            property_depth: Max recursion depth for nested properties
+
+        Returns:
+            DataAssetDetails with all properties
+
+        Example:
+            asset = client.get_data_asset("/Game/Data/ItemDatabase.ItemDatabase")
+            for name, value in asset.properties.items():
+                print(f"{name}: {value}")
+        """
+        result = self._execute({
+            "type": "GetDataAsset",
+            "assetPath": asset_path,
+            "propertyDepth": property_depth,
+        })
+        return DataAssetDetails.from_dict(result.get("asset", {}))
+
+    def get_data_table_rows(
+        self,
+        table_path: str,
+        row_name: str = "",
+        limit: int = 100,
+    ) -> Tuple[str, int, List[DataTableRowInfo]]:
+        """
+        Get rows from a DataTable.
+
+        Args:
+            table_path: Full path to the DataTable asset
+            row_name: Specific row to get (empty = all rows up to limit)
+            limit: Maximum rows to return when row_name is empty
+
+        Returns:
+            Tuple of (row_struct_name, total_row_count, list of DataTableRowInfo)
+
+        Example:
+            # Get all rows
+            struct_name, total, rows = client.get_data_table_rows("/Game/Data/Items.Items")
+            print(f"Table uses {struct_name} with {total} rows")
+            for row in rows:
+                print(f"{row.row_name}: {row.data}")
+
+            # Get specific row
+            _, _, rows = client.get_data_table_rows("/Game/Data/Items.Items", row_name="Sword")
+            if rows:
+                print(rows[0].data)
+        """
+        result = self._execute({
+            "type": "GetDataTableRow",
+            "tablePath": table_path,
+            "rowName": row_name,
+            "limit": limit,
+        })
+        rows = [DataTableRowInfo.from_dict(r) for r in result.get("rows", [])]
+        return (
+            result.get("rowStructName", ""),
+            result.get("totalRowCount", 0),
+            rows,
+        )
+
+    def get_data_table_row(
+        self,
+        table_path: str,
+        row_name: str,
+    ) -> Optional[DataTableRowInfo]:
+        """
+        Get a single row from a DataTable by name.
+
+        Args:
+            table_path: Full path to the DataTable asset
+            row_name: Name of the row to retrieve
+
+        Returns:
+            DataTableRowInfo if found, None otherwise
+
+        Example:
+            row = client.get_data_table_row("/Game/Data/Items.Items", "Sword")
+            if row:
+                print(f"Found: {row.data}")
+        """
+        _, _, rows = self.get_data_table_rows(table_path, row_name=row_name)
+        return rows[0] if rows else None
+
+    # =========================================================================
+    # Capture Operations
+    # =========================================================================
+
+    def capture_viewport(
+        self,
+        output_path: str = "",
+        width: int = 0,
+        height: int = 0,
+        show_ui: bool = False,
+        format: str = "PNG",
+    ) -> CaptureResult:
+        """
+        Capture the current viewport.
+
+        Only available in Editor or PIE contexts where a viewport exists.
+        For captures without a viewport, use capture_scene().
+
+        Args:
+            output_path: File path to save (empty = return base64 in result)
+            width: Width override (0 = current viewport width)
+            height: Height override (0 = current viewport height)
+            show_ui: Include UI elements in capture
+            format: Image format (PNG, JPG, EXR)
+
+        Returns:
+            CaptureResult with image data or file path
+
+        Example:
+            # Save to file
+            result = client.capture_viewport(output_path="/tmp/screenshot.png")
+
+            # Get as base64
+            result = client.capture_viewport()
+            if result.image_data:
+                import base64
+                png_bytes = base64.b64decode(result.image_data)
+        """
+        result = self._execute({
+            "type": "CaptureViewport",
+            "outputPath": output_path,
+            "width": width,
+            "height": height,
+            "showUI": show_ui,
+            "format": format,
+        })
+        return CaptureResult.from_dict(result)
+
+    def capture_scene(
+        self,
+        location: Union[Tuple[float, float, float], Vector] = (0, 0, 0),
+        rotation: Union[Tuple[float, float, float], Rotator] = (0, 0, 0),
+        width: int = 1280,
+        height: int = 720,
+        fov: float = 90.0,
+        actor_id: str = "",
+        component_name: str = "",
+        output_path: str = "",
+        format: str = "PNG",
+    ) -> SceneCaptureResult:
+        """
+        Capture the scene from a specified camera position.
+
+        Works in all contexts (Editor, PIE, packaged). Either specify
+        a camera position or use an existing SceneCaptureComponent2D.
+
+        Args:
+            location: Camera location (if not using existing actor)
+            rotation: Camera rotation (pitch, yaw, roll) (if not using existing actor)
+            width: Capture width in pixels
+            height: Capture height in pixels
+            fov: Field of view in degrees
+            actor_id: Actor with SceneCaptureComponent2D (optional)
+            component_name: Specific component name if actor has multiple
+            output_path: File path to save (empty = return base64)
+            format: Image format (PNG, JPG)
+
+        Returns:
+            SceneCaptureResult with image data and camera info
+
+        Example:
+            # Capture from a specific position
+            result = client.capture_scene(
+                location=(1000, 500, 300),
+                rotation=(0, 45, 0),
+                width=1920,
+                height=1080
+            )
+
+            # Use existing SceneCapture actor
+            result = client.capture_scene(actor_id="MySceneCapture")
+        """
+        # Convert tuples to dicts
+        if isinstance(location, tuple):
+            location = {"x": location[0], "y": location[1], "z": location[2]}
+        elif isinstance(location, Vector):
+            location = location.to_dict()
+
+        if isinstance(rotation, tuple):
+            rotation = {"pitch": rotation[0], "yaw": rotation[1], "roll": rotation[2]}
+        elif isinstance(rotation, Rotator):
+            rotation = rotation.to_dict()
+
+        result = self._execute({
+            "type": "CaptureScene",
+            "location": location,
+            "rotation": rotation,
+            "width": width,
+            "height": height,
+            "fov": fov,
+            "actorId": actor_id,
+            "componentName": component_name,
+            "outputPath": output_path,
+            "format": format,
+        })
+        return SceneCaptureResult.from_dict(result)

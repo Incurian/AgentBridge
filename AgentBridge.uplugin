@@ -38,7 +38,7 @@
 		},
 		{
 			"Name": "AgentBridgeServer",
-			"Type": "Editor",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
 	]
