@@ -41,7 +41,19 @@ struct AGENTBRIDGECORE_API FAgentPropertyValue
 	TArray<TSharedPtr<FAgentPropertyValue>> ArrayValue;
 	TMap<FString, TSharedPtr<FAgentPropertyValue>> StructValue;
 
+	// Default constructor
+	FAgentPropertyValue() = default;
+
 	// Convenience constructors
+	explicit FAgentPropertyValue(bool Value);
+	explicit FAgentPropertyValue(int64 Value);
+	explicit FAgentPropertyValue(double Value);
+	explicit FAgentPropertyValue(const FString& Value);
+	explicit FAgentPropertyValue(const FVector& Value);
+	explicit FAgentPropertyValue(const FRotator& Value);
+	explicit FAgentPropertyValue(const FTransform& Value);
+
+	// Static factory methods
 	static FAgentPropertyValue FromBool(bool Value);
 	static FAgentPropertyValue FromInt(int64 Value);
 	static FAgentPropertyValue FromFloat(double Value);
@@ -59,6 +71,12 @@ struct AGENTBRIDGECORE_API FAgentPropertyValue
 	FVector AsVector() const;
 	FRotator AsRotator() const;
 	FTransform AsTransform() const;
+
+	// Alias methods for readability
+	bool GetBool() const { return AsBool(); }
+	int64 GetInt() const { return AsInt(); }
+	double GetFloat() const { return AsFloat(); }
+	FString GetString() const { return AsString(); }
 };
 
 // Property metadata for discovery

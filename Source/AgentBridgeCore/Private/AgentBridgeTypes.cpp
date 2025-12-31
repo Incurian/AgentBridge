@@ -1,5 +1,55 @@
 #include "AgentBridgeTypes.h"
 
+//~==============================================================================
+// Convenience Constructors
+//~==============================================================================
+
+FAgentPropertyValue::FAgentPropertyValue(bool Value)
+{
+	Type = EAgentPropertyType::Bool;
+	StringValue = Value ? TEXT("true") : TEXT("false");
+}
+
+FAgentPropertyValue::FAgentPropertyValue(int64 Value)
+{
+	Type = EAgentPropertyType::Int64;
+	StringValue = FString::Printf(TEXT("%lld"), Value);
+}
+
+FAgentPropertyValue::FAgentPropertyValue(double Value)
+{
+	Type = EAgentPropertyType::Double;
+	StringValue = FString::Printf(TEXT("%.17g"), Value);
+}
+
+FAgentPropertyValue::FAgentPropertyValue(const FString& Value)
+{
+	Type = EAgentPropertyType::String;
+	StringValue = Value;
+}
+
+FAgentPropertyValue::FAgentPropertyValue(const FVector& Value)
+{
+	Type = EAgentPropertyType::Vector;
+	StringValue = Value.ToString();
+}
+
+FAgentPropertyValue::FAgentPropertyValue(const FRotator& Value)
+{
+	Type = EAgentPropertyType::Rotator;
+	StringValue = Value.ToString();
+}
+
+FAgentPropertyValue::FAgentPropertyValue(const FTransform& Value)
+{
+	Type = EAgentPropertyType::Transform;
+	StringValue = Value.ToString();
+}
+
+//~==============================================================================
+// Static Factory Methods
+//~==============================================================================
+
 FAgentPropertyValue FAgentPropertyValue::FromBool(bool Value)
 {
 	FAgentPropertyValue Result;

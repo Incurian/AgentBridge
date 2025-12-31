@@ -1,4 +1,4 @@
-#include "PropertyPath.h"
+#include "AgentPropertyPath.h"
 #include "PropertyAccessor.h"
 #include "TypeDiscovery.h"
 #include "UObject/UnrealType.h"
@@ -7,7 +7,7 @@
 // Path Parsing
 //~==============================================================================
 
-TArray<FPropertyPathSegment> FPropertyPath::ParsePath(const FString& PathString)
+TArray<FPropertyPathSegment> FAgentPropertyPath::ParsePath(const FString& PathString)
 {
 	TArray<FPropertyPathSegment> Segments;
 
@@ -104,7 +104,7 @@ TArray<FPropertyPathSegment> FPropertyPath::ParsePath(const FString& PathString)
 	return Segments;
 }
 
-FString FPropertyPath::SegmentsToString(const TArray<FPropertyPathSegment>& Segments)
+FString FAgentPropertyPath::SegmentsToString(const TArray<FPropertyPathSegment>& Segments)
 {
 	FString Result;
 
@@ -128,7 +128,7 @@ FString FPropertyPath::SegmentsToString(const TArray<FPropertyPathSegment>& Segm
 	return Result;
 }
 
-bool FPropertyPath::ValidatePath(const FString& PathString, FString* OutError)
+bool FAgentPropertyPath::ValidatePath(const FString& PathString, FString* OutError)
 {
 	if (PathString.IsEmpty())
 	{
@@ -206,7 +206,7 @@ bool FPropertyPath::ValidatePath(const FString& PathString, FString* OutError)
 // Path Resolution (Read)
 //~==============================================================================
 
-FPropertyPathResult FPropertyPath::GetValue(UObject* Object, const FString& PathString)
+FPropertyPathResult FAgentPropertyPath::GetValue(UObject* Object, const FString& PathString)
 {
 	FPropertyPathResult Result;
 
@@ -228,7 +228,7 @@ FPropertyPathResult FPropertyPath::GetValue(UObject* Object, const FString& Path
 	return GetValue(Object, Segments);
 }
 
-FPropertyPathResult FPropertyPath::GetValue(UObject* Object, const TArray<FPropertyPathSegment>& Segments)
+FPropertyPathResult FAgentPropertyPath::GetValue(UObject* Object, const TArray<FPropertyPathSegment>& Segments)
 {
 	FPropertyPathResult Result;
 
@@ -271,13 +271,13 @@ FPropertyPathResult FPropertyPath::GetValue(UObject* Object, const TArray<FPrope
 // Path Resolution (Write)
 //~==============================================================================
 
-bool FPropertyPath::SetValue(UObject* Object, const FString& PathString, const FAgentPropertyValue& Value)
+bool FAgentPropertyPath::SetValue(UObject* Object, const FString& PathString, const FAgentPropertyValue& Value)
 {
 	TArray<FPropertyPathSegment> Segments = ParsePath(PathString);
 	return SetValue(Object, Segments, Value);
 }
 
-bool FPropertyPath::SetValue(
+bool FAgentPropertyPath::SetValue(
 	UObject* Object,
 	const TArray<FPropertyPathSegment>& Segments,
 	const FAgentPropertyValue& Value)
@@ -327,13 +327,13 @@ bool FPropertyPath::SetValue(
 // Path Existence
 //~==============================================================================
 
-bool FPropertyPath::PathExists(UObject* Object, const FString& PathString)
+bool FAgentPropertyPath::PathExists(UObject* Object, const FString& PathString)
 {
 	FPropertyPathResult Result = GetValue(Object, PathString);
 	return Result.bSuccess;
 }
 
-EAgentPropertyType FPropertyPath::GetPathType(UClass* Class, const FString& PathString)
+EAgentPropertyType FAgentPropertyPath::GetPathType(UClass* Class, const FString& PathString)
 {
 	if (!Class)
 	{
@@ -452,7 +452,7 @@ EAgentPropertyType FPropertyPath::GetPathType(UClass* Class, const FString& Path
 // Internal Helpers
 //~==============================================================================
 
-FPropertyPathResult FPropertyPath::ResolveSegments(
+FPropertyPathResult FAgentPropertyPath::ResolveSegments(
 	void* Container,
 	FProperty* Property,
 	const TArray<FPropertyPathSegment>& Segments,
@@ -668,7 +668,7 @@ FPropertyPathResult FPropertyPath::ResolveSegments(
 	}
 }
 
-FProperty* FPropertyPath::FindPropertyByName(UStruct* Struct, const FString& PropertyName)
+FProperty* FAgentPropertyPath::FindPropertyByName(UStruct* Struct, const FString& PropertyName)
 {
 	if (!Struct || PropertyName.IsEmpty())
 	{

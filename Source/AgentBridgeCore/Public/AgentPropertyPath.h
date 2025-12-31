@@ -116,7 +116,7 @@ struct AGENTBRIDGECORE_API FPropertyPathResult
 };
 
 /**
- * FPropertyPath - Parses and resolves nested property paths.
+ * FAgentPropertyPath - Parses and resolves nested property paths.
  *
  * This class enables access to deeply nested properties using dot-notation paths:
  *
@@ -148,7 +148,7 @@ struct AGENTBRIDGECORE_API FPropertyPathResult
  *
  * @see FPropertyAccessor for single-property access
  */
-class AGENTBRIDGECORE_API FPropertyPath
+class AGENTBRIDGECORE_API FAgentPropertyPath
 {
 public:
 	//~==============================================================================

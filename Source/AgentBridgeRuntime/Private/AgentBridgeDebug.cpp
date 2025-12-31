@@ -1,4 +1,9 @@
 #include "AgentBridgeDebug.h"
+#include "AgentBridgeTypes.h"
+#include "AgentPropertyPath.h"
+#include "ActorOperations.h"
+#include "FunctionInvoker.h"
+#include "WorldContextManager.h"
 #include "EngineUtils.h"
 #include "UObject/UObjectIterator.h"
 #include "Engine/World.h"
@@ -32,7 +37,45 @@ void FAgentBridgeDebug::RegisterCommands()
 		ECVF_Default
 	));
 
-	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered"));
+	// PropertyPath commands
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.GetPath"),
+		TEXT("Read nested property path. Usage: AgentBridge.GetPath <ActorName> <Path>"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_GetPath),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.SetPath"),
+		TEXT("Write to property path. Usage: AgentBridge.SetPath <ActorName> <Path> <Value>"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_SetPath),
+		ECVF_Default
+	));
+
+	// ActorOperations commands
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.QueryActors"),
+		TEXT("Query actors by pattern. Usage: AgentBridge.QueryActors [Pattern] [Limit]"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_QueryActors),
+		ECVF_Default
+	));
+
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.SpawnActor"),
+		TEXT("Spawn actor. Usage: AgentBridge.SpawnActor <Class> [X Y Z] [Label]"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_SpawnActor),
+		ECVF_Default
+	));
+
+	// FunctionInvoker commands
+	RegisteredCommands.Add(IConsoleManager::Get().RegisterConsoleCommand(
+		TEXT("AgentBridge.CallFunc"),
+		TEXT("Call function on actor. Usage: AgentBridge.CallFunc <ActorName> <FunctionName>"),
+		FConsoleCommandWithWorldAndArgsDelegate::CreateStatic(&FAgentBridgeDebug::Cmd_CallFunc),
+		ECVF_Default
+	));
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Debug commands registered (8 commands)"));
 }
 
 void FAgentBridgeDebug::UnregisterCommands()
@@ -499,4 +542,462 @@ FString FAgentBridgeDebug::FunctionFlagsToString(EFunctionFlags Flags)
 	if (Flags & FUNC_Exec) FlagStrs.Add(TEXT("Exec"));
 
 	return FString::Join(FlagStrs, TEXT(", "));
+}
+
+//~==============================================================================
+// Helper Functions
+//~==============================================================================
+
+AActor* FAgentBridgeDebug::FindActorByName(UWorld* World, const FString& SearchName)
+{
+	if (!World || SearchName.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	for (TActorIterator<AActor> It(World); It; ++It)
+	{
+		AActor* Actor = *It;
+		if (Actor->GetName().Contains(SearchName) || Actor->GetActorLabel().Contains(SearchName))
+		{
+			return Actor;
+		}
+	}
+
+	return nullptr;
+}
+
+FString FAgentBridgeDebug::AgentValueToString(const FAgentPropertyValue& Value)
+{
+	switch (Value.Type)
+	{
+	case EAgentPropertyType::None:
+		return TEXT("(none)");
+
+	case EAgentPropertyType::Bool:
+		return Value.GetBool() ? TEXT("true") : TEXT("false");
+
+	case EAgentPropertyType::Int8:
+	case EAgentPropertyType::Int16:
+	case EAgentPropertyType::Int32:
+	case EAgentPropertyType::Int64:
+	case EAgentPropertyType::UInt8:
+	case EAgentPropertyType::UInt16:
+	case EAgentPropertyType::UInt32:
+	case EAgentPropertyType::UInt64:
+		return FString::Printf(TEXT("%lld"), Value.GetInt());
+
+	case EAgentPropertyType::Float:
+	case EAgentPropertyType::Double:
+		return FString::Printf(TEXT("%f"), Value.GetFloat());
+
+	case EAgentPropertyType::String:
+	case EAgentPropertyType::Text:
+		return FString::Printf(TEXT("\"%s\""), *Value.GetString());
+
+	case EAgentPropertyType::Name:
+		return Value.GetString();
+
+	case EAgentPropertyType::Vector:
+	{
+		FVector V = Value.AsVector();
+		return FString::Printf(TEXT("(X=%f, Y=%f, Z=%f)"), V.X, V.Y, V.Z);
+	}
+
+	case EAgentPropertyType::Rotator:
+	{
+		FRotator R = Value.AsRotator();
+		return FString::Printf(TEXT("(P=%f, Y=%f, R=%f)"), R.Pitch, R.Yaw, R.Roll);
+	}
+
+	case EAgentPropertyType::Transform:
+	{
+		FTransform T = Value.AsTransform();
+		return T.ToString();
+	}
+
+	case EAgentPropertyType::Color:
+	{
+		FColor C = FColor(
+			static_cast<uint8>(Value.StructValue.Contains(TEXT("R")) ? Value.StructValue[TEXT("R")]->GetInt() : 0),
+			static_cast<uint8>(Value.StructValue.Contains(TEXT("G")) ? Value.StructValue[TEXT("G")]->GetInt() : 0),
+			static_cast<uint8>(Value.StructValue.Contains(TEXT("B")) ? Value.StructValue[TEXT("B")]->GetInt() : 0),
+			static_cast<uint8>(Value.StructValue.Contains(TEXT("A")) ? Value.StructValue[TEXT("A")]->GetInt() : 255)
+		);
+		return C.ToString();
+	}
+
+	case EAgentPropertyType::Object:
+	case EAgentPropertyType::SoftObject:
+	case EAgentPropertyType::WeakObject:
+		return FString::Printf(TEXT("Object: %s"), *Value.GetString());
+
+	case EAgentPropertyType::Class:
+		return FString::Printf(TEXT("Class: %s"), *Value.GetString());
+
+	case EAgentPropertyType::Array:
+		return FString::Printf(TEXT("[Array with %d elements]"), Value.ArrayValue.Num());
+
+	case EAgentPropertyType::Map:
+	case EAgentPropertyType::Set:
+		return FString::Printf(TEXT("{Map with %d entries}"), Value.StructValue.Num());
+
+	case EAgentPropertyType::Struct:
+	{
+		FString Result = TEXT("{");
+		bool bFirst = true;
+		for (const auto& Pair : Value.StructValue)
+		{
+			if (!bFirst) Result += TEXT(", ");
+			bFirst = false;
+			Result += FString::Printf(TEXT("%s=%s"), *Pair.Key,
+				Pair.Value.IsValid() ? *AgentValueToString(*Pair.Value) : TEXT("null"));
+		}
+		Result += TEXT("}");
+		return Result;
+	}
+
+	case EAgentPropertyType::Enum:
+		return Value.GetString();
+
+	case EAgentPropertyType::Unknown:
+	default:
+		return TEXT("(unknown type)");
+	}
+}
+
+//~==============================================================================
+// PropertyPath Commands
+//~==============================================================================
+
+void FAgentBridgeDebug::Cmd_GetPath(const TArray<FString>& Args, UWorld* World)
+{
+	if (Args.Num() < 2)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.GetPath <ActorName> <Path>"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Example: AgentBridge.GetPath Floor RelativeLocation.X"));
+		return;
+	}
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	AActor* Actor = FindActorByName(World, Args[0]);
+	if (!Actor)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Actor '%s' not found"), *Args[0]);
+		return;
+	}
+
+	const FString& Path = Args[1];
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== GetPath: %s.%s ==="), *Actor->GetName(), *Path);
+
+	FPropertyPathResult Result = FAgentPropertyPath::GetValue(Actor, Path);
+
+	if (Result.bSuccess)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Value: %s"), *AgentValueToString(Result.Value));
+		UE_LOG(LogAgentBridge, Log, TEXT("  Type: %d"), static_cast<int32>(Result.Value.Type));
+	}
+	else
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  Error: %s"), *Result.ErrorMessage);
+	}
+}
+
+void FAgentBridgeDebug::Cmd_SetPath(const TArray<FString>& Args, UWorld* World)
+{
+	if (Args.Num() < 3)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.SetPath <ActorName> <Path> <Value>"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Example: AgentBridge.SetPath Floor RelativeScale3D.X 2.0"));
+		return;
+	}
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	AActor* Actor = FindActorByName(World, Args[0]);
+	if (!Actor)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Actor '%s' not found"), *Args[0]);
+		return;
+	}
+
+	const FString& Path = Args[1];
+	const FString& ValueStr = Args[2];
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== SetPath: %s.%s = %s ==="), *Actor->GetName(), *Path, *ValueStr);
+
+	// First get the current value to determine the type
+	FPropertyPathResult CurrentResult = FAgentPropertyPath::GetValue(Actor, Path);
+	if (!CurrentResult.bSuccess)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  Path error: %s"), *CurrentResult.ErrorMessage);
+		return;
+	}
+
+	// Create value of the same type
+	FAgentPropertyValue NewValue;
+	switch (CurrentResult.Value.Type)
+	{
+	case EAgentPropertyType::Bool:
+		NewValue = FAgentPropertyValue(ValueStr.Equals(TEXT("true"), ESearchCase::IgnoreCase) ||
+			ValueStr.Equals(TEXT("1")));
+		break;
+
+	case EAgentPropertyType::Int8:
+	case EAgentPropertyType::Int16:
+	case EAgentPropertyType::Int32:
+	case EAgentPropertyType::Int64:
+	case EAgentPropertyType::UInt8:
+	case EAgentPropertyType::UInt16:
+	case EAgentPropertyType::UInt32:
+	case EAgentPropertyType::UInt64:
+		NewValue = FAgentPropertyValue(static_cast<int64>(FCString::Atoi64(*ValueStr)));
+		break;
+
+	case EAgentPropertyType::Float:
+	case EAgentPropertyType::Double:
+		NewValue = FAgentPropertyValue(FCString::Atod(*ValueStr));
+		break;
+
+	case EAgentPropertyType::String:
+	case EAgentPropertyType::Name:
+	case EAgentPropertyType::Text:
+		NewValue = FAgentPropertyValue(ValueStr);
+		break;
+
+	default:
+		UE_LOG(LogAgentBridge, Error, TEXT("  Cannot set value of type %d via console"), static_cast<int32>(CurrentResult.Value.Type));
+		return;
+	}
+
+	bool bSuccess = FAgentPropertyPath::SetValue(Actor, Path, NewValue);
+
+	if (bSuccess)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Success! New value set."));
+
+		// Verify by reading back
+		FPropertyPathResult VerifyResult = FAgentPropertyPath::GetValue(Actor, Path);
+		if (VerifyResult.bSuccess)
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  Verified: %s"), *AgentValueToString(VerifyResult.Value));
+		}
+	}
+	else
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  Failed to set value"));
+	}
+}
+
+//~==============================================================================
+// ActorOperations Commands
+//~==============================================================================
+
+void FAgentBridgeDebug::Cmd_QueryActors(const TArray<FString>& Args, UWorld* World)
+{
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	FActorQueryParams Params;
+	Params.Limit = 20; // Default limit for console output
+
+	if (Args.Num() > 0)
+	{
+		Params.NamePattern = Args[0];
+	}
+
+	if (Args.Num() > 1)
+	{
+		Params.Limit = FCString::Atoi(*Args[1]);
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== QueryActors (Pattern='%s', Limit=%d) ==="),
+		*Params.NamePattern, Params.Limit);
+
+	TArray<FActorReference> Results = FActorOperations::QueryActors(Params, World);
+
+	UE_LOG(LogAgentBridge, Log, TEXT("Found %d actors:"), Results.Num());
+
+	for (int32 i = 0; i < Results.Num(); i++)
+	{
+		const FActorReference& Ref = Results[i];
+		UE_LOG(LogAgentBridge, Log, TEXT("  [%d] %s (%s) - Label: %s"),
+			i, *Ref.Name, *Ref.ClassName, *Ref.Label);
+	}
+}
+
+void FAgentBridgeDebug::Cmd_SpawnActor(const TArray<FString>& Args, UWorld* World)
+{
+	if (Args.Num() < 1)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.SpawnActor <Class> [X Y Z] [Label]"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Example: AgentBridge.SpawnActor StaticMeshActor 0 0 100 MyActor"));
+		return;
+	}
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	FActorSpawnParams Params;
+	Params.ClassPath = Args[0];
+
+	// Parse location if provided
+	if (Args.Num() >= 4)
+	{
+		float X = FCString::Atof(*Args[1]);
+		float Y = FCString::Atof(*Args[2]);
+		float Z = FCString::Atof(*Args[3]);
+		Params.Transform.SetLocation(FVector(X, Y, Z));
+	}
+
+	// Parse label if provided
+	if (Args.Num() >= 5)
+	{
+		Params.ActorLabel = Args[4];
+	}
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== SpawnActor ==="));
+	UE_LOG(LogAgentBridge, Log, TEXT("  Class: %s"), *Params.ClassPath);
+	UE_LOG(LogAgentBridge, Log, TEXT("  Location: %s"), *Params.Transform.GetLocation().ToString());
+	UE_LOG(LogAgentBridge, Log, TEXT("  Label: %s"), *Params.ActorLabel);
+
+	FString Error;
+	AActor* NewActor = FActorOperations::SpawnActor(Params, World, &Error);
+
+	if (NewActor)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Success! Spawned: %s"), *NewActor->GetName());
+		UE_LOG(LogAgentBridge, Log, TEXT("  Path: %s"), *NewActor->GetPathName());
+	}
+	else
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  Failed: %s"), *Error);
+	}
+}
+
+//~==============================================================================
+// FunctionInvoker Commands
+//~==============================================================================
+
+void FAgentBridgeDebug::Cmd_CallFunc(const TArray<FString>& Args, UWorld* World)
+{
+	if (Args.Num() < 2)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Usage: AgentBridge.CallFunc <ActorName> <FunctionName>"));
+		UE_LOG(LogAgentBridge, Warning, TEXT("  Example: AgentBridge.CallFunc MyActor K2_GetActorLocation"));
+		return;
+	}
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("No world context available"));
+		return;
+	}
+
+	AActor* Actor = FindActorByName(World, Args[0]);
+	if (!Actor)
+	{
+		UE_LOG(LogAgentBridge, Warning, TEXT("Actor '%s' not found"), *Args[0]);
+		return;
+	}
+
+	const FString& FunctionName = Args[1];
+
+	UE_LOG(LogAgentBridge, Log, TEXT("=== CallFunc: %s.%s() ==="), *Actor->GetName(), *FunctionName);
+
+	// Find the function
+	UFunction* Function = FFunctionInvoker::FindFunction(Actor->GetClass(), FunctionName);
+	if (!Function)
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  Function '%s' not found on %s"), *FunctionName, *Actor->GetClass()->GetName());
+
+		// List available functions
+		TArray<UFunction*> Funcs = FFunctionInvoker::GetCallableFunctions(Actor->GetClass(), false, true);
+		if (Funcs.Num() > 0)
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  Available BP-callable functions:"));
+			for (int32 i = 0; i < FMath::Min(10, Funcs.Num()); i++)
+			{
+				UE_LOG(LogAgentBridge, Log, TEXT("    - %s"), *Funcs[i]->GetName());
+			}
+			if (Funcs.Num() > 10)
+			{
+				UE_LOG(LogAgentBridge, Log, TEXT("    ... and %d more"), Funcs.Num() - 10);
+			}
+		}
+		return;
+	}
+
+	// Get function signature
+	FAgentFunctionSignature Sig = FFunctionInvoker::GetFunctionSignature(Function);
+	UE_LOG(LogAgentBridge, Log, TEXT("  Signature: %d params, returns: %s"),
+		Sig.Parameters.Num(),
+		Sig.ReturnValue.PropertyName.IsEmpty() ? TEXT("void") : *Sig.ReturnValue.TypeName);
+
+	// Invoke with no parameters (for simple functions)
+	TMap<FString, FAgentPropertyValue> EmptyParams;
+	FAgentFunctionResult Result = FFunctionInvoker::InvokeFunction(Actor, Function, EmptyParams, World);
+
+	if (Result.bSuccess)
+	{
+		UE_LOG(LogAgentBridge, Log, TEXT("  Success!"));
+
+		if (Result.ReturnValue.Type != EAgentPropertyType::None)
+		{
+			UE_LOG(LogAgentBridge, Log, TEXT("  Return: %s"), *AgentValueToString(Result.ReturnValue));
+		}
+
+		for (const auto& Pair : Result.OutParams)
+		{
+			if (Pair.Value.IsValid())
+			{
+				UE_LOG(LogAgentBridge, Log, TEXT("  Out[%s]: %s"), *Pair.Key, *AgentValueToString(*Pair.Value));
+			}
+		}
+	}
+	else
+	{
+		UE_LOG(LogAgentBridge, Error, TEXT("  Error: %s"), *Result.ErrorMessage);
+	}
 }
