@@ -133,6 +133,90 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 
 ## Session Log
 
+### Jan 1 (Session 16) - Consolidated Improvement Plan
+
+**Goal:** Synthesize all improvement documents into a prioritized roadmap.
+
+**Documents Reviewed:**
+- `BIOME_INSPIRED_FIXES.md` - 8 improvements from PCG Biome workflow testing
+- `REFLECTION_IMPROVEMENTS.md` - 3 items (most already done in Session 8)
+- `StretchGoals.md` - 4 long-term features (Blueprint graphs, Niagara, Sequencer, UI)
+- `WISHLIST_PLAN.md` - Status check (P0/P1 complete, P2/P3 pending)
+
+---
+
+#### 🎯 PRIORITY 1: Agent Usability (Low Effort, High Impact)
+
+These make the API "just work" without agents needing Unreal implementation details:
+
+| Feature | Description | Effort |
+|---------|-------------|--------|
+| **Blueprint class normalization** | Accept `BP_MyActor` or `BP_MyActor_C` (auto-add suffix) | 1hr |
+| **Label pattern search** | Add `label_pattern` to `query_actors` (match display names) | 2hr |
+| **Unified property setter** | Auto-detect property type, route to correct typed setter | 3hr |
+| **Value format parsing** | Accept `(R=1,G=0,B=0)` or `#FF0000` or `[1,0,0]` for colors | 2hr |
+
+**Rationale:** Naive agents currently fail because they don't know about `_C` suffixes, internal vs label names, or which typed setter to use. These fixes eliminate that friction.
+
+---
+
+#### 🎯 PRIORITY 2: Missing Capabilities (Medium Effort, Unblocks Workflows)
+
+| Feature | Description | Effort |
+|---------|-------------|--------|
+| **UObject property access** | `set_property` on DataAssets, Materials (not just actors) | 4hr |
+| **Function parameters** | `tempo_call_function(params={...})` for non-void functions | 4hr |
+| **get_landscape_bounds** | ✅ DONE (Session 16) - Returns landscape world-space bounds | - |
+| **TSoftObjectPtr support** | ✅ DONE (Session 15) - set_property handles soft refs | - |
+
+**Rationale:** PCG Biome workflow was blocked on UObject property access - can create DataAssets but can't modify them. Function parameters needed for `SetVectorParameterValue` and similar.
+
+---
+
+#### 🎯 PRIORITY 3: Error Recovery & Help (Medium Effort, High Polish)
+
+| Feature | Description | Effort |
+|---------|-------------|--------|
+| **Enhanced error messages** | Include property name suggestions on typo, valid enum values | 3hr |
+| **PCG Biome help topic** | Add `help(topic='pcg_biome')` with complete workflow | 1hr |
+| **Component naming guidance** | Warn about instance names (LightComponent0) vs class names | 0.5hr |
+
+**Rationale:** When agents fail, they should get actionable feedback, not just "property not found."
+
+---
+
+#### 🎯 PRIORITY 4: Stretch Goals (High Effort, Nice to Have)
+
+| Feature | Description | Effort | Notes |
+|---------|-------------|--------|-------|
+| Blueprint graph editing | Add/remove nodes, connect pins | 40hr+ | Competitor parity (Cursor) |
+| Niagara control | List systems, set parameters | 8hr | Similar to PCG pattern |
+| Sequencer control | Create/modify cinematics | 16hr | Complex API surface |
+| Widget interaction | Click buttons, fill forms | 20hr | Needs input simulation |
+| Sound capture | Record/analyze audio | 8hr | TempoAudio integration |
+
+**Rationale:** These are valuable but require significant investment. Blueprint graphs are the biggest competitive gap.
+
+---
+
+#### Consolidated TODO (in priority order):
+
+1. ~~TSoftObjectPtr support~~ ✅
+2. ~~get_landscape_bounds~~ ✅
+3. Blueprint class normalization (no _C suffix needed)
+4. Label pattern search (query_actors label_pattern)
+5. Unified property setter (auto-detect type)
+6. UObject property access (DataAssets, Materials)
+7. Function parameter support (tempo_call_function params)
+8. Value format auto-detection (flexible color/vector parsing)
+9. Enhanced error messages with suggestions
+10. PCG Biome workflow help topic
+11. Component naming guidance in help
+
+**Implementation Order:** 3→4→5→6→7 (dependency chain for "naive agent can do PCG Biome workflow")
+
+---
+
 ### Jan 1 (Session 15) - PCG Biome Workflow Testing
 **Goal:** Test full PCG Biome workflow via MCP tools to identify tooling gaps.
 

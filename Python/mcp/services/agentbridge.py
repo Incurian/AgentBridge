@@ -1330,6 +1330,55 @@ def _string_to_detachment_rule(rule: str) -> int:
     return rules.get(rule.lower(), pb.ATTACHMENT_RULE_KEEP_WORLD)
 
 
+def _normalize_blueprint_class(class_name: str) -> str:
+    """
+    Normalize Blueprint class names by auto-appending _C suffix if needed.
+
+    Blueprint classes have two objects:
+    - BP_MyActor: The UBlueprint asset (editor-only)
+    - BP_MyActor_C: The UBlueprintGeneratedClass (runtime class)
+
+    When spawning or loading classes, you need the _C version.
+    This function makes the API more forgiving by auto-appending _C
+    when the class looks like a Blueprint path.
+
+    Examples:
+        '/Game/BP_Enemy.BP_Enemy' -> '/Game/BP_Enemy.BP_Enemy_C'
+        '/Game/BP_Enemy.BP_Enemy_C' -> '/Game/BP_Enemy.BP_Enemy_C' (unchanged)
+        'PointLight' -> 'PointLight' (unchanged, not a Blueprint)
+        'BP_Enemy' -> 'BP_Enemy_C' (short name, assume Blueprint)
+    """
+    if not class_name:
+        return class_name
+
+    # Already has _C suffix - no change needed
+    if class_name.endswith("_C"):
+        return class_name
+
+    # Check if it's a Blueprint path (contains /Game/ or other content paths)
+    is_blueprint_path = (
+        "/Game/" in class_name or
+        "/Script/" in class_name or
+        class_name.startswith("/") and "." in class_name
+    )
+
+    # Check if it's a short Blueprint name (starts with BP_ but no path)
+    is_short_bp_name = (
+        class_name.startswith("BP_") and
+        "/" not in class_name
+    )
+
+    if is_blueprint_path:
+        # Full path: /Game/BP_Enemy.BP_Enemy -> /Game/BP_Enemy.BP_Enemy_C
+        return class_name + "_C"
+    elif is_short_bp_name:
+        # Short name: BP_Enemy -> BP_Enemy_C
+        return class_name + "_C"
+
+    # Not a Blueprint, return unchanged (e.g., "PointLight", "StaticMeshActor")
+    return class_name
+
+
 def connect(host: str, port: int) -> AgentBridgeClient:
     """Create an AgentBridgeClient."""
     return AgentBridgeClient(host, port)
@@ -1491,7 +1540,7 @@ COMMON CLASSES:
 - StaticMeshActor - Static geometry
 - CameraActor - Cameras
 - PlayerStart - Spawn points
-- Blueprint: /Game/BP_Name.BP_Name_C (note the _C suffix!)
+- Blueprint: /Game/BP_Name.BP_Name (the _C suffix is auto-added!)
 
 UNITS:
 - Location: centimeters (100 = 1 meter)
@@ -1539,7 +1588,8 @@ not labels like "MyDoor". To find by label, use get_actor(actor_id="label").
 
 Creating actors:
 - spawn_actor(class_name="PointLight", location=[0,0,500], label="MyLight")
-- spawn_actor(class_name="/Game/BP_Enemy.BP_Enemy_C", location=[100,0,0])
+- spawn_actor(class_name="/Game/BP_Enemy.BP_Enemy", location=[100,0,0])
+  (Note: _C suffix is auto-added for Blueprint classes)
 
 Modifying actors:
 - set_actor_transform(actor_id="MyLight", location=[100,200,300])
@@ -1606,11 +1656,19 @@ Built-in classes (no path needed):
 - PlayerStart, TargetPoint, Note
 - TriggerBox, TriggerSphere, BlockingVolume
 
-Blueprint classes (need full path + _C):
-- /Game/Blueprints/BP_Enemy.BP_Enemy_C
-- /Game/Characters/BP_Player.BP_Player_C
+Blueprint classes:
+- /Game/Blueprints/BP_Enemy.BP_Enemy (path to the asset)
+- /Game/Characters/BP_Player.BP_Player
+- BP_Enemy (short name with BP_ prefix)
 
-The _C suffix is required - it refers to the generated class, not the asset.
+BLUEPRINT CLASS NORMALIZATION:
+The _C suffix (for Blueprint Generated Class) is AUTOMATICALLY added!
+You can use either format:
+- /Game/BP_Enemy.BP_Enemy -> auto-converted to /Game/BP_Enemy.BP_Enemy_C
+- BP_Enemy -> auto-converted to BP_Enemy_C
+- /Game/BP_Enemy.BP_Enemy_C -> unchanged (already has _C)
+
+This works for: spawn_actor, query_actors, get_class_schema, list_classes
 """,
         "assets": """
 ASSET & FILE OPERATIONS:
@@ -1791,9 +1849,13 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         return {"success": True}
 
     elif tool_name == "query_actors":
+        # Normalize Blueprint class names if filtering by class (auto-append _C suffix if needed)
+        class_name = args.get("class_name", "")
+        if class_name:
+            class_name = _normalize_blueprint_class(class_name)
         result = safe_call(
             client.query_actors,
-            class_name=args.get("class_name", ""),
+            class_name=class_name,
             name_pattern=args.get("name_pattern", ""),
             tag=args.get("tag", ""),
             limit=args.get("limit", 100),
@@ -1850,9 +1912,11 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         return {"found": False, "error": f"Actor '{args['actor_id']}' not found"}
 
     elif tool_name == "spawn_actor":
+        # Normalize Blueprint class names (auto-append _C suffix if needed)
+        class_name = _normalize_blueprint_class(args["class_name"])
         result = safe_call(
             client.spawn_actor,
-            class_name=args["class_name"],
+            class_name=class_name,
             location=tuple(args.get("location", [0, 0, 0])),
             rotation=tuple(args.get("rotation", [0, 0, 0])),
             scale=tuple(args.get("scale", [1, 1, 1])),
@@ -1897,9 +1961,13 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         return {"success": True}
 
     elif tool_name == "list_classes":
+        # Normalize Blueprint base class names (auto-append _C suffix if needed)
+        base_class_name = args.get("base_class_name", "Actor")
+        if base_class_name and base_class_name != "Actor":
+            base_class_name = _normalize_blueprint_class(base_class_name)
         result = safe_call(
             client.list_classes,
-            base_class_name=args.get("base_class_name", "Actor"),
+            base_class_name=base_class_name,
             name_pattern=args.get("name_pattern", ""),
             include_blueprint=args.get("include_blueprint", True),
             limit=args.get("limit", 50),
@@ -1922,9 +1990,11 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         }
 
     elif tool_name == "get_class_schema":
+        # Normalize Blueprint class names (auto-append _C suffix if needed)
+        class_name = _normalize_blueprint_class(args["class_name"])
         result = safe_call(
             client.get_class_schema,
-            class_name=args["class_name"],
+            class_name=class_name,
             include_inherited=args.get("include_inherited", True),
             include_functions=args.get("include_functions", False),
         )
