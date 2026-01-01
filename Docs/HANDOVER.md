@@ -1,7 +1,7 @@
 # AgentBridge Handover Document
 
 > Session handover for Claude Code continuity.
-> Last Updated: December 31, 2025 (Session 11 - Autonomous)
+> Last Updated: December 31, 2025 (Session 11 - Wrapping up for MCP restart)
 
 ---
 
@@ -205,6 +205,30 @@ cd D:/tempo/TempoSample
 - File operations use security validation (must be within project directory)
 - Asset operations wrapped in `#if WITH_EDITOR` (editor-only APIs)
 - Proto field names verified against C++ struct fields (e.g., `AssetPath` not `FilePath`)
+
+---
+
+### Session 12 TODO (MCP Access Available)
+
+**Immediate Testing:**
+1. Use MCP tools directly to test new features:
+   - `list_worlds` - verify connection
+   - `spawn_actor` + `attach_actor` - test attachment
+   - `write_project_file` / `read_project_file` - test file ops
+   - `create_asset` - test asset creation
+
+2. Run test_wishlist.py if preferred:
+   ```bash
+   PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo" \
+     D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_wishlist.py
+   ```
+
+**New Feature Ideas (after testing):**
+- Blueprint graph editing (competitor parity)
+- Niagara particle system control
+- Sequencer cinematics control
+- Improved error messages with suggestions
+- Command logging/history system
 
 ---
 
