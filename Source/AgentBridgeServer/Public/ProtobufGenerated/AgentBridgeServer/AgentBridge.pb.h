@@ -3557,6 +3557,7 @@ class AGENTBRIDGESERVER_API QueryActorsRequest final :
     kClassNameFieldNumber = 1,
     kNamePatternFieldNumber = 2,
     kTagFieldNumber = 3,
+    kLabelPatternFieldNumber = 6,
     kLimitFieldNumber = 4,
     kIncludeHiddenFieldNumber = 5,
   };
@@ -3608,6 +3609,22 @@ class AGENTBRIDGESERVER_API QueryActorsRequest final :
   std::string* _internal_mutable_tag();
 
   public:
+  // string label_pattern = 6;
+  void clear_label_pattern() ;
+  const std::string& label_pattern() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_label_pattern(Arg_&& arg, Args_... args);
+  std::string* mutable_label_pattern();
+  PROTOBUF_NODISCARD std::string* release_label_pattern();
+  void set_allocated_label_pattern(std::string* value);
+
+  private:
+  const std::string& _internal_label_pattern() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_label_pattern(
+      const std::string& value);
+  std::string* _internal_mutable_label_pattern();
+
+  public:
   // int32 limit = 4;
   void clear_limit() ;
   ::int32_t limit() const;
@@ -3634,8 +3651,8 @@ class AGENTBRIDGESERVER_API QueryActorsRequest final :
 
   friend class ::google::protobuf_tempo::internal::TcParser;
   static const ::google::protobuf_tempo::internal::TcParseTable<
-      3, 5, 0,
-      70, 2>
+      3, 6, 0,
+      83, 2>
       _table_;
   friend class ::google::protobuf_tempo::MessageLite;
   friend class ::google::protobuf_tempo::Arena;
@@ -3654,6 +3671,7 @@ class AGENTBRIDGESERVER_API QueryActorsRequest final :
     ::google::protobuf_tempo::internal::ArenaStringPtr class_name_;
     ::google::protobuf_tempo::internal::ArenaStringPtr name_pattern_;
     ::google::protobuf_tempo::internal::ArenaStringPtr tag_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr label_pattern_;
     ::int32_t limit_;
     bool include_hidden_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
@@ -21224,6 +21242,59 @@ inline void QueryActorsRequest::_internal_set_include_hidden(bool value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.include_hidden_ = value;
+}
+
+// string label_pattern = 6;
+inline void QueryActorsRequest::clear_label_pattern() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.label_pattern_.ClearToEmpty();
+}
+inline const std::string& QueryActorsRequest::label_pattern() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.QueryActorsRequest.label_pattern)
+  return _internal_label_pattern();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void QueryActorsRequest::set_label_pattern(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.label_pattern_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.QueryActorsRequest.label_pattern)
+}
+inline std::string* QueryActorsRequest::mutable_label_pattern() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_label_pattern();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.QueryActorsRequest.label_pattern)
+  return _s;
+}
+inline const std::string& QueryActorsRequest::_internal_label_pattern() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.label_pattern_.Get();
+}
+inline void QueryActorsRequest::_internal_set_label_pattern(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.label_pattern_.Set(value, GetArena());
+}
+inline std::string* QueryActorsRequest::_internal_mutable_label_pattern() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.label_pattern_.Mutable( GetArena());
+}
+inline std::string* QueryActorsRequest::release_label_pattern() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.QueryActorsRequest.label_pattern)
+  return _impl_.label_pattern_.Release();
+}
+inline void QueryActorsRequest::set_allocated_label_pattern(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.label_pattern_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.label_pattern_.IsDefault()) {
+          _impl_.label_pattern_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.QueryActorsRequest.label_pattern)
 }
 
 // -------------------------------------------------------------------
