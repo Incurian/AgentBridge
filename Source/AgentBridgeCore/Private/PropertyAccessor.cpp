@@ -288,10 +288,14 @@ bool FPropertyAccessor::IsPropertyWritable(FProperty* Property)
 		return false;
 	}
 
-	// Check for read-only flags
-	const EPropertyFlags ReadOnlyFlags =
-		CPF_BlueprintReadOnly |
-		CPF_EditConst;
+	// Check for truly read-only flags
+	// NOTE: We intentionally do NOT check CPF_BlueprintReadOnly here!
+	// BlueprintReadOnly only prevents Blueprint scripts from writing - C++ and Editor
+	// code can still modify these properties. Since AgentBridge acts as editor code
+	// (not as a Blueprint script), we should allow writing to BlueprintReadOnly properties.
+	//
+	// CPF_EditConst is the flag for truly read-only properties (computed/derived values).
+	const EPropertyFlags ReadOnlyFlags = CPF_EditConst;
 
 	return !Property->HasAnyPropertyFlags(ReadOnlyFlags);
 }

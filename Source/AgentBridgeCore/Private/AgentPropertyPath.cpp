@@ -2,6 +2,8 @@
 #include "PropertyAccessor.h"
 #include "TypeDiscovery.h"
 #include "UObject/UnrealType.h"
+#include "GameFramework/Actor.h"
+#include "Components/ActorComponent.h"
 
 //~==============================================================================
 // Path Parsing
@@ -203,6 +205,72 @@ bool FAgentPropertyPath::ValidatePath(const FString& PathString, FString* OutErr
 }
 
 //~==============================================================================
+// Component Resolution Helper
+// Following "tools should just work" philosophy: when a path segment like
+// "LightComponent0" isn't found as a property, try to find it as a component.
+//~==============================================================================
+
+static UActorComponent* FindComponentByName(AActor* Actor, const FString& ComponentName)
+{
+	if (!Actor)
+	{
+		return nullptr;
+	}
+
+	// Get all components
+	TInlineComponentArray<UActorComponent*> Components;
+	Actor->GetComponents(Components);
+
+	// Try exact match first
+	for (UActorComponent* Comp : Components)
+	{
+		if (Comp && Comp->GetName() == ComponentName)
+		{
+			return Comp;
+		}
+	}
+
+	// Try case-insensitive match
+	for (UActorComponent* Comp : Components)
+	{
+		if (Comp && Comp->GetName().Equals(ComponentName, ESearchCase::IgnoreCase))
+		{
+			return Comp;
+		}
+	}
+
+	// Try partial match (handles "LightComponent" matching "LightComponent0")
+	for (UActorComponent* Comp : Components)
+	{
+		if (Comp)
+		{
+			FString CompName = Comp->GetName();
+			// Check if ComponentName is a prefix of the actual name (minus trailing digits)
+			if (CompName.StartsWith(ComponentName))
+			{
+				// Make sure the remaining part is just digits
+				FString Suffix = CompName.Mid(ComponentName.Len());
+				bool bAllDigits = true;
+				for (TCHAR Char : Suffix)
+				{
+					if (!FChar::IsDigit(Char))
+					{
+						bAllDigits = false;
+						break;
+					}
+				}
+				if (bAllDigits)
+				{
+					return Comp;
+				}
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+//~==============================================================================
 // Path Resolution (Read)
 //~==============================================================================
 
@@ -258,6 +326,24 @@ FPropertyPathResult FAgentPropertyPath::GetValue(UObject* Object, const TArray<F
 	FProperty* FirstProp = FindPropertyByName(Object->GetClass(), Segments[0].Name);
 	if (!FirstProp)
 	{
+		// Fallback: Try to find as a component (following "tools should just work")
+		// This handles paths like "LightComponent0.Intensity" where LightComponent0 is a component, not a property
+		AActor* Actor = Cast<AActor>(Object);
+		if (Actor)
+		{
+			UActorComponent* Component = FindComponentByName(Actor, Segments[0].Name);
+			if (Component && Segments.Num() > 1)
+			{
+				// Recurse into the component with remaining segments
+				TArray<FPropertyPathSegment> RemainingSegments;
+				for (int32 i = 1; i < Segments.Num(); i++)
+				{
+					RemainingSegments.Add(Segments[i]);
+				}
+				return GetValue(Component, RemainingSegments);
+			}
+		}
+
 		Result.bSuccess = false;
 		Result.ErrorMessage = FString::Printf(TEXT("Property '%s' not found"), *Segments[0].Name);
 		return Result;
@@ -302,6 +388,23 @@ bool FAgentPropertyPath::SetValue(
 	FProperty* FirstProp = FindPropertyByName(Object->GetClass(), Segments[0].Name);
 	if (!FirstProp)
 	{
+		// Fallback: Try to find as a component (following "tools should just work")
+		// This handles paths like "LightComponent0.Intensity" where LightComponent0 is a component, not a property
+		AActor* Actor = Cast<AActor>(Object);
+		if (Actor)
+		{
+			UActorComponent* Component = FindComponentByName(Actor, Segments[0].Name);
+			if (Component && Segments.Num() > 1)
+			{
+				// Recurse into the component with remaining segments
+				TArray<FPropertyPathSegment> RemainingSegments;
+				for (int32 i = 1; i < Segments.Num(); i++)
+				{
+					RemainingSegments.Add(Segments[i]);
+				}
+				return SetValue(Component, RemainingSegments, Value);
+			}
+		}
 		return false;
 	}
 

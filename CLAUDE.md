@@ -12,6 +12,15 @@
 When a tool has multiple ways to accomplish something, it should figure out the right approach
 under the hood. The complexity lives in the lower modules; the API surface stays simple.
 
+**📝 THE SECOND MOST IMPORTANT PRINCIPLE:**
+
+> **When you discover something "interesting" (unexpected behavior, workarounds, edge cases),
+> document it immediately and explain how to handle it.**
+
+Every friction point discovered is an opportunity to either:
+1. Fix it so it "just works" (preferred)
+2. Document the workaround clearly if a fix isn't feasible
+
 ### Examples of This Philosophy
 
 | User Intent | Tool Behavior |

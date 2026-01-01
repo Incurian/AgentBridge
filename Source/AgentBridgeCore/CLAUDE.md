@@ -116,13 +116,33 @@ if (FObjectPropertyBase* ObjProp = CastField<FObjectPropertyBase>(Property))
 **Solution:** Added `WritePropertyDirect()` that works with pre-resolved value pointers.
 All internal write helpers now take value pointers directly, not containers.
 
-## Known Limitations
+## Recent Fixes
 
-### FunctionInvoker Return Values - AUTO-FIXED
+### Nested Property SET (Session 20) - FIXED
+
+**Problem:** SET operations on component paths (`LightComponent0.Intensity`) and nested paths
+(`RootComponent.RelativeLocation`) were failing while GET worked.
+
+**Root Cause:** `IsPropertyWritable()` was checking for `CPF_BlueprintReadOnly` flag. Most component
+properties have this flag, but it only prevents Blueprint scripts from writing - C++ and Editor
+code can still modify them.
+
+**Solution:** Removed `CPF_BlueprintReadOnly` from the writable check:
+```cpp
+// OLD - Too restrictive:
+const EPropertyFlags ReadOnlyFlags = CPF_BlueprintReadOnly | CPF_EditConst;
+
+// NEW - Only block truly read-only properties:
+const EPropertyFlags ReadOnlyFlags = CPF_EditConst;
+```
+
+All component and nested paths now work correctly for both GET and SET operations.
+
+### FunctionInvoker Return Values - AUTO-FIXED (Session 19)
 
 Function calls were returning default/zero values for complex struct return types.
 
-**Solution (Session 19):**
+**Solution:**
 - Added `GetFunctionToPropertyMap()` in CommandExecutor.cpp
 - Common getters automatically redirect to property access
 - K2_GetActorLocation, K2_GetActorRotation, GetActorScale3D, etc. all work correctly now

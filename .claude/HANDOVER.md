@@ -1,6 +1,6 @@
 # AgentBridge Session Handover
 
-> Last Updated: January 1, 2026 (Session 19 - continued)
+> Last Updated: January 1, 2026 (Session 20)
 
 ## Current State
 
@@ -12,19 +12,31 @@ AgentBridge is **feature-complete** with:
 - PIE/Runtime support
 - **Nested BP struct writes now working!**
 - **UObject property access (DataAssets, Materials) now working!**
+- **Component property paths now fully working (GET and SET)!**
 
 ## Completed Items
 
-### Session 19 (Current)
+### Session 20 (Current)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| **Fix nested property SET** | ✅ DONE | Root cause: `IsPropertyWritable()` was blocking `BlueprintReadOnly` properties |
+| **Component path GET/SET** | ✅ DONE | `LightComponent0.Intensity`, `RootComponent.RelativeLocation` all work |
+
+**The Fix:** Removed `CPF_BlueprintReadOnly` check from `IsPropertyWritable()`.
+- `BlueprintReadOnly` only prevents Blueprint scripts from writing
+- C++ and Editor code (like AgentBridge) can still modify these properties
+- This was a single-line change in `PropertyAccessor.cpp` with huge impact
+
+### Session 19
 
 | Task | Status | Notes |
 |------|--------|-------|
 | **Fix nested BP struct writes** | ✅ DONE | Added `WritePropertyDirect()` for pre-resolved value pointers |
 | **UObject property access** | ✅ DONE | Added `ResolveObject()` - works on actors AND assets |
+| **Component path fallback** | ✅ DONE | Added `FindComponentByName()` in AgentPropertyPath.cpp |
 | Blueprint class normalization | ✅ DONE | Already implemented in `FindClassByName()` |
-| Unified property setter | ✅ DONE | Already implemented via `_normalize_property_value()` |
 | Documentation reorganization | ✅ DONE | Per-module CLAUDE.md files |
-| Landscape bounds accuracy | ✅ DONE | Use `GetComponentsBoundingBox()` first |
 
 ### Remaining Stretch Goals
 
@@ -44,12 +56,38 @@ AgentBridge is **feature-complete** with:
 | tempo_call_function params | Won't fix | Use `call_static_function` |
 | FunctionInvoker struct returns | **AUTO-FIXED** | Transparent fallback to property access |
 
-**FunctionInvoker struct returns - now auto-fixed!**
+**FunctionInvoker struct returns - auto-fixed!**
 - Common getter functions (K2_GetActorLocation, K2_GetActorRotation, GetActorScale3D, etc.)
   are automatically redirected to property access under the hood
 - Users call the function, get correct results - no workarounds needed
 - Following "tools should just work" philosophy
-- Added `GetFunctionToPropertyMap()` in CommandExecutor.cpp
+
+---
+
+## Session 20 Technical Details
+
+### Nested Property SET Fix
+
+**Root Cause:** `IsPropertyWritable()` was checking for `CPF_BlueprintReadOnly` flag and rejecting writes.
+
+```cpp
+// OLD - Too restrictive:
+const EPropertyFlags ReadOnlyFlags = CPF_BlueprintReadOnly | CPF_EditConst;
+
+// NEW - Only block truly read-only properties:
+const EPropertyFlags ReadOnlyFlags = CPF_EditConst;
+```
+
+**Key Insight:** `CPF_BlueprintReadOnly` prevents Blueprint scripts from writing, but NOT C++/Editor code. Since AgentBridge acts as editor automation, we should allow writing to these properties.
+
+**Verified Working:**
+- `LightComponent0.Intensity` - GET and SET ✅
+- `LightComponent.Intensity` (partial name) - GET and SET ✅
+- `RootComponent.RelativeLocation` - GET and SET ✅
+- `LightComponent0.AttenuationRadius` - GET and SET ✅
+
+Files changed:
+- `PropertyAccessor.cpp` - Removed `CPF_BlueprintReadOnly` from `IsPropertyWritable()`
 
 ## Session 19 Technical Details
 
@@ -65,6 +103,16 @@ Files changed:
 - `PropertyAccessor.cpp` - Add `WritePropertyDirect()`, refactor helpers
 - `PropertyAccessor.h` - Document new API
 
+### Component Path Resolution
+
+Added `FindComponentByName()` helper to handle paths like `LightComponent0.Intensity`:
+- Tries exact match first
+- Falls back to case-insensitive match
+- Falls back to partial match (e.g., "LightComponent" matches "LightComponent0")
+
+Files changed:
+- `AgentPropertyPath.cpp` - Added `FindComponentByName()`, updated `GetValue()`/`SetValue()`
+
 ### UObject Property Access
 
 Following "tools should just work" philosophy, property commands now auto-detect whether
@@ -76,10 +124,6 @@ the target is an actor or an asset:
 // 2. Falls back to asset path loading if that fails
 // 3. Auto-appends ".AssetName" suffix if path is missing it
 ```
-
-Files changed:
-- `CommandExecutor.cpp` - Add `ResolveObject()`, update Get/SetPropertyPath handlers
-- `CommandExecutor.h` - Declare `ResolveObject()` in private section
 
 ## Recent Sessions Summary
 
@@ -145,5 +189,5 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 
 ---
 
-*Documentation reorganized January 1, 2026*
-*Per-module CLAUDE.md files now contain module-specific context*
+*Session 20: Fixed nested property SET (BlueprintReadOnly flag issue)*
+*All component and nested paths now fully working!*
