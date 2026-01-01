@@ -91,6 +91,27 @@ public:
 		const FAgentPropertyValue& Value
 	);
 
+	/**
+	 * Writes a value directly to a memory location without calling ContainerPtrToValuePtr.
+	 *
+	 * This is used when the caller has already resolved the value pointer via property
+	 * path resolution. Unlike WriteProperty, this does NOT apply ContainerPtrToValuePtr
+	 * offset - the ValuePtr must already point to the exact memory location of the value.
+	 *
+	 * @param ValuePtr		Direct pointer to the value's memory location.
+	 * @param Property		The FProperty describing the value's type. Must not be null.
+	 * @param Value			The value to write in transport format.
+	 * @return				True if the write succeeded, false otherwise.
+	 *
+	 * @note Use this ONLY when you've already calculated the correct value address.
+	 *       For standard property access, use WriteProperty instead.
+	 */
+	static bool WritePropertyDirect(
+		void* ValuePtr,
+		FProperty* Property,
+		const FAgentPropertyValue& Value
+	);
+
 	//~==============================================================================
 	// Type Introspection
 	//~==============================================================================
@@ -207,34 +228,36 @@ private:
 
 	//~==============================================================================
 	// Internal Write Helpers
+	// NOTE: All write helpers receive a direct ValuePtr (already resolved), not a container.
+	// They must NOT call ContainerPtrToValuePtr internally.
 	//~==============================================================================
 
-	/** Writes a boolean value to a property. */
-	static bool WriteBoolProperty(void* Container, FBoolProperty* Property, const FAgentPropertyValue& Value);
+	/** Writes a boolean value directly to a property location. */
+	static bool WriteBoolProperty(void* ValuePtr, FBoolProperty* Property, const FAgentPropertyValue& Value);
 
-	/** Writes a numeric value, handling type conversion. */
-	static bool WriteNumericProperty(void* Container, FNumericProperty* Property, const FAgentPropertyValue& Value);
+	/** Writes a numeric value directly, handling type conversion. */
+	static bool WriteNumericProperty(void* ValuePtr, FNumericProperty* Property, const FAgentPropertyValue& Value);
 
-	/** Writes string-like values. */
-	static bool WriteStringProperty(void* Container, FProperty* Property, const FAgentPropertyValue& Value);
+	/** Writes string-like values directly. */
+	static bool WriteStringProperty(void* ValuePtr, FProperty* Property, const FAgentPropertyValue& Value);
 
-	/** Writes enum values by name or numeric value. */
-	static bool WriteEnumProperty(void* Container, FProperty* Property, const FAgentPropertyValue& Value);
+	/** Writes enum values by name or numeric value directly. */
+	static bool WriteEnumProperty(void* ValuePtr, FProperty* Property, const FAgentPropertyValue& Value);
 
-	/** Writes object references, resolving from path strings. */
-	static bool WriteObjectProperty(void* Container, FObjectPropertyBase* Property, const FAgentPropertyValue& Value);
+	/** Writes object references directly, resolving from path strings. */
+	static bool WriteObjectProperty(void* ValuePtr, FObjectPropertyBase* Property, const FAgentPropertyValue& Value);
 
-	/** Writes struct values, recursively setting members. */
-	static bool WriteStructProperty(void* Container, FStructProperty* Property, const FAgentPropertyValue& Value);
+	/** Writes struct values directly, recursively setting members. */
+	static bool WriteStructProperty(void* ValuePtr, FStructProperty* Property, const FAgentPropertyValue& Value);
 
-	/** Writes array values, resizing and populating elements. */
-	static bool WriteArrayProperty(void* Container, FArrayProperty* Property, const FAgentPropertyValue& Value);
+	/** Writes array values directly, resizing and populating elements. */
+	static bool WriteArrayProperty(void* ValuePtr, FArrayProperty* Property, const FAgentPropertyValue& Value);
 
-	/** Writes map values, clearing and repopulating. */
-	static bool WriteMapProperty(void* Container, FMapProperty* Property, const FAgentPropertyValue& Value);
+	/** Writes map values directly, clearing and repopulating. */
+	static bool WriteMapProperty(void* ValuePtr, FMapProperty* Property, const FAgentPropertyValue& Value);
 
-	/** Writes set values, clearing and repopulating. */
-	static bool WriteSetProperty(void* Container, FSetProperty* Property, const FAgentPropertyValue& Value);
+	/** Writes set values directly, clearing and repopulating. */
+	static bool WriteSetProperty(void* ValuePtr, FSetProperty* Property, const FAgentPropertyValue& Value);
 
 	//~==============================================================================
 	// Utility Helpers

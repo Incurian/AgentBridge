@@ -102,6 +102,21 @@ bool FPropertyAccessor::WriteProperty(
 		return false;
 	}
 
+	// Calculate value pointer from container and delegate to direct write
+	void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Container);
+	return WritePropertyDirect(ValuePtr, Property, Value);
+}
+
+bool FPropertyAccessor::WritePropertyDirect(
+	void* ValuePtr,
+	FProperty* Property,
+	const FAgentPropertyValue& Value)
+{
+	if (!ValuePtr || !Property)
+	{
+		return false;
+	}
+
 	// Check if property is writable
 	if (!IsPropertyWritable(Property))
 	{
@@ -109,62 +124,63 @@ bool FPropertyAccessor::WriteProperty(
 	}
 
 	// Dispatch based on property type
+	// NOTE: All Write*Property helpers now receive the direct ValuePtr, NOT a container.
+	// They must NOT call ContainerPtrToValuePtr internally.
 	if (FBoolProperty* BoolProp = CastField<FBoolProperty>(Property))
 	{
-		return WriteBoolProperty(Container, BoolProp, Value);
+		return WriteBoolProperty(ValuePtr, BoolProp, Value);
 	}
 
 	if (FEnumProperty* EnumProp = CastField<FEnumProperty>(Property))
 	{
-		return WriteEnumProperty(Container, Property, Value);
+		return WriteEnumProperty(ValuePtr, Property, Value);
 	}
 	if (FByteProperty* ByteProp = CastField<FByteProperty>(Property))
 	{
 		if (ByteProp->Enum)
 		{
-			return WriteEnumProperty(Container, Property, Value);
+			return WriteEnumProperty(ValuePtr, Property, Value);
 		}
 	}
 
 	if (FNumericProperty* NumProp = CastField<FNumericProperty>(Property))
 	{
-		return WriteNumericProperty(Container, NumProp, Value);
+		return WriteNumericProperty(ValuePtr, NumProp, Value);
 	}
 
 	if (CastField<FStrProperty>(Property) ||
 		CastField<FNameProperty>(Property) ||
 		CastField<FTextProperty>(Property))
 	{
-		return WriteStringProperty(Container, Property, Value);
+		return WriteStringProperty(ValuePtr, Property, Value);
 	}
 
 	if (FObjectPropertyBase* ObjProp = CastField<FObjectPropertyBase>(Property))
 	{
-		return WriteObjectProperty(Container, ObjProp, Value);
+		return WriteObjectProperty(ValuePtr, ObjProp, Value);
 	}
 
 	if (FStructProperty* StructProp = CastField<FStructProperty>(Property))
 	{
-		return WriteStructProperty(Container, StructProp, Value);
+		return WriteStructProperty(ValuePtr, StructProp, Value);
 	}
 
 	if (FArrayProperty* ArrayProp = CastField<FArrayProperty>(Property))
 	{
-		return WriteArrayProperty(Container, ArrayProp, Value);
+		return WriteArrayProperty(ValuePtr, ArrayProp, Value);
 	}
 
 	if (FMapProperty* MapProp = CastField<FMapProperty>(Property))
 	{
-		return WriteMapProperty(Container, MapProp, Value);
+		return WriteMapProperty(ValuePtr, MapProp, Value);
 	}
 
 	if (FSetProperty* SetProp = CastField<FSetProperty>(Property))
 	{
-		return WriteSetProperty(Container, SetProp, Value);
+		return WriteSetProperty(ValuePtr, SetProp, Value);
 	}
 
 	// Fallback - try ImportText for unknown types
-	void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Container);
 	const TCHAR* ImportResult = Property->ImportText_Direct(*Value.StringValue, ValuePtr, nullptr, PPF_None);
 	return ImportResult != nullptr;
 }
@@ -722,20 +738,21 @@ FAgentPropertyValue FPropertyAccessor::ReadSetProperty(
 
 //~==============================================================================
 // Internal Write Helpers
+// NOTE: All these helpers now receive the direct ValuePtr, NOT a container.
+// They must NOT call ContainerPtrToValuePtr internally.
 //~==============================================================================
 
-bool FPropertyAccessor::WriteBoolProperty(void* Container, FBoolProperty* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteBoolProperty(void* ValuePtr, FBoolProperty* Property, const FAgentPropertyValue& Value)
 {
-	void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Container);
+	// ValuePtr is already the direct pointer to the bool value
 	bool BoolValue = Value.AsBool();
 	Property->SetPropertyValue(ValuePtr, BoolValue);
 	return true;
 }
 
-bool FPropertyAccessor::WriteNumericProperty(void* Container, FNumericProperty* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteNumericProperty(void* ValuePtr, FNumericProperty* Property, const FAgentPropertyValue& Value)
 {
-	void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Container);
-
+	// ValuePtr is already the direct pointer to the numeric value
 	if (Property->IsFloatingPoint())
 	{
 		double DoubleValue = Value.AsFloat();
@@ -754,10 +771,9 @@ bool FPropertyAccessor::WriteNumericProperty(void* Container, FNumericProperty* 
 	return true;
 }
 
-bool FPropertyAccessor::WriteStringProperty(void* Container, FProperty* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteStringProperty(void* ValuePtr, FProperty* Property, const FAgentPropertyValue& Value)
 {
-	void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Container);
-
+	// ValuePtr is already the direct pointer to the string value
 	if (FStrProperty* StrProp = CastField<FStrProperty>(Property))
 	{
 		StrProp->SetPropertyValue(ValuePtr, Value.StringValue);
@@ -777,9 +793,9 @@ bool FPropertyAccessor::WriteStringProperty(void* Container, FProperty* Property
 	return false;
 }
 
-bool FPropertyAccessor::WriteEnumProperty(void* Container, FProperty* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteEnumProperty(void* ValuePtr, FProperty* Property, const FAgentPropertyValue& Value)
 {
-	void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Container);
+	// ValuePtr is already the direct pointer to the enum value
 	UEnum* Enum = nullptr;
 
 	if (FEnumProperty* EnumProp = CastField<FEnumProperty>(Property))
@@ -829,9 +845,9 @@ bool FPropertyAccessor::WriteEnumProperty(void* Container, FProperty* Property, 
 	return true;
 }
 
-bool FPropertyAccessor::WriteObjectProperty(void* Container, FObjectPropertyBase* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteObjectProperty(void* ValuePtr, FObjectPropertyBase* Property, const FAgentPropertyValue& Value)
 {
-	void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Container);
+	// ValuePtr is already the direct pointer to the object reference
 
 	// Handle FSoftObjectProperty specially - it stores a path, not a loaded object
 	if (FSoftObjectProperty* SoftProp = CastField<FSoftObjectProperty>(Property))
@@ -889,9 +905,10 @@ bool FPropertyAccessor::WriteObjectProperty(void* Container, FObjectPropertyBase
 	return true;
 }
 
-bool FPropertyAccessor::WriteStructProperty(void* Container, FStructProperty* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteStructProperty(void* ValuePtr, FStructProperty* Property, const FAgentPropertyValue& Value)
 {
-	void* StructPtr = Property->ContainerPtrToValuePtr<void>(Container);
+	// ValuePtr is already the direct pointer to the struct data (StructPtr)
+	void* StructPtr = ValuePtr;
 
 	// Try special types first
 	if (TryWriteSpecialStruct(Property, StructPtr, Value))
@@ -923,6 +940,7 @@ bool FPropertyAccessor::WriteStructProperty(void* Container, FStructProperty* Pr
 
 		if (MemberProp && Pair.Value.IsValid())
 		{
+			// For struct members, StructPtr IS the container, so use WriteProperty (not WritePropertyDirect)
 			if (!WriteProperty(StructPtr, MemberProp, *Pair.Value))
 			{
 				bAllSuccess = false;
@@ -933,14 +951,15 @@ bool FPropertyAccessor::WriteStructProperty(void* Container, FStructProperty* Pr
 	return bAllSuccess;
 }
 
-bool FPropertyAccessor::WriteArrayProperty(void* Container, FArrayProperty* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteArrayProperty(void* ValuePtr, FArrayProperty* Property, const FAgentPropertyValue& Value)
 {
 	if (Value.Type != EAgentPropertyType::Array)
 	{
 		return false;
 	}
 
-	void* ArrayPtr = Property->ContainerPtrToValuePtr<void>(Container);
+	// ValuePtr is already the direct pointer to the array data
+	void* ArrayPtr = ValuePtr;
 	FScriptArrayHelper ArrayHelper(Property, ArrayPtr);
 
 	// Resize array to match input
@@ -970,14 +989,15 @@ bool FPropertyAccessor::WriteArrayProperty(void* Container, FArrayProperty* Prop
 	return bAllSuccess;
 }
 
-bool FPropertyAccessor::WriteMapProperty(void* Container, FMapProperty* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteMapProperty(void* ValuePtr, FMapProperty* Property, const FAgentPropertyValue& Value)
 {
 	if (Value.Type != EAgentPropertyType::Map && Value.StructValue.Num() == 0)
 	{
 		return false;
 	}
 
-	void* MapPtr = Property->ContainerPtrToValuePtr<void>(Container);
+	// ValuePtr is already the direct pointer to the map data
+	void* MapPtr = ValuePtr;
 	FScriptMapHelper MapHelper(Property, MapPtr);
 
 	// Clear existing entries
@@ -995,7 +1015,7 @@ bool FPropertyAccessor::WriteMapProperty(void* Container, FMapProperty* Property
 		// Add a new entry
 		int32 Index = MapHelper.AddDefaultValue_Invalid_NeedsRehash();
 		uint8* KeyPtr = MapHelper.GetKeyPtr(Index);
-		uint8* ValuePtr = MapHelper.GetValuePtr(Index);
+		uint8* MapValuePtr = MapHelper.GetValuePtr(Index);
 
 		// Set key
 		const TCHAR* KeyResult = Property->KeyProp->ImportText_Direct(*Pair.Key, KeyPtr, nullptr, PPF_None);
@@ -1005,7 +1025,7 @@ bool FPropertyAccessor::WriteMapProperty(void* Container, FMapProperty* Property
 		}
 
 		// Set value
-		const TCHAR* ValueResult = Property->ValueProp->ImportText_Direct(*Pair.Value->StringValue, ValuePtr, nullptr, PPF_None);
+		const TCHAR* ValueResult = Property->ValueProp->ImportText_Direct(*Pair.Value->StringValue, MapValuePtr, nullptr, PPF_None);
 		if (!ValueResult)
 		{
 			bAllSuccess = false;
@@ -1016,14 +1036,15 @@ bool FPropertyAccessor::WriteMapProperty(void* Container, FMapProperty* Property
 	return bAllSuccess;
 }
 
-bool FPropertyAccessor::WriteSetProperty(void* Container, FSetProperty* Property, const FAgentPropertyValue& Value)
+bool FPropertyAccessor::WriteSetProperty(void* ValuePtr, FSetProperty* Property, const FAgentPropertyValue& Value)
 {
 	if (Value.Type != EAgentPropertyType::Set && Value.ArrayValue.Num() == 0)
 	{
 		return false;
 	}
 
-	void* SetPtr = Property->ContainerPtrToValuePtr<void>(Container);
+	// ValuePtr is already the direct pointer to the set data
+	void* SetPtr = ValuePtr;
 	FScriptSetHelper SetHelper(Property, SetPtr);
 
 	// Clear existing entries

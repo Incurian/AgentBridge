@@ -320,7 +320,9 @@ bool FAgentPropertyPath::SetValue(
 	}
 
 	// Write the value to the resolved location
-	return FPropertyAccessor::WriteProperty(Resolution.ValuePtr, Resolution.FinalProperty, Value);
+	// CRITICAL: Use WritePropertyDirect because Resolution.ValuePtr is already the resolved
+	// value pointer, NOT a container. WriteProperty would incorrectly call ContainerPtrToValuePtr again.
+	return FPropertyAccessor::WritePropertyDirect(Resolution.ValuePtr, Resolution.FinalProperty, Value);
 }
 
 //~==============================================================================
