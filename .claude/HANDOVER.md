@@ -1,6 +1,6 @@
 # AgentBridge Session Handover
 
-> Last Updated: January 1, 2026
+> Last Updated: January 1, 2026 (Session 19)
 
 ## Current State
 
@@ -10,45 +10,56 @@ AgentBridge is **feature-complete** with:
 - Self-documenting help system
 - World Partition support
 - PIE/Runtime support
+- **Nested BP struct writes now working!**
 
-## Consolidated Todos
+## Completed Items
 
-### Priority 1: Top Priority
+### Session 19 (Current)
 
-| Task | Module | Effort | Status |
-|------|--------|--------|--------|
-| **Fix nested BP struct writes** | Scripting | 4hr | **TOP PRIORITY** |
-| Blueprint class normalization (auto-add `_C`) | Scripting | 2hr | Pending |
-| Unified property setter (auto-detect type) | Scripting | 4hr | Pending |
-| UObject property access (DataAssets, Materials) | Core/Runtime | 4hr | Pending |
+| Task | Status | Notes |
+|------|--------|-------|
+| **Fix nested BP struct writes** | ✅ DONE | Added `WritePropertyDirect()` for pre-resolved value pointers |
+| Blueprint class normalization | ✅ DONE | Already implemented in `FindClassByName()` |
+| Unified property setter | ✅ DONE | Already implemented via `_normalize_property_value()` |
+| Documentation reorganization | ✅ DONE | Per-module CLAUDE.md files |
+| Landscape bounds accuracy | ✅ DONE | Use `GetComponentsBoundingBox()` first |
 
-### Priority 2: Known Issues to Fix
-
-| Issue | Module | Notes |
-|-------|--------|-------|
-| TSoftObjectPtr assignment | Scripting | Use TObjectPtr properties as workaround |
-| Function parameters in `tempo_call_function` | Server | Tempo proto limitation, use `call_static_function` |
-
-### Priority 3: Stretch Goals
+### Remaining Stretch Goals
 
 | Feature | Module | Effort | Notes |
 |---------|--------|--------|-------|
+| UObject property access | Core/Runtime | Medium | Read/write properties on DataAssets, Materials |
 | Blueprint graph editing | Scripting | Very High | Competitor parity |
 | Niagara particle control | Scripting | High | Similar to PCG pattern |
 | Sequencer control | Scripting | High | Complex API surface |
 | INI/Config automation | Scripting | Medium | Read/write DefaultEngine.ini |
-| Landscape sculpting | Runtime | High | Import/export heightmaps |
-| Sound capture | Python | Medium | TempoAudio integration |
 | Standalone gRPC server | Server | High | Remove Tempo dependency |
 
-### Won't Fix (By Design)
+### Known Limitations
 
-- **FunctionInvoker return values**: Returns default values for structs - use property queries
-- **TSoftObjectPtr direct assignment**: Complex UE limitation - use TObjectPtr properties
+| Issue | Status | Workaround |
+|-------|--------|------------|
+| TSoftObjectPtr assignment | Won't fix | Use TObjectPtr properties |
+| tempo_call_function params | Won't fix | Use `call_static_function` |
+| FunctionInvoker return values | Needs testing | May work now with WritePropertyDirect fix |
+
+## Session 19 Technical Details
+
+### Nested Struct Write Fix
+
+The bug was a container/value pointer confusion:
+- `ResolveSegments()` returns direct value pointer for nested paths
+- `WriteProperty()` was calling `ContainerPtrToValuePtr()` again
+- Added `WritePropertyDirect()` that skips the offset calculation
+
+Files changed:
+- `AgentPropertyPath.cpp` - Use `WritePropertyDirect()` for resolved paths
+- `PropertyAccessor.cpp` - Add `WritePropertyDirect()`, refactor helpers
+- `PropertyAccessor.h` - Document new API
 
 ## Recent Sessions Summary
 
-### Session 18 (Most Recent)
+### Session 18
 - Documentation reorganization to per-module CLAUDE.md files
 - Consolidated todos from all improvement docs
 

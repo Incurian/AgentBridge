@@ -27,6 +27,21 @@ This module provides the foundation for all property access and type discovery:
 FAgentPropertyValue Value = FPropertyAccessor::ReadProperty(Container, Property, MaxDepth);
 ```
 
+### Writing Properties
+
+**Two variants exist for different use cases:**
+
+```cpp
+// When you have a container and want the offset calculated:
+FPropertyAccessor::WriteProperty(Container, Property, Value);
+
+// When you already have the resolved value pointer (e.g., from path resolution):
+FPropertyAccessor::WritePropertyDirect(ValuePtr, Property, Value);
+```
+
+**CRITICAL:** Use `WritePropertyDirect` when the pointer IS the value, not a container.
+This was the fix for nested BP struct writes - path resolution returns value pointers.
+
 ### Array Traversal (CRITICAL)
 
 The element becomes the container for inner properties:
@@ -89,22 +104,34 @@ if (FObjectPropertyBase* ObjProp = CastField<FObjectPropertyBase>(Property))
 }
 ```
 
-## Known Issues
+## Recent Fixes
+
+### Nested BP Struct Writes (Session 19)
+
+**Problem:** Writing to nested struct paths like `DefaultDefinition.BiomeColor` silently failed.
+
+**Root Cause:** Path resolution returns a direct value pointer, but `WriteProperty()` was calling
+`ContainerPtrToValuePtr()` on it, corrupting the offset.
+
+**Solution:** Added `WritePropertyDirect()` that works with pre-resolved value pointers.
+All internal write helpers now take value pointers directly, not containers.
+
+## Known Limitations
 
 ### FunctionInvoker Return Values
 
-Function calls return default values (0 for structs, "" for strings) instead of actual return values.
+Function calls may return default values for complex struct return types.
+
+**Status:** Needs testing - the `WritePropertyDirect` fix may have also fixed this issue.
 
 **Workaround:** Use property queries instead of function calls when possible.
-
-**Status:** Won't fix (by design) - complex UE limitation.
 
 ## Stretch Goals
 
 | Feature | Effort | Notes |
 |---------|--------|-------|
-| Fix struct return values | High | Requires understanding UE4/5 return value marshaling |
 | UObject property access | Medium | Allow property access on DataAssets, not just actors |
+| Test struct return values | Low | May already work after WritePropertyDirect fix |
 
 ## Testing
 
