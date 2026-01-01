@@ -50,7 +50,7 @@ When continuing a session alone:
 ### Keep Help Text in Sync
 When adding or modifying MCP tools, **update the help system** in `Python/mcp/services/agentbridge.py`:
 - `_get_help_text()` function contains all help content
-- Topics: overview, actors, properties, classes, console, workflows
+- Topics: overview, actors, properties, classes, assets, components, console, workflows
 - This is the primary documentation for naive AI agents without access to these docs
 
 **Check before committing:** Does your change affect how agents should use the tools?
@@ -326,7 +326,7 @@ Plugins/AgentBridge/
 │   │   └── services/            # Modular service modules
 │   │       ├── __init__.py      # Service registry + auto-registration
 │   │       ├── base.py          # Shared utilities (create_channel, safe_call)
-│   │       ├── agentbridge.py   # AgentBridge gRPC service (11 tools)
+│   │       ├── agentbridge.py   # AgentBridge gRPC service (37 tools)
 │   │       ├── tempo_time.py    # TimeService (6 tools)
 │   │       ├── tempo_actor_control.py  # ActorControlService (17 tools)
 │   │       ├── tempo_core.py    # TempoCoreService (6 tools)
