@@ -9,13 +9,14 @@
 
 1. [Testing Overview](#testing-overview)
 2. [Environment Setup](#environment-setup)
-3. [Phase 1: Console Command Testing](#phase-1-console-command-testing)
-4. [Phase 2: HTTP Client Testing](#phase-2-http-client-testing)
-5. [Phase 3: gRPC Client Testing](#phase-3-grpc-client-testing)
-6. [Phase 4: MCP Integration Testing](#phase-4-mcp-integration-testing)
-7. [Phase 5: Context-Specific Testing](#phase-5-context-specific-testing)
-8. [Phase 6: Wishlist Features Testing](#phase-6-wishlist-features-testing)
-9. [Test Artifacts Cleanup](#test-artifacts-cleanup)
+3. [Automated Build-Run-Test Workflow](#automated-build-run-test-workflow)
+4. [Phase 1: Console Command Testing](#phase-1-console-command-testing)
+5. [Phase 2: HTTP Client Testing](#phase-2-http-client-testing)
+6. [Phase 3: gRPC Client Testing](#phase-3-grpc-client-testing)
+7. [Phase 4: MCP Integration Testing](#phase-4-mcp-integration-testing)
+8. [Phase 5: Context-Specific Testing](#phase-5-context-specific-testing)
+9. [Phase 6: Wishlist Features Testing](#phase-6-wishlist-features-testing)
+10. [Test Artifacts Cleanup](#test-artifacts-cleanup)
 
 ---
 
@@ -66,6 +67,102 @@ curl http://localhost:8080/health
 
 # Check gRPC server (Python)
 python -c "import grpc; ch = grpc.insecure_channel('localhost:10001'); grpc.channel_ready_future(ch).result(timeout=5); print('OK')"
+```
+
+---
+
+## Automated Build-Run-Test Workflow
+
+This section documents the complete automated workflow for building, running, testing, and terminating the editor from the command line.
+
+### Quick Reference
+
+```bash
+# 1. Verify TempoEnv Python
+D:/tempo/TempoSample/TempoEnv/Scripts/python.exe --version
+# Expected: Python 3.11.8
+
+# 2. Build the project (~60 seconds)
+cd D:/tempo/TempoSample
+./Plugins/Tempo/Scripts/Build.sh
+
+# 3. Run editor in background
+./Plugins/Tempo/Scripts/Run.sh &
+
+# 4. Wait for gRPC server (~30 seconds)
+sleep 30
+
+# 5. Test gRPC connection
+PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo" \
+  D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c "
+import grpc
+channel = grpc.insecure_channel('localhost:10001')
+grpc.channel_ready_future(channel).result(timeout=5)
+print('gRPC server is UP')
+"
+
+# 6. Force-quit editor (when done)
+# IMPORTANT: Use cmd //c wrapper in Git Bash to avoid /F path interpretation
+cmd //c "taskkill /F /IM UnrealEditor-Cmd.exe"
+```
+
+### Key Findings
+
+| Step | Tool | Time | Notes |
+|------|------|------|-------|
+| Build | `Build.sh` | ~60s | Runs UBT, regenerates protos |
+| Startup | `Run.sh` | ~30s | Uses `UnrealEditor-Cmd.exe` (headless) |
+| gRPC Ready | Port 10001 | ~30s after Run.sh | Tempo gRPC server |
+| Quit (graceful) | `tempo_quit` MCP tool | Variable | May block on save dialog |
+| Quit (force) | `taskkill /F` | Immediate | Discards unsaved changes |
+
+### Important Gotchas
+
+1. **TempoEnv Required**: Always use `D:/tempo/TempoSample/TempoEnv/Scripts/python.exe`, not system Python
+   - grpcio 1.62.2 and protobuf 4.25.3 are pre-installed
+   - System Python may have incompatible versions
+
+2. **Git Bash `/F` Flag Issue**: In Git Bash, `/F` is interpreted as a path
+   ```bash
+   # WRONG - Git Bash interprets /F as path
+   taskkill /F /PID 12345
+
+   # CORRECT - Use cmd wrapper
+   cmd //c "taskkill /F /PID 12345"
+   ```
+
+3. **tempo_quit May Not Force-Terminate**: If there are unsaved changes, `tempo_quit` returns success but the editor may block waiting for user confirmation. Use `taskkill /F` for guaranteed termination.
+
+4. **name_pattern vs label**: When using `query_actors`, the `name_pattern` matches internal UE names (like `PointLight_UAID_...`), NOT the human-readable label. Use `class_name` filter or `get_actor` by label instead.
+
+### Python Test Script Example
+
+```python
+#!/usr/bin/env python3
+"""Quick MCP connectivity test"""
+import sys
+sys.path.insert(0, "D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo")
+sys.path.insert(0, "D:/tempo/TempoSample/Plugins/AgentBridge/Python")
+
+from mcp.services.agentbridge import connect, execute
+
+client = connect('localhost', 10001)
+
+# List worlds
+result = execute(client, 'list_worlds', {})
+print(f"Worlds: {result}")
+
+# Spawn test actor
+result = execute(client, 'spawn_actor', {
+    'class_name': 'PointLight',
+    'location': [0, 0, 500],
+    'label': 'AutoTest_Light'
+})
+print(f"Spawned: {result}")
+
+# Query to verify
+result = execute(client, 'query_actors', {'class_name': 'PointLight', 'limit': 5})
+print(f"PointLights: {result}")
 ```
 
 ---

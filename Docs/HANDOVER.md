@@ -1,7 +1,7 @@
 # AgentBridge Handover Document
 
 > Session handover for Claude Code continuity.
-> Last Updated: December 31, 2025 (Session 12 - Safety Guidelines Added)
+> Last Updated: December 31, 2025 (Session 13 - MCP Bug Fixes)
 
 ---
 
@@ -132,6 +132,56 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 ---
 
 ## Session Log
+
+### Dec 31 (Session 13) - Bug Fixes from Systematic MCP Tool Testing
+**Feature:** Fixed two bugs discovered during systematic testing of all MCP tools.
+
+**Why it matters:** Naive Claude agents calling `get_actor` or `detach_actor` would get confusing errors instead of correct responses. These fixes ensure the complete tool surface area works correctly.
+
+**Bug 1: `get_actor` import error**
+- **Symptom:** `No module named 'tempo.scripting_pb2'`
+- **Cause:** Bad import at line 1391: `from tempo.scripting_pb2 import Vector as ProtoVector`
+- **Fix:** Use existing `Geometry_pb2` import from line 16:
+  ```python
+  ProtoVector = Geometry_pb2.Vector
+  ProtoRotation = Geometry_pb2.Rotation
+  ```
+- **Note:** MCP server caches Python modules in memory. **Restart Claude Code** for fix to take effect.
+
+**Bug 2: `detach_actor` duplicate definition**
+- **Symptom:** `'bool' object has no attribute 'lower'`
+- **Cause:** Duplicate tool/method/handler definitions with wrong parameters (`location_rule`, `rotation_rule`, `scale_rule` instead of `maintain_world_position`)
+- **Fix:** Removed all duplicate definitions, keeping only the correct ones that match the proto:
+  ```protobuf
+  message DetachActorRequest {
+    string actor_id = 1;
+    bool maintain_world_position = 2;
+  }
+  ```
+
+**Tools Verified Working (17 tested):**
+- `list_worlds` ✅
+- `spawn_actor` ✅
+- `query_actors` ✅
+- `set_actor_transform` ✅
+- `tempo_get_components` ✅
+- `tempo_get_actor_properties` ✅
+- `tempo_set_float_property` ✅
+- `tempo_set_color_property` ✅
+- `execute_console_command` ✅
+- `search_console_commands` ✅
+- `write_project_file` ✅
+- `read_project_file` ✅
+- `list_project_directory` ✅
+- `create_asset` ✅
+- `get_component_transform` ✅
+- `attach_actor` ✅
+- `detach_actor` ✅ (after fix)
+
+**Files Changed:**
+- `Python/mcp/services/agentbridge.py` - Fixed import, removed duplicate definitions
+
+---
 
 ### Dec 31 (Session 12) - Automated Testing Workflow Validation
 **Feature:** Validated and documented the complete build-run-test-quit workflow for autonomous MCP testing.

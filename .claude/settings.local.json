@@ -51,7 +51,13 @@
       "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c:*)",
       "Bash(PYTHONPATH=\"D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo\" D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c \"\nimport sys; sys.path.insert\\(0, ''.''\\)\nfrom mcp.services.agentbridge import _get_help_text\n\n# Test overview - should now mention component naming\nresult = _get_help_text\\(\\)\nprint\\(''=== OVERVIEW \\(checking for COMPONENT NAMES section\\) ===''\\)\nif ''COMPONENT NAMES'' in result[''help'']:\n    print\\(''FOUND component naming warning in overview''\\)\nelse:\n    print\\(''ERROR: Missing component naming in overview''\\)\n\n# Test properties topic\nresult = _get_help_text\\(''properties''\\)\nprint\\(''\\\\n=== PROPERTIES TOPIC ===''\\)\nif ''INSTANCE names'' in result[''help''] and ''LightComponent0'' in result[''help'']:\n    print\\(''FOUND component naming guidance''\\)\nif ''tempo_set_color_property'' in result[''help'']:\n    print\\(''FOUND typed tools recommendation''\\)\n\n# Test workflows topic\nresult = _get_help_text\\(''workflows''\\)\nprint\\(''\\\\n=== WORKFLOWS TOPIC ===''\\)\nif ''tempo_get_components'' in result[''help'']:\n    print\\(''FOUND light color workflow''\\)\n\")",
       "Bash(git stash pop:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(\"D:/EL_UE/UE_5.6/Engine/Binaries/Win64/UnrealEditor-Cmd.exe\" \"D:/tempo/TempoSample/TempoSample.uproject\" -ExecCmds=\"AgentBridge.ListWorlds,AgentBridge.Capabilities,Quit\" -unattended -NullRHI -nosplash -nosound -noloadstartuppackages)",
+      "mcp__agentbridge__list_worlds",
+      "mcp__agentbridge__spawn_actor",
+      "mcp__agentbridge__query_actors",
+      "mcp__agentbridge__tempo_quit",
+      "Bash(cmd //c \"taskkill /F /PID 10628\")"
     ]
   },
   "outputStyle": "Explanatory"

@@ -948,38 +948,7 @@ TOOLS = [
             "required": ["actor_id", "component_name"],
         },
     },
-    {
-        "name": "detach_actor",
-        "description": "Detach an actor from its parent actor.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor to detach",
-                },
-                "location_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world"],
-                    "description": "How to handle location after detach",
-                    "default": "keep_world",
-                },
-                "rotation_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world"],
-                    "description": "How to handle rotation after detach",
-                    "default": "keep_world",
-                },
-                "scale_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world"],
-                    "description": "How to handle scale after detach",
-                    "default": "keep_world",
-                },
-            },
-            "required": ["actor_id"],
-        },
-    },
+
 ]
 
 
@@ -1329,17 +1298,6 @@ class AgentBridgeClient:
             maintain_world_transform=maintain_world_transform,
         ))
 
-    def detach_actor(self, actor_id: str,
-                     location_rule: str = "keep_world",
-                     rotation_rule: str = "keep_world",
-                     scale_rule: str = "keep_world"):
-        return self.stub.DetachActor(pb.DetachActorRequest(
-            actor_id=actor_id,
-            location_rule=_string_to_detachment_rule(location_rule),
-            rotation_rule=_string_to_detachment_rule(rotation_rule),
-            scale_rule=_string_to_detachment_rule(scale_rule),
-        ))
-
 
 def _string_to_attachment_rule(rule: str) -> int:
     """Convert string attachment rule to proto enum value."""
@@ -1388,7 +1346,9 @@ def _actor_to_dict(actor: ActorInfo) -> Dict[str, Any]:
 def _property_value_to_dict(pv) -> Any:
     """Convert PropertyValue protobuf to Python value."""
     # Import here to avoid circular imports
-    from tempo.scripting_pb2 import Vector as ProtoVector, Rotation as ProtoRotation
+    # Geometry_pb2 already imported at top - use Geometry_pb2.Vector, Geometry_pb2.Rotation
+    ProtoVector = Geometry_pb2.Vector
+    ProtoRotation = Geometry_pb2.Rotation
 
     # PropertyType enum values from AgentBridge.proto
     PT_NONE = 0
@@ -2407,18 +2367,6 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             args["actor_id"],
             args["component_name"],
             args.get("maintain_world_transform", True),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    elif tool_name == "detach_actor":
-        result = safe_call(
-            client.detach_actor,
-            args["actor_id"],
-            args.get("location_rule", "keep_world"),
-            args.get("rotation_rule", "keep_world"),
-            args.get("scale_rule", "keep_world"),
         )
         if isinstance(result, dict) and "error" in result:
             return result
