@@ -98,6 +98,7 @@ Each module has its own CLAUDE.md with detailed context:
 | AgentBridgeScripting | Command layer, JSON serialization | `Source/AgentBridgeScripting/CLAUDE.md` |
 | AgentBridgeServer | gRPC/HTTP server, proto definitions | `Source/AgentBridgeServer/CLAUDE.md` |
 | Python | MCP server, gRPC client, tests | `Python/CLAUDE.md` |
+| bp_toolkit | UAsset parsing, Blueprint analysis (optional submodule) | `bp_toolkit/README.md` |
 
 ## Critical Rules
 
@@ -182,6 +183,9 @@ D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_client.py
 | Engine | `D:/EL_UE/UE_5.6` |
 | Project Logs | `D:/tempo/TempoSample/Saved/Logs/TempoSample.log` |
 | Tempo Plugin | `D:/tempo/TempoSample/Plugins/Tempo` |
+| bp_toolkit | `D:/tempo/TempoSample/Plugins/AgentBridge/bp_toolkit` (submodule) |
+| bp_toolkit repo | `D:/repos/bp_toolkit.git` (local bare repo) |
+| UAssetGUI.exe | `bp_toolkit/vendor/UAssetGUI/UAssetGUI/bin/Release/net8.0-windows/UAssetGUI.exe` |
 
 ## Session Continuity
 
@@ -211,4 +215,118 @@ Help topics in `agentbridge.py`:
 
 ---
 
-*38 RPCs, 90 MCP Tools, Self-Documenting Help System*
+## Optional Submodules
+
+### bp_toolkit - Blueprint/Asset Parsing Toolkit
+
+A Python toolkit for parsing Unreal Engine assets exported to JSON. Useful for understanding
+Blueprint logic, analyzing asset dependencies, and documenting complex Blueprints.
+
+**Location:** `bp_toolkit/` (submodule from `D:\repos\bp_toolkit.git`)
+
+#### Setup
+
+```bash
+# Initialize submodules (includes UAssetGUI with UAssetAPI)
+cd D:/tempo/TempoSample/Plugins/AgentBridge
+git submodule update --init --recursive
+
+# Build UAssetGUI (.NET 8+ required)
+cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
+```
+
+#### Capabilities
+
+| Tool | Purpose |
+|------|---------|
+| `asset_parser.py` | **Main tool** - Multi-asset parser with query modes |
+| `bp_parser.py` | Blueprint-specific deep parsing with call graphs |
+| `bp_export.py` | UAsset ↔ JSON conversion wrapper for UAssetGUI |
+| `bp_batch.py` | Batch processing multiple assets |
+
+#### Supported Asset Types
+
+- **Blueprint** - Full K2Node extraction, call graphs, Mermaid diagrams
+- **Animation Blueprint** - State machines, anim nodes, blend spaces
+- **Behavior Tree** - Tree hierarchy, ASCII visualization
+- **PCG Graph** - Node connections, data flow diagrams
+- **Material** - Expression flow, texture/parameter extraction
+- **MetaSound** - Audio routing, wave asset references
+- **Niagara** - Emitter hierarchy, module stages
+
+#### Quick Examples
+
+```bash
+cd D:/tempo/TempoSample/Plugins/AgentBridge/bp_toolkit
+
+# Export a uasset to JSON
+python bp_export.py "D:/tempo/TempoSample/Content/SomeBlueprint.uasset"
+
+# Detect asset type
+python asset_parser.py SomeBlueprint.json --detect
+
+# List Blueprint events
+python asset_parser.py BP_Character.json --list-events
+
+# List Behavior Tree tasks
+python asset_parser.py BT_EnemyAI.json --list-tasks
+
+# Search for patterns
+python asset_parser.py AnyAsset.json --find "velocity"
+
+# Full parse with output directory
+python asset_parser.py BP_Pawn.json parsed_output/
+
+# Comment-node visualization (6 formats)
+python asset_parser.py BP_Pawn.json --flow-tagged
+python asset_parser.py BP_Pawn.json --flow-boxes
+python asset_parser.py BP_Pawn.json --flow-all
+```
+
+#### Query Modes (No File Output)
+
+Fast lookups without generating parsed directories:
+
+| Flag | Asset Types | Description |
+|------|-------------|-------------|
+| `--find <pattern>` | All | Search namemap and exports |
+| `--list-events` | Blueprint | Event nodes (BeginPlay, Tick, etc.) |
+| `--list-functions` | Blueprint | User-defined functions |
+| `--variables` | Blueprint | Variable Get/Set with names |
+| `--comments` | Blueprint | Extract comment node text |
+| `--flow-tagged` | Blueprint | Tree view with comment tags |
+| `--list-tasks` | Behavior Tree | Task node types |
+| `--blackboard` | Behavior Tree | Blackboard key references |
+| `--list-nodes` | PCG Graph | Node types with counts |
+| `--connections` | PCG Graph | Node-to-node connections |
+| `--textures` | Material | Texture sample references |
+| `--emitters` | Niagara | Emitter list (for Systems) |
+
+#### Submodule Structure
+
+```
+bp_toolkit/
+├── asset_parser.py      # v3.3.0 - Main multi-asset parser
+├── bp_parser.py         # v2.0.0 - Blueprint-specific deep parser
+├── bp_export.py         # v1.2.0 - UAssetGUI wrapper
+├── bp_batch.py          # v1.0.0 - Batch processor
+├── README.md            # Full documentation
+├── CLAUDE_SKILL.md      # Claude Code skill definitions
+├── MCP_SERVER.md        # MCP server implementation guide
+└── vendor/
+    └── UAssetGUI/       # Submodule (GitHub: atenfyr/UAssetGUI)
+        ├── UAssetAPI/   # Nested submodule
+        └── UAssetGUI/bin/Release/net8.0-windows/
+            └── UAssetGUI.exe  # Built binary
+```
+
+#### Notes
+
+- **Build artifacts are gitignored** - Binary exists locally but not in repo
+- **UAssetGUI requires .NET 8+** - Build once after submodule init
+- **JSON files can be large** - 40-100MB for complex Blueprints, gitignored by default
+- **Local bare repo** at `D:\repos\bp_toolkit.git` - Push changes there
+
+---
+
+*38 RPCs, 90 MCP Tools, Self-Documenting Help System, bp_toolkit Asset Parsing*
