@@ -94,22 +94,25 @@ Agent needs to:
 1. **DataAssets Support** - DONE: list, inspect, query data tables
 2. **Visual Capture** - DONE: viewport screenshots, SceneCapture
 3. **AgentBridge.Capabilities Console Command** - DONE
+4. **World Partition Support** - DONE: streaming-aware queries, data layers
+5. **Console Commands** - DONE: search + execute with log capture
 
-### Medium Priority - MOSTLY COMPLETE
-4. **Audio Capture** - DONE: world audio capture and analysis
-5. **Material Editor Integration** - DONE: instances, parameters, apply
-6. **PCG Integration** - PARTIAL: list, regenerate, set params
+### Medium Priority - COMPLETE
+6. **Audio Capture** - DONE: world audio capture and analysis
+7. **Material Editor Integration** - DONE: instances, parameters, apply
+8. **PCG Integration** - PARTIAL: list, regenerate, set params
+9. **CVar Manipulation** - DONE: search_console_commands + execute_console_command
+
+### Wishlist Features - NEW (Session 9-11)
+10. **Asset Operations** - DONE: create, save, duplicate, blueprint, thumbnails
+11. **Component Operations** - DONE: transforms, attach/detach actors/components
+12. **File Operations** - DONE: read/write/list/copy project files (sandboxed)
 
 ### Lower Priority (Research First)
-7. **Sequencer Integration** - Cinematics control
-8. **Animation Blueprint Access** - Animation state machines
-9. **Niagara Integration** - Particle system control
-10. **Level Streaming** - Multi-level operations
-
-### New Medium Priority
-11. **CVar Manipulation** - Get/set console variables
-12. **Command Logging** - Log all executed commands for debugging
-13. **Blueprint Graph Editing** - Create/modify BP node graphs
+13. **Sequencer Integration** - Cinematics control
+14. **Animation Blueprint Access** - Animation state machines
+15. **Niagara Integration** - Particle system control
+16. **Blueprint Graph Editing** - Create/modify BP node graphs
 
 ---
 
@@ -490,19 +493,23 @@ Player->SetPlaybackPosition(FFrameTime(FrameNumber));
 
 | Feature | AgentBridge | chongdashu | ChiR24 | Priority |
 |---------|-------------|------------|--------|----------|
-| Actor manipulation | ✓ | ✓ | ✓ | - |
-| Property access | ✓ | ✓ | ✓ | - |
-| Type discovery | ✓ | ✓ | ✓ | - |
+| Actor manipulation | ✓ | ✓ | ✓ | DONE |
+| Property access | ✓ | ✓ | ✓ | DONE |
+| Type discovery | ✓ | ✓ | ✓ | DONE |
 | DataAssets | ✓ | ✗ | ◯ | DONE |
 | Screenshots | ✓ | ✗ | ✓ | DONE |
 | Audio capture | ✓ | ✗ | ◯ | DONE |
 | Material ops | ✓ | ✗ | ◯ | DONE |
 | PCG ops | ◐ | ✗ | ✗ | PARTIAL |
+| World Partition | ✓ | ✗ | ✓ | DONE |
+| CVars | ✓ | ✗ | ✓ | DONE |
+| Asset creation | ✓ | ✗ | ◯ | DONE |
+| Component ops | ✓ | ✗ | ◯ | DONE |
+| File operations | ✓ | ✗ | ◯ | DONE |
 | Blueprint graphs | ✗ | ✓ | ✓ | MEDIUM |
-| CVars | ◯ | ✗ | ✓ | MEDIUM |
 | Niagara/VFX | ✗ | ✗ | ✓ | LOW |
 | Sequencer | ✗ | ✗ | ✓ | LOW |
-| Landscape | ✗ | ✗ | ✓ | LOW |
+| Landscape | ◐ | ✗ | ✓ | PARTIAL |
 | Behavior trees | ✗ | ✗ | ✓ | LOW |
 
 ✓ = Implemented, ◐ = Partial, ◯ = Planned, ✗ = Not implemented
@@ -541,13 +548,28 @@ Player->SetPlaybackPosition(FFrameTime(FrameNumber));
 - Console commands for Material/PCG testing
 - Python client v1.4.0 with full API coverage
 
+#### December 2025 - World Partition & Console Commands (Phase 5)
+- World Partition support: streaming-aware queries, data layers
+- Console command search and execution with log capture
+- 7 new gRPC RPCs for WP and console operations
+- Self-documenting help system for AI agents
+
+#### December 2025 - Wishlist Implementation (Sessions 9-11)
+- Asset Operations: CreateAsset, SaveAsset, SaveActorAsBlueprint, DuplicateAsset, GetAssetThumbnail
+- Component Operations: GetComponentTransform, SetComponentTransform, AttachComponent/Actor, DetachComponent/Actor
+- File Operations: ReadProjectFile, WriteProjectFile, ListProjectDirectory, CopyProjectFile, DeleteProjectFile
+- Security: File operations sandboxed to project directory
+- 38 gRPC RPCs, 90 MCP tools total
+- Integration test script: test_wishlist.py
+
 ### Open Questions
 
-1. **DataAsset Creation**: Can we create new DataAssets at runtime or only in editor?
+1. **DataAsset Creation**: ANSWERED - Editor only via CreateAsset command with #if WITH_EDITOR
 2. **Audio Streaming**: What's the best approach for streaming audio to external processes?
-3. **Large Level Support**: How do we handle levels with thousands of actors efficiently?
+3. **Large Level Support**: PARTIALLY ANSWERED - World Partition queries handle this via ForEachActorDescInstance
 4. **Networked PIE**: How to handle multiple PIE instances in multiplayer testing?
 5. **Asset Hot-Reload**: Can we reload assets without restarting?
+6. **Blueprint Graph Editing**: How to create/modify BP node graphs programmatically?
 
 ### Technical Debt
 
@@ -585,7 +607,7 @@ Player->SetPlaybackPosition(FFrameTime(FrameNumber));
 
 ---
 
-*Document Version: 2.0*
-*Last Updated: December 2024*
+*Document Version: 3.0*
+*Last Updated: December 31, 2025*
 *Purpose: Research and planning for future features*
-*Extended Features Complete: DataAssets, Capture, Audio, Materials, PCG*
+*Complete: DataAssets, Capture, Audio, Materials, PCG, World Partition, CVars, Assets, Components, Files*
