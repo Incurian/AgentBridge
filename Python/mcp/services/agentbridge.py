@@ -255,10 +255,9 @@ TOOLS = [
                 },
                 "path": {
                     "type": "string",
-                    "description": "Property path",
+                    "description": "Property path (e.g., 'LightComponent.Intensity', 'RootComponent.RelativeLocation')",
                 },
                 "value": {
-                    "type": "string",
                     "description": "New value as string (will be parsed according to property type)",
                 },
             },
@@ -1335,6 +1334,201 @@ def _string_to_detachment_rule(rule: str) -> int:
     return rules.get(rule.lower(), pb.ATTACHMENT_RULE_KEEP_WORLD)
 
 
+def _normalize_property_value(value: any, property_hint: str = "") -> str:
+    """
+    Normalize a property value to Unreal's expected string format.
+
+    Accepts flexible input formats and converts to Unreal-parseable strings:
+
+    Colors (detects if property_hint contains 'color' or value has r/g/b):
+      - [1, 0, 0] -> "(R=1.0,G=0.0,B=0.0,A=1.0)"
+      - [1, 0, 0, 0.5] -> "(R=1.0,G=0.0,B=0.0,A=0.5)"
+      - {"r": 1, "g": 0, "b": 0} -> "(R=1.0,G=0.0,B=0.0,A=1.0)"
+      - "#FF0000" -> "(R=1.0,G=0.0,B=0.0,A=1.0)"
+
+    Vectors:
+      - [1, 2, 3] -> "(X=1.0,Y=2.0,Z=3.0)"
+      - {"x": 1, "y": 2, "z": 3} -> "(X=1.0,Y=2.0,Z=3.0)"
+
+    Rotators (detects if property_hint contains 'rotation' or value has pitch/yaw/roll):
+      - [0, 90, 0] -> "(Pitch=0.0,Yaw=90.0,Roll=0.0)"
+      - {"pitch": 0, "yaw": 90, "roll": 0} -> "(Pitch=0.0,Yaw=90.0,Roll=0.0)"
+
+    Booleans:
+      - True/False -> "true"/"false"
+
+    Everything else: str(value)
+    """
+    hint_lower = property_hint.lower()
+    is_color_hint = 'color' in hint_lower
+    is_rotation_hint = 'rotation' in hint_lower or 'rotator' in hint_lower
+
+    # Already a string - check if it needs conversion
+    if isinstance(value, str):
+        # Hex color string
+        if value.startswith('#') and len(value) in (7, 9):
+            try:
+                hex_str = value[1:]
+                r = int(hex_str[0:2], 16) / 255.0
+                g = int(hex_str[2:4], 16) / 255.0
+                b = int(hex_str[4:6], 16) / 255.0
+                a = int(hex_str[6:8], 16) / 255.0 if len(hex_str) == 8 else 1.0
+                return f"(R={r},G={g},B={b},A={a})"
+            except ValueError:
+                pass
+        # Already in Unreal format or other string
+        return value
+
+    # Boolean
+    if isinstance(value, bool):
+        return "true" if value else "false"
+
+    # Number
+    if isinstance(value, (int, float)):
+        return str(value)
+
+    # Dict - check keys to determine type
+    if isinstance(value, dict):
+        # Color dict
+        if 'r' in value and 'g' in value and 'b' in value:
+            r = float(value.get('r', 0))
+            g = float(value.get('g', 0))
+            b = float(value.get('b', 0))
+            a = float(value.get('a', 1.0))
+            return f"(R={r},G={g},B={b},A={a})"
+
+        # Vector dict
+        if 'x' in value and 'y' in value and 'z' in value:
+            x = float(value.get('x', 0))
+            y = float(value.get('y', 0))
+            z = float(value.get('z', 0))
+            return f"(X={x},Y={y},Z={z})"
+
+        # Rotator dict
+        if 'pitch' in value or 'yaw' in value or 'roll' in value:
+            pitch = float(value.get('pitch', 0))
+            yaw = float(value.get('yaw', 0))
+            roll = float(value.get('roll', 0))
+            return f"(Pitch={pitch},Yaw={yaw},Roll={roll})"
+
+        # Generic dict - return as string
+        return str(value)
+
+    # List/tuple - determine type from hint or length
+    if isinstance(value, (list, tuple)):
+        if len(value) == 3:
+            # 3 elements - could be vector, color (RGB), or rotator
+            v = [float(x) for x in value]
+            if is_color_hint:
+                return f"(R={v[0]},G={v[1]},B={v[2]},A=1.0)"
+            elif is_rotation_hint:
+                return f"(Pitch={v[0]},Yaw={v[1]},Roll={v[2]})"
+            else:
+                # Default to vector for 3-element list
+                return f"(X={v[0]},Y={v[1]},Z={v[2]})"
+        elif len(value) == 4:
+            # 4 elements - assume color (RGBA)
+            v = [float(x) for x in value]
+            return f"(R={v[0]},G={v[1]},B={v[2]},A={v[3]})"
+        else:
+            # Other array - return as string
+            return str(value)
+
+    # Fallback
+    return str(value)
+
+
+def _enhance_property_error(error_dict: Dict[str, Any], property_path: str, actor_id: str) -> Dict[str, Any]:
+    """
+    Enhance a property error with helpful hints based on common mistakes.
+    """
+    error_msg = error_dict.get("error", "")
+
+    # Common component class names that users might mistakenly use
+    class_name_hints = {
+        "PointLightComponent": "LightComponent0",
+        "SpotLightComponent": "LightComponent0",
+        "DirectionalLightComponent": "LightComponent0",
+        "StaticMeshComponent": "StaticMeshComponent0",
+        "SkeletalMeshComponent": "SkeletalMeshComponent",
+        "CameraComponent": "CameraComponent0",
+    }
+
+    hints = []
+
+    # Check if path starts with a class name (common mistake)
+    path_parts = property_path.split(".")
+    if path_parts:
+        first_part = path_parts[0]
+        if first_part in class_name_hints:
+            hints.append(f"Use instance name '{class_name_hints[first_part]}' instead of class name '{first_part}'")
+        elif first_part.endswith("Component") and not first_part[-1].isdigit():
+            hints.append(f"Component names are instance names (e.g., 'LightComponent0'), not class names. Use get_actor('{actor_id}', include_components=True) to see component names.")
+
+    # Check if this looks like a read-only property issue
+    if "Failed to set" in error_msg:
+        hints.append("This property may be read-only. For light colors, use tempo_set_color_property instead.")
+
+    if hints:
+        error_dict["hints"] = hints
+
+    return error_dict
+
+
+def _find_similar_actors(client, search_term: str, limit: int = 5) -> List[str]:
+    """
+    Find actors with names or labels similar to the search term.
+    Used to provide helpful suggestions when an actor is not found.
+    """
+    suggestions = []
+
+    # Generate search terms: full term + substrings for compound names
+    # e.g., "MySkyLight" -> ["MySkyLight", "SkyLight", "Light"]
+    search_terms = [search_term]
+
+    # Try to extract meaningful substrings (CamelCase splitting)
+    import re
+    words = re.findall(r'[A-Z][a-z]*|[a-z]+', search_term)
+    if len(words) > 1:
+        # Add progressively shorter suffixes: MySkyLight -> SkyLight -> Light
+        for i in range(1, len(words)):
+            search_terms.append(''.join(words[i:]))
+
+    # Search with each term until we have enough suggestions
+    for term in search_terms:
+        if len(suggestions) >= limit:
+            break
+
+        # Try label pattern search first (most user-friendly)
+        try:
+            result = client.query_actors(label_pattern=term, limit=limit)
+            if result and hasattr(result, 'actors'):
+                for actor in result.actors[:limit]:
+                    label = actor.label or actor.name
+                    if label not in suggestions:
+                        suggestions.append(label)
+                        if len(suggestions) >= limit:
+                            break
+        except Exception:
+            pass
+
+        # If not enough suggestions, try name pattern search
+        if len(suggestions) < limit:
+            try:
+                result = client.query_actors(name_pattern=term, limit=limit - len(suggestions))
+                if result and hasattr(result, 'actors'):
+                    for actor in result.actors:
+                        label = actor.label or actor.name
+                        if label not in suggestions:
+                            suggestions.append(label)
+                            if len(suggestions) >= limit:
+                                break
+            except Exception:
+                pass
+
+    return suggestions[:limit]
+
+
 def _normalize_blueprint_class(class_name: str) -> str:
     """
     Normalize Blueprint class names by auto-appending _C suffix if needed.
@@ -1615,17 +1809,38 @@ PROPERTY OPERATIONS:
 
 Reading properties:
 - get_actor(actor_id, include_properties=True) - All properties
-- get_property_path(actor_id, path="RootComponent.RelativeLocation") - Specific path
+- get_property(actor_id, path="RootComponent.RelativeLocation") - Specific path
 
 Setting properties:
-- set_property_path(actor_id, path="LightComponent0.Intensity", value=5000)
-- set_actor_properties(actor_id, properties=[{"key": "bHidden", "value": true}])
+- set_property(actor_id, path="LightComponent0.Intensity", value="5000")
+- set_property(actor_id, path="LightComponent0.LightColor", value=[1, 0, 0])
 
 Property paths:
 - Simple: "bHidden", "ActorLabel"
 - Nested: "RootComponent.RelativeLocation.X"
 - Array: "Materials[0]"
 - Component: "LightComponent0.Intensity"
+
+FLEXIBLE VALUE FORMATS:
+set_property accepts multiple input formats and auto-converts to Unreal format:
+
+Colors (auto-detected from path containing 'color' or RGBA keys):
+- [1, 0, 0] -> Red (RGB, alpha=1.0)
+- [1, 0, 0, 0.5] -> Red with 50% alpha (RGBA)
+- {"r": 1, "g": 0, "b": 0} -> Red (dict format)
+- "#FF0000" -> Red (hex format)
+
+Vectors (default for 3-element lists):
+- [100, 200, 300] -> location/offset
+- {"x": 100, "y": 200, "z": 300} -> dict format
+
+Rotators (auto-detected from path containing 'rotation'):
+- [0, 90, 0] -> Pitch=0, Yaw=90, Roll=0
+- {"pitch": 0, "yaw": 90, "roll": 0} -> dict format
+
+Simple values:
+- "5000" or 5000 for numbers
+- true/false for booleans
 
 CRITICAL - COMPONENT NAMING:
 Component names are INSTANCE names, not class names!
@@ -1640,12 +1855,6 @@ Common instance names:
 - PointLight -> LightComponent0
 - StaticMeshActor -> StaticMeshComponent0
 - CameraActor -> CameraComponent0
-
-TYPED vs GENERIC TOOLS:
-- For colors: Use tempo_set_color_property (easier, handles format)
-- For transforms: Use set_actor_transform (easier)
-- For simple values: set_property_path works fine
-- Generic set_property_path requires correct JSON value types
 
 Use get_class_schema(class_name) to discover available properties!
 """,
@@ -1887,6 +2096,12 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             include_components=args.get("include_components", False),
         )
         if isinstance(result, dict) and "error" in result:
+            # Enhance error with suggestions for finding the actor
+            actor_id = args["actor_id"]
+            result["hint"] = "Use query_actors(label_pattern='...') to find actors by display name"
+            suggestions = _find_similar_actors(client, actor_id, limit=5)
+            if suggestions:
+                result["similar_actors"] = suggestions
             return result
         if result.HasField("actor"):
             actor = client._parse_actor_descriptor(result.actor.actor_info)
@@ -1919,6 +2134,7 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
                 response["folder_path"] = result.actor.folder_path
 
             return response
+        # Fallback - actor not found (shouldn't normally reach here since gRPC returns NOT_FOUND)
         return {"found": False, "error": f"Actor '{args['actor_id']}' not found"}
 
     elif tool_name == "spawn_actor":
@@ -1938,7 +2154,12 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         if result.HasField("spawned_actor"):
             actor = client._parse_actor_descriptor(result.spawned_actor)
             return {"success": True, "actor": _actor_to_dict(actor)}
-        return {"success": False, "error": "Failed to spawn actor"}
+        return {
+            "success": False,
+            "error": f"Failed to spawn actor of class '{class_name}'",
+            "hint": "Check that the class exists. Use list_classes(name_pattern='...') to search. For Blueprints, use format '/Game/Path/BP_Name.BP_Name' (the _C suffix is auto-added).",
+            "common_classes": ["PointLight", "SpotLight", "StaticMeshActor", "CameraActor", "PlayerStart"],
+        }
 
     elif tool_name == "delete_actor":
         result = safe_call(client.delete_actor, args["actor_id"])
@@ -1961,13 +2182,16 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
     elif tool_name == "get_property":
         result = safe_call(client.get_property, args["actor_id"], args["path"])
         if isinstance(result, dict) and "error" in result:
-            return result
+            return _enhance_property_error(result, args["path"], args["actor_id"])
         return {"path": args["path"], "value": result.value.string_value}
 
     elif tool_name == "set_property":
-        result = safe_call(client.set_property, args["actor_id"], args["path"], args["value"])
+        # Normalize the value to Unreal's expected string format
+        # This allows flexible input like [1,0,0] for colors or {"x":1,"y":2,"z":3} for vectors
+        normalized_value = _normalize_property_value(args["value"], args["path"])
+        result = safe_call(client.set_property, args["actor_id"], args["path"], normalized_value)
         if isinstance(result, dict) and "error" in result:
-            return result
+            return _enhance_property_error(result, args["path"], args["actor_id"])
         return {"success": True}
 
     elif tool_name == "list_classes":
