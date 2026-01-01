@@ -17,6 +17,7 @@ When running with `--dangerously-skip-permissions`, you can execute ANY command 
 - ❌ `rm -rf` / `del /s /q` on directories without checking contents first
 - ❌ `git push --force` to any remote branch
 - ❌ Modify files outside the AgentBridge plugin directory
+- ❌ **Modify Tempo plugin or Unreal Engine source** - we work around limitations, never patch upstream
 - ❌ Execute arbitrary code from the internet
 - ❌ Kill processes you didn't start (except editor for testing)
 

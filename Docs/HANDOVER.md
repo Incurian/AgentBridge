@@ -1,7 +1,7 @@
 # AgentBridge Handover Document
 
 > Session handover for Claude Code continuity.
-> Last Updated: December 31, 2025 (Session 13 - MCP Bug Fixes)
+> Last Updated: January 1, 2026 (Session 15 - PCG Biome Workflow Testing)
 
 ---
 
@@ -132,6 +132,72 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 ---
 
 ## Session Log
+
+### Jan 1 (Session 15) - PCG Biome Workflow Testing
+**Goal:** Test full PCG Biome workflow via MCP tools to identify tooling gaps.
+
+**What Works:**
+- `spawn_actor` with full BP paths (`/PCGBiomeCore/Blueprints/BP_PCGBiomeCore.BP_PCGBiomeCore_C`)
+- `set_actor_transform` for positioning/scaling volumes
+- `tempo_set_asset_property` for TObjectPtr properties (Definition, Assets[0])
+- `create_asset` for Blueprint DataAssets (BiomeDefinitionTemplate_C, BiomeAssetTemplate_C)
+- `set_property` for inline struct properties (`DefaultDefinition.BiomeName`)
+- `set_property` with color format `(R=0.0,G=1.0,B=0.0,A=1.0)` for FLinearColor
+- `tempo_call_function` for no-arg void functions (`NotifyPropertiesChangedFromBlueprint`)
+- `tempo_get_component_properties` for reading component data (CachedLocalBox, etc.)
+
+**What's Blocked:**
+1. `TSoftObjectPtr` properties (BiomeTexture) - "Property did not have correct type"
+2. Functions with parameters - `tempo_call_function` only supports void()
+3. UObject property access - can create DataAssets but can't modify their properties
+4. Typed setters on nested structs - `tempo_set_color_property` fails on `Struct.Color`
+
+**Feature Requests Documented (PCG_BIOME_WORKFLOW.md):**
+1. `get_landscape_bounds` - automate tedious Z bounds calculation
+2. `TSoftObjectPtr` support in tempo_set_asset_property
+3. Function parameter support in tempo_call_function
+4. Blueprint/C++ agnostic API - agent shouldn't need to know `_C` suffix, property types, etc.
+5. UObject property access - not just actors
+
+**Algorithm Documented:**
+- XY bounds: `total_size = num_proxies × quads_per_component × scale`
+- Z bounds: Sample `CachedLocalBox` from collision components, convert local→world, add margin
+
+**Files Changed:**
+- `Docs/PCG_BIOME_WORKFLOW.md` - Created comprehensive workflow log with algorithms and feature requests
+
+---
+
+### Jan 1 (Session 14) - get_actor Verification & Doc Updates
+**Feature:** Verified `get_actor` MCP tool works correctly, then updated tool descriptions and help text.
+
+**Tests Performed:**
+1. `list_worlds` - Confirmed Editor world with TestingMap (150 actors)
+2. `query_actors` - Retrieved 10 actors to find test targets
+3. `get_actor` with multiple options:
+   - **PlayerStart** - with `include_properties=true`, `include_components=true` → 80+ properties, 4 components
+   - **SkyAtmosphere** - with `include_components=true` → 3 components
+   - **Landscape** - with `include_properties=true` → 150+ properties including material, physics, LOD settings
+
+**Key Findings:**
+- Actor label resolution works (e.g., "PlayerStart" resolves to full internal name)
+- Properties include nested structs (`BodyInstance`, `LightmassSettings`, `AttachmentReplication`)
+- Components return instance names (e.g., `CollisionCapsule`, `SkyAtmosphereComponent`)
+- All tests passed with no errors
+
+**Documentation Updates:**
+1. **`query_actors` tool** - Clarified `name_pattern` matches internal names, NOT labels
+2. **`get_actor` tool** - Added note that labels resolve to full internal names
+3. **`actors` help topic** - Added warning about `name_pattern` behavior with example
+
+**Why these updates matter:** A naive Claude agent might try `query_actors(name_pattern="MyLight")` expecting to match a label, but it only matches internal names like `PointLight_UAID_...`. These clarifications prevent confusion.
+
+**Files Changed:**
+- `Python/mcp/services/agentbridge.py` - Tool descriptions and help text
+
+**Session Duration:** ~10 minutes
+
+---
 
 ### Dec 31 (Session 13) - Bug Fixes from Systematic MCP Tool Testing
 **Feature:** Fixed two bugs discovered during systematic testing of all MCP tools.

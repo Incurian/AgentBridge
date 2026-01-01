@@ -833,13 +833,56 @@ bool FPropertyAccessor::WriteObjectProperty(void* Container, FObjectPropertyBase
 {
 	void* ValuePtr = Property->ContainerPtrToValuePtr<void>(Container);
 
-	// Resolve the object reference
-	UObject* Object = ResolveObjectReference(Value.StringValue, Property->PropertyClass);
-
-	// Allow null if the string was empty
-	if (!Object && !Value.StringValue.IsEmpty())
+	// Handle FSoftObjectProperty specially - it stores a path, not a loaded object
+	if (FSoftObjectProperty* SoftProp = CastField<FSoftObjectProperty>(Property))
 	{
-		return false;
+		FSoftObjectPath SoftPath(Value.StringValue);
+		FSoftObjectPtr SoftPtr(SoftPath);
+		SoftProp->SetPropertyValue(ValuePtr, SoftPtr);
+		return true;
+	}
+
+	// Handle FSoftClassProperty similarly
+	if (FSoftClassProperty* SoftClassProp = CastField<FSoftClassProperty>(Property))
+	{
+		FSoftObjectPath SoftPath(Value.StringValue);
+		FSoftObjectPtr SoftPtr(SoftPath);
+		SoftClassProp->SetPropertyValue(ValuePtr, SoftPtr);
+		return true;
+	}
+
+	// For regular object properties (TObjectPtr, raw pointers), resolve and load the object
+	FSoftObjectPath SoftPath(Value.StringValue);
+	UObject* Object = nullptr;
+
+	if (!Value.StringValue.IsEmpty())
+	{
+		// Try to resolve (already loaded)
+		Object = SoftPath.ResolveObject();
+
+		// If not loaded, try to load it
+		if (!Object)
+		{
+			Object = SoftPath.TryLoad();
+		}
+
+		// If still not found, check asset registry and load
+		if (!Object)
+		{
+			Object = ResolveObjectReference(Value.StringValue, Property->PropertyClass);
+		}
+
+		// If we couldn't find the object, fail
+		if (!Object)
+		{
+			return false;
+		}
+
+		// Type check
+		if (Property->PropertyClass && !Object->IsA(Property->PropertyClass))
+		{
+			return false;
+		}
 	}
 
 	Property->SetObjectPropertyValue(ValuePtr, Object);

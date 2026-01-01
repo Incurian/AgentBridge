@@ -77,7 +77,7 @@ TOOLS = [
                 },
                 "name_pattern": {
                     "type": "string",
-                    "description": "Wildcard pattern for actor name/label (e.g., 'Light*', '*Door*')",
+                    "description": "Wildcard pattern for internal actor name (e.g., 'Light*', '*Door*'). Note: Matches internal names, NOT labels. Use get_actor with a label to find actors by display name.",
                 },
                 "tag": {
                     "type": "string",
@@ -99,7 +99,7 @@ TOOLS = [
     },
     {
         "name": "get_actor",
-        "description": "Get detailed information about a specific actor, including properties and components.",
+        "description": "Get detailed information about a specific actor, including properties and components. Accepts friendly labels (e.g., 'PlayerStart') which resolve to the full internal name.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -1517,10 +1517,13 @@ Use help(topic='actors|properties|classes|assets|components|console|workflows') 
 ACTOR OPERATIONS:
 
 Finding actors:
-- query_actors(name_pattern="*Door*") - Wildcard search
-- query_actors(class_name="PointLight") - Filter by type
+- query_actors(class_name="PointLight") - Filter by type (recommended)
+- query_actors(name_pattern="*Door*") - Wildcard on INTERNAL names (not labels!)
 - query_actors(tag="Interactive") - Filter by tag
 - get_actor(actor_id="MyLight", include_properties=True) - Full details
+
+IMPORTANT: name_pattern matches internal names like "StaticMeshActor_UAID_123...",
+not labels like "MyDoor". To find by label, use get_actor(actor_id="label").
 
 Creating actors:
 - spawn_actor(class_name="PointLight", location=[0,0,500], label="MyLight")
