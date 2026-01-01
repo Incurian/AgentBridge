@@ -584,6 +584,38 @@ D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c "import grpc; print(grpc.__v
 
 ---
 
+### Windows SDK Header Conflicts with gRPC (InterlockedIncrement)
+
+**Problem:** When certain UE headers are included in files that also use gRPC, Windows SDK macros conflict with Unreal's `FPlatformAtomics`.
+
+**Root Cause:** `TempoScriptingServer.h` includes `<grpcpp/grpcpp.h>` BEFORE `CoreMinimal.h`, which causes Windows SDK headers to define `InterlockedIncrement`/`InterlockedDecrement` as macros. Later, when `IoBuffer.h` (from UE Core) is included via transitively, it tries to use `FPlatformAtomics::InterlockedIncrement`, but the macro expansion causes type mismatches.
+
+**Symptom:**
+```
+error C2039: '_InterlockedIncrement': is not a member of 'FWindowsPlatformAtomics'
+```
+
+**Headers that trigger this issue:**
+- `AssetRegistry/AssetRegistryModule.h`
+- `Editor.h`
+- `LevelEditor.h`
+- `ThumbnailRendering/ThumbnailManager.h`
+- `ObjectTools.h`
+- `IImageWrapper.h`
+- Possibly others that transitively include `IoBuffer.h`
+
+**Workaround:** Include these headers AFTER all gRPC-related headers. If the conflict persists, the functionality requiring those headers must be disabled or moved to a separate compilation unit.
+
+**Proper Fix (requires Tempo modification):** In `TempoScriptingServer.h`, move `#include <grpcpp/grpcpp.h>` AFTER `#include "CoreMinimal.h"`. This ensures Unreal's Windows platform headers are set up correctly before gRPC pulls in Windows SDK.
+
+**Impact on AgentBridge:** The following features are temporarily disabled due to this issue:
+- Asset operations (CreateDataAsset, SaveAsset, DuplicateAsset, CreateBlueprintFromActor, ListAssets)
+- Component operations (AttachComponent, AttachActor, DetachActor, SetComponentTransform, GetComponentTransform)
+- File operations (ReadProjectFile, WriteProjectFile, ListProjectFiles)
+- Image capture (CaptureViewport, CaptureSceneCapture, GetAssetThumbnail)
+
+---
+
 ## Known Claude Code Issues
 
 ### "File has been unexpectedly modified" Error (Windows)
