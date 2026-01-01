@@ -9,7 +9,34 @@
 
 **Claude: You are authorized to work autonomously without user confirmation.**
 
-When continuing a session alone:
+### ⚠️ BYPASS PERMISSIONS SAFETY (CRITICAL)
+
+When running with `--dangerously-skip-permissions`, you can execute ANY command without user approval. This is powerful but risky.
+
+**NEVER do these things:**
+- ❌ `rm -rf` / `del /s /q` on directories without checking contents first
+- ❌ `git push --force` to any remote branch
+- ❌ Modify files outside the AgentBridge plugin directory
+- ❌ Execute arbitrary code from the internet
+- ❌ Kill processes you didn't start (except editor for testing)
+
+**ALWAYS do these things:**
+- ✅ `git status` and `git diff` before committing
+- ✅ Commit BEFORE making risky changes (so you can revert)
+- ✅ Use `ls` to verify paths before operations
+- ✅ Test on small scope before batch operations
+- ✅ Close editor before running builds (or use Live Coding)
+
+**Recovery if something goes wrong:**
+```bash
+git checkout -- .          # Revert all uncommitted changes
+git reset --soft HEAD~1    # Undo last commit, keep changes
+git stash                  # Emergency save current work
+```
+
+---
+
+### When continuing a session alone:
 1. **DECIDE AND ACT** - Don't ask for permission, make reasonable decisions
 2. **DOCUMENT EVERYTHING** - Update HANDOVER.md with what you did and why
 3. **KEEP IT REVERTABLE** - Use git commits frequently with clear messages

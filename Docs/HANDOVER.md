@@ -1,7 +1,54 @@
 # AgentBridge Handover Document
 
 > Session handover for Claude Code continuity.
-> Last Updated: December 31, 2025 (Session 11 - Wrapping up for MCP restart)
+> Last Updated: December 31, 2025 (Session 12 - Safety Guidelines Added)
+
+---
+
+## ⚠️ BYPASS PERMISSIONS MODE SAFETY
+
+**When running with `--dangerously-skip-permissions`, Claude can execute ANY command without confirmation.**
+
+### 🛡️ Safety Guidelines
+
+1. **Git is Your Safety Net**
+   - Commit frequently with descriptive messages before major changes
+   - Use `git diff` to review changes before committing
+   - If something goes wrong: `git checkout -- .` to revert all uncommitted changes
+   - Or `git stash` to save current work temporarily
+
+2. **Dangerous Operations to Avoid**
+   - ❌ `rm -rf` or `del /s /q` on important directories
+   - ❌ Force-pushing to shared branches (`git push --force`)
+   - ❌ Modifying system files outside the project
+   - ❌ Running untested scripts with elevated privileges
+   - ❌ Executing commands that could affect other running processes
+
+3. **Safe Practices**
+   - ✅ Always `ls` or check before deleting
+   - ✅ Use `git status` before commits
+   - ✅ Test commands on small scope first
+   - ✅ Keep the editor closed during builds (or use Live Coding)
+   - ✅ Work in feature branches, not master
+
+4. **Recovery Commands**
+   ```bash
+   # Undo all uncommitted changes
+   git checkout -- .
+
+   # Undo last commit (keep changes)
+   git reset --soft HEAD~1
+
+   # See what changed
+   git diff HEAD~1
+
+   # Emergency stash
+   git stash push -m "emergency backup"
+   ```
+
+5. **Kill Switch**
+   - Close the terminal or press Ctrl+C multiple times to interrupt
+   - Use `cmd //c "taskkill /F /IM UnrealEditor-Cmd.exe"` to force-quit editor
 
 ---
 
@@ -85,6 +132,34 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 ---
 
 ## Session Log
+
+### Dec 31 (Session 12) - Automated Testing Workflow Validation
+**Feature:** Validated and documented the complete build-run-test-quit workflow for autonomous MCP testing.
+
+**Workflow Tested:**
+1. ✅ TempoEnv Python verified (3.11.8 with grpcio 1.62.2, protobuf 4.25.3)
+2. ✅ Build with `./Plugins/Tempo/Scripts/Build.sh` (~63 seconds)
+3. ✅ Start editor with `./Plugins/Tempo/Scripts/Run.sh` (background)
+4. ✅ gRPC server ready on port 10001 (~30 seconds after startup)
+5. ✅ MCP tools working (spawned `MCP_TestLight_Session12`)
+6. ✅ Force-quit with `cmd //c "taskkill /F /IM UnrealEditor-Cmd.exe"`
+
+**Key Findings:**
+- `tempo_quit` MCP tool returns success but may block on save dialog
+- Git Bash interprets `/F` as a path - must use `cmd //c` wrapper
+- `query_actors` `name_pattern` matches internal names, not labels
+- Use `class_name` filter or `get_actor` to find actors by label
+
+**Documentation Updated:**
+- `Docs/TestingStrategy.md` - Added "Automated Build-Run-Test Workflow" section
+- Added quick reference commands, timing table, gotchas, Python example
+
+**For Autonomous Mode:**
+```bash
+claude --dangerously-skip-permissions
+```
+
+---
 
 ### Dec 31 (Session 9) - Wishlist Implementation Phase 1
 **Feature:** Implemented 16 new commands for asset creation, component manipulation, and file operations.
