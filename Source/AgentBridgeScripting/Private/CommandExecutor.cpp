@@ -89,6 +89,89 @@ AActor* FCommandExecutor::ResolveActor(const FString& ActorId, FString* OutError
 }
 
 //~==============================================================================
+// Object Resolution (Actor or Asset)
+// Following the "tools should just work" philosophy - automatically determine
+// whether the ID refers to an actor in the world or an asset on disk.
+//~==============================================================================
+
+UObject* FCommandExecutor::ResolveObject(const FString& ObjectId, FString* OutError)
+{
+	if (ObjectId.IsEmpty())
+	{
+		if (OutError) *OutError = TEXT("ObjectId is empty");
+		return nullptr;
+	}
+
+	// First, try to resolve as an actor (most common case)
+	// This handles: actor names, labels, GUIDs, paths like "PersistentLevel.MyActor"
+	UWorld* World = FWorldContextManager::Get().GetTargetWorld();
+	if (World)
+	{
+		AActor* Actor = FActorOperations::FindActorByName(ObjectId, World);
+		if (Actor)
+		{
+			return Actor;
+		}
+	}
+
+	// If it looks like an asset path (contains /Game/ or starts with /), try loading it
+	if (ObjectId.Contains(TEXT("/Game/")) || ObjectId.Contains(TEXT("/Script/")) ||
+		ObjectId.StartsWith(TEXT("/")))
+	{
+		FSoftObjectPath SoftPath(ObjectId);
+
+		// Try to resolve without loading first
+		UObject* Object = SoftPath.ResolveObject();
+		if (Object)
+		{
+			return Object;
+		}
+
+		// Try to load the asset
+		Object = SoftPath.TryLoad();
+		if (Object)
+		{
+			return Object;
+		}
+
+		// For DataAssets, the path might be missing the class suffix
+		// e.g., "/Game/MyAsset" instead of "/Game/MyAsset.MyAsset"
+		if (!ObjectId.Contains(TEXT(".")))
+		{
+			// Try appending the asset name as the class name
+			FString AssetName = FPaths::GetBaseFilename(ObjectId);
+			FString FullPath = ObjectId + TEXT(".") + AssetName;
+			FSoftObjectPath FullSoftPath(FullPath);
+			Object = FullSoftPath.TryLoad();
+			if (Object)
+			{
+				return Object;
+			}
+		}
+	}
+
+	// If we get here, we couldn't resolve it
+	if (OutError)
+	{
+		if (World)
+		{
+			*OutError = FString::Printf(
+				TEXT("Could not resolve '%s' as actor or asset. "
+					 "For assets, use full path like '/Game/MyAsset.MyAsset'"),
+				*ObjectId);
+		}
+		else
+		{
+			*OutError = FString::Printf(
+				TEXT("No world available and could not resolve '%s' as asset"),
+				*ObjectId);
+		}
+	}
+
+	return nullptr;
+}
+
+//~==============================================================================
 // Actor Info Building
 //~==============================================================================
 
@@ -554,8 +637,10 @@ void FCommandExecutor::Execute(const FGetPropertyPathCommand& Command, FProperty
 	Response.CommandId = Command.CommandId;
 
 	FString Error;
-	AActor* Actor = ResolveActor(Command.ActorId, &Error);
-	if (!Actor)
+	// ResolveObject handles both actors and assets automatically
+	// Following "tools should just work" philosophy - users can pass actor names OR asset paths
+	UObject* Object = ResolveObject(Command.ActorId, &Error);
+	if (!Object)
 	{
 		Response.bSuccess = false;
 		Response.ErrorMessage = Error;
@@ -563,7 +648,7 @@ void FCommandExecutor::Execute(const FGetPropertyPathCommand& Command, FProperty
 		return;
 	}
 
-	FPropertyPathResult Result = FAgentPropertyPath::GetValue(Actor, Command.Path);
+	FPropertyPathResult Result = FAgentPropertyPath::GetValue(Object, Command.Path);
 	if (!Result.bSuccess)
 	{
 		Response.bSuccess = false;
@@ -584,8 +669,10 @@ void FCommandExecutor::Execute(const FSetPropertyPathCommand& Command, FAgentRes
 	Response.CommandId = Command.CommandId;
 
 	FString Error;
-	AActor* Actor = ResolveActor(Command.ActorId, &Error);
-	if (!Actor)
+	// ResolveObject handles both actors and assets automatically
+	// Following "tools should just work" philosophy - users can pass actor names OR asset paths
+	UObject* Object = ResolveObject(Command.ActorId, &Error);
+	if (!Object)
 	{
 		Response.bSuccess = false;
 		Response.ErrorMessage = Error;
@@ -594,7 +681,7 @@ void FCommandExecutor::Execute(const FSetPropertyPathCommand& Command, FAgentRes
 	}
 
 	FAgentPropertyValue Value = JsonToPropertyValue(Command.Value);
-	Response.bSuccess = FAgentPropertyPath::SetValue(Actor, Command.Path, Value);
+	Response.bSuccess = FAgentPropertyPath::SetValue(Object, Command.Path, Value);
 	if (!Response.bSuccess)
 	{
 		Response.ErrorMessage = FString::Printf(TEXT("Failed to set path '%s'"), *Command.Path);
@@ -614,11 +701,11 @@ void FCommandExecutor::Execute(const FCallFunctionCommand& Command, FFunctionCal
 	UObject* Target = nullptr;
 	UClass* TargetClass = nullptr;
 
-	// Resolve target
+	// Resolve target - ResolveObject handles both actors and assets
 	if (!Command.ActorId.IsEmpty())
 	{
 		FString Error;
-		Target = ResolveActor(Command.ActorId, &Error);
+		Target = ResolveObject(Command.ActorId, &Error);
 		if (!Target)
 		{
 			Response.bSuccess = false;

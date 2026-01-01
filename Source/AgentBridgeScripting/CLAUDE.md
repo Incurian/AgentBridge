@@ -117,29 +117,29 @@ FString PropertyValueToJson(const FAgentPropertyValue& Value);
 
 Supports: Bool, Int, Float, String, Vector, Rotator, Transform, Color, Arrays, Structs
 
-## Known Issues
+## Resolved Issues (Session 19)
 
-### Nested Struct Property Writes (TOP PRIORITY)
+### Nested Struct Property Writes - ✅ FIXED
 
-Writing to nested struct properties (e.g., `DefaultDefinition.BiomeColor`) returns success but value is unchanged.
+Writing to nested struct properties now works correctly. The fix was in AgentBridgeCore:
+- Added `WritePropertyDirect()` for pre-resolved value pointers
+- Path resolution returns direct pointers, so we skip `ContainerPtrToValuePtr()` offset
 
-**Symptom:**
+### UObject Property Access - ✅ IMPLEMENTED
+
+Property operations (`get_property`, `set_property`) now work on **both actors AND assets**:
+- Pass actor name/label/GUID → works as before
+- Pass asset path like `/Game/Data/MyAsset.MyAsset` → loads and accesses the asset
+- The tool automatically figures out which resolution method to use
+
 ```python
-set_property(actor="X", path="DefaultDefinition.BiomeColor", value="(R=0,G=1,B=0,A=1)")
-# Returns success=true, but value remains unchanged
+# These all work now:
+get_property(actor_id="MyActor", path="Health")           # Actor by name
+get_property(actor_id="/Game/Data/BiomeDef", path="BiomeColor")  # DataAsset
+set_property(actor_id="/Game/Data/BiomeDef", path="BiomeColor", value="(R=1,G=0,B=0,A=1)")
 ```
 
-**Investigation Notes:**
-- Reading nested struct properties works fine
-- Writing to top-level struct properties works
-- Issue appears specific to nested paths in Blueprint-generated structs
-- May need to mark outer struct dirty or use different write approach
-
-**Likely Fix Location:** `CommandExecutor.cpp` - `SetPropertyPath()` function
-
-**Workaround:** Use pre-configured DataAssets with correct values.
-
-**Status:** TOP PRIORITY - blocks PCG Biome custom configuration.
+## Known Limitations
 
 ### TSoftObjectPtr Assignment
 
@@ -147,13 +147,13 @@ Cannot assign `TSoftObjectPtr<>` properties directly - use `TObjectPtr<>` where 
 
 **Status:** Complex UE limitation, workaround is to use TObjectPtr properties.
 
-## Todos
+## Completed Todos
 
 - [x] Asset creation (`CreateAsset`, `SaveAsset`, `DuplicateAsset`)
 - [x] Component operations (`AttachComponent`, `DetachActor`, etc.)
 - [x] File operations with sandboxing
-- [ ] **TOP PRIORITY: Fix nested struct property writes** - see Known Issues above
-- [ ] UObject property access (DataAssets, Materials - not just actors)
+- [x] Nested struct property writes - fixed via `WritePropertyDirect()`
+- [x] UObject property access - unified via `ResolveObject()`
 
 ## Stretch Goals
 

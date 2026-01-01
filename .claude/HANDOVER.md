@@ -1,6 +1,6 @@
 # AgentBridge Session Handover
 
-> Last Updated: January 1, 2026 (Session 19)
+> Last Updated: January 1, 2026 (Session 19 - continued)
 
 ## Current State
 
@@ -11,6 +11,7 @@ AgentBridge is **feature-complete** with:
 - World Partition support
 - PIE/Runtime support
 - **Nested BP struct writes now working!**
+- **UObject property access (DataAssets, Materials) now working!**
 
 ## Completed Items
 
@@ -19,6 +20,7 @@ AgentBridge is **feature-complete** with:
 | Task | Status | Notes |
 |------|--------|-------|
 | **Fix nested BP struct writes** | ✅ DONE | Added `WritePropertyDirect()` for pre-resolved value pointers |
+| **UObject property access** | ✅ DONE | Added `ResolveObject()` - works on actors AND assets |
 | Blueprint class normalization | ✅ DONE | Already implemented in `FindClassByName()` |
 | Unified property setter | ✅ DONE | Already implemented via `_normalize_property_value()` |
 | Documentation reorganization | ✅ DONE | Per-module CLAUDE.md files |
@@ -28,7 +30,6 @@ AgentBridge is **feature-complete** with:
 
 | Feature | Module | Effort | Notes |
 |---------|--------|--------|-------|
-| UObject property access | Core/Runtime | Medium | Read/write properties on DataAssets, Materials |
 | Blueprint graph editing | Scripting | Very High | Competitor parity |
 | Niagara particle control | Scripting | High | Similar to PCG pattern |
 | Sequencer control | Scripting | High | Complex API surface |
@@ -56,6 +57,22 @@ Files changed:
 - `AgentPropertyPath.cpp` - Use `WritePropertyDirect()` for resolved paths
 - `PropertyAccessor.cpp` - Add `WritePropertyDirect()`, refactor helpers
 - `PropertyAccessor.h` - Document new API
+
+### UObject Property Access
+
+Following "tools should just work" philosophy, property commands now auto-detect whether
+the target is an actor or an asset:
+
+```cpp
+// ResolveObject() in CommandExecutor.cpp:
+// 1. First tries actor resolution (most common case)
+// 2. Falls back to asset path loading if that fails
+// 3. Auto-appends ".AssetName" suffix if path is missing it
+```
+
+Files changed:
+- `CommandExecutor.cpp` - Add `ResolveObject()`, update Get/SetPropertyPath handlers
+- `CommandExecutor.h` - Declare `ResolveObject()` in private section
 
 ## Recent Sessions Summary
 

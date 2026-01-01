@@ -3,6 +3,47 @@
 > UE 5.6 plugin exposing editor/runtime state to external AI agents via gRPC + MCP.
 > Primary use case: "Build me a level" - agents need full read/write/discover capabilities.
 
+## Core Design Philosophy
+
+**🎯 THE MOST IMPORTANT PRINCIPLE:**
+
+> **Users and agents should not need to know implementation details. Tools should just work.**
+
+When a tool has multiple ways to accomplish something, it should figure out the right approach
+under the hood. The complexity lives in the lower modules; the API surface stays simple.
+
+### Examples of This Philosophy
+
+| User Intent | Tool Behavior |
+|-------------|---------------|
+| `spawn_actor("BP_MyActor")` | Auto-adds `_C` suffix, searches loaded classes, falls back to path loading |
+| `set_property(path="Color", value=[1,0,0])` | Detects array format, converts to `(R=1,G=0,B=0,A=1)`, handles color/vector/rotator |
+| `get_property(actor="MyLight", path="Intensity")` | Resolves label to actor name, finds component, traverses path |
+| `query_actors(class="PointLight")` | Matches `APointLight`, `PointLight`, `PointLightActor` variants |
+
+### Implementation Layering
+
+```
+┌─────────────────────────────────────┐
+│  MCP Tools (Python)                 │  ← Simple API, smart defaults
+│  - Auto-detect value types          │
+│  - Normalize class names            │
+│  - Provide helpful error messages   │
+├─────────────────────────────────────┤
+│  CommandExecutor (Scripting)        │  ← Route to correct handler
+│  - Dispatch based on input format   │
+│  - Validate and transform inputs    │
+├─────────────────────────────────────┤
+│  Core/Runtime                       │  ← Handle edge cases
+│  - Multiple resolution strategies   │
+│  - Fallback paths for failures      │
+│  - Type coercion and conversion     │
+└─────────────────────────────────────┘
+```
+
+**When adding features:** Put the intelligence in lower modules. The user-facing API should
+be minimal and obvious. If something "should just work," make it work automatically.
+
 ## Quick Start
 
 | What | Where |

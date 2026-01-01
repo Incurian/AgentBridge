@@ -227,6 +227,17 @@ private:
 	static AActor* ResolveActor(const FString& ActorId, FString* OutError = nullptr);
 
 	/**
+	 * Finds any UObject by identifier - supports both actors and assets.
+	 * Following "tools should just work" philosophy: tries actor resolution first,
+	 * then falls back to asset path loading.
+	 *
+	 * @param ObjectId	Actor name/label/path OR asset path (e.g., "/Game/Data/MyAsset.MyAsset")
+	 * @param OutError	Optional error message on failure
+	 * @return			The found UObject (actor or asset), or nullptr
+	 */
+	static UObject* ResolveObject(const FString& ObjectId, FString* OutError = nullptr);
+
+	/**
 	 * Starts execution timing.
 	 */
 	static double StartTiming();
