@@ -52,6 +52,8 @@ be minimal and obvious. If something "should just work," make it work automatica
 | HTTP Port | 8080 (fallback) |
 | Python Env | `D:/tempo/TempoSample/TempoEnv/Scripts/python.exe` |
 | Build Script | `D:/tempo/TempoSample/Scripts/Build.sh` |
+| Run Editor | `cd D:/tempo/TempoSample && ./Plugins/Tempo/Scripts/Run.sh` |
+| Kill Editor | `cmd //c "taskkill /F /IM UnrealEditor-Cmd.exe"` |
 
 ## Architecture
 
@@ -127,6 +129,27 @@ cd D:/tempo/TempoSample/Scripts && ./Build.sh
 # Live Coding (editor running)
 Ctrl+Alt+F11
 ```
+
+## Running the Editor
+
+```bash
+# Start editor (headless, runs in background)
+cd D:/tempo/TempoSample && ./Plugins/Tempo/Scripts/Run.sh
+
+# Wait ~30 seconds for gRPC server to be ready on port 10001
+
+# Force-quit editor (IMPORTANT: use cmd wrapper in Git Bash)
+cmd //c "taskkill /F /IM UnrealEditor-Cmd.exe"
+```
+
+**Important Gotchas:**
+
+| Issue | Solution |
+|-------|----------|
+| Git Bash interprets `/F` as path | Use `cmd //c "taskkill /F ..."` wrapper |
+| `tempo_quit` may hang on save dialog | Use `taskkill /F` for guaranteed termination |
+| gRPC not ready immediately | Wait ~30 seconds after Run.sh starts |
+| Editor already running | Kill first, then rebuild, then run |
 
 ## Testing
 

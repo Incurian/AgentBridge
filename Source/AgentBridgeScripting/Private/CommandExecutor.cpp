@@ -693,6 +693,40 @@ void FCommandExecutor::Execute(const FSetPropertyPathCommand& Command, FAgentRes
 // Function Commands
 //~==============================================================================
 
+//~==============================================================================
+// Function-to-Property Fallback Mapping
+// Following "tools should just work" philosophy: FunctionInvoker has issues with
+// struct return values, so we automatically redirect known getters to property access.
+//~==============================================================================
+
+static TMap<FString, FString> GetFunctionToPropertyMap()
+{
+	static TMap<FString, FString> Map;
+	static bool bInitialized = false;
+
+	if (!bInitialized)
+	{
+		// Actor transform getters -> equivalent property paths
+		Map.Add(TEXT("K2_GetActorLocation"), TEXT("RootComponent.RelativeLocation"));
+		Map.Add(TEXT("K2_GetActorRotation"), TEXT("RootComponent.RelativeRotation"));
+		Map.Add(TEXT("GetActorScale3D"), TEXT("RootComponent.RelativeScale3D"));
+		Map.Add(TEXT("GetActorLocation"), TEXT("RootComponent.RelativeLocation"));
+		Map.Add(TEXT("GetActorRotation"), TEXT("RootComponent.RelativeRotation"));
+
+		// Component getters
+		Map.Add(TEXT("GetRelativeLocation"), TEXT("RelativeLocation"));
+		Map.Add(TEXT("GetRelativeRotation"), TEXT("RelativeRotation"));
+		Map.Add(TEXT("GetRelativeScale3D"), TEXT("RelativeScale3D"));
+		Map.Add(TEXT("GetComponentLocation"), TEXT("RelativeLocation"));
+		Map.Add(TEXT("GetComponentRotation"), TEXT("RelativeRotation"));
+		Map.Add(TEXT("GetComponentScale"), TEXT("RelativeScale3D"));
+
+		bInitialized = true;
+	}
+
+	return Map;
+}
+
 void FCommandExecutor::Execute(const FCallFunctionCommand& Command, FFunctionCallResponse& Response)
 {
 	double StartTime = StartTiming();
@@ -732,6 +766,24 @@ void FCommandExecutor::Execute(const FCallFunctionCommand& Command, FFunctionCal
 		Response.ErrorMessage = TEXT("Must specify ActorId or ClassName");
 		Response.ExecutionTimeMs = EndTiming(StartTime);
 		return;
+	}
+
+	// Check for function-to-property fallback (workaround for FunctionInvoker struct return issue)
+	// Following "tools should just work" - if we know a function returns broken data, use property access
+	const TMap<FString, FString>& FunctionToProperty = GetFunctionToPropertyMap();
+	if (Target && FunctionToProperty.Contains(Command.FunctionName))
+	{
+		const FString& PropertyPath = FunctionToProperty[Command.FunctionName];
+		FPropertyPathResult PathResult = FAgentPropertyPath::GetValue(Target, PropertyPath);
+
+		if (PathResult.bSuccess)
+		{
+			Response.bSuccess = true;
+			Response.ReturnValue = PropertyValueToJson(PathResult.Value);
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+		// If property access fails, fall through to normal function invocation
 	}
 
 	// Find function

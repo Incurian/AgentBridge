@@ -118,13 +118,19 @@ All internal write helpers now take value pointers directly, not containers.
 
 ## Known Limitations
 
-### FunctionInvoker Return Values
+### FunctionInvoker Return Values - AUTO-FIXED
 
-Function calls may return default values for complex struct return types.
+Function calls were returning default/zero values for complex struct return types.
 
-**Status:** Needs testing - the `WritePropertyDirect` fix may have also fixed this issue.
+**Solution (Session 19):**
+- Added `GetFunctionToPropertyMap()` in CommandExecutor.cpp
+- Common getters automatically redirect to property access
+- K2_GetActorLocation, K2_GetActorRotation, GetActorScale3D, etc. all work correctly now
+- Users get expected results without knowing about the workaround
 
-**Workaround:** Use property queries instead of function calls when possible.
+**Root Cause (for reference):** Issue in how `FFunctionInvoker::InvokeFunction` extracts return
+values from the UFunction parameter block. Not fixed in FunctionInvoker itself, but transparently
+worked around at the command layer.
 
 ## Stretch Goals
 

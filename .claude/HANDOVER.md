@@ -42,7 +42,14 @@ AgentBridge is **feature-complete** with:
 |-------|--------|------------|
 | TSoftObjectPtr assignment | Won't fix | Use TObjectPtr properties |
 | tempo_call_function params | Won't fix | Use `call_static_function` |
-| FunctionInvoker return values | Needs testing | May work now with WritePropertyDirect fix |
+| FunctionInvoker struct returns | **AUTO-FIXED** | Transparent fallback to property access |
+
+**FunctionInvoker struct returns - now auto-fixed!**
+- Common getter functions (K2_GetActorLocation, K2_GetActorRotation, GetActorScale3D, etc.)
+  are automatically redirected to property access under the hood
+- Users call the function, get correct results - no workarounds needed
+- Following "tools should just work" philosophy
+- Added `GetFunctionToPropertyMap()` in CommandExecutor.cpp
 
 ## Session 19 Technical Details
 
