@@ -118,6 +118,8 @@ void UAgentBridgeServiceSubsystem::RegisterScriptingServices(FTempoScriptingServ
 			&UAgentBridgeServiceSubsystem::GetStreamingState),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestQueryLandscape,
 			&UAgentBridgeServiceSubsystem::QueryLandscape),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetLandscapeBounds,
+			&UAgentBridgeServiceSubsystem::GetLandscapeBounds),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetDataLayers,
 			&UAgentBridgeServiceSubsystem::GetDataLayers),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetActorsInDataLayer,
@@ -1275,6 +1277,45 @@ void UAgentBridgeServiceSubsystem::QueryLandscape(
 	for (const FStreamingActorReference& Ref : Proxies)
 	{
 		FillStreamingActorInfo(Response.add_landscape_proxies(), Ref);
+	}
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::GetLandscapeBounds(
+	const GetLandscapeBoundsRequest& Request,
+	const TResponseDelegate<GetLandscapeBoundsResponse>& ResponseContinuation)
+{
+	UWorld* World = GetWorld();
+	FLandscapeBounds Bounds = FWorldPartitionOps::GetLandscapeBounds(World);
+
+	GetLandscapeBoundsResponse Response;
+	Response.set_valid(Bounds.bValid);
+
+	if (Bounds.bValid)
+	{
+		auto* Min = Response.mutable_min();
+		Min->set_x(Bounds.Min.X);
+		Min->set_y(Bounds.Min.Y);
+		Min->set_z(Bounds.Min.Z);
+
+		auto* Max = Response.mutable_max();
+		Max->set_x(Bounds.Max.X);
+		Max->set_y(Bounds.Max.Y);
+		Max->set_z(Bounds.Max.Z);
+
+		auto* Center = Response.mutable_center();
+		Center->set_x(Bounds.Center.X);
+		Center->set_y(Bounds.Center.Y);
+		Center->set_z(Bounds.Center.Z);
+
+		auto* Extent = Response.mutable_extent();
+		Extent->set_x(Bounds.Extent.X);
+		Extent->set_y(Bounds.Extent.Y);
+		Extent->set_z(Bounds.Extent.Z);
+
+		Response.set_proxy_count(Bounds.ProxyCount);
+		Response.set_landscape_name(TCHAR_TO_UTF8(*Bounds.LandscapeName));
 	}
 
 	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);

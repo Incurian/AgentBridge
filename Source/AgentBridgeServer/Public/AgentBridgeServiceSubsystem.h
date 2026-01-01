@@ -43,6 +43,8 @@ namespace AgentBridgeServer
 	class GetStreamingStateResponse;
 	class QueryLandscapeRequest;
 	class QueryLandscapeResponse;
+	class GetLandscapeBoundsRequest;
+	class GetLandscapeBoundsResponse;
 	class GetDataLayersRequest;
 	class GetDataLayersResponse;
 	class GetActorsInDataLayerRequest;
@@ -225,6 +227,10 @@ public:
 	void QueryLandscape(
 		const AgentBridgeServer::QueryLandscapeRequest& Request,
 		const TResponseDelegate<AgentBridgeServer::QueryLandscapeResponse>& ResponseContinuation);
+
+	void GetLandscapeBounds(
+		const AgentBridgeServer::GetLandscapeBoundsRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::GetLandscapeBoundsResponse>& ResponseContinuation);
 
 	void GetDataLayers(
 		const AgentBridgeServer::GetDataLayersRequest& Request,

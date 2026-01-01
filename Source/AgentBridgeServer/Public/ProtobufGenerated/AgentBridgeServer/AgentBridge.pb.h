@@ -183,6 +183,12 @@ AGENTBRIDGESERVER_API extern GetDataLayersRequestDefaultTypeInternal _GetDataLay
 class GetDataLayersResponse;
 struct GetDataLayersResponseDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern GetDataLayersResponseDefaultTypeInternal _GetDataLayersResponse_default_instance_;
+class GetLandscapeBoundsRequest;
+struct GetLandscapeBoundsRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern GetLandscapeBoundsRequestDefaultTypeInternal _GetLandscapeBoundsRequest_default_instance_;
+class GetLandscapeBoundsResponse;
+struct GetLandscapeBoundsResponseDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern GetLandscapeBoundsResponseDefaultTypeInternal _GetLandscapeBoundsResponse_default_instance_;
 class GetPropertyPathRequest;
 struct GetPropertyPathRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern GetPropertyPathRequestDefaultTypeInternal _GetPropertyPathRequest_default_instance_;
@@ -497,7 +503,7 @@ class AGENTBRIDGESERVER_API WriteProjectFileResponse final :
                &_WriteProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    76;
+    78;
 
   friend void swap(WriteProjectFileResponse& a, WriteProjectFileResponse& b) {
     a.Swap(&b);
@@ -702,7 +708,7 @@ class AGENTBRIDGESERVER_API WriteProjectFileRequest final :
                &_WriteProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    75;
+    77;
 
   friend void swap(WriteProjectFileRequest& a, WriteProjectFileRequest& b) {
     a.Swap(&b);
@@ -1600,7 +1606,7 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsRequest final :
                &_SearchConsoleCommandsRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    54;
+    56;
 
   friend void swap(SearchConsoleCommandsRequest& a, SearchConsoleCommandsRequest& b) {
     a.Swap(&b);
@@ -2016,7 +2022,7 @@ class AGENTBRIDGESERVER_API SaveAssetResponse final :
                &_SaveAssetResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    59;
+    61;
 
   friend void swap(SaveAssetResponse& a, SaveAssetResponse& b) {
     a.Swap(&b);
@@ -2227,7 +2233,7 @@ class AGENTBRIDGESERVER_API SaveAssetRequest final :
                &_SaveAssetRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    58;
+    60;
 
   friend void swap(SaveAssetRequest& a, SaveAssetRequest& b) {
     a.Swap(&b);
@@ -2420,7 +2426,7 @@ class AGENTBRIDGESERVER_API SaveActorAsBlueprintResponse final :
                &_SaveActorAsBlueprintResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    61;
+    63;
 
   friend void swap(SaveActorAsBlueprintResponse& a, SaveActorAsBlueprintResponse& b) {
     a.Swap(&b);
@@ -2631,7 +2637,7 @@ class AGENTBRIDGESERVER_API SaveActorAsBlueprintRequest final :
                &_SaveActorAsBlueprintRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    60;
+    62;
 
   friend void swap(SaveActorAsBlueprintRequest& a, SaveActorAsBlueprintRequest& b) {
     a.Swap(&b);
@@ -2860,7 +2866,7 @@ class AGENTBRIDGESERVER_API ReadProjectFileResponse final :
                &_ReadProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    74;
+    76;
 
   friend void swap(ReadProjectFileResponse& a, ReadProjectFileResponse& b) {
     a.Swap(&b);
@@ -3095,7 +3101,7 @@ class AGENTBRIDGESERVER_API ReadProjectFileRequest final :
                &_ReadProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    73;
+    75;
 
   friend void swap(ReadProjectFileRequest& a, ReadProjectFileRequest& b) {
     a.Swap(&b);
@@ -4141,7 +4147,7 @@ class AGENTBRIDGESERVER_API ListProjectDirectoryRequest final :
                &_ListProjectDirectoryRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    78;
+    80;
 
   friend void swap(ListProjectDirectoryRequest& a, ListProjectDirectoryRequest& b) {
     a.Swap(&b);
@@ -5249,6 +5255,142 @@ class AGENTBRIDGESERVER_API GetPropertyPathRequest final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API GetLandscapeBoundsRequest final :
+    public ::google::protobuf_tempo::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:AgentBridgeServer.GetLandscapeBoundsRequest) */ {
+ public:
+  inline GetLandscapeBoundsRequest() : GetLandscapeBoundsRequest(nullptr) {}
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR GetLandscapeBoundsRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline GetLandscapeBoundsRequest(const GetLandscapeBoundsRequest& from)
+      : GetLandscapeBoundsRequest(nullptr, from) {}
+  GetLandscapeBoundsRequest(GetLandscapeBoundsRequest&& from) noexcept
+    : GetLandscapeBoundsRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline GetLandscapeBoundsRequest& operator=(const GetLandscapeBoundsRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetLandscapeBoundsRequest& operator=(GetLandscapeBoundsRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetLandscapeBoundsRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetLandscapeBoundsRequest* internal_default_instance() {
+    return reinterpret_cast<const GetLandscapeBoundsRequest*>(
+               &_GetLandscapeBoundsRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    47;
+
+  friend void swap(GetLandscapeBoundsRequest& a, GetLandscapeBoundsRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetLandscapeBoundsRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetLandscapeBoundsRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetLandscapeBoundsRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetLandscapeBoundsRequest>(arena);
+  }
+  using ::google::protobuf_tempo::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const GetLandscapeBoundsRequest& from) {
+    ::google::protobuf_tempo::internal::ZeroFieldsBase::CopyImpl(*this, from);
+  }
+  using ::google::protobuf_tempo::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const GetLandscapeBoundsRequest& from) {
+    ::google::protobuf_tempo::internal::ZeroFieldsBase::MergeImpl(*this, from);
+  }
+  public:
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.GetLandscapeBoundsRequest";
+  }
+  protected:
+  explicit GetLandscapeBoundsRequest(::google::protobuf_tempo::Arena* arena);
+  GetLandscapeBoundsRequest(::google::protobuf_tempo::Arena* arena, const GetLandscapeBoundsRequest& from);
+  public:
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.GetLandscapeBoundsRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API GetDataLayersResponse final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.GetDataLayersResponse) */ {
  public:
@@ -5308,7 +5450,7 @@ class AGENTBRIDGESERVER_API GetDataLayersResponse final :
                &_GetDataLayersResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    48;
+    50;
 
   friend void swap(GetDataLayersResponse& a, GetDataLayersResponse& b) {
     a.Swap(&b);
@@ -5500,7 +5642,7 @@ class AGENTBRIDGESERVER_API GetDataLayersRequest final :
                &_GetDataLayersRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    49;
 
   friend void swap(GetDataLayersRequest& a, GetDataLayersRequest& b) {
     a.Swap(&b);
@@ -5637,7 +5779,7 @@ class AGENTBRIDGESERVER_API GetComponentTransformRequest final :
                &_GetComponentTransformRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    66;
+    68;
 
   friend void swap(GetComponentTransformRequest& a, GetComponentTransformRequest& b) {
     a.Swap(&b);
@@ -6053,7 +6195,7 @@ class AGENTBRIDGESERVER_API GetAssetThumbnailResponse final :
                &_GetAssetThumbnailResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    65;
+    67;
 
   friend void swap(GetAssetThumbnailResponse& a, GetAssetThumbnailResponse& b) {
     a.Swap(&b);
@@ -6288,7 +6430,7 @@ class AGENTBRIDGESERVER_API GetAssetThumbnailRequest final :
                &_GetAssetThumbnailRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    64;
+    66;
 
   friend void swap(GetAssetThumbnailRequest& a, GetAssetThumbnailRequest& b) {
     a.Swap(&b);
@@ -6493,7 +6635,7 @@ class AGENTBRIDGESERVER_API GetActorsInDataLayerRequest final :
                &_GetActorsInDataLayerRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    49;
+    51;
 
   friend void swap(GetActorsInDataLayerRequest& a, GetActorsInDataLayerRequest& b) {
     a.Swap(&b);
@@ -7096,7 +7238,7 @@ class AGENTBRIDGESERVER_API FileInfo final :
                &_FileInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    77;
+    79;
 
   friend void swap(FileInfo& a, FileInfo& b) {
     a.Swap(&b);
@@ -7337,7 +7479,7 @@ class AGENTBRIDGESERVER_API ExecuteConsoleCommandResponse final :
                &_ExecuteConsoleCommandResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    52;
+    54;
 
   friend void swap(ExecuteConsoleCommandResponse& a, ExecuteConsoleCommandResponse& b) {
     a.Swap(&b);
@@ -7530,7 +7672,7 @@ class AGENTBRIDGESERVER_API ExecuteConsoleCommandRequest final :
                &_ExecuteConsoleCommandRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    51;
+    53;
 
   friend void swap(ExecuteConsoleCommandRequest& a, ExecuteConsoleCommandRequest& b) {
     a.Swap(&b);
@@ -7711,7 +7853,7 @@ class AGENTBRIDGESERVER_API DuplicateAssetResponse final :
                &_DuplicateAssetResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    63;
+    65;
 
   friend void swap(DuplicateAssetResponse& a, DuplicateAssetResponse& b) {
     a.Swap(&b);
@@ -7922,7 +8064,7 @@ class AGENTBRIDGESERVER_API DuplicateAssetRequest final :
                &_DuplicateAssetRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    62;
+    64;
 
   friend void swap(DuplicateAssetRequest& a, DuplicateAssetRequest& b) {
     a.Swap(&b);
@@ -8139,7 +8281,7 @@ class AGENTBRIDGESERVER_API DetachComponentRequest final :
                &_DetachComponentRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    71;
+    73;
 
   friend void swap(DetachComponentRequest& a, DetachComponentRequest& b) {
     a.Swap(&b);
@@ -8350,7 +8492,7 @@ class AGENTBRIDGESERVER_API DetachActorRequest final :
                &_DetachActorRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    72;
+    74;
 
   friend void swap(DetachActorRequest& a, DetachActorRequest& b) {
     a.Swap(&b);
@@ -8543,7 +8685,7 @@ class AGENTBRIDGESERVER_API DeleteProjectFileRequest final :
                &_DeleteProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    82;
+    84;
 
   friend void swap(DeleteProjectFileRequest& a, DeleteProjectFileRequest& b) {
     a.Swap(&b);
@@ -8917,7 +9059,7 @@ class AGENTBRIDGESERVER_API CreateAssetResponse final :
                &_CreateAssetResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    57;
+    59;
 
   friend void swap(CreateAssetResponse& a, CreateAssetResponse& b) {
     a.Swap(&b);
@@ -9146,7 +9288,7 @@ class AGENTBRIDGESERVER_API CopyProjectFileResponse final :
                &_CopyProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    81;
+    83;
 
   friend void swap(CopyProjectFileResponse& a, CopyProjectFileResponse& b) {
     a.Swap(&b);
@@ -9357,7 +9499,7 @@ class AGENTBRIDGESERVER_API CopyProjectFileRequest final :
                &_CopyProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    80;
+    82;
 
   friend void swap(CopyProjectFileRequest& a, CopyProjectFileRequest& b) {
     a.Swap(&b);
@@ -9568,7 +9710,7 @@ class AGENTBRIDGESERVER_API ConsoleCommandInfo final :
                &_ConsoleCommandInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    53;
+    55;
 
   friend void swap(ConsoleCommandInfo& a, ConsoleCommandInfo& b) {
     a.Swap(&b);
@@ -10327,7 +10469,7 @@ class AGENTBRIDGESERVER_API AttachComponentRequest final :
                &_AttachComponentRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    69;
+    71;
 
   friend void swap(AttachComponentRequest& a, AttachComponentRequest& b) {
     a.Swap(&b);
@@ -10598,7 +10740,7 @@ class AGENTBRIDGESERVER_API AttachActorRequest final :
                &_AttachActorRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    70;
+    72;
 
   friend void swap(AttachActorRequest& a, AttachActorRequest& b) {
     a.Swap(&b);
@@ -10869,7 +11011,7 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsResponse final :
                &_SearchConsoleCommandsResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    55;
+    57;
 
   friend void swap(SearchConsoleCommandsResponse& a, SearchConsoleCommandsResponse& b) {
     a.Swap(&b);
@@ -11271,7 +11413,7 @@ class AGENTBRIDGESERVER_API ListProjectDirectoryResponse final :
                &_ListProjectDirectoryResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    79;
+    81;
 
   friend void swap(ListProjectDirectoryResponse& a, ListProjectDirectoryResponse& b) {
     a.Swap(&b);
@@ -11626,6 +11768,280 @@ class AGENTBRIDGESERVER_API ListClassesResponse final :
     ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::ClassInfo > classes_;
     ::int32_t total_count_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API GetLandscapeBoundsResponse final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.GetLandscapeBoundsResponse) */ {
+ public:
+  inline GetLandscapeBoundsResponse() : GetLandscapeBoundsResponse(nullptr) {}
+  ~GetLandscapeBoundsResponse() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR GetLandscapeBoundsResponse(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline GetLandscapeBoundsResponse(const GetLandscapeBoundsResponse& from)
+      : GetLandscapeBoundsResponse(nullptr, from) {}
+  GetLandscapeBoundsResponse(GetLandscapeBoundsResponse&& from) noexcept
+    : GetLandscapeBoundsResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline GetLandscapeBoundsResponse& operator=(const GetLandscapeBoundsResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetLandscapeBoundsResponse& operator=(GetLandscapeBoundsResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetLandscapeBoundsResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetLandscapeBoundsResponse* internal_default_instance() {
+    return reinterpret_cast<const GetLandscapeBoundsResponse*>(
+               &_GetLandscapeBoundsResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    48;
+
+  friend void swap(GetLandscapeBoundsResponse& a, GetLandscapeBoundsResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetLandscapeBoundsResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetLandscapeBoundsResponse* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetLandscapeBoundsResponse* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetLandscapeBoundsResponse>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const GetLandscapeBoundsResponse& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const GetLandscapeBoundsResponse& from) {
+    GetLandscapeBoundsResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(GetLandscapeBoundsResponse* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.GetLandscapeBoundsResponse";
+  }
+  protected:
+  explicit GetLandscapeBoundsResponse(::google::protobuf_tempo::Arena* arena);
+  GetLandscapeBoundsResponse(::google::protobuf_tempo::Arena* arena, const GetLandscapeBoundsResponse& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kLandscapeNameFieldNumber = 7,
+    kMinFieldNumber = 2,
+    kMaxFieldNumber = 3,
+    kCenterFieldNumber = 4,
+    kExtentFieldNumber = 5,
+    kValidFieldNumber = 1,
+    kProxyCountFieldNumber = 6,
+  };
+  // string landscape_name = 7;
+  void clear_landscape_name() ;
+  const std::string& landscape_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_landscape_name(Arg_&& arg, Args_... args);
+  std::string* mutable_landscape_name();
+  PROTOBUF_NODISCARD std::string* release_landscape_name();
+  void set_allocated_landscape_name(std::string* value);
+
+  private:
+  const std::string& _internal_landscape_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_landscape_name(
+      const std::string& value);
+  std::string* _internal_mutable_landscape_name();
+
+  public:
+  // .TempoScripting.Vector min = 2;
+  bool has_min() const;
+  void clear_min() ;
+  const ::TempoScripting::Vector& min() const;
+  PROTOBUF_NODISCARD ::TempoScripting::Vector* release_min();
+  ::TempoScripting::Vector* mutable_min();
+  void set_allocated_min(::TempoScripting::Vector* value);
+  void unsafe_arena_set_allocated_min(::TempoScripting::Vector* value);
+  ::TempoScripting::Vector* unsafe_arena_release_min();
+
+  private:
+  const ::TempoScripting::Vector& _internal_min() const;
+  ::TempoScripting::Vector* _internal_mutable_min();
+
+  public:
+  // .TempoScripting.Vector max = 3;
+  bool has_max() const;
+  void clear_max() ;
+  const ::TempoScripting::Vector& max() const;
+  PROTOBUF_NODISCARD ::TempoScripting::Vector* release_max();
+  ::TempoScripting::Vector* mutable_max();
+  void set_allocated_max(::TempoScripting::Vector* value);
+  void unsafe_arena_set_allocated_max(::TempoScripting::Vector* value);
+  ::TempoScripting::Vector* unsafe_arena_release_max();
+
+  private:
+  const ::TempoScripting::Vector& _internal_max() const;
+  ::TempoScripting::Vector* _internal_mutable_max();
+
+  public:
+  // .TempoScripting.Vector center = 4;
+  bool has_center() const;
+  void clear_center() ;
+  const ::TempoScripting::Vector& center() const;
+  PROTOBUF_NODISCARD ::TempoScripting::Vector* release_center();
+  ::TempoScripting::Vector* mutable_center();
+  void set_allocated_center(::TempoScripting::Vector* value);
+  void unsafe_arena_set_allocated_center(::TempoScripting::Vector* value);
+  ::TempoScripting::Vector* unsafe_arena_release_center();
+
+  private:
+  const ::TempoScripting::Vector& _internal_center() const;
+  ::TempoScripting::Vector* _internal_mutable_center();
+
+  public:
+  // .TempoScripting.Vector extent = 5;
+  bool has_extent() const;
+  void clear_extent() ;
+  const ::TempoScripting::Vector& extent() const;
+  PROTOBUF_NODISCARD ::TempoScripting::Vector* release_extent();
+  ::TempoScripting::Vector* mutable_extent();
+  void set_allocated_extent(::TempoScripting::Vector* value);
+  void unsafe_arena_set_allocated_extent(::TempoScripting::Vector* value);
+  ::TempoScripting::Vector* unsafe_arena_release_extent();
+
+  private:
+  const ::TempoScripting::Vector& _internal_extent() const;
+  ::TempoScripting::Vector* _internal_mutable_extent();
+
+  public:
+  // bool valid = 1;
+  void clear_valid() ;
+  bool valid() const;
+  void set_valid(bool value);
+
+  private:
+  bool _internal_valid() const;
+  void _internal_set_valid(bool value);
+
+  public:
+  // int32 proxy_count = 6;
+  void clear_proxy_count() ;
+  ::int32_t proxy_count() const;
+  void set_proxy_count(::int32_t value);
+
+  private:
+  ::int32_t _internal_proxy_count() const;
+  void _internal_set_proxy_count(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.GetLandscapeBoundsResponse)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      3, 7, 4,
+      67, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::HasBits<1> _has_bits_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr landscape_name_;
+    ::TempoScripting::Vector* min_;
+    ::TempoScripting::Vector* max_;
+    ::TempoScripting::Vector* center_;
+    ::TempoScripting::Vector* extent_;
+    bool valid_;
+    ::int32_t proxy_count_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -12570,7 +12986,7 @@ class AGENTBRIDGESERVER_API SetComponentTransformRequest final :
                &_SetComponentTransformRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    68;
+    70;
 
   friend void swap(SetComponentTransformRequest& a, SetComponentTransformRequest& b) {
     a.Swap(&b);
@@ -13890,7 +14306,7 @@ class AGENTBRIDGESERVER_API GetComponentTransformResponse final :
                &_GetComponentTransformResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    67;
+    69;
 
   friend void swap(GetComponentTransformResponse& a, GetComponentTransformResponse& b) {
     a.Swap(&b);
@@ -16581,7 +16997,7 @@ class AGENTBRIDGESERVER_API CreateAssetRequest final :
                &_CreateAssetRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    56;
+    58;
 
   friend void swap(CreateAssetRequest& a, CreateAssetRequest& b) {
     a.Swap(&b);
@@ -18138,7 +18554,7 @@ class AGENTBRIDGESERVER_API GetActorsInDataLayerResponse final :
                &_GetActorsInDataLayerResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    50;
+    52;
 
   friend void swap(GetActorsInDataLayerResponse& a, GetActorsInDataLayerResponse& b) {
     a.Swap(&b);
@@ -26856,6 +27272,477 @@ inline void QueryLandscapeResponse::_internal_set_total_count(::int32_t value) {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.total_count_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GetLandscapeBoundsRequest
+
+// -------------------------------------------------------------------
+
+// GetLandscapeBoundsResponse
+
+// bool valid = 1;
+inline void GetLandscapeBoundsResponse::clear_valid() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.valid_ = false;
+}
+inline bool GetLandscapeBoundsResponse::valid() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetLandscapeBoundsResponse.valid)
+  return _internal_valid();
+}
+inline void GetLandscapeBoundsResponse::set_valid(bool value) {
+  _internal_set_valid(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.GetLandscapeBoundsResponse.valid)
+}
+inline bool GetLandscapeBoundsResponse::_internal_valid() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.valid_;
+}
+inline void GetLandscapeBoundsResponse::_internal_set_valid(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.valid_ = value;
+}
+
+// .TempoScripting.Vector min = 2;
+inline bool GetLandscapeBoundsResponse::has_min() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.min_ != nullptr);
+  return value;
+}
+inline const ::TempoScripting::Vector& GetLandscapeBoundsResponse::_internal_min() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::TempoScripting::Vector* p = _impl_.min_;
+  return p != nullptr ? *p : reinterpret_cast<const ::TempoScripting::Vector&>(::TempoScripting::_Vector_default_instance_);
+}
+inline const ::TempoScripting::Vector& GetLandscapeBoundsResponse::min() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetLandscapeBoundsResponse.min)
+  return _internal_min();
+}
+inline void GetLandscapeBoundsResponse::unsafe_arena_set_allocated_min(::TempoScripting::Vector* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.min_);
+  }
+  _impl_.min_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.min)
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::release_min() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::TempoScripting::Vector* released = _impl_.min_;
+  _impl_.min_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::unsafe_arena_release_min() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.GetLandscapeBoundsResponse.min)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::TempoScripting::Vector* temp = _impl_.min_;
+  _impl_.min_ = nullptr;
+  return temp;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::_internal_mutable_min() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  if (_impl_.min_ == nullptr) {
+    auto* p = CreateMaybeMessage<::TempoScripting::Vector>(GetArena());
+    _impl_.min_ = reinterpret_cast<::TempoScripting::Vector*>(p);
+  }
+  return _impl_.min_;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::mutable_min() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::TempoScripting::Vector* _msg = _internal_mutable_min();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.GetLandscapeBoundsResponse.min)
+  return _msg;
+}
+inline void GetLandscapeBoundsResponse::set_allocated_min(::TempoScripting::Vector* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.min_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.min_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.min)
+}
+
+// .TempoScripting.Vector max = 3;
+inline bool GetLandscapeBoundsResponse::has_max() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.max_ != nullptr);
+  return value;
+}
+inline const ::TempoScripting::Vector& GetLandscapeBoundsResponse::_internal_max() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::TempoScripting::Vector* p = _impl_.max_;
+  return p != nullptr ? *p : reinterpret_cast<const ::TempoScripting::Vector&>(::TempoScripting::_Vector_default_instance_);
+}
+inline const ::TempoScripting::Vector& GetLandscapeBoundsResponse::max() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetLandscapeBoundsResponse.max)
+  return _internal_max();
+}
+inline void GetLandscapeBoundsResponse::unsafe_arena_set_allocated_max(::TempoScripting::Vector* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.max_);
+  }
+  _impl_.max_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.max)
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::release_max() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::TempoScripting::Vector* released = _impl_.max_;
+  _impl_.max_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::unsafe_arena_release_max() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.GetLandscapeBoundsResponse.max)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::TempoScripting::Vector* temp = _impl_.max_;
+  _impl_.max_ = nullptr;
+  return temp;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::_internal_mutable_max() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  if (_impl_.max_ == nullptr) {
+    auto* p = CreateMaybeMessage<::TempoScripting::Vector>(GetArena());
+    _impl_.max_ = reinterpret_cast<::TempoScripting::Vector*>(p);
+  }
+  return _impl_.max_;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::mutable_max() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::TempoScripting::Vector* _msg = _internal_mutable_max();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.GetLandscapeBoundsResponse.max)
+  return _msg;
+}
+inline void GetLandscapeBoundsResponse::set_allocated_max(::TempoScripting::Vector* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.max_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.max_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.max)
+}
+
+// .TempoScripting.Vector center = 4;
+inline bool GetLandscapeBoundsResponse::has_center() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.center_ != nullptr);
+  return value;
+}
+inline const ::TempoScripting::Vector& GetLandscapeBoundsResponse::_internal_center() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::TempoScripting::Vector* p = _impl_.center_;
+  return p != nullptr ? *p : reinterpret_cast<const ::TempoScripting::Vector&>(::TempoScripting::_Vector_default_instance_);
+}
+inline const ::TempoScripting::Vector& GetLandscapeBoundsResponse::center() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetLandscapeBoundsResponse.center)
+  return _internal_center();
+}
+inline void GetLandscapeBoundsResponse::unsafe_arena_set_allocated_center(::TempoScripting::Vector* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.center_);
+  }
+  _impl_.center_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.center)
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::release_center() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::TempoScripting::Vector* released = _impl_.center_;
+  _impl_.center_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::unsafe_arena_release_center() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.GetLandscapeBoundsResponse.center)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::TempoScripting::Vector* temp = _impl_.center_;
+  _impl_.center_ = nullptr;
+  return temp;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::_internal_mutable_center() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  if (_impl_.center_ == nullptr) {
+    auto* p = CreateMaybeMessage<::TempoScripting::Vector>(GetArena());
+    _impl_.center_ = reinterpret_cast<::TempoScripting::Vector*>(p);
+  }
+  return _impl_.center_;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::mutable_center() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::TempoScripting::Vector* _msg = _internal_mutable_center();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.GetLandscapeBoundsResponse.center)
+  return _msg;
+}
+inline void GetLandscapeBoundsResponse::set_allocated_center(::TempoScripting::Vector* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.center_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.center_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.center)
+}
+
+// .TempoScripting.Vector extent = 5;
+inline bool GetLandscapeBoundsResponse::has_extent() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000008u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.extent_ != nullptr);
+  return value;
+}
+inline const ::TempoScripting::Vector& GetLandscapeBoundsResponse::_internal_extent() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::TempoScripting::Vector* p = _impl_.extent_;
+  return p != nullptr ? *p : reinterpret_cast<const ::TempoScripting::Vector&>(::TempoScripting::_Vector_default_instance_);
+}
+inline const ::TempoScripting::Vector& GetLandscapeBoundsResponse::extent() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetLandscapeBoundsResponse.extent)
+  return _internal_extent();
+}
+inline void GetLandscapeBoundsResponse::unsafe_arena_set_allocated_extent(::TempoScripting::Vector* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.extent_);
+  }
+  _impl_.extent_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.extent)
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::release_extent() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::TempoScripting::Vector* released = _impl_.extent_;
+  _impl_.extent_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::unsafe_arena_release_extent() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.GetLandscapeBoundsResponse.extent)
+
+  _impl_._has_bits_[0] &= ~0x00000008u;
+  ::TempoScripting::Vector* temp = _impl_.extent_;
+  _impl_.extent_ = nullptr;
+  return temp;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::_internal_mutable_extent() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000008u;
+  if (_impl_.extent_ == nullptr) {
+    auto* p = CreateMaybeMessage<::TempoScripting::Vector>(GetArena());
+    _impl_.extent_ = reinterpret_cast<::TempoScripting::Vector*>(p);
+  }
+  return _impl_.extent_;
+}
+inline ::TempoScripting::Vector* GetLandscapeBoundsResponse::mutable_extent() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::TempoScripting::Vector* _msg = _internal_mutable_extent();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.GetLandscapeBoundsResponse.extent)
+  return _msg;
+}
+inline void GetLandscapeBoundsResponse::set_allocated_extent(::TempoScripting::Vector* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.extent_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000008u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000008u;
+  }
+
+  _impl_.extent_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.extent)
+}
+
+// int32 proxy_count = 6;
+inline void GetLandscapeBoundsResponse::clear_proxy_count() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.proxy_count_ = 0;
+}
+inline ::int32_t GetLandscapeBoundsResponse::proxy_count() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetLandscapeBoundsResponse.proxy_count)
+  return _internal_proxy_count();
+}
+inline void GetLandscapeBoundsResponse::set_proxy_count(::int32_t value) {
+  _internal_set_proxy_count(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.GetLandscapeBoundsResponse.proxy_count)
+}
+inline ::int32_t GetLandscapeBoundsResponse::_internal_proxy_count() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.proxy_count_;
+}
+inline void GetLandscapeBoundsResponse::_internal_set_proxy_count(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.proxy_count_ = value;
+}
+
+// string landscape_name = 7;
+inline void GetLandscapeBoundsResponse::clear_landscape_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.landscape_name_.ClearToEmpty();
+}
+inline const std::string& GetLandscapeBoundsResponse::landscape_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetLandscapeBoundsResponse.landscape_name)
+  return _internal_landscape_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void GetLandscapeBoundsResponse::set_landscape_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.landscape_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.GetLandscapeBoundsResponse.landscape_name)
+}
+inline std::string* GetLandscapeBoundsResponse::mutable_landscape_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_landscape_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.GetLandscapeBoundsResponse.landscape_name)
+  return _s;
+}
+inline const std::string& GetLandscapeBoundsResponse::_internal_landscape_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.landscape_name_.Get();
+}
+inline void GetLandscapeBoundsResponse::_internal_set_landscape_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.landscape_name_.Set(value, GetArena());
+}
+inline std::string* GetLandscapeBoundsResponse::_internal_mutable_landscape_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.landscape_name_.Mutable( GetArena());
+}
+inline std::string* GetLandscapeBoundsResponse::release_landscape_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.GetLandscapeBoundsResponse.landscape_name)
+  return _impl_.landscape_name_.Release();
+}
+inline void GetLandscapeBoundsResponse::set_allocated_landscape_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.landscape_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.landscape_name_.IsDefault()) {
+          _impl_.landscape_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.landscape_name)
 }
 
 // -------------------------------------------------------------------

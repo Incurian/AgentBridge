@@ -430,6 +430,15 @@ TOOLS = [
         },
     },
     {
+        "name": "get_landscape_bounds",
+        "description": "Get complete landscape bounds in world space. Returns min/max corners, center point, and half-extents. Use this to size PCG volumes or other actors to cover the entire landscape.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+        },
+    },
+    {
         "name": "get_data_layers",
         "description": "Get all data layers defined in the world. Data layers are used to group actors for streaming.",
         "inputSchema": {
@@ -1110,6 +1119,9 @@ class AgentBridgeClient:
 
     def query_landscape(self, include_unloaded=True):
         return self.stub.QueryLandscape(pb.QueryLandscapeRequest(include_unloaded=include_unloaded))
+
+    def get_landscape_bounds(self):
+        return self.stub.GetLandscapeBounds(pb.GetLandscapeBoundsRequest())
 
     def get_data_layers(self):
         return self.stub.GetDataLayers(pb.GetDataLayersRequest())
@@ -2051,6 +2063,22 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
                 }
                 for p in result.landscape_proxies
             ],
+        }
+
+    elif tool_name == "get_landscape_bounds":
+        result = safe_call(client.get_landscape_bounds)
+        if isinstance(result, dict) and "error" in result:
+            return result
+        if not result.valid:
+            return {"error": "No landscape found in world"}
+        return {
+            "valid": result.valid,
+            "min": [result.min.x, result.min.y, result.min.z],
+            "max": [result.max.x, result.max.y, result.max.z],
+            "center": [result.center.x, result.center.y, result.center.z],
+            "extent": [result.extent.x, result.extent.y, result.extent.z],
+            "proxy_count": result.proxy_count,
+            "landscape_name": result.landscape_name,
         }
 
     elif tool_name == "get_data_layers":

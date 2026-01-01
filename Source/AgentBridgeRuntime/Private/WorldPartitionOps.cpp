@@ -7,6 +7,7 @@
 #include "LandscapeProxy.h"
 #include "LandscapeStreamingProxy.h"
 #include "Landscape.h"
+#include "LandscapeHeightfieldCollisionComponent.h"
 
 #if WITH_EDITOR
 #include "WorldPartition/WorldPartition.h"
@@ -444,6 +445,100 @@ ALandscapeProxy* FWorldPartitionOps::GetMainLandscape(UWorld* World)
 	}
 
 	return nullptr;
+}
+
+FLandscapeBounds FWorldPartitionOps::GetLandscapeBounds(UWorld* World)
+{
+	FLandscapeBounds Result;
+
+	if (!World)
+	{
+		World = FWorldContextManager::Get().GetTargetWorld();
+	}
+
+	if (!World)
+	{
+		return Result;
+	}
+
+	// Get the main landscape for scale reference
+	ALandscapeProxy* MainLandscape = GetMainLandscape(World);
+	if (!MainLandscape)
+	{
+		UE_LOG(LogAgentBridgeWP, Warning, TEXT("GetLandscapeBounds: No landscape found in world"));
+		return Result;
+	}
+
+	Result.LandscapeName = MainLandscape->GetName();
+	FVector LandscapeScale = MainLandscape->GetActorScale3D();
+
+	// Initialize bounds to invalid state for min/max tracking
+	FVector MinBounds(MAX_FLT, MAX_FLT, MAX_FLT);
+	FVector MaxBounds(-MAX_FLT, -MAX_FLT, -MAX_FLT);
+	int32 ProxyCount = 0;
+
+	// Iterate all landscape proxies (including streaming proxies)
+	for (TActorIterator<ALandscapeProxy> It(World); It; ++It)
+	{
+		ALandscapeProxy* Proxy = *It;
+		if (!Proxy)
+		{
+			continue;
+		}
+
+		ProxyCount++;
+		FVector ProxyLocation = Proxy->GetActorLocation();
+
+		// Get the collision component which has CachedLocalBox
+		ULandscapeHeightfieldCollisionComponent* CollisionComp = Proxy->CollisionComponents.Num() > 0
+			? Proxy->CollisionComponents[0]
+			: nullptr;
+
+		if (CollisionComp)
+		{
+			// CachedLocalBox contains the local-space bounds of the heightfield
+			FBox LocalBox = CollisionComp->CachedLocalBox;
+
+			// Convert to world space using proxy location and landscape scale
+			FVector WorldMin = ProxyLocation + LocalBox.Min * LandscapeScale;
+			FVector WorldMax = ProxyLocation + LocalBox.Max * LandscapeScale;
+
+			// Expand our overall bounds
+			MinBounds = MinBounds.ComponentMin(WorldMin);
+			MaxBounds = MaxBounds.ComponentMax(WorldMax);
+		}
+		else
+		{
+			// Fallback: use the proxy's bounding box
+			FBox ProxyBounds = Proxy->GetComponentsBoundingBox(false, true);
+			if (ProxyBounds.IsValid)
+			{
+				MinBounds = MinBounds.ComponentMin(ProxyBounds.Min);
+				MaxBounds = MaxBounds.ComponentMax(ProxyBounds.Max);
+			}
+		}
+	}
+
+	// Check if we found valid bounds
+	if (ProxyCount == 0 || MinBounds.X > MaxBounds.X)
+	{
+		UE_LOG(LogAgentBridgeWP, Warning, TEXT("GetLandscapeBounds: No valid landscape proxies found"));
+		return Result;
+	}
+
+	Result.bValid = true;
+	Result.Min = MinBounds;
+	Result.Max = MaxBounds;
+	Result.Center = (MinBounds + MaxBounds) * 0.5;
+	Result.Extent = (MaxBounds - MinBounds) * 0.5;
+	Result.ProxyCount = ProxyCount;
+
+	UE_LOG(LogAgentBridgeWP, Log, TEXT("GetLandscapeBounds: %s with %d proxies, bounds [%.0f, %.0f, %.0f] to [%.0f, %.0f, %.0f]"),
+		*Result.LandscapeName, ProxyCount,
+		MinBounds.X, MinBounds.Y, MinBounds.Z,
+		MaxBounds.X, MaxBounds.Y, MaxBounds.Z);
+
+	return Result;
 }
 
 //~==============================================================================

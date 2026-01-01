@@ -40,6 +40,7 @@ static const char* AgentBridgeService_method_names[] = {
   "/AgentBridgeServer.AgentBridgeService/QueryAllActors",
   "/AgentBridgeServer.AgentBridgeService/GetStreamingState",
   "/AgentBridgeServer.AgentBridgeService/QueryLandscape",
+  "/AgentBridgeServer.AgentBridgeService/GetLandscapeBounds",
   "/AgentBridgeServer.AgentBridgeService/GetDataLayers",
   "/AgentBridgeServer.AgentBridgeService/GetActorsInDataLayer",
   "/AgentBridgeServer.AgentBridgeService/ExecuteConsoleCommand",
@@ -87,26 +88,27 @@ AgentBridgeService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>&
   , rpcmethod_QueryAllActors_(AgentBridgeService_method_names[15], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_GetStreamingState_(AgentBridgeService_method_names[16], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_QueryLandscape_(AgentBridgeService_method_names[17], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetDataLayers_(AgentBridgeService_method_names[18], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetActorsInDataLayer_(AgentBridgeService_method_names[19], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ExecuteConsoleCommand_(AgentBridgeService_method_names[20], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SearchConsoleCommands_(AgentBridgeService_method_names[21], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_CreateAsset_(AgentBridgeService_method_names[22], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SaveAsset_(AgentBridgeService_method_names[23], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SaveActorAsBlueprint_(AgentBridgeService_method_names[24], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_DuplicateAsset_(AgentBridgeService_method_names[25], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetAssetThumbnail_(AgentBridgeService_method_names[26], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetComponentTransform_(AgentBridgeService_method_names[27], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SetComponentTransform_(AgentBridgeService_method_names[28], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_AttachComponent_(AgentBridgeService_method_names[29], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_AttachActor_(AgentBridgeService_method_names[30], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_DetachComponent_(AgentBridgeService_method_names[31], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_DetachActor_(AgentBridgeService_method_names[32], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ReadProjectFile_(AgentBridgeService_method_names[33], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_WriteProjectFile_(AgentBridgeService_method_names[34], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ListProjectDirectory_(AgentBridgeService_method_names[35], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_CopyProjectFile_(AgentBridgeService_method_names[36], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_DeleteProjectFile_(AgentBridgeService_method_names[37], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetLandscapeBounds_(AgentBridgeService_method_names[18], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetDataLayers_(AgentBridgeService_method_names[19], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetActorsInDataLayer_(AgentBridgeService_method_names[20], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ExecuteConsoleCommand_(AgentBridgeService_method_names[21], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SearchConsoleCommands_(AgentBridgeService_method_names[22], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_CreateAsset_(AgentBridgeService_method_names[23], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SaveAsset_(AgentBridgeService_method_names[24], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SaveActorAsBlueprint_(AgentBridgeService_method_names[25], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_DuplicateAsset_(AgentBridgeService_method_names[26], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetAssetThumbnail_(AgentBridgeService_method_names[27], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetComponentTransform_(AgentBridgeService_method_names[28], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SetComponentTransform_(AgentBridgeService_method_names[29], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_AttachComponent_(AgentBridgeService_method_names[30], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_AttachActor_(AgentBridgeService_method_names[31], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_DetachComponent_(AgentBridgeService_method_names[32], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_DetachActor_(AgentBridgeService_method_names[33], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ReadProjectFile_(AgentBridgeService_method_names[34], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_WriteProjectFile_(AgentBridgeService_method_names[35], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListProjectDirectory_(AgentBridgeService_method_names[36], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_CopyProjectFile_(AgentBridgeService_method_names[37], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_DeleteProjectFile_(AgentBridgeService_method_names[38], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AgentBridgeService::Stub::ListWorlds(::grpc::ClientContext* context, const ::AgentBridgeServer::ListWorldsRequest& request, ::AgentBridgeServer::ListWorldsResponse* response) {
@@ -519,6 +521,29 @@ void AgentBridgeService::Stub::async::QueryLandscape(::grpc::ClientContext* cont
 ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::QueryLandscapeResponse>* AgentBridgeService::Stub::AsyncQueryLandscapeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::QueryLandscapeRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncQueryLandscapeRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::GetLandscapeBounds(::grpc::ClientContext* context, const ::AgentBridgeServer::GetLandscapeBoundsRequest& request, ::AgentBridgeServer::GetLandscapeBoundsResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::GetLandscapeBoundsRequest, ::AgentBridgeServer::GetLandscapeBoundsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GetLandscapeBounds_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::GetLandscapeBounds(::grpc::ClientContext* context, const ::AgentBridgeServer::GetLandscapeBoundsRequest* request, ::AgentBridgeServer::GetLandscapeBoundsResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::GetLandscapeBoundsRequest, ::AgentBridgeServer::GetLandscapeBoundsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetLandscapeBounds_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::GetLandscapeBounds(::grpc::ClientContext* context, const ::AgentBridgeServer::GetLandscapeBoundsRequest* request, ::AgentBridgeServer::GetLandscapeBoundsResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetLandscapeBounds_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetLandscapeBoundsResponse>* AgentBridgeService::Stub::PrepareAsyncGetLandscapeBoundsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetLandscapeBoundsRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::GetLandscapeBoundsResponse, ::AgentBridgeServer::GetLandscapeBoundsRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GetLandscapeBounds_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::GetLandscapeBoundsResponse>* AgentBridgeService::Stub::AsyncGetLandscapeBoundsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetLandscapeBoundsRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncGetLandscapeBoundsRaw(context, request, cq);
   result->StartCall();
   return result;
 }
@@ -1167,6 +1192,16 @@ AgentBridgeService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AgentBridgeService_method_names[18],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetLandscapeBoundsRequest, ::AgentBridgeServer::GetLandscapeBoundsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::GetLandscapeBoundsRequest* req,
+             ::AgentBridgeServer::GetLandscapeBoundsResponse* resp) {
+               return service->GetLandscapeBounds(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[19],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetDataLayersRequest, ::AgentBridgeServer::GetDataLayersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
              ::grpc::ServerContext* ctx,
@@ -1175,7 +1210,7 @@ AgentBridgeService::Service::Service() {
                return service->GetDataLayers(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[19],
+      AgentBridgeService_method_names[20],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetActorsInDataLayerRequest, ::AgentBridgeServer::GetActorsInDataLayerResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1185,7 +1220,7 @@ AgentBridgeService::Service::Service() {
                return service->GetActorsInDataLayer(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[20],
+      AgentBridgeService_method_names[21],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ExecuteConsoleCommandRequest, ::AgentBridgeServer::ExecuteConsoleCommandResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1195,7 +1230,7 @@ AgentBridgeService::Service::Service() {
                return service->ExecuteConsoleCommand(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[21],
+      AgentBridgeService_method_names[22],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::SearchConsoleCommandsRequest, ::AgentBridgeServer::SearchConsoleCommandsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1205,7 +1240,7 @@ AgentBridgeService::Service::Service() {
                return service->SearchConsoleCommands(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[22],
+      AgentBridgeService_method_names[23],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::CreateAssetRequest, ::AgentBridgeServer::CreateAssetResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1215,7 +1250,7 @@ AgentBridgeService::Service::Service() {
                return service->CreateAsset(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[23],
+      AgentBridgeService_method_names[24],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::SaveAssetRequest, ::AgentBridgeServer::SaveAssetResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1225,7 +1260,7 @@ AgentBridgeService::Service::Service() {
                return service->SaveAsset(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[24],
+      AgentBridgeService_method_names[25],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::SaveActorAsBlueprintRequest, ::AgentBridgeServer::SaveActorAsBlueprintResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1235,7 +1270,7 @@ AgentBridgeService::Service::Service() {
                return service->SaveActorAsBlueprint(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[25],
+      AgentBridgeService_method_names[26],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::DuplicateAssetRequest, ::AgentBridgeServer::DuplicateAssetResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1245,7 +1280,7 @@ AgentBridgeService::Service::Service() {
                return service->DuplicateAsset(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[26],
+      AgentBridgeService_method_names[27],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetAssetThumbnailRequest, ::AgentBridgeServer::GetAssetThumbnailResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1255,7 +1290,7 @@ AgentBridgeService::Service::Service() {
                return service->GetAssetThumbnail(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[27],
+      AgentBridgeService_method_names[28],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetComponentTransformRequest, ::AgentBridgeServer::GetComponentTransformResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1265,7 +1300,7 @@ AgentBridgeService::Service::Service() {
                return service->GetComponentTransform(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[28],
+      AgentBridgeService_method_names[29],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::SetComponentTransformRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1275,7 +1310,7 @@ AgentBridgeService::Service::Service() {
                return service->SetComponentTransform(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[29],
+      AgentBridgeService_method_names[30],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::AttachComponentRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1285,7 +1320,7 @@ AgentBridgeService::Service::Service() {
                return service->AttachComponent(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[30],
+      AgentBridgeService_method_names[31],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::AttachActorRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1295,7 +1330,7 @@ AgentBridgeService::Service::Service() {
                return service->AttachActor(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[31],
+      AgentBridgeService_method_names[32],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::DetachComponentRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1305,7 +1340,7 @@ AgentBridgeService::Service::Service() {
                return service->DetachComponent(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[32],
+      AgentBridgeService_method_names[33],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::DetachActorRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1315,7 +1350,7 @@ AgentBridgeService::Service::Service() {
                return service->DetachActor(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[33],
+      AgentBridgeService_method_names[34],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ReadProjectFileRequest, ::AgentBridgeServer::ReadProjectFileResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1325,7 +1360,7 @@ AgentBridgeService::Service::Service() {
                return service->ReadProjectFile(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[34],
+      AgentBridgeService_method_names[35],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::WriteProjectFileRequest, ::AgentBridgeServer::WriteProjectFileResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1335,7 +1370,7 @@ AgentBridgeService::Service::Service() {
                return service->WriteProjectFile(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[35],
+      AgentBridgeService_method_names[36],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ListProjectDirectoryRequest, ::AgentBridgeServer::ListProjectDirectoryResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1345,7 +1380,7 @@ AgentBridgeService::Service::Service() {
                return service->ListProjectDirectory(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[36],
+      AgentBridgeService_method_names[37],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::CopyProjectFileRequest, ::AgentBridgeServer::CopyProjectFileResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1355,7 +1390,7 @@ AgentBridgeService::Service::Service() {
                return service->CopyProjectFile(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[37],
+      AgentBridgeService_method_names[38],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::DeleteProjectFileRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1489,6 +1524,13 @@ AgentBridgeService::Service::~Service() {
 }
 
 ::grpc::Status AgentBridgeService::Service::QueryLandscape(::grpc::ServerContext* context, const ::AgentBridgeServer::QueryLandscapeRequest* request, ::AgentBridgeServer::QueryLandscapeResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::GetLandscapeBounds(::grpc::ServerContext* context, const ::AgentBridgeServer::GetLandscapeBoundsRequest* request, ::AgentBridgeServer::GetLandscapeBoundsResponse* response) {
   (void) context;
   (void) request;
   (void) response;

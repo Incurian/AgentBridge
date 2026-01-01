@@ -381,6 +381,18 @@ message QueryLandscapeResponse {
   int32 total_count = 2;
 }
 
+message GetLandscapeBoundsRequest {}
+
+message GetLandscapeBoundsResponse {
+  bool valid = 1;                      // Whether valid bounds were found
+  TempoScripting.Vector min = 2;       // Minimum corner of bounding box
+  TempoScripting.Vector max = 3;       // Maximum corner of bounding box
+  TempoScripting.Vector center = 4;    // Center point of landscape
+  TempoScripting.Vector extent = 5;    // Half-extents (distance from center to edge)
+  int32 proxy_count = 6;               // Number of landscape proxies sampled
+  string landscape_name = 7;           // Name of the main landscape actor
+}
+
 message GetDataLayersRequest {}
 
 message GetDataLayersResponse {
@@ -669,6 +681,7 @@ service AgentBridgeService {
   rpc QueryAllActors(QueryAllActorsRequest) returns (QueryAllActorsResponse);
   rpc GetStreamingState(GetStreamingStateRequest) returns (GetStreamingStateResponse);
   rpc QueryLandscape(QueryLandscapeRequest) returns (QueryLandscapeResponse);
+  rpc GetLandscapeBounds(GetLandscapeBoundsRequest) returns (GetLandscapeBoundsResponse);
   rpc GetDataLayers(GetDataLayersRequest) returns (GetDataLayersResponse);
   rpc GetActorsInDataLayer(GetActorsInDataLayerRequest) returns (GetActorsInDataLayerResponse);
 

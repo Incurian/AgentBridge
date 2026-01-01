@@ -15,6 +15,34 @@ class ALandscapeProxy;
 class ALandscapeStreamingProxy;
 
 /**
+ * Complete landscape bounds information
+ * Includes XY extents from proxy positions and Z from height data
+ */
+struct AGENTBRIDGERUNTIME_API FLandscapeBounds
+{
+	/** Whether valid bounds were found */
+	bool bValid = false;
+
+	/** Minimum corner of the bounding box (world space) */
+	FVector Min = FVector::ZeroVector;
+
+	/** Maximum corner of the bounding box (world space) */
+	FVector Max = FVector::ZeroVector;
+
+	/** Center point of the landscape */
+	FVector Center = FVector::ZeroVector;
+
+	/** Half-extents (distance from center to edge) */
+	FVector Extent = FVector::ZeroVector;
+
+	/** Number of landscape proxies sampled */
+	int32 ProxyCount = 0;
+
+	/** Name of the main landscape actor (if found) */
+	FString LandscapeName;
+};
+
+/**
  * Streaming state for an actor in World Partition
  */
 enum class EActorStreamingState : uint8
@@ -153,6 +181,15 @@ public:
 	 * Get the main landscape actor for the level
 	 */
 	static ALandscapeProxy* GetMainLandscape(UWorld* World = nullptr);
+
+	/**
+	 * Get complete landscape bounds in world space
+	 * Samples collision components from streaming proxies to get accurate Z bounds
+	 *
+	 * @param World - World to query (nullptr = current world)
+	 * @return FLandscapeBounds with min/max/center/extent in world space
+	 */
+	static FLandscapeBounds GetLandscapeBounds(UWorld* World = nullptr);
 
 	//~==============================================================================
 	// Streaming Cell Operations (Editor Only)
