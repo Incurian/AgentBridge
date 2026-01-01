@@ -1,7 +1,7 @@
 # AgentBridge Handover Document
 
 > Session handover for Claude Code continuity.
-> Last Updated: January 1, 2026 (Session 15 - PCG Biome Workflow Testing)
+> Last Updated: January 1, 2026 (Session 17 - Flexible Value Formats & Enhanced Errors)
 
 ---
 
@@ -132,6 +132,41 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 ---
 
 ## Session Log
+
+### Jan 1 (Session 17) - Flexible Value Formats & Enhanced Errors
+
+**Goal:** Implement Priority 1 improvements from consolidated plan - make the API "just work."
+
+**Completed:**
+
+1. **Unified Property Setter with Value Normalization**
+   - `_normalize_property_value()` function converts flexible inputs to Unreal format
+   - Arrays: `[1, 0, 0]` → `(R=1.0,G=0.0,B=0.0,A=1.0)` (color) or `(X=1.0,Y=2.0,Z=3.0)` (vector)
+   - Dicts: `{"r": 1, "g": 0, "b": 0}` → color format
+   - Hex: `"#FF0000"` → color format
+   - Path hints: "LightColor" triggers color mode, "Rotation" triggers rotator mode
+
+2. **Enhanced Error Messages with Suggestions**
+   - `get_actor`: When actor not found, suggests similar actors via CamelCase splitting
+     - "MySkyLight" → suggests "SkyLight", "DirectionalLight"
+   - `set_property`: Detects common mistakes
+     - Using class names instead of instance names (PointLightComponent → LightComponent0)
+     - Read-only properties (suggests tempo_set_color_property for colors)
+   - `spawn_actor`: Lists common classes and Blueprint format hints
+
+3. **Updated Help Text**
+   - Properties topic now documents flexible value formats
+   - Examples for colors, vectors, rotators in multiple formats
+
+**Commits:**
+- `0a3ae15` - Add flexible value formats and enhanced error messages
+
+**Next Session:**
+- UObject property access (DataAssets, Materials) - Priority 2 item
+- Function parameter support in tempo_call_function
+- PCG Biome workflow help topic
+
+---
 
 ### Jan 1 (Session 16) - Consolidated Improvement Plan
 
