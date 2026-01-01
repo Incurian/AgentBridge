@@ -1891,13 +1891,17 @@ This works for: spawn_actor, query_actors, get_class_schema, list_classes
         "assets": """
 ASSET & FILE OPERATIONS:
 
-Creating assets:
-- create_asset(asset_class="DataAsset", package_path="/Game/Data", asset_name="MyData")
+Creating assets WITH PROPERTIES:
+- create_asset(asset_class="DataAsset", package_path="/Game/Data", asset_name="MyData",
+               properties={"MyProperty": "value", "MyNumber": 42})
 - create_asset(asset_class="MaterialInstanceConstant", package_path="/Game/Materials",
                asset_name="MI_Wood", parent_asset_path="/Game/Materials/M_Wood")
 
+The 'properties' parameter sets initial values when creating DataAssets or custom assets.
+Property names must match the asset class definition (use get_class_schema to check).
+
 Saving assets:
-- save_asset(asset_path="/Game/Data/MyData") - Save to disk
+- save_asset(asset_path="/Game/Data/MyData") - Save to disk (required to persist!)
 - save_actor_as_blueprint(actor_id="MyActor", package_path="/Game/Blueprints",
                           blueprint_name="BP_MyActor") - Convert actor to Blueprint
 
@@ -1912,10 +1916,16 @@ File operations (constrained to project directory):
 - list_project_directory(relative_path="Content/Blueprints") - List directory
 - copy_project_file(source="A.txt", dest="B.txt") - Copy file
 
+WORKFLOW - Creating a DataAsset:
+1. create_asset(asset_class="MyDataAsset", package_path="/Game/Data",
+                asset_name="Config1", properties={"Value": 100})
+2. save_asset(asset_path="/Game/Data/Config1") - Persist to disk
+
 IMPORTANT:
 - All file paths are relative to project root
 - File operations are sandboxed - cannot access files outside project
 - Binary files are base64 encoded in transport
+- Assets created but not saved will be lost when editor closes
 """,
         "components": """
 COMPONENT OPERATIONS:
@@ -2024,6 +2034,37 @@ Working with project files:
 1. list_project_directory("Config") - See config files
 2. read_project_file("Config/DefaultGame.ini") - Read config
 3. write_project_file("Saved/MyBackup.json", '{"key": "value"}') - Write data
+
+PCG BIOME WORKFLOW:
+Setting up procedural content generation with biomes:
+
+1. Find landscape bounds:
+   bounds = get_landscape_bounds()
+   # Returns: min_point, max_point, center, half_extents
+
+2. Spawn PCG volume to cover landscape:
+   spawn_actor(class_name="PCGVolume", location=bounds["center"],
+               scale=[bounds["half_extents"][0]/50, bounds["half_extents"][1]/50, 100],
+               label="BiomePCG")
+
+3. Create biome DataAsset with initial properties:
+   create_asset(asset_class="BiomeDataAsset", package_path="/Game/Biomes",
+                asset_name="Forest", properties={"TreeDensity": 0.5, "GrassHeight": 30})
+   save_asset(asset_path="/Game/Biomes/Forest")
+
+4. Query PCG actors to check spawned content:
+   query_actors(class_name="PCGComponent")
+   # Or find actors by tag if PCG assigns tags
+
+5. Regenerate after parameter changes:
+   # Use execute_console_command if PCG supports it, or
+   # modify DataAsset properties and resave
+
+TIPS:
+- Use get_landscape_bounds() to size PCG volumes correctly
+- Create DataAssets with initial properties via create_asset()
+- Use label_pattern to find PCG-spawned actors
+- PCG regeneration may require editor commands or level reload
 """
     }
 
