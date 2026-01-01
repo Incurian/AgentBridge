@@ -67,7 +67,7 @@ TOOLS = [
     # =========================================================================
     {
         "name": "query_actors",
-        "description": "Search for actors in the current world. You can filter by class, name pattern, or tag. Returns a list of matching actors with their transforms.",
+        "description": "Search for actors in the current world. You can filter by class, name pattern, label pattern, or tag. Returns a list of matching actors with their transforms.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -77,7 +77,11 @@ TOOLS = [
                 },
                 "name_pattern": {
                     "type": "string",
-                    "description": "Wildcard pattern for internal actor name (e.g., 'Light*', '*Door*'). Note: Matches internal names, NOT labels. Use get_actor with a label to find actors by display name.",
+                    "description": "Substring pattern for internal actor name (e.g., 'Light', 'Door'). Matches GetName() - the internal unique identifier.",
+                },
+                "label_pattern": {
+                    "type": "string",
+                    "description": "Substring pattern for display label (e.g., 'MyLight', 'MainDoor'). Matches GetActorLabel() - the human-readable name shown in the editor.",
                 },
                 "tag": {
                     "type": "string",
@@ -1010,10 +1014,11 @@ class AgentBridgeClient:
     def set_target_world(self, world_identifier: str):
         return self.stub.SetTargetWorld(pb.SetTargetWorldRequest(world_identifier=world_identifier))
 
-    def query_actors(self, class_name="", name_pattern="", tag="", limit=100, include_hidden=False):
+    def query_actors(self, class_name="", name_pattern="", label_pattern="", tag="", limit=100, include_hidden=False):
         return self.stub.QueryActors(pb.QueryActorsRequest(
             class_name=class_name,
             name_pattern=name_pattern,
+            label_pattern=label_pattern,
             tag=tag,
             limit=limit,
             include_hidden=include_hidden,
@@ -1579,12 +1584,16 @@ ACTOR OPERATIONS:
 
 Finding actors:
 - query_actors(class_name="PointLight") - Filter by type (recommended)
-- query_actors(name_pattern="*Door*") - Wildcard on INTERNAL names (not labels!)
+- query_actors(label_pattern="MainLight") - Filter by display label (NEW! Most useful!)
+- query_actors(name_pattern="Door") - Filter by internal name
 - query_actors(tag="Interactive") - Filter by tag
 - get_actor(actor_id="MyLight", include_properties=True) - Full details
 
-IMPORTANT: name_pattern matches internal names like "StaticMeshActor_UAID_123...",
-not labels like "MyDoor". To find by label, use get_actor(actor_id="label").
+LABEL PATTERN vs NAME PATTERN:
+- label_pattern: Matches display names (what you see in editor), e.g., "MainLight", "Floor"
+- name_pattern: Matches internal names like "PointLight_UAID_123..."
+
+TIP: Use label_pattern for most searches - it matches human-readable names!
 
 Creating actors:
 - spawn_actor(class_name="PointLight", location=[0,0,500], label="MyLight")
@@ -1857,6 +1866,7 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             client.query_actors,
             class_name=class_name,
             name_pattern=args.get("name_pattern", ""),
+            label_pattern=args.get("label_pattern", ""),
             tag=args.get("tag", ""),
             limit=args.get("limit", 100),
             include_hidden=args.get("include_hidden", False),

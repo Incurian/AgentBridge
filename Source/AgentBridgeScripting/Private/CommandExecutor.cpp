@@ -317,6 +317,7 @@ void FCommandExecutor::Execute(const FQueryActorsCommand& Command, FQueryActorsR
 
 	FActorQueryParams Params;
 	Params.NamePattern = Command.NamePattern;
+	Params.LabelPattern = Command.LabelPattern;
 	Params.Tag = Command.Tag;
 	Params.Limit = Command.Limit;
 	Params.bIncludeHidden = Command.bIncludeHidden;

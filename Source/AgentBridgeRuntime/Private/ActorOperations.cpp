@@ -134,12 +134,19 @@ TArray<FActorReference> FActorOperations::QueryActors(
 			continue;
 		}
 
-		// Name pattern filter
+		// Name pattern filter (matches internal names only)
 		if (!Params.NamePattern.IsEmpty())
 		{
-			bool bMatchesName = Actor->GetName().Contains(Params.NamePattern) ||
-				Actor->GetActorLabel().Contains(Params.NamePattern);
-			if (!bMatchesName)
+			if (!Actor->GetName().Contains(Params.NamePattern))
+			{
+				continue;
+			}
+		}
+
+		// Label pattern filter (matches display labels only)
+		if (!Params.LabelPattern.IsEmpty())
+		{
+			if (!Actor->GetActorLabel().Contains(Params.LabelPattern))
 			{
 				continue;
 			}

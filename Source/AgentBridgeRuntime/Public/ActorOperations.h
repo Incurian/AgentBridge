@@ -88,8 +88,11 @@ struct AGENTBRIDGERUNTIME_API FActorQueryParams
 	/** Filter by class (nullptr = all actors). */
 	UClass* ClassFilter = nullptr;
 
-	/** Filter by name pattern (substring match). */
+	/** Filter by internal name pattern (substring match on GetName()). */
 	FString NamePattern;
+
+	/** Filter by label pattern (substring match on GetActorLabel() - display names). */
+	FString LabelPattern;
 
 	/** Filter by actor tag. */
 	FString Tag;

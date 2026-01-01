@@ -623,6 +623,7 @@ void UAgentBridgeServiceSubsystem::QueryActors(
 	FQueryActorsCommand Cmd;
 	Cmd.ClassName = UTF8_TO_TCHAR(Request.class_name().c_str());
 	Cmd.NamePattern = UTF8_TO_TCHAR(Request.name_pattern().c_str());
+	Cmd.LabelPattern = UTF8_TO_TCHAR(Request.label_pattern().c_str());
 	Cmd.Tag = UTF8_TO_TCHAR(Request.tag().c_str());
 	Cmd.Limit = Request.limit() > 0 ? Request.limit() : 1000;
 	Cmd.bIncludeHidden = Request.include_hidden();

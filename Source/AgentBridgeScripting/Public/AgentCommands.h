@@ -164,8 +164,11 @@ struct AGENTBRIDGESCRIPTING_API FQueryActorsCommand : FAgentCommandBase
 	/** Class name to filter by (empty = all). */
 	FString ClassName;
 
-	/** Name/label pattern to match. */
+	/** Internal name pattern to match (from GetName()). */
 	FString NamePattern;
+
+	/** Label pattern to match (from GetActorLabel() - display names). */
+	FString LabelPattern;
 
 	/** Tag to filter by. */
 	FString Tag;
