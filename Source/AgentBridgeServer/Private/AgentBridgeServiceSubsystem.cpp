@@ -127,7 +127,45 @@ void UAgentBridgeServiceSubsystem::RegisterScriptingServices(FTempoScriptingServ
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestExecuteConsoleCommand,
 			&UAgentBridgeServiceSubsystem::ExecuteConsoleCommand),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestSearchConsoleCommands,
-			&UAgentBridgeServiceSubsystem::SearchConsoleCommands)
+			&UAgentBridgeServiceSubsystem::SearchConsoleCommands),
+
+		// Asset Operations (P0)
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestCreateAsset,
+			&UAgentBridgeServiceSubsystem::CreateAsset),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestSaveAsset,
+			&UAgentBridgeServiceSubsystem::SaveAsset),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestSaveActorAsBlueprint,
+			&UAgentBridgeServiceSubsystem::SaveActorAsBlueprint),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDuplicateAsset,
+			&UAgentBridgeServiceSubsystem::DuplicateAsset),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetAssetThumbnail,
+			&UAgentBridgeServiceSubsystem::GetAssetThumbnail),
+
+		// Component Operations (P1)
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetComponentTransform,
+			&UAgentBridgeServiceSubsystem::GetComponentTransform),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestSetComponentTransform,
+			&UAgentBridgeServiceSubsystem::SetComponentTransform),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestAttachComponent,
+			&UAgentBridgeServiceSubsystem::AttachComponent),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestAttachActor,
+			&UAgentBridgeServiceSubsystem::AttachActor),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDetachComponent,
+			&UAgentBridgeServiceSubsystem::DetachComponent),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDetachActor,
+			&UAgentBridgeServiceSubsystem::DetachActor),
+
+		// File Operations (P1)
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestReadProjectFile,
+			&UAgentBridgeServiceSubsystem::ReadProjectFile),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestWriteProjectFile,
+			&UAgentBridgeServiceSubsystem::WriteProjectFile),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestListProjectDirectory,
+			&UAgentBridgeServiceSubsystem::ListProjectDirectory),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestCopyProjectFile,
+			&UAgentBridgeServiceSubsystem::CopyProjectFile),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDeleteProjectFile,
+			&UAgentBridgeServiceSubsystem::DeleteProjectFile)
 	);
 }
 
@@ -1508,4 +1546,447 @@ void UAgentBridgeServiceSubsystem::SearchConsoleCommands(
 	Response.set_total_scanned(TotalScanned);
 	Response.set_total_matches(TotalMatches);
 	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+//~==============================================================================
+// Asset Operations (P0)
+//~==============================================================================
+
+void UAgentBridgeServiceSubsystem::CreateAsset(
+	const CreateAssetRequest& Request,
+	const TResponseDelegate<CreateAssetResponse>& ResponseContinuation)
+{
+	FCreateAssetCommand Cmd;
+	Cmd.AssetClass = UTF8_TO_TCHAR(Request.asset_class().c_str());
+	Cmd.PackagePath = UTF8_TO_TCHAR(Request.package_path().c_str());
+	Cmd.AssetName = UTF8_TO_TCHAR(Request.asset_name().c_str());
+	Cmd.ParentAssetPath = UTF8_TO_TCHAR(Request.parent_asset_path().c_str());
+
+	// Parse properties from proto - convert PropertyValue to JSON string
+	for (const auto& Prop : Request.properties())
+	{
+		// For now, just use string_value if set
+		FString ValueStr;
+		if (Prop.value().type() == PROPERTY_TYPE_STRING)
+		{
+			ValueStr = UTF8_TO_TCHAR(Prop.value().string_value().c_str());
+		}
+		else if (Prop.value().type() == PROPERTY_TYPE_INT)
+		{
+			ValueStr = FString::Printf(TEXT("%lld"), Prop.value().int_value());
+		}
+		else if (Prop.value().type() == PROPERTY_TYPE_FLOAT)
+		{
+			ValueStr = FString::Printf(TEXT("%f"), Prop.value().float_value());
+		}
+		else if (Prop.value().type() == PROPERTY_TYPE_BOOL)
+		{
+			ValueStr = Prop.value().bool_value() ? TEXT("true") : TEXT("false");
+		}
+		else
+		{
+			ValueStr = UTF8_TO_TCHAR(Prop.value().string_value().c_str());
+		}
+		Cmd.Properties.Add(UTF8_TO_TCHAR(Prop.key().c_str()), ValueStr);
+	}
+
+	FCreateAssetResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	CreateAssetResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	Response.set_asset_path(TCHAR_TO_UTF8(*CmdResponse.AssetPath));
+	Response.set_asset_class(TCHAR_TO_UTF8(*CmdResponse.AssetClass));
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::SaveAsset(
+	const SaveAssetRequest& Request,
+	const TResponseDelegate<SaveAssetResponse>& ResponseContinuation)
+{
+	FSaveAssetCommand Cmd;
+	Cmd.AssetPath = UTF8_TO_TCHAR(Request.asset_path().c_str());
+	Cmd.bPromptForCheckout = Request.prompt_for_checkout();
+
+	FSaveAssetResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	SaveAssetResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	Response.set_file_path(TCHAR_TO_UTF8(*CmdResponse.AssetPath));
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::SaveActorAsBlueprint(
+	const SaveActorAsBlueprintRequest& Request,
+	const TResponseDelegate<SaveActorAsBlueprintResponse>& ResponseContinuation)
+{
+	FSaveActorAsBlueprintCommand Cmd;
+	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
+	Cmd.PackagePath = UTF8_TO_TCHAR(Request.package_path().c_str());
+	Cmd.BlueprintName = UTF8_TO_TCHAR(Request.blueprint_name().c_str());
+	Cmd.bReplaceExisting = Request.replace_existing();
+
+	FSaveActorAsBlueprintResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	SaveActorAsBlueprintResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	Response.set_blueprint_path(TCHAR_TO_UTF8(*CmdResponse.BlueprintPath));
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::DuplicateAsset(
+	const DuplicateAssetRequest& Request,
+	const TResponseDelegate<DuplicateAssetResponse>& ResponseContinuation)
+{
+	FDuplicateAssetCommand Cmd;
+	Cmd.SourcePath = UTF8_TO_TCHAR(Request.source_path().c_str());
+	Cmd.DestPackagePath = UTF8_TO_TCHAR(Request.dest_package_path().c_str());
+	Cmd.DestAssetName = UTF8_TO_TCHAR(Request.dest_asset_name().c_str());
+
+	FDuplicateAssetResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	DuplicateAssetResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	Response.set_new_asset_path(TCHAR_TO_UTF8(*CmdResponse.NewAssetPath));
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::GetAssetThumbnail(
+	const GetAssetThumbnailRequest& Request,
+	const TResponseDelegate<GetAssetThumbnailResponse>& ResponseContinuation)
+{
+	FGetAssetThumbnailCommand Cmd;
+	Cmd.AssetPath = UTF8_TO_TCHAR(Request.asset_path().c_str());
+	Cmd.Width = Request.width() > 0 ? Request.width() : 256;
+	Cmd.Height = Request.height() > 0 ? Request.height() : 256;
+
+	FGetAssetThumbnailResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	GetAssetThumbnailResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	// ImageData is base64-encoded string, set as bytes
+	Response.set_image_data(TCHAR_TO_UTF8(*CmdResponse.ImageData));
+	Response.set_width(CmdResponse.Width);
+	Response.set_height(CmdResponse.Height);
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+//~==============================================================================
+// Component Operations (P1)
+//~==============================================================================
+
+void UAgentBridgeServiceSubsystem::GetComponentTransform(
+	const GetComponentTransformRequest& Request,
+	const TResponseDelegate<GetComponentTransformResponse>& ResponseContinuation)
+{
+	FGetComponentTransformCommand Cmd;
+	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
+	Cmd.ComponentName = UTF8_TO_TCHAR(Request.component_name().c_str());
+	Cmd.bWorldSpace = Request.world_space();
+
+	FGetComponentTransformResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	GetComponentTransformResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+
+	if (CmdResponse.bSuccess)
+	{
+		auto* Transform = Response.mutable_transform();
+		SetProtoVector(Transform->mutable_location(), CmdResponse.Location);
+		SetProtoRotation(Transform->mutable_rotation(), CmdResponse.Rotation);
+		Transform->mutable_scale()->set_x(CmdResponse.Scale.X);
+		Transform->mutable_scale()->set_y(CmdResponse.Scale.Y);
+		Transform->mutable_scale()->set_z(CmdResponse.Scale.Z);
+	}
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::SetComponentTransform(
+	const SetComponentTransformRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FSetComponentTransformCommand Cmd;
+	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
+	Cmd.ComponentName = UTF8_TO_TCHAR(Request.component_name().c_str());
+	Cmd.bWorldSpace = Request.world_space();
+	Cmd.bSweep = Request.sweep();
+
+	if (Request.has_transform())
+	{
+		const auto& T = Request.transform();
+		if (T.has_location())
+		{
+			Cmd.Location = FVector(T.location().x(), T.location().y(), T.location().z());
+		}
+		if (T.has_rotation())
+		{
+			Cmd.Rotation = FRotator(T.rotation().p(), T.rotation().y(), T.rotation().r());
+		}
+		if (T.has_scale())
+		{
+			Cmd.Scale = FVector(T.scale().x(), T.scale().y(), T.scale().z());
+		}
+	}
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+namespace
+{
+	EAttachmentRuleType ProtoToAttachmentRule(AgentBridgeServer::AttachmentRule Rule)
+	{
+		switch (Rule)
+		{
+		case AgentBridgeServer::ATTACHMENT_RULE_KEEP_WORLD:
+			return EAttachmentRuleType::KeepWorld;
+		case AgentBridgeServer::ATTACHMENT_RULE_SNAP_TO_TARGET:
+			return EAttachmentRuleType::SnapToTarget;
+		default:
+			return EAttachmentRuleType::KeepRelative;
+		}
+	}
+}
+
+void UAgentBridgeServiceSubsystem::AttachComponent(
+	const AttachComponentRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FAttachComponentCommand Cmd;
+	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
+	Cmd.ComponentName = UTF8_TO_TCHAR(Request.component_name().c_str());
+	Cmd.ParentComponentName = UTF8_TO_TCHAR(Request.parent_component_name().c_str());
+	Cmd.SocketName = UTF8_TO_TCHAR(Request.socket_name().c_str());
+	Cmd.LocationRule = ProtoToAttachmentRule(Request.location_rule());
+	Cmd.RotationRule = ProtoToAttachmentRule(Request.rotation_rule());
+	Cmd.ScaleRule = ProtoToAttachmentRule(Request.scale_rule());
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+void UAgentBridgeServiceSubsystem::AttachActor(
+	const AttachActorRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FAttachActorCommand Cmd;
+	Cmd.ChildActorId = UTF8_TO_TCHAR(Request.child_actor_id().c_str());
+	Cmd.ParentActorId = UTF8_TO_TCHAR(Request.parent_actor_id().c_str());
+	Cmd.ParentComponentName = UTF8_TO_TCHAR(Request.parent_component_name().c_str());
+	Cmd.SocketName = UTF8_TO_TCHAR(Request.socket_name().c_str());
+	Cmd.LocationRule = ProtoToAttachmentRule(Request.location_rule());
+	Cmd.RotationRule = ProtoToAttachmentRule(Request.rotation_rule());
+	Cmd.ScaleRule = ProtoToAttachmentRule(Request.scale_rule());
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+void UAgentBridgeServiceSubsystem::DetachComponent(
+	const DetachComponentRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FDetachComponentCommand Cmd;
+	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
+	Cmd.ComponentName = UTF8_TO_TCHAR(Request.component_name().c_str());
+	Cmd.bMaintainWorldPosition = Request.maintain_world_position();
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+void UAgentBridgeServiceSubsystem::DetachActor(
+	const DetachActorRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FDetachActorCommand Cmd;
+	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
+	Cmd.bMaintainWorldPosition = Request.maintain_world_position();
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+//~==============================================================================
+// File Operations (P1)
+//~==============================================================================
+
+void UAgentBridgeServiceSubsystem::ReadProjectFile(
+	const ReadProjectFileRequest& Request,
+	const TResponseDelegate<ReadProjectFileResponse>& ResponseContinuation)
+{
+	FReadProjectFileCommand Cmd;
+	Cmd.RelativePath = UTF8_TO_TCHAR(Request.relative_path().c_str());
+	Cmd.bAsBase64 = Request.as_base64();
+	Cmd.MaxBytes = Request.max_bytes();
+
+	FReadProjectFileResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	ReadProjectFileResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	Response.set_content(TCHAR_TO_UTF8(*CmdResponse.Content));
+	Response.set_file_size(CmdResponse.FileSizeBytes);
+	Response.set_is_binary(CmdResponse.bIsBase64);
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::WriteProjectFile(
+	const WriteProjectFileRequest& Request,
+	const TResponseDelegate<WriteProjectFileResponse>& ResponseContinuation)
+{
+	FWriteProjectFileCommand Cmd;
+	Cmd.RelativePath = UTF8_TO_TCHAR(Request.relative_path().c_str());
+	Cmd.Content = UTF8_TO_TCHAR(Request.content().c_str());
+	Cmd.bIsBase64 = Request.is_base64();
+	Cmd.bCreateDirectories = Request.create_directories();
+	Cmd.bAppend = Request.append();
+
+	FWriteProjectFileResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	WriteProjectFileResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	Response.set_bytes_written(CmdResponse.BytesWritten);
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::ListProjectDirectory(
+	const ListProjectDirectoryRequest& Request,
+	const TResponseDelegate<ListProjectDirectoryResponse>& ResponseContinuation)
+{
+	FListProjectDirectoryCommand Cmd;
+	Cmd.RelativePath = UTF8_TO_TCHAR(Request.relative_path().c_str());
+	Cmd.Pattern = UTF8_TO_TCHAR(Request.pattern().c_str());
+	Cmd.bRecursive = Request.recursive();
+	Cmd.Limit = Request.limit() > 0 ? Request.limit() : 100;
+
+	FListProjectDirectoryResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	ListProjectDirectoryResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	Response.set_total_count(CmdResponse.TotalCount);
+
+	for (const auto& File : CmdResponse.Files)
+	{
+		auto* ProtoFile = Response.add_files();
+		ProtoFile->set_name(TCHAR_TO_UTF8(*File.Name));
+		ProtoFile->set_relative_path(TCHAR_TO_UTF8(*File.RelativePath));
+		ProtoFile->set_is_directory(File.bIsDirectory);
+		ProtoFile->set_size(File.SizeBytes);
+		ProtoFile->set_last_modified(TCHAR_TO_UTF8(*File.ModificationTime));
+	}
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::CopyProjectFile(
+	const CopyProjectFileRequest& Request,
+	const TResponseDelegate<CopyProjectFileResponse>& ResponseContinuation)
+{
+	FCopyProjectFileCommand Cmd;
+	Cmd.SourcePath = UTF8_TO_TCHAR(Request.source_path().c_str());
+	Cmd.DestPath = UTF8_TO_TCHAR(Request.dest_path().c_str());
+	Cmd.bOverwrite = Request.overwrite();
+
+	FCopyProjectFileResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	CopyProjectFileResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	Response.set_dest_full_path(TCHAR_TO_UTF8(*CmdResponse.DestAbsolutePath));
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::DeleteProjectFile(
+	const DeleteProjectFileRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FDeleteProjectFileCommand Cmd;
+	Cmd.RelativePath = UTF8_TO_TCHAR(Request.relative_path().c_str());
+	Cmd.bAllowDirectoryDelete = Request.allow_directory_delete();
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
 }

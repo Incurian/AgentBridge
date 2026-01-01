@@ -53,6 +53,38 @@ namespace AgentBridgeServer
 	class ExecuteConsoleCommandResponse;
 	class SearchConsoleCommandsRequest;
 	class SearchConsoleCommandsResponse;
+
+	// Asset operation types (P0)
+	class CreateAssetRequest;
+	class CreateAssetResponse;
+	class SaveAssetRequest;
+	class SaveAssetResponse;
+	class SaveActorAsBlueprintRequest;
+	class SaveActorAsBlueprintResponse;
+	class DuplicateAssetRequest;
+	class DuplicateAssetResponse;
+	class GetAssetThumbnailRequest;
+	class GetAssetThumbnailResponse;
+
+	// Component operation types (P1)
+	class GetComponentTransformRequest;
+	class GetComponentTransformResponse;
+	class SetComponentTransformRequest;
+	class AttachComponentRequest;
+	class AttachActorRequest;
+	class DetachComponentRequest;
+	class DetachActorRequest;
+
+	// File operation types (P1)
+	class ReadProjectFileRequest;
+	class ReadProjectFileResponse;
+	class WriteProjectFileRequest;
+	class WriteProjectFileResponse;
+	class ListProjectDirectoryRequest;
+	class ListProjectDirectoryResponse;
+	class CopyProjectFileRequest;
+	class CopyProjectFileResponse;
+	class DeleteProjectFileRequest;
 }
 
 namespace TempoScripting
@@ -213,4 +245,80 @@ public:
 	void SearchConsoleCommands(
 		const AgentBridgeServer::SearchConsoleCommandsRequest& Request,
 		const TResponseDelegate<AgentBridgeServer::SearchConsoleCommandsResponse>& ResponseContinuation);
+
+	//~==============================================================================
+	// gRPC Service Handlers - Asset Operations (P0)
+	//~==============================================================================
+
+	void CreateAsset(
+		const AgentBridgeServer::CreateAssetRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::CreateAssetResponse>& ResponseContinuation);
+
+	void SaveAsset(
+		const AgentBridgeServer::SaveAssetRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::SaveAssetResponse>& ResponseContinuation);
+
+	void SaveActorAsBlueprint(
+		const AgentBridgeServer::SaveActorAsBlueprintRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::SaveActorAsBlueprintResponse>& ResponseContinuation);
+
+	void DuplicateAsset(
+		const AgentBridgeServer::DuplicateAssetRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::DuplicateAssetResponse>& ResponseContinuation);
+
+	void GetAssetThumbnail(
+		const AgentBridgeServer::GetAssetThumbnailRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::GetAssetThumbnailResponse>& ResponseContinuation);
+
+	//~==============================================================================
+	// gRPC Service Handlers - Component Operations (P1)
+	//~==============================================================================
+
+	void GetComponentTransform(
+		const AgentBridgeServer::GetComponentTransformRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::GetComponentTransformResponse>& ResponseContinuation);
+
+	void SetComponentTransform(
+		const AgentBridgeServer::SetComponentTransformRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void AttachComponent(
+		const AgentBridgeServer::AttachComponentRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void AttachActor(
+		const AgentBridgeServer::AttachActorRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void DetachComponent(
+		const AgentBridgeServer::DetachComponentRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void DetachActor(
+		const AgentBridgeServer::DetachActorRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	//~==============================================================================
+	// gRPC Service Handlers - File Operations (P1)
+	//~==============================================================================
+
+	void ReadProjectFile(
+		const AgentBridgeServer::ReadProjectFileRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::ReadProjectFileResponse>& ResponseContinuation);
+
+	void WriteProjectFile(
+		const AgentBridgeServer::WriteProjectFileRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::WriteProjectFileResponse>& ResponseContinuation);
+
+	void ListProjectDirectory(
+		const AgentBridgeServer::ListProjectDirectoryRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::ListProjectDirectoryResponse>& ResponseContinuation);
+
+	void CopyProjectFile(
+		const AgentBridgeServer::CopyProjectFileRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::CopyProjectFileResponse>& ResponseContinuation);
+
+	void DeleteProjectFile(
+		const AgentBridgeServer::DeleteProjectFileRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
 };

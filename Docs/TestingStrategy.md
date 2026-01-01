@@ -14,7 +14,8 @@
 5. [Phase 3: gRPC Client Testing](#phase-3-grpc-client-testing)
 6. [Phase 4: MCP Integration Testing](#phase-4-mcp-integration-testing)
 7. [Phase 5: Context-Specific Testing](#phase-5-context-specific-testing)
-8. [Test Artifacts Cleanup](#test-artifacts-cleanup)
+8. [Phase 6: Wishlist Features Testing](#phase-6-wishlist-features-testing)
+9. [Test Artifacts Cleanup](#test-artifacts-cleanup)
 
 ---
 
@@ -26,8 +27,9 @@
 |----------|----------|------|-------------|---------|
 | Console Commands | N/A | N/A | Manual in Editor | Editor |
 | HTTP API | HTTP/JSON | 8080 | `test_client.py` | Editor |
-| gRPC API | gRPC/Protobuf | 50051 | `test_grpc.py` | Editor/PIE |
-| MCP Tools | gRPC (via MCP) | 50051 | Manual/Claude | Editor/PIE |
+| gRPC API | gRPC/Protobuf | 10001 | `test_grpc.py` | Editor/PIE |
+| MCP Tools | gRPC (via MCP) | 10001 | Manual/Claude | Editor/PIE |
+| Wishlist | gRPC | 10001 | `test_wishlist.py` | Editor |
 
 ### What Gets Tested
 
@@ -53,7 +55,7 @@
    cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
    pip install -r requirements.txt
    ```
-3. **gRPC server active** (Tempo default port 50051)
+3. **gRPC server active** (Tempo default port 10001)
 4. **HTTP server active** (AgentBridge port 8080)
 
 ### Verify Servers Are Running
@@ -63,7 +65,7 @@
 curl http://localhost:8080/health
 
 # Check gRPC server (Python)
-python -c "import grpc; ch = grpc.insecure_channel('localhost:50051'); grpc.channel_ready_future(ch).result(timeout=5); print('OK')"
+python -c "import grpc; ch = grpc.insecure_channel('localhost:10001'); grpc.channel_ready_future(ch).result(timeout=5); print('OK')"
 ```
 
 ---
@@ -273,7 +275,7 @@ from AgentBridgeServer import AgentBridge_pb2_grpc as pb_grpc
 from TempoScripting import Geometry_pb2
 
 # Connect
-channel = grpc.insecure_channel("localhost:50051")
+channel = grpc.insecure_channel("localhost:10001")
 stub = pb_grpc.AgentBridgeServiceStub(channel)
 
 # List worlds
@@ -554,6 +556,126 @@ table_info = client.get_data_table("/Game/Data/MyDataTable")
 
 ---
 
+## Phase 6: Wishlist Features Testing
+
+Tests for the new asset, component, and file operations added in Sessions 9-10.
+
+### 6.1 Automated Test Script
+
+```bash
+cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
+PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo" \
+    D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_wishlist.py
+```
+
+This runs automated tests for:
+- File operations (read/write/list/copy)
+- Component transforms (get/set)
+- Actor attachment (attach/detach)
+- Asset operations (create/thumbnail)
+
+### 6.2 Manual File Operations
+
+```python
+# Write a file
+result = execute(client, "write_project_file", {
+    "relative_path": "Saved/Test.txt",
+    "content": "Hello World",
+})
+
+# Read it back
+result = execute(client, "read_project_file", {
+    "relative_path": "Saved/Test.txt",
+})
+
+# List directory
+result = execute(client, "list_project_directory", {
+    "relative_path": "Content",
+    "pattern": "*.uasset",
+    "limit": 20,
+})
+```
+
+**Security checks:**
+- Paths with `..` should be rejected
+- Paths in `Binaries/` should be rejected
+- Files with `.exe` extension should be rejected
+
+### 6.3 Manual Component Operations
+
+```python
+# Spawn test actor
+execute(client, "spawn_actor", {
+    "class_name": "PointLight",
+    "location": [0, 0, 500],
+    "label": "TestLight",
+})
+
+# Get component transform
+result = execute(client, "get_component_transform", {
+    "actor_id": "TestLight",
+    "component_name": "LightComponent0",
+    "world_space": True,
+})
+
+# Set component transform (relative offset)
+execute(client, "set_component_transform", {
+    "actor_id": "TestLight",
+    "component_name": "LightComponent0",
+    "location": [50, 0, 0],
+    "world_space": False,
+})
+```
+
+### 6.4 Manual Actor Attachment
+
+```python
+# Spawn parent and child
+execute(client, "spawn_actor", {
+    "class_name": "StaticMeshActor", "location": [0, 0, 100], "label": "Parent"
+})
+execute(client, "spawn_actor", {
+    "class_name": "PointLight", "location": [0, 0, 200], "label": "Child"
+})
+
+# Attach child to parent
+execute(client, "attach_actor", {
+    "child_actor_id": "Child",
+    "parent_actor_id": "Parent",
+    "location_rule": "keep_world",
+})
+
+# Detach child
+execute(client, "detach_actor", {
+    "actor_id": "Child",
+})
+
+# Cleanup
+execute(client, "delete_actor", {"actor_id": "Child"})
+execute(client, "delete_actor", {"actor_id": "Parent"})
+```
+
+### 6.5 Manual Asset Operations
+
+```python
+# Create a DataAsset (editor only)
+result = execute(client, "create_asset", {
+    "asset_class": "DataAsset",
+    "package_path": "/Game/Test",
+    "asset_name": "TestData",
+})
+
+# Get asset thumbnail
+result = execute(client, "get_asset_thumbnail", {
+    "asset_path": "/Engine/BasicShapes/Cube",
+    "width": 128,
+    "height": 128,
+})
+print(f"Image data: {len(result['image_data'])} base64 chars")
+```
+
+---
+
 ## Test Artifacts Cleanup
 
 When you're done inspecting, clean up test artifacts manually:
@@ -668,10 +790,10 @@ curl http://localhost:8080/health
 # D:\tempo\TempoSample\Saved\Logs\TempoSample.log
 ```
 
-**gRPC (50051):**
+**gRPC (10001):**
 ```python
 import grpc
-channel = grpc.insecure_channel("localhost:50051")
+channel = grpc.insecure_channel("localhost:10001")
 try:
     grpc.channel_ready_future(channel).result(timeout=5)
     print("gRPC server is up")

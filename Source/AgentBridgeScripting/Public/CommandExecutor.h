@@ -161,6 +161,37 @@ public:
 	static void Execute(const FSetPCGParameterCommand& Command, FAgentResponseBase& Response);
 
 	//~==============================================================================
+	// Typed Execution - Asset Commands (P0)
+	//~==============================================================================
+
+	static void Execute(const FCreateAssetCommand& Command, FCreateAssetResponse& Response);
+	static void Execute(const FSaveAssetCommand& Command, FSaveAssetResponse& Response);
+	static void Execute(const FSaveActorAsBlueprintCommand& Command, FSaveActorAsBlueprintResponse& Response);
+	static void Execute(const FDuplicateAssetCommand& Command, FDuplicateAssetResponse& Response);
+	static void Execute(const FGetAssetThumbnailCommand& Command, FGetAssetThumbnailResponse& Response);
+
+	//~==============================================================================
+	// Typed Execution - Component Commands (P1)
+	//~==============================================================================
+
+	static void Execute(const FGetComponentTransformCommand& Command, FGetComponentTransformResponse& Response);
+	static void Execute(const FSetComponentTransformCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FAttachComponentCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FAttachActorCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FDetachComponentCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FDetachActorCommand& Command, FAgentResponseBase& Response);
+
+	//~==============================================================================
+	// Typed Execution - File Commands (P1)
+	//~==============================================================================
+
+	static void Execute(const FReadProjectFileCommand& Command, FReadProjectFileResponse& Response);
+	static void Execute(const FWriteProjectFileCommand& Command, FWriteProjectFileResponse& Response);
+	static void Execute(const FListProjectDirectoryCommand& Command, FListProjectDirectoryResponse& Response);
+	static void Execute(const FCopyProjectFileCommand& Command, FCopyProjectFileResponse& Response);
+	static void Execute(const FDeleteProjectFileCommand& Command, FAgentResponseBase& Response);
+
+	//~==============================================================================
 	// JSON Serialization Helpers
 	//~==============================================================================
 
@@ -231,4 +262,36 @@ private:
 	static FString SerializeCreateMaterialInstanceResponse(const FCreateMaterialInstanceResponse& Response);
 	static FString SerializeListPCGActorsResponse(const FListPCGActorsResponse& Response);
 	static FString SerializeRegeneratePCGResponse(const FRegeneratePCGResponse& Response);
+
+	// Asset response serialization (P0)
+	static FString SerializeCreateAssetResponse(const FCreateAssetResponse& Response);
+	static FString SerializeSaveAssetResponse(const FSaveAssetResponse& Response);
+	static FString SerializeSaveActorAsBlueprintResponse(const FSaveActorAsBlueprintResponse& Response);
+	static FString SerializeDuplicateAssetResponse(const FDuplicateAssetResponse& Response);
+	static FString SerializeGetAssetThumbnailResponse(const FGetAssetThumbnailResponse& Response);
+
+	// Component response serialization (P1)
+	static FString SerializeGetComponentTransformResponse(const FGetComponentTransformResponse& Response);
+
+	// File response serialization (P1)
+	static FString SerializeReadProjectFileResponse(const FReadProjectFileResponse& Response);
+	static FString SerializeWriteProjectFileResponse(const FWriteProjectFileResponse& Response);
+	static FString SerializeListProjectDirectoryResponse(const FListProjectDirectoryResponse& Response);
+	static FString SerializeCopyProjectFileResponse(const FCopyProjectFileResponse& Response);
+
+	//~==============================================================================
+	// File Path Validation (P1)
+	//~==============================================================================
+
+	/**
+	 * Validates a relative path is safe for file operations.
+	 * Returns true if the path is within allowed project directories.
+	 */
+	static bool IsPathAllowed(const FString& RelativePath, FString* OutError = nullptr);
+
+	/**
+	 * Converts a relative path to absolute project path.
+	 * Returns empty if path is not allowed.
+	 */
+	static FString ToAbsoluteProjectPath(const FString& RelativePath, FString* OutError = nullptr);
 };

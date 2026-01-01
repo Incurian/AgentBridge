@@ -509,6 +509,477 @@ TOOLS = [
             "required": ["keyword"],
         },
     },
+
+    # =========================================================================
+    # Asset Operations (P0)
+    # =========================================================================
+    {
+        "name": "create_asset",
+        "description": "Create a new UAsset (DataAsset, MaterialInstance, etc.) in the Content folder. Editor only.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "asset_class": {
+                    "type": "string",
+                    "description": "Asset class name (e.g., 'DataAsset', 'MaterialInstanceConstant')",
+                },
+                "package_path": {
+                    "type": "string",
+                    "description": "Content folder path (e.g., '/Game/MyAssets')",
+                },
+                "asset_name": {
+                    "type": "string",
+                    "description": "Name for the new asset",
+                },
+                "parent_asset_path": {
+                    "type": "string",
+                    "description": "For instances (e.g., parent material path)",
+                },
+                "properties": {
+                    "type": "object",
+                    "description": "Initial property values to set",
+                },
+            },
+            "required": ["asset_class", "package_path", "asset_name"],
+        },
+    },
+    {
+        "name": "save_asset",
+        "description": "Save a modified asset to disk. Editor only.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "asset_path": {
+                    "type": "string",
+                    "description": "Asset path to save (e.g., '/Game/MyAssets/MyAsset')",
+                },
+                "prompt_for_checkout": {
+                    "type": "boolean",
+                    "description": "Prompt for source control checkout",
+                    "default": False,
+                },
+            },
+            "required": ["asset_path"],
+        },
+    },
+    {
+        "name": "save_actor_as_blueprint",
+        "description": "Convert an actor to a reusable Blueprint asset. Editor only.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_id": {
+                    "type": "string",
+                    "description": "Actor to convert",
+                },
+                "package_path": {
+                    "type": "string",
+                    "description": "Content folder path for the blueprint",
+                },
+                "blueprint_name": {
+                    "type": "string",
+                    "description": "Name for the blueprint",
+                },
+                "replace_existing": {
+                    "type": "boolean",
+                    "description": "Overwrite if exists",
+                    "default": False,
+                },
+            },
+            "required": ["actor_id", "package_path", "blueprint_name"],
+        },
+    },
+    {
+        "name": "duplicate_asset",
+        "description": "Create a copy of an existing asset. Editor only.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "source_path": {
+                    "type": "string",
+                    "description": "Source asset path",
+                },
+                "dest_package_path": {
+                    "type": "string",
+                    "description": "Destination folder",
+                },
+                "dest_asset_name": {
+                    "type": "string",
+                    "description": "Name for the copy",
+                },
+            },
+            "required": ["source_path", "dest_package_path", "dest_asset_name"],
+        },
+    },
+
+    # =========================================================================
+    # Component Operations (P1)
+    # =========================================================================
+    {
+        "name": "get_component_transform",
+        "description": "Get the transform of a specific component on an actor.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_id": {
+                    "type": "string",
+                    "description": "Actor identifier",
+                },
+                "component_name": {
+                    "type": "string",
+                    "description": "Component instance name (e.g., 'LightComponent0')",
+                },
+                "world_space": {
+                    "type": "boolean",
+                    "description": "True for world coordinates, false for relative",
+                    "default": True,
+                },
+            },
+            "required": ["actor_id", "component_name"],
+        },
+    },
+    {
+        "name": "set_component_transform",
+        "description": "Set the transform of a specific component.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_id": {
+                    "type": "string",
+                    "description": "Actor identifier",
+                },
+                "component_name": {
+                    "type": "string",
+                    "description": "Component instance name",
+                },
+                "location": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "description": "Location [X, Y, Z]",
+                },
+                "rotation": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "description": "Rotation [Pitch, Yaw, Roll]",
+                },
+                "scale": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "description": "Scale [X, Y, Z]",
+                },
+                "world_space": {
+                    "type": "boolean",
+                    "description": "True for world coordinates",
+                    "default": True,
+                },
+            },
+            "required": ["actor_id", "component_name"],
+        },
+    },
+    {
+        "name": "attach_actor",
+        "description": "Attach one actor to another (parent-child relationship).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "child_actor_id": {
+                    "type": "string",
+                    "description": "Actor to attach",
+                },
+                "parent_actor_id": {
+                    "type": "string",
+                    "description": "Actor to attach to",
+                },
+                "parent_component_name": {
+                    "type": "string",
+                    "description": "Specific component (default: root)",
+                },
+                "socket_name": {
+                    "type": "string",
+                    "description": "Optional socket name",
+                },
+                "location_rule": {
+                    "type": "string",
+                    "enum": ["KeepRelative", "KeepWorld", "SnapToTarget"],
+                    "description": "How to handle location",
+                    "default": "KeepWorld",
+                },
+            },
+            "required": ["child_actor_id", "parent_actor_id"],
+        },
+    },
+    {
+        "name": "detach_actor",
+        "description": "Detach an actor from its parent.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_id": {
+                    "type": "string",
+                    "description": "Actor to detach",
+                },
+                "maintain_world_position": {
+                    "type": "boolean",
+                    "description": "Keep current world position",
+                    "default": True,
+                },
+            },
+            "required": ["actor_id"],
+        },
+    },
+
+    # =========================================================================
+    # File Operations (P1)
+    # =========================================================================
+    {
+        "name": "read_project_file",
+        "description": "Read a file from the project directory. Constrained to safe paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "relative_path": {
+                    "type": "string",
+                    "description": "Path relative to project root",
+                },
+                "as_base64": {
+                    "type": "boolean",
+                    "description": "Return binary content as base64",
+                    "default": False,
+                },
+            },
+            "required": ["relative_path"],
+        },
+    },
+    {
+        "name": "write_project_file",
+        "description": "Write a file to the project directory. Constrained to safe paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "relative_path": {
+                    "type": "string",
+                    "description": "Path relative to project root",
+                },
+                "content": {
+                    "type": "string",
+                    "description": "Content to write",
+                },
+                "is_base64": {
+                    "type": "boolean",
+                    "description": "Content is base64 encoded",
+                    "default": False,
+                },
+                "create_directories": {
+                    "type": "boolean",
+                    "description": "Create parent directories",
+                    "default": True,
+                },
+                "append": {
+                    "type": "boolean",
+                    "description": "Append instead of overwrite",
+                    "default": False,
+                },
+            },
+            "required": ["relative_path", "content"],
+        },
+    },
+    {
+        "name": "list_project_directory",
+        "description": "List files in a project directory. Constrained to safe paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "relative_path": {
+                    "type": "string",
+                    "description": "Path relative to project root",
+                },
+                "pattern": {
+                    "type": "string",
+                    "description": "Glob pattern (e.g., '*.uasset')",
+                },
+                "recursive": {
+                    "type": "boolean",
+                    "description": "Include subdirectories",
+                    "default": False,
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Maximum files to return",
+                    "default": 100,
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "copy_project_file",
+        "description": "Copy a file within the project directory. Constrained to safe paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "source_path": {
+                    "type": "string",
+                    "description": "Source path relative to project root",
+                },
+                "dest_path": {
+                    "type": "string",
+                    "description": "Destination path relative to project root",
+                },
+                "overwrite": {
+                    "type": "boolean",
+                    "description": "Overwrite if destination exists",
+                    "default": False,
+                },
+            },
+            "required": ["source_path", "dest_path"],
+        },
+    },
+    # =========================================================================
+    # Component Operations (P1)
+    # =========================================================================
+    {
+        "name": "attach_component",
+        "description": "Attach a component to another component within the same actor.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_id": {
+                    "type": "string",
+                    "description": "Actor containing the components",
+                },
+                "component_name": {
+                    "type": "string",
+                    "description": "Component to attach",
+                },
+                "parent_component_name": {
+                    "type": "string",
+                    "description": "Parent component to attach to",
+                },
+                "socket_name": {
+                    "type": "string",
+                    "description": "Socket on parent to attach to (optional)",
+                },
+                "location_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
+                    "description": "How to handle location",
+                    "default": "keep_relative",
+                },
+                "rotation_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
+                    "description": "How to handle rotation",
+                    "default": "keep_relative",
+                },
+                "scale_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
+                    "description": "How to handle scale",
+                    "default": "keep_relative",
+                },
+            },
+            "required": ["actor_id", "component_name", "parent_component_name"],
+        },
+    },
+    {
+        "name": "attach_actor",
+        "description": "Attach an actor to another actor (child becomes component of parent).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "child_actor_id": {
+                    "type": "string",
+                    "description": "Actor to attach",
+                },
+                "parent_actor_id": {
+                    "type": "string",
+                    "description": "Actor to attach to",
+                },
+                "parent_component_name": {
+                    "type": "string",
+                    "description": "Component on parent to attach to (optional, defaults to root)",
+                },
+                "socket_name": {
+                    "type": "string",
+                    "description": "Socket on parent component (optional)",
+                },
+                "location_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
+                    "description": "How to handle location",
+                    "default": "keep_world",
+                },
+                "rotation_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
+                    "description": "How to handle rotation",
+                    "default": "keep_world",
+                },
+                "scale_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
+                    "description": "How to handle scale",
+                    "default": "keep_world",
+                },
+            },
+            "required": ["child_actor_id", "parent_actor_id"],
+        },
+    },
+    {
+        "name": "detach_component",
+        "description": "Detach a component from its parent, making it a root component.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_id": {
+                    "type": "string",
+                    "description": "Actor containing the component",
+                },
+                "component_name": {
+                    "type": "string",
+                    "description": "Component to detach",
+                },
+                "maintain_world_transform": {
+                    "type": "boolean",
+                    "description": "Keep world position after detach",
+                    "default": True,
+                },
+            },
+            "required": ["actor_id", "component_name"],
+        },
+    },
+    {
+        "name": "detach_actor",
+        "description": "Detach an actor from its parent actor.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_id": {
+                    "type": "string",
+                    "description": "Actor to detach",
+                },
+                "location_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world"],
+                    "description": "How to handle location after detach",
+                    "default": "keep_world",
+                },
+                "rotation_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world"],
+                    "description": "How to handle rotation after detach",
+                    "default": "keep_world",
+                },
+                "scale_rule": {
+                    "type": "string",
+                    "enum": ["keep_relative", "keep_world"],
+                    "description": "How to handle scale after detach",
+                    "default": "keep_world",
+                },
+            },
+            "required": ["actor_id"],
+        },
+    },
 ]
 
 
@@ -692,6 +1163,202 @@ class AgentBridgeClient:
             search_help=search_help,
         ))
 
+    # Asset Operations (P0)
+    def create_asset(self, asset_class: str, package_path: str, asset_name: str,
+                     parent_asset_path: str = "", properties: dict = None):
+        request = pb.CreateAssetRequest(
+            asset_class=asset_class,
+            package_path=package_path,
+            asset_name=asset_name,
+            parent_asset_path=parent_asset_path,
+        )
+        if properties:
+            for key, value in properties.items():
+                kv = request.properties.add()
+                kv.key = key
+                _set_property_value(kv.value, value)
+        return self.stub.CreateAsset(request)
+
+    def save_asset(self, asset_path: str, prompt_for_checkout: bool = False):
+        return self.stub.SaveAsset(pb.SaveAssetRequest(
+            asset_path=asset_path,
+            prompt_for_checkout=prompt_for_checkout,
+        ))
+
+    def save_actor_as_blueprint(self, actor_id: str, package_path: str, blueprint_name: str,
+                                replace_existing: bool = False):
+        return self.stub.SaveActorAsBlueprint(pb.SaveActorAsBlueprintRequest(
+            actor_id=actor_id,
+            package_path=package_path,
+            blueprint_name=blueprint_name,
+            replace_existing=replace_existing,
+        ))
+
+    def duplicate_asset(self, source_path: str, dest_package_path: str, dest_asset_name: str):
+        return self.stub.DuplicateAsset(pb.DuplicateAssetRequest(
+            source_path=source_path,
+            dest_package_path=dest_package_path,
+            dest_asset_name=dest_asset_name,
+        ))
+
+    # Component Operations (P1)
+    def get_component_transform(self, actor_id: str, component_name: str, world_space: bool = True):
+        return self.stub.GetComponentTransform(pb.GetComponentTransformRequest(
+            actor_id=actor_id,
+            component_name=component_name,
+            world_space=world_space,
+        ))
+
+    def set_component_transform(self, actor_id: str, component_name: str,
+                                location=None, rotation=None, scale=None,
+                                world_space: bool = True, sweep: bool = False):
+        transform = pb.ActorTransform()
+        if location:
+            transform.location.CopyFrom(self._make_vector(*location))
+        if rotation:
+            transform.rotation.CopyFrom(self._make_rotation(*rotation))
+        if scale:
+            transform.scale.CopyFrom(pb.Scale(x=scale[0], y=scale[1], z=scale[2]))
+        return self.stub.SetComponentTransform(pb.SetComponentTransformRequest(
+            actor_id=actor_id,
+            component_name=component_name,
+            transform=transform,
+            world_space=world_space,
+            sweep=sweep,
+        ))
+
+    def attach_actor(self, child_actor_id: str, parent_actor_id: str,
+                     parent_component_name: str = "", socket_name: str = "",
+                     location_rule: str = "KeepWorld"):
+        rule_map = {
+            "KeepRelative": pb.ATTACHMENT_RULE_KEEP_RELATIVE,
+            "KeepWorld": pb.ATTACHMENT_RULE_KEEP_WORLD,
+            "SnapToTarget": pb.ATTACHMENT_RULE_SNAP_TO_TARGET,
+        }
+        rule = rule_map.get(location_rule, pb.ATTACHMENT_RULE_KEEP_WORLD)
+        return self.stub.AttachActor(pb.AttachActorRequest(
+            child_actor_id=child_actor_id,
+            parent_actor_id=parent_actor_id,
+            parent_component_name=parent_component_name,
+            socket_name=socket_name,
+            location_rule=rule,
+            rotation_rule=rule,
+            scale_rule=rule,
+        ))
+
+    def detach_actor(self, actor_id: str, maintain_world_position: bool = True):
+        return self.stub.DetachActor(pb.DetachActorRequest(
+            actor_id=actor_id,
+            maintain_world_position=maintain_world_position,
+        ))
+
+    # File Operations (P1)
+    def read_project_file(self, relative_path: str, as_base64: bool = False, max_bytes: int = 0):
+        return self.stub.ReadProjectFile(pb.ReadProjectFileRequest(
+            relative_path=relative_path,
+            as_base64=as_base64,
+            max_bytes=max_bytes,
+        ))
+
+    def write_project_file(self, relative_path: str, content: str, is_base64: bool = False,
+                           create_directories: bool = True, append: bool = False):
+        return self.stub.WriteProjectFile(pb.WriteProjectFileRequest(
+            relative_path=relative_path,
+            content=content,
+            is_base64=is_base64,
+            create_directories=create_directories,
+            append=append,
+        ))
+
+    def list_project_directory(self, relative_path: str = "", pattern: str = "",
+                               recursive: bool = False, limit: int = 100):
+        return self.stub.ListProjectDirectory(pb.ListProjectDirectoryRequest(
+            relative_path=relative_path,
+            pattern=pattern,
+            recursive=recursive,
+            limit=limit,
+        ))
+
+    def copy_project_file(self, source_path: str, dest_path: str,
+                          overwrite: bool = False):
+        return self.stub.CopyProjectFile(pb.CopyProjectFileRequest(
+            source_path=source_path,
+            dest_path=dest_path,
+            overwrite=overwrite,
+        ))
+
+    # -------------------------------------------------------------------------
+    # Component Operations
+    # -------------------------------------------------------------------------
+
+    def attach_component(self, actor_id: str, component_name: str,
+                         parent_component_name: str, socket_name: str = "",
+                         location_rule: str = "keep_relative",
+                         rotation_rule: str = "keep_relative",
+                         scale_rule: str = "keep_relative"):
+        return self.stub.AttachComponent(pb.AttachComponentRequest(
+            actor_id=actor_id,
+            component_name=component_name,
+            parent_component_name=parent_component_name,
+            socket_name=socket_name,
+            location_rule=_string_to_attachment_rule(location_rule),
+            rotation_rule=_string_to_attachment_rule(rotation_rule),
+            scale_rule=_string_to_attachment_rule(scale_rule),
+        ))
+
+    def attach_actor(self, child_actor_id: str, parent_actor_id: str,
+                     parent_component_name: str = "", socket_name: str = "",
+                     location_rule: str = "keep_world",
+                     rotation_rule: str = "keep_world",
+                     scale_rule: str = "keep_world"):
+        return self.stub.AttachActor(pb.AttachActorRequest(
+            child_actor_id=child_actor_id,
+            parent_actor_id=parent_actor_id,
+            parent_component_name=parent_component_name,
+            socket_name=socket_name,
+            location_rule=_string_to_attachment_rule(location_rule),
+            rotation_rule=_string_to_attachment_rule(rotation_rule),
+            scale_rule=_string_to_attachment_rule(scale_rule),
+        ))
+
+    def detach_component(self, actor_id: str, component_name: str,
+                         maintain_world_transform: bool = True):
+        return self.stub.DetachComponent(pb.DetachComponentRequest(
+            actor_id=actor_id,
+            component_name=component_name,
+            maintain_world_transform=maintain_world_transform,
+        ))
+
+    def detach_actor(self, actor_id: str,
+                     location_rule: str = "keep_world",
+                     rotation_rule: str = "keep_world",
+                     scale_rule: str = "keep_world"):
+        return self.stub.DetachActor(pb.DetachActorRequest(
+            actor_id=actor_id,
+            location_rule=_string_to_detachment_rule(location_rule),
+            rotation_rule=_string_to_detachment_rule(rotation_rule),
+            scale_rule=_string_to_detachment_rule(scale_rule),
+        ))
+
+
+def _string_to_attachment_rule(rule: str) -> int:
+    """Convert string attachment rule to proto enum value."""
+    rules = {
+        "keep_relative": pb.ATTACHMENT_RULE_KEEP_RELATIVE,
+        "keep_world": pb.ATTACHMENT_RULE_KEEP_WORLD,
+        "snap_to_target": pb.ATTACHMENT_RULE_SNAP_TO_TARGET,
+    }
+    return rules.get(rule.lower(), pb.ATTACHMENT_RULE_KEEP_RELATIVE)
+
+
+def _string_to_detachment_rule(rule: str) -> int:
+    """Convert string detachment rule to proto enum value."""
+    rules = {
+        "keep_relative": pb.ATTACHMENT_RULE_KEEP_RELATIVE,
+        "keep_world": pb.ATTACHMENT_RULE_KEEP_WORLD,
+    }
+    return rules.get(rule.lower(), pb.ATTACHMENT_RULE_KEEP_WORLD)
+
 
 def connect(host: str, port: int) -> AgentBridgeClient:
     """Create an AgentBridgeClient."""
@@ -870,12 +1537,19 @@ ADVANCED CAPABILITIES:
 - get_class_schema(class_name="SceneCaptureComponent2D") - Works for ANY class
 - call_static_function - Call Blueprint library functions (KismetRenderingLibrary, etc.)
 
+ASSET & FILE OPERATIONS:
+- create_asset - Create DataAssets, MaterialInstances, etc.
+- save_asset - Save modified assets to disk
+- save_actor_as_blueprint - Convert actor to reusable Blueprint
+- read_project_file / write_project_file - Read/write files in project directory
+- list_project_directory - List directory contents
+
 IMPORTANT - COMPONENT NAMES:
 - Components use INSTANCE names (LightComponent0), not class names (PointLightComponent)
 - Use tempo_get_components(actor) to find the correct component name
 - For colors, use tempo_set_color_property instead of set_property_path
 
-Use help(topic='actors|properties|classes|console|workflows') for detailed help.
+Use help(topic='actors|properties|classes|assets|components|console|workflows') for detailed help.
 """
 
     topics = {
@@ -963,6 +1637,67 @@ Blueprint classes (need full path + _C):
 
 The _C suffix is required - it refers to the generated class, not the asset.
 """,
+        "assets": """
+ASSET & FILE OPERATIONS:
+
+Creating assets:
+- create_asset(asset_class="DataAsset", package_path="/Game/Data", asset_name="MyData")
+- create_asset(asset_class="MaterialInstanceConstant", package_path="/Game/Materials",
+               asset_name="MI_Wood", parent_asset_path="/Game/Materials/M_Wood")
+
+Saving assets:
+- save_asset(asset_path="/Game/Data/MyData") - Save to disk
+- save_actor_as_blueprint(actor_id="MyActor", package_path="/Game/Blueprints",
+                          blueprint_name="BP_MyActor") - Convert actor to Blueprint
+
+Asset management:
+- duplicate_asset(source_path="/Game/Data/MyData", dest_path="/Game/Data",
+                  new_name="MyData_Copy")
+- get_asset_thumbnail(asset_path="/Game/Meshes/Chair") - Get preview image (base64 PNG)
+
+File operations (constrained to project directory):
+- read_project_file(relative_path="Config/DefaultGame.ini") - Read text/binary file
+- write_project_file(relative_path="Saved/MyData.json", content="...") - Write file
+- list_project_directory(relative_path="Content/Blueprints") - List directory
+- copy_project_file(source="A.txt", dest="B.txt") - Copy file
+
+IMPORTANT:
+- All file paths are relative to project root
+- File operations are sandboxed - cannot access files outside project
+- Binary files are base64 encoded in transport
+""",
+        "components": """
+COMPONENT OPERATIONS:
+
+Getting component transforms:
+- get_component_transform(actor_id="MyActor", component_name="MeshComponent0")
+- get_component_transform(actor_id, component_name, world_space=True)  # World coords
+
+Setting component transforms:
+- set_component_transform(actor_id, component_name, location=[100,0,0])
+- set_component_transform(actor_id, component_name, rotation=[0,45,0], world_space=True)
+
+Attaching actors to each other:
+- attach_actor(child_actor_id="MovingLight", parent_actor_id="Vehicle")
+- attach_actor(child_id, parent_id, parent_component_name="Turret", socket_name="GunMount")
+
+Attachment rules (location_rule, rotation_rule, scale_rule):
+- "keep_world" - Maintain world position (default for actors)
+- "keep_relative" - Maintain relative offset (default for components)
+- "snap_to_target" - Snap to parent's position
+
+Attaching components within an actor:
+- attach_component(actor_id, component_name="Light", parent_component_name="Arm")
+
+Detaching:
+- detach_actor(actor_id="MovingLight")  # Keep world position
+- detach_component(actor_id, component_name, maintain_world_transform=True)
+
+Common use cases:
+- Attach light to moving vehicle: attach_actor(light, vehicle)
+- Build component hierarchies: attach_component in sequence
+- Reparent actors: detach + attach to new parent
+""",
         "console": """
 CONSOLE COMMANDS:
 
@@ -1027,6 +1762,17 @@ Examples of useful static functions:
 - KismetSystemLibrary::ExecuteConsoleCommand - Run console commands
 - KismetRenderingLibrary::CreateRenderTarget2D - Create render targets
 - KismetMathLibrary::* - Math operations
+
+Creating and saving assets:
+1. spawn_actor(class_name="PointLight", location=[0,0,500], label="MyLight")
+2. set_property_path("MyLight", "LightComponent0.Intensity", 10000)
+3. save_actor_as_blueprint("MyLight", "/Game/Blueprints", "BP_MyLight")
+4. save_asset("/Game/Blueprints/BP_MyLight") - Save Blueprint to disk
+
+Working with project files:
+1. list_project_directory("Config") - See config files
+2. read_project_file("Config/DefaultGame.ini") - Read config
+3. write_project_file("Saved/MyBackup.json", '{"key": "value"}') - Write data
 """
     }
 
@@ -1416,6 +2162,267 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             "has_more": has_more,
             "next_offset": offset + len(commands) if has_more else None,
         }
+
+    # =========================================================================
+    # Asset Operations (P0)
+    # =========================================================================
+    elif tool_name == "create_asset":
+        result = safe_call(
+            client.create_asset,
+            args["asset_class"],
+            args["package_path"],
+            args["asset_name"],
+            args.get("parent_asset_path", ""),
+            args.get("properties"),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "asset_path": result.asset_path,
+            "asset_class": result.asset_class,
+        }
+
+    elif tool_name == "save_asset":
+        result = safe_call(
+            client.save_asset,
+            args["asset_path"],
+            args.get("prompt_for_checkout", False),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "file_path": result.file_path,
+        }
+
+    elif tool_name == "save_actor_as_blueprint":
+        result = safe_call(
+            client.save_actor_as_blueprint,
+            args["actor_id"],
+            args["package_path"],
+            args["blueprint_name"],
+            args.get("replace_existing", False),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "blueprint_path": result.blueprint_path,
+        }
+
+    elif tool_name == "duplicate_asset":
+        result = safe_call(
+            client.duplicate_asset,
+            args["source_path"],
+            args["dest_package_path"],
+            args["dest_asset_name"],
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "new_asset_path": result.new_asset_path,
+        }
+
+    # =========================================================================
+    # Component Operations (P1)
+    # =========================================================================
+    elif tool_name == "get_component_transform":
+        result = safe_call(
+            client.get_component_transform,
+            args["actor_id"],
+            args["component_name"],
+            args.get("world_space", True),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        if not result.success:
+            return {"success": False, "error_message": result.error_message}
+        t = result.transform
+        return {
+            "success": True,
+            "location": [t.location.x, t.location.y, t.location.z],
+            "rotation": [t.rotation.p, t.rotation.y, t.rotation.r],
+            "scale": [t.scale.x, t.scale.y, t.scale.z],
+        }
+
+    elif tool_name == "set_component_transform":
+        result = safe_call(
+            client.set_component_transform,
+            args["actor_id"],
+            args["component_name"],
+            args.get("location"),
+            args.get("rotation"),
+            args.get("scale"),
+            args.get("world_space", True),
+            args.get("sweep", False),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "attach_actor":
+        result = safe_call(
+            client.attach_actor,
+            args["child_actor_id"],
+            args["parent_actor_id"],
+            args.get("parent_component_name", ""),
+            args.get("socket_name", ""),
+            args.get("location_rule", "KeepWorld"),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "detach_actor":
+        result = safe_call(
+            client.detach_actor,
+            args["actor_id"],
+            args.get("maintain_world_position", True),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    # =========================================================================
+    # File Operations (P1)
+    # =========================================================================
+    elif tool_name == "read_project_file":
+        result = safe_call(
+            client.read_project_file,
+            args["relative_path"],
+            args.get("as_base64", False),
+            args.get("max_bytes", 0),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "content": result.content,
+            "file_size": result.file_size,
+            "is_binary": result.is_binary,
+        }
+
+    elif tool_name == "write_project_file":
+        result = safe_call(
+            client.write_project_file,
+            args["relative_path"],
+            args["content"],
+            args.get("is_base64", False),
+            args.get("create_directories", True),
+            args.get("append", False),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "bytes_written": result.bytes_written,
+        }
+
+    elif tool_name == "list_project_directory":
+        result = safe_call(
+            client.list_project_directory,
+            args.get("relative_path", ""),
+            args.get("pattern", ""),
+            args.get("recursive", False),
+            args.get("limit", 100),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        files = []
+        for f in result.files:
+            files.append({
+                "name": f.name,
+                "relative_path": f.relative_path,
+                "is_directory": f.is_directory,
+                "size": f.size,
+                "last_modified": f.last_modified,
+            })
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "files": files,
+            "total_count": result.total_count,
+        }
+
+    elif tool_name == "copy_project_file":
+        result = safe_call(
+            client.copy_project_file,
+            args["source_path"],
+            args["dest_path"],
+            args.get("overwrite", False),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "dest_absolute_path": result.dest_absolute_path,
+        }
+
+    # -------------------------------------------------------------------------
+    # Component Operations
+    # -------------------------------------------------------------------------
+
+    elif tool_name == "attach_component":
+        result = safe_call(
+            client.attach_component,
+            args["actor_id"],
+            args["component_name"],
+            args["parent_component_name"],
+            args.get("socket_name", ""),
+            args.get("location_rule", "keep_relative"),
+            args.get("rotation_rule", "keep_relative"),
+            args.get("scale_rule", "keep_relative"),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "attach_actor":
+        result = safe_call(
+            client.attach_actor,
+            args["child_actor_id"],
+            args["parent_actor_id"],
+            args.get("parent_component_name", ""),
+            args.get("socket_name", ""),
+            args.get("location_rule", "keep_world"),
+            args.get("rotation_rule", "keep_world"),
+            args.get("scale_rule", "keep_world"),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "detach_component":
+        result = safe_call(
+            client.detach_component,
+            args["actor_id"],
+            args["component_name"],
+            args.get("maintain_world_transform", True),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "detach_actor":
+        result = safe_call(
+            client.detach_actor,
+            args["actor_id"],
+            args.get("location_rule", "keep_world"),
+            args.get("rotation_rule", "keep_world"),
+            args.get("scale_rule", "keep_world"),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
 
     else:
         return {"error": f"Unknown tool: {tool_name}"}

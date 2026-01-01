@@ -16,6 +16,9 @@
 #include "Serialization/JsonWriter.h"
 #include "Dom/JsonObject.h"
 
+// Package saving
+#include "UObject/SavePackage.h"
+
 // Capture-related includes
 #include "Engine/TextureRenderTarget2D.h"
 #include "Components/SceneCaptureComponent2D.h"
@@ -1988,6 +1991,1202 @@ void FCommandExecutor::Execute(const FSetPCGParameterCommand& Command, FAgentRes
 }
 
 //~==============================================================================
+// Asset Commands (P0)
+//~==============================================================================
+
+void FCommandExecutor::Execute(const FCreateAssetCommand& Command, FCreateAssetResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	// Validate inputs
+	if (Command.AssetClass.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("AssetClass is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	if (Command.PackagePath.IsEmpty() || Command.AssetName.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("PackagePath and AssetName are required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Validate path is within /Game/
+	if (!Command.PackagePath.StartsWith(TEXT("/Game/")))
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("PackagePath must start with /Game/");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find the asset class
+	UClass* AssetClass = FTypeDiscovery::FindClassByName(Command.AssetClass);
+	if (!AssetClass)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Asset class '%s' not found"), *Command.AssetClass);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Create the package
+	FString PackageName = Command.PackagePath / Command.AssetName;
+	UPackage* Package = CreatePackage(*PackageName);
+	if (!Package)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Failed to create package '%s'"), *PackageName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Create the asset object
+	UObject* NewAsset = NewObject<UObject>(Package, AssetClass, *Command.AssetName, RF_Public | RF_Standalone);
+	if (!NewAsset)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to create asset object");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Set initial properties if provided
+	for (const auto& Pair : Command.Properties)
+	{
+		// Find the property by name
+		FProperty* Property = AssetClass->FindPropertyByName(*Pair.Key);
+		if (Property)
+		{
+			FAgentPropertyValue PropValue = JsonToPropertyValue(Pair.Value);
+			FPropertyAccessor::WriteProperty(NewAsset, Property, PropValue);
+		}
+	}
+
+	// Mark the package dirty
+	Package->MarkPackageDirty();
+
+	// Notify asset registry
+	FAssetRegistryModule::AssetCreated(NewAsset);
+
+	Response.AssetPath = NewAsset->GetPathName();
+	Response.AssetClass = AssetClass->GetName();
+	Response.bSaved = false;
+	Response.bSuccess = true;
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("CreateAsset is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FSaveAssetCommand& Command, FSaveAssetResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.AssetPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("AssetPath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Load the asset
+	UObject* Asset = LoadObject<UObject>(nullptr, *Command.AssetPath);
+	if (!Asset)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Asset '%s' not found"), *Command.AssetPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UPackage* Package = Asset->GetOutermost();
+	FString PackageFileName = FPackageName::LongPackageNameToFilename(Package->GetName(), FPackageName::GetAssetPackageExtension());
+
+	// Save the package
+	FSavePackageArgs SaveArgs;
+	SaveArgs.TopLevelFlags = RF_Public | RF_Standalone;
+	bool bSaved = UPackage::SavePackage(Package, Asset, *PackageFileName, SaveArgs);
+
+	if (bSaved)
+	{
+		Response.AssetPath = Command.AssetPath;
+
+		// Get file size
+		IFileManager& FileManager = IFileManager::Get();
+		Response.FileSizeBytes = FileManager.FileSize(*PackageFileName);
+
+		Response.bSuccess = true;
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to save package");
+	}
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("SaveAsset is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FSaveActorAsBlueprintCommand& Command, FSaveActorAsBlueprintResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	// Find the actor
+	FString Error;
+	AActor* Actor = ResolveActor(Command.ActorId, &Error);
+	if (!Actor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	if (Command.PackagePath.IsEmpty() || Command.BlueprintName.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("PackagePath and BlueprintName are required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Validate path
+	if (!Command.PackagePath.StartsWith(TEXT("/Game/")))
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("PackagePath must start with /Game/");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString PackageName = Command.PackagePath / Command.BlueprintName;
+
+	// Check if asset already exists
+	UObject* ExistingAsset = LoadObject<UObject>(nullptr, *PackageName);
+	if (ExistingAsset && !Command.bReplaceExisting)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Asset '%s' already exists. Set bReplaceExisting to true to overwrite."), *PackageName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Use FKismetEditorUtilities if available
+	// For now, provide a stub implementation
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("SaveActorAsBlueprint requires FKismetEditorUtilities. Implementation pending.");
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("SaveActorAsBlueprint is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FDuplicateAssetCommand& Command, FDuplicateAssetResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.SourcePath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("SourcePath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	if (Command.DestPackagePath.IsEmpty() || Command.DestAssetName.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("DestPackagePath and DestAssetName are required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Validate destination path
+	if (!Command.DestPackagePath.StartsWith(TEXT("/Game/")))
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("DestPackagePath must start with /Game/");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Load source asset
+	UObject* SourceAsset = LoadObject<UObject>(nullptr, *Command.SourcePath);
+	if (!SourceAsset)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Source asset '%s' not found"), *Command.SourcePath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Create destination package
+	FString DestPackageName = Command.DestPackagePath / Command.DestAssetName;
+	UPackage* DestPackage = CreatePackage(*DestPackageName);
+	if (!DestPackage)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to create destination package");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Duplicate the object
+	UObject* DuplicatedAsset = StaticDuplicateObject(SourceAsset, DestPackage, *Command.DestAssetName);
+	if (DuplicatedAsset)
+	{
+		DuplicatedAsset->SetFlags(RF_Public | RF_Standalone);
+		DuplicatedAsset->MarkPackageDirty();
+		FAssetRegistryModule::AssetCreated(DuplicatedAsset);
+
+		Response.NewAssetPath = DuplicatedAsset->GetPathName();
+		Response.bSuccess = true;
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to duplicate asset");
+	}
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("DuplicateAsset is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FGetAssetThumbnailCommand& Command, FGetAssetThumbnailResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.AssetPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("AssetPath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Load the asset
+	UObject* Asset = LoadObject<UObject>(nullptr, *Command.AssetPath);
+	if (!Asset)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Asset '%s' not found"), *Command.AssetPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Thumbnail rendering requires more setup - stub for now
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("GetAssetThumbnail requires UThumbnailManager integration. Implementation pending.");
+	Response.AssetType = Asset->GetClass()->GetName();
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("GetAssetThumbnail is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+//~==============================================================================
+// Component Commands (P1)
+//~==============================================================================
+
+void FCommandExecutor::Execute(const FGetComponentTransformCommand& Command, FGetComponentTransformResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Find the actor
+	FString Error;
+	AActor* Actor = ResolveActor(Command.ActorId, &Error);
+	if (!Actor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find the component
+	USceneComponent* Component = nullptr;
+	if (Command.ComponentName.IsEmpty())
+	{
+		Component = Actor->GetRootComponent();
+	}
+	else
+	{
+		TArray<UActorComponent*> Components;
+		Actor->GetComponents(Components);
+		for (UActorComponent* Comp : Components)
+		{
+			if (Comp && Comp->GetName() == Command.ComponentName)
+			{
+				Component = Cast<USceneComponent>(Comp);
+				break;
+			}
+		}
+	}
+
+	if (!Component)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Command.ComponentName.IsEmpty()
+			? TEXT("Actor has no root component")
+			: FString::Printf(TEXT("Component '%s' not found or is not a SceneComponent"), *Command.ComponentName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	Response.bWorldSpace = Command.bWorldSpace;
+	if (Command.bWorldSpace)
+	{
+		Response.Location = Component->GetComponentLocation();
+		Response.Rotation = Component->GetComponentRotation();
+		Response.Scale = Component->GetComponentScale();
+	}
+	else
+	{
+		Response.Location = Component->GetRelativeLocation();
+		Response.Rotation = Component->GetRelativeRotation();
+		Response.Scale = Component->GetRelativeScale3D();
+	}
+
+	// Parent info
+	if (USceneComponent* Parent = Component->GetAttachParent())
+	{
+		Response.ParentComponentName = Parent->GetName();
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FSetComponentTransformCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Find the actor
+	FString Error;
+	AActor* Actor = ResolveActor(Command.ActorId, &Error);
+	if (!Actor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find the component
+	USceneComponent* Component = nullptr;
+	if (Command.ComponentName.IsEmpty())
+	{
+		Component = Actor->GetRootComponent();
+	}
+	else
+	{
+		TArray<UActorComponent*> Components;
+		Actor->GetComponents(Components);
+		for (UActorComponent* Comp : Components)
+		{
+			if (Comp && Comp->GetName() == Command.ComponentName)
+			{
+				Component = Cast<USceneComponent>(Comp);
+				break;
+			}
+		}
+	}
+
+	if (!Component)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Command.ComponentName.IsEmpty()
+			? TEXT("Actor has no root component")
+			: FString::Printf(TEXT("Component '%s' not found or is not a SceneComponent"), *Command.ComponentName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Apply transform changes
+	if (Command.bWorldSpace)
+	{
+		if (Command.Location.IsSet())
+		{
+			Component->SetWorldLocation(Command.Location.GetValue(), Command.bSweep);
+		}
+		if (Command.Rotation.IsSet())
+		{
+			Component->SetWorldRotation(Command.Rotation.GetValue(), Command.bSweep);
+		}
+		if (Command.Scale.IsSet())
+		{
+			Component->SetWorldScale3D(Command.Scale.GetValue());
+		}
+	}
+	else
+	{
+		if (Command.Location.IsSet())
+		{
+			Component->SetRelativeLocation(Command.Location.GetValue(), Command.bSweep);
+		}
+		if (Command.Rotation.IsSet())
+		{
+			Component->SetRelativeRotation(Command.Rotation.GetValue(), Command.bSweep);
+		}
+		if (Command.Scale.IsSet())
+		{
+			Component->SetRelativeScale3D(Command.Scale.GetValue());
+		}
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+// Helper to convert EAttachmentRuleType to EAttachmentRule
+static EAttachmentRule ToAttachmentRule(EAttachmentRuleType RuleType)
+{
+	switch (RuleType)
+	{
+	case EAttachmentRuleType::KeepRelative: return EAttachmentRule::KeepRelative;
+	case EAttachmentRuleType::KeepWorld: return EAttachmentRule::KeepWorld;
+	case EAttachmentRuleType::SnapToTarget: return EAttachmentRule::SnapToTarget;
+	default: return EAttachmentRule::KeepRelative;
+	}
+}
+
+void FCommandExecutor::Execute(const FAttachComponentCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Find the actor
+	FString Error;
+	AActor* Actor = ResolveActor(Command.ActorId, &Error);
+	if (!Actor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find the component to attach
+	USceneComponent* Component = nullptr;
+	TArray<UActorComponent*> Components;
+	Actor->GetComponents(Components);
+	for (UActorComponent* Comp : Components)
+	{
+		if (Comp && Comp->GetName() == Command.ComponentName)
+		{
+			Component = Cast<USceneComponent>(Comp);
+			break;
+		}
+	}
+
+	if (!Component)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Component '%s' not found"), *Command.ComponentName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find parent component
+	USceneComponent* ParentComponent = nullptr;
+	if (Command.ParentComponentName.IsEmpty())
+	{
+		ParentComponent = Actor->GetRootComponent();
+	}
+	else
+	{
+		for (UActorComponent* Comp : Components)
+		{
+			if (Comp && Comp->GetName() == Command.ParentComponentName)
+			{
+				ParentComponent = Cast<USceneComponent>(Comp);
+				break;
+			}
+		}
+	}
+
+	if (!ParentComponent)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Command.ParentComponentName.IsEmpty()
+			? TEXT("Actor has no root component")
+			: FString::Printf(TEXT("Parent component '%s' not found"), *Command.ParentComponentName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Perform attachment
+	FAttachmentTransformRules Rules(
+		ToAttachmentRule(Command.LocationRule),
+		ToAttachmentRule(Command.RotationRule),
+		ToAttachmentRule(Command.ScaleRule),
+		false // bWeldSimulatedBodies
+	);
+
+	FName SocketName = Command.SocketName.IsEmpty() ? NAME_None : FName(*Command.SocketName);
+	Component->AttachToComponent(ParentComponent, Rules, SocketName);
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FAttachActorCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Find child actor
+	FString Error;
+	AActor* ChildActor = ResolveActor(Command.ChildActorId, &Error);
+	if (!ChildActor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Child actor: %s"), *Error);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find parent actor
+	AActor* ParentActor = ResolveActor(Command.ParentActorId, &Error);
+	if (!ParentActor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Parent actor: %s"), *Error);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find parent component
+	USceneComponent* ParentComponent = nullptr;
+	if (Command.ParentComponentName.IsEmpty())
+	{
+		ParentComponent = ParentActor->GetRootComponent();
+	}
+	else
+	{
+		TArray<UActorComponent*> Components;
+		ParentActor->GetComponents(Components);
+		for (UActorComponent* Comp : Components)
+		{
+			if (Comp && Comp->GetName() == Command.ParentComponentName)
+			{
+				ParentComponent = Cast<USceneComponent>(Comp);
+				break;
+			}
+		}
+	}
+
+	if (!ParentComponent)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Command.ParentComponentName.IsEmpty()
+			? TEXT("Parent actor has no root component")
+			: FString::Printf(TEXT("Parent component '%s' not found"), *Command.ParentComponentName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Perform attachment
+	FAttachmentTransformRules Rules(
+		ToAttachmentRule(Command.LocationRule),
+		ToAttachmentRule(Command.RotationRule),
+		ToAttachmentRule(Command.ScaleRule),
+		false // bWeldSimulatedBodies
+	);
+
+	FName SocketName = Command.SocketName.IsEmpty() ? NAME_None : FName(*Command.SocketName);
+	ChildActor->AttachToComponent(ParentComponent, Rules, SocketName);
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FDetachComponentCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Find the actor
+	FString Error;
+	AActor* Actor = ResolveActor(Command.ActorId, &Error);
+	if (!Actor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find the component
+	USceneComponent* Component = nullptr;
+	TArray<UActorComponent*> Components;
+	Actor->GetComponents(Components);
+	for (UActorComponent* Comp : Components)
+	{
+		if (Comp && Comp->GetName() == Command.ComponentName)
+		{
+			Component = Cast<USceneComponent>(Comp);
+			break;
+		}
+	}
+
+	if (!Component)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Component '%s' not found"), *Command.ComponentName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Perform detachment
+	FDetachmentTransformRules Rules(
+		Command.bMaintainWorldPosition ? EDetachmentRule::KeepWorld : EDetachmentRule::KeepRelative,
+		Command.bMaintainWorldPosition ? EDetachmentRule::KeepWorld : EDetachmentRule::KeepRelative,
+		Command.bMaintainWorldPosition ? EDetachmentRule::KeepWorld : EDetachmentRule::KeepRelative,
+		true // bCallModify
+	);
+
+	Component->DetachFromComponent(Rules);
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FDetachActorCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Find the actor
+	FString Error;
+	AActor* Actor = ResolveActor(Command.ActorId, &Error);
+	if (!Actor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Perform detachment
+	FDetachmentTransformRules Rules(
+		Command.bMaintainWorldPosition ? EDetachmentRule::KeepWorld : EDetachmentRule::KeepRelative,
+		Command.bMaintainWorldPosition ? EDetachmentRule::KeepWorld : EDetachmentRule::KeepRelative,
+		Command.bMaintainWorldPosition ? EDetachmentRule::KeepWorld : EDetachmentRule::KeepRelative,
+		true // bCallModify
+	);
+
+	Actor->DetachFromActor(Rules);
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+//~==============================================================================
+// File Commands (P1) - Constrained to Project Directory
+//~==============================================================================
+
+bool FCommandExecutor::IsPathAllowed(const FString& RelativePath, FString* OutError)
+{
+	// Check for path traversal
+	if (RelativePath.Contains(TEXT("..")) || RelativePath.Contains(TEXT("/..")) || RelativePath.Contains(TEXT("\\..")))
+	{
+		if (OutError) *OutError = TEXT("Path traversal not allowed");
+		return false;
+	}
+
+	// Normalize path separators
+	FString NormalizedPath = RelativePath;
+	NormalizedPath.ReplaceInline(TEXT("\\"), TEXT("/"));
+
+	// Block certain directories
+	static const TArray<FString> BlockedPrefixes = {
+		TEXT("Binaries/"),
+		TEXT("Intermediate/"),
+		TEXT("Saved/Crashes/"),
+		TEXT("Saved/Logs/"),
+		TEXT(".git/"),
+		TEXT(".vs/")
+	};
+
+	for (const FString& Blocked : BlockedPrefixes)
+	{
+		if (NormalizedPath.StartsWith(Blocked, ESearchCase::IgnoreCase))
+		{
+			if (OutError) *OutError = FString::Printf(TEXT("Access to '%s' directory is not allowed"), *Blocked);
+			return false;
+		}
+	}
+
+	// Block certain extensions
+	static const TArray<FString> BlockedExtensions = {
+		TEXT(".exe"),
+		TEXT(".dll"),
+		TEXT(".pdb"),
+		TEXT(".lib"),
+		TEXT(".so"),
+		TEXT(".dylib")
+	};
+
+	for (const FString& Ext : BlockedExtensions)
+	{
+		if (NormalizedPath.EndsWith(Ext, ESearchCase::IgnoreCase))
+		{
+			if (OutError) *OutError = FString::Printf(TEXT("Files with '%s' extension are not allowed"), *Ext);
+			return false;
+		}
+	}
+
+	return true;
+}
+
+FString FCommandExecutor::ToAbsoluteProjectPath(const FString& RelativePath, FString* OutError)
+{
+	if (!IsPathAllowed(RelativePath, OutError))
+	{
+		return FString();
+	}
+
+	FString ProjectDir = FPaths::ProjectDir();
+	FString AbsolutePath = FPaths::Combine(ProjectDir, RelativePath);
+	FPaths::NormalizeFilename(AbsolutePath);
+
+	// Verify the resulting path is still within project directory
+	FString NormalizedProjectDir = ProjectDir;
+	FPaths::NormalizeDirectoryName(NormalizedProjectDir);
+
+	if (!AbsolutePath.StartsWith(NormalizedProjectDir))
+	{
+		if (OutError) *OutError = TEXT("Resulting path is outside project directory");
+		return FString();
+	}
+
+	return AbsolutePath;
+}
+
+void FCommandExecutor::Execute(const FReadProjectFileCommand& Command, FReadProjectFileResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	if (Command.RelativePath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("RelativePath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString Error;
+	FString AbsolutePath = ToAbsoluteProjectPath(Command.RelativePath, &Error);
+	if (AbsolutePath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	IFileManager& FileManager = IFileManager::Get();
+
+	// Check if file exists
+	if (!FileManager.FileExists(*AbsolutePath))
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("File '%s' not found"), *Command.RelativePath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Get file info
+	Response.FileSizeBytes = FileManager.FileSize(*AbsolutePath);
+	FDateTime ModTime = FileManager.GetTimeStamp(*AbsolutePath);
+	Response.ModificationTime = ModTime.ToIso8601();
+
+	// Check size limit
+	int64 BytesToRead = Response.FileSizeBytes;
+	if (Command.MaxBytes > 0 && BytesToRead > Command.MaxBytes)
+	{
+		BytesToRead = Command.MaxBytes;
+	}
+
+	// Read file
+	if (Command.bAsBase64)
+	{
+		TArray<uint8> FileData;
+		if (FFileHelper::LoadFileToArray(FileData, *AbsolutePath))
+		{
+			if (Command.MaxBytes > 0 && FileData.Num() > Command.MaxBytes)
+			{
+				FileData.SetNum(Command.MaxBytes);
+			}
+			Response.Content = FBase64::Encode(FileData);
+			Response.bIsBase64 = true;
+			Response.bSuccess = true;
+		}
+		else
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = TEXT("Failed to read file");
+		}
+	}
+	else
+	{
+		FString FileContent;
+		if (FFileHelper::LoadFileToString(FileContent, *AbsolutePath))
+		{
+			if (Command.MaxBytes > 0 && FileContent.Len() > Command.MaxBytes)
+			{
+				FileContent = FileContent.Left(Command.MaxBytes);
+			}
+			Response.Content = FileContent;
+			Response.bIsBase64 = false;
+			Response.bSuccess = true;
+		}
+		else
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = TEXT("Failed to read file as text");
+		}
+	}
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FWriteProjectFileCommand& Command, FWriteProjectFileResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	if (Command.RelativePath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("RelativePath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString Error;
+	FString AbsolutePath = ToAbsoluteProjectPath(Command.RelativePath, &Error);
+	if (AbsolutePath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Create directories if requested
+	if (Command.bCreateDirectories)
+	{
+		FString Directory = FPaths::GetPath(AbsolutePath);
+		IFileManager::Get().MakeDirectory(*Directory, true);
+	}
+
+	bool bWriteSuccess = false;
+	int64 BytesWritten = 0;
+
+	if (Command.bIsBase64)
+	{
+		TArray<uint8> FileData;
+		if (FBase64::Decode(Command.Content, FileData))
+		{
+			if (Command.bAppend)
+			{
+				// Load existing, append, and save
+				TArray<uint8> ExistingData;
+				FFileHelper::LoadFileToArray(ExistingData, *AbsolutePath);
+				ExistingData.Append(FileData);
+				bWriteSuccess = FFileHelper::SaveArrayToFile(ExistingData, *AbsolutePath);
+				BytesWritten = FileData.Num();
+			}
+			else
+			{
+				bWriteSuccess = FFileHelper::SaveArrayToFile(FileData, *AbsolutePath);
+				BytesWritten = FileData.Num();
+			}
+		}
+		else
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = TEXT("Failed to decode base64 content");
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+	}
+	else
+	{
+		uint32 WriteFlags = Command.bAppend ? (FILEWRITE_Append | FILEWRITE_AllowRead) : FILEWRITE_None;
+		bWriteSuccess = FFileHelper::SaveStringToFile(Command.Content, *AbsolutePath, FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get(), WriteFlags);
+		BytesWritten = Command.Content.Len();
+	}
+
+	if (bWriteSuccess)
+	{
+		Response.AbsolutePath = AbsolutePath;
+		Response.BytesWritten = BytesWritten;
+		Response.bSuccess = true;
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to write file");
+	}
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FListProjectDirectoryCommand& Command, FListProjectDirectoryResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	FString RelativePath = Command.RelativePath.IsEmpty() ? TEXT(".") : Command.RelativePath;
+
+	FString Error;
+	FString AbsolutePath = ToAbsoluteProjectPath(RelativePath, &Error);
+	if (AbsolutePath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	IFileManager& FileManager = IFileManager::Get();
+
+	// Check if directory exists
+	if (!FileManager.DirectoryExists(*AbsolutePath))
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Directory '%s' not found"), *RelativePath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	Response.AbsolutePath = AbsolutePath;
+
+	// List files
+	FString SearchPattern = Command.Pattern.IsEmpty() ? TEXT("*") : Command.Pattern;
+	FString SearchPath = FPaths::Combine(AbsolutePath, SearchPattern);
+
+	TArray<FString> FoundFiles;
+	if (Command.bRecursive)
+	{
+		FileManager.FindFilesRecursive(FoundFiles, *AbsolutePath, *SearchPattern, true, true, false);
+	}
+	else
+	{
+		FileManager.FindFiles(FoundFiles, *SearchPath, true, true);
+		// Prepend the base path
+		for (FString& File : FoundFiles)
+		{
+			File = FPaths::Combine(AbsolutePath, File);
+		}
+	}
+
+	Response.TotalCount = FoundFiles.Num();
+	FString ProjectDir = FPaths::ProjectDir();
+
+	int32 Count = 0;
+	for (const FString& FullPath : FoundFiles)
+	{
+		if (Count >= Command.Limit)
+		{
+			break;
+		}
+
+		FFileInfo Info;
+		Info.RelativePath = FullPath;
+		FPaths::MakePathRelativeTo(Info.RelativePath, *ProjectDir);
+		Info.Name = FPaths::GetCleanFilename(FullPath);
+		Info.bIsDirectory = FileManager.DirectoryExists(*FullPath);
+		Info.Extension = FPaths::GetExtension(FullPath, true);
+
+		if (!Info.bIsDirectory)
+		{
+			Info.SizeBytes = FileManager.FileSize(*FullPath);
+			FDateTime ModTime = FileManager.GetTimeStamp(*FullPath);
+			Info.ModificationTime = ModTime.ToIso8601();
+		}
+
+		Response.Files.Add(Info);
+		Count++;
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FCopyProjectFileCommand& Command, FCopyProjectFileResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	if (Command.SourcePath.IsEmpty() || Command.DestPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("SourcePath and DestPath are required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString Error;
+	FString AbsoluteSource = ToAbsoluteProjectPath(Command.SourcePath, &Error);
+	if (AbsoluteSource.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Source: %s"), *Error);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString AbsoluteDest = ToAbsoluteProjectPath(Command.DestPath, &Error);
+	if (AbsoluteDest.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Destination: %s"), *Error);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	IFileManager& FileManager = IFileManager::Get();
+
+	// Check source exists
+	if (!FileManager.FileExists(*AbsoluteSource))
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Source file '%s' not found"), *Command.SourcePath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Check if destination exists
+	if (FileManager.FileExists(*AbsoluteDest) && !Command.bOverwrite)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Destination file already exists. Set bOverwrite to true to overwrite.");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Create destination directory
+	FString DestDir = FPaths::GetPath(AbsoluteDest);
+	FileManager.MakeDirectory(*DestDir, true);
+
+	// Copy file
+	uint32 CopyResult = FileManager.Copy(*AbsoluteDest, *AbsoluteSource, true);
+	if (CopyResult == COPY_OK)
+	{
+		Response.DestAbsolutePath = AbsoluteDest;
+		Response.BytesCopied = FileManager.FileSize(*AbsoluteDest);
+		Response.bSuccess = true;
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to copy file");
+	}
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FDeleteProjectFileCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	if (Command.RelativePath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("RelativePath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString Error;
+	FString AbsolutePath = ToAbsoluteProjectPath(Command.RelativePath, &Error);
+	if (AbsolutePath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	IFileManager& FileManager = IFileManager::Get();
+
+	// Check if it's a directory
+	bool bIsDirectory = FileManager.DirectoryExists(*AbsolutePath);
+	if (bIsDirectory && !Command.bAllowDirectoryDelete)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Cannot delete directories unless bAllowDirectoryDelete is true");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	bool bDeleted = false;
+	if (bIsDirectory)
+	{
+		bDeleted = FileManager.DeleteDirectory(*AbsolutePath, false, true);
+	}
+	else if (FileManager.FileExists(*AbsolutePath))
+	{
+		bDeleted = FileManager.Delete(*AbsolutePath);
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("File or directory not found");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	if (bDeleted)
+	{
+		Response.bSuccess = true;
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to delete file or directory");
+	}
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+//~==============================================================================
 // JSON Serialization
 //~==============================================================================
 
@@ -2936,6 +4135,287 @@ FString FCommandExecutor::SerializeRegeneratePCGResponse(const FRegeneratePCGRes
 }
 
 //~==============================================================================
+// Asset Response Serialization (P0)
+//~==============================================================================
+
+FString FCommandExecutor::SerializeCreateAssetResponse(const FCreateAssetResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("assetPath"), Response.AssetPath);
+		Obj->SetStringField(TEXT("assetClass"), Response.AssetClass);
+		Obj->SetBoolField(TEXT("saved"), Response.bSaved);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeSaveAssetResponse(const FSaveAssetResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("assetPath"), Response.AssetPath);
+		Obj->SetNumberField(TEXT("fileSizeBytes"), Response.FileSizeBytes);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeSaveActorAsBlueprintResponse(const FSaveActorAsBlueprintResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("blueprintPath"), Response.BlueprintPath);
+		Obj->SetStringField(TEXT("generatedClassPath"), Response.GeneratedClassPath);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeDuplicateAssetResponse(const FDuplicateAssetResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("newAssetPath"), Response.NewAssetPath);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeGetAssetThumbnailResponse(const FGetAssetThumbnailResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("imageData"), Response.ImageData);
+		Obj->SetNumberField(TEXT("width"), Response.Width);
+		Obj->SetNumberField(TEXT("height"), Response.Height);
+		Obj->SetStringField(TEXT("assetType"), Response.AssetType);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+//~==============================================================================
+// Component Response Serialization (P1)
+//~==============================================================================
+
+FString FCommandExecutor::SerializeGetComponentTransformResponse(const FGetComponentTransformResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		TSharedPtr<FJsonObject> LocObj = MakeShared<FJsonObject>();
+		LocObj->SetNumberField(TEXT("x"), Response.Location.X);
+		LocObj->SetNumberField(TEXT("y"), Response.Location.Y);
+		LocObj->SetNumberField(TEXT("z"), Response.Location.Z);
+		Obj->SetObjectField(TEXT("location"), LocObj);
+
+		TSharedPtr<FJsonObject> RotObj = MakeShared<FJsonObject>();
+		RotObj->SetNumberField(TEXT("pitch"), Response.Rotation.Pitch);
+		RotObj->SetNumberField(TEXT("yaw"), Response.Rotation.Yaw);
+		RotObj->SetNumberField(TEXT("roll"), Response.Rotation.Roll);
+		Obj->SetObjectField(TEXT("rotation"), RotObj);
+
+		TSharedPtr<FJsonObject> ScaleObj = MakeShared<FJsonObject>();
+		ScaleObj->SetNumberField(TEXT("x"), Response.Scale.X);
+		ScaleObj->SetNumberField(TEXT("y"), Response.Scale.Y);
+		ScaleObj->SetNumberField(TEXT("z"), Response.Scale.Z);
+		Obj->SetObjectField(TEXT("scale"), ScaleObj);
+
+		Obj->SetBoolField(TEXT("worldSpace"), Response.bWorldSpace);
+		if (!Response.ParentComponentName.IsEmpty())
+		{
+			Obj->SetStringField(TEXT("parentComponentName"), Response.ParentComponentName);
+		}
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+//~==============================================================================
+// File Response Serialization (P1)
+//~==============================================================================
+
+FString FCommandExecutor::SerializeReadProjectFileResponse(const FReadProjectFileResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("content"), Response.Content);
+		Obj->SetBoolField(TEXT("isBase64"), Response.bIsBase64);
+		Obj->SetNumberField(TEXT("fileSizeBytes"), Response.FileSizeBytes);
+		Obj->SetStringField(TEXT("modificationTime"), Response.ModificationTime);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeWriteProjectFileResponse(const FWriteProjectFileResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("absolutePath"), Response.AbsolutePath);
+		Obj->SetNumberField(TEXT("bytesWritten"), Response.BytesWritten);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeListProjectDirectoryResponse(const FListProjectDirectoryResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("absolutePath"), Response.AbsolutePath);
+		Obj->SetNumberField(TEXT("totalCount"), Response.TotalCount);
+
+		TArray<TSharedPtr<FJsonValue>> FilesArr;
+		for (const FFileInfo& File : Response.Files)
+		{
+			TSharedPtr<FJsonObject> FileObj = MakeShared<FJsonObject>();
+			FileObj->SetStringField(TEXT("relativePath"), File.RelativePath);
+			FileObj->SetStringField(TEXT("name"), File.Name);
+			FileObj->SetBoolField(TEXT("isDirectory"), File.bIsDirectory);
+			FileObj->SetNumberField(TEXT("sizeBytes"), File.SizeBytes);
+			FileObj->SetStringField(TEXT("modificationTime"), File.ModificationTime);
+			FileObj->SetStringField(TEXT("extension"), File.Extension);
+			FilesArr.Add(MakeShared<FJsonValueObject>(FileObj));
+		}
+		Obj->SetArrayField(TEXT("files"), FilesArr);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeCopyProjectFileResponse(const FCopyProjectFileResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("destAbsolutePath"), Response.DestAbsolutePath);
+		Obj->SetNumberField(TEXT("bytesCopied"), Response.BytesCopied);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+//~==============================================================================
 // JSON Command Execution
 //~==============================================================================
 
@@ -3458,6 +4938,294 @@ FString FCommandExecutor::ExecuteJson(const FString& CommandJson)
 		JsonObj->TryGetStringField(TEXT("parameterName"), Cmd.ParameterName);
 		JsonObj->TryGetStringField(TEXT("value"), Cmd.Value);
 		JsonObj->TryGetBoolField(TEXT("autoRegenerate"), Cmd.bAutoRegenerate);
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	//~==============================================================================
+	// Asset Commands (P0)
+	//~==============================================================================
+	else if (TypeStr == TEXT("CreateAsset"))
+	{
+		FCreateAssetCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("assetClass"), Cmd.AssetClass);
+		JsonObj->TryGetStringField(TEXT("packagePath"), Cmd.PackagePath);
+		JsonObj->TryGetStringField(TEXT("assetName"), Cmd.AssetName);
+		JsonObj->TryGetStringField(TEXT("parentAssetPath"), Cmd.ParentAssetPath);
+
+		// Parse properties map
+		const TSharedPtr<FJsonObject>* PropsObj;
+		if (JsonObj->TryGetObjectField(TEXT("properties"), PropsObj))
+		{
+			for (const auto& Pair : (*PropsObj)->Values)
+			{
+				FString ValueStr;
+				TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ValueStr);
+				FJsonSerializer::Serialize(Pair.Value, TEXT(""), Writer);
+				Cmd.Properties.Add(Pair.Key, ValueStr);
+			}
+		}
+
+		FCreateAssetResponse Response;
+		Execute(Cmd, Response);
+		return SerializeCreateAssetResponse(Response);
+	}
+	else if (TypeStr == TEXT("SaveAsset"))
+	{
+		FSaveAssetCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("assetPath"), Cmd.AssetPath);
+		JsonObj->TryGetBoolField(TEXT("promptForCheckout"), Cmd.bPromptForCheckout);
+
+		FSaveAssetResponse Response;
+		Execute(Cmd, Response);
+		return SerializeSaveAssetResponse(Response);
+	}
+	else if (TypeStr == TEXT("SaveActorAsBlueprint"))
+	{
+		FSaveActorAsBlueprintCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("packagePath"), Cmd.PackagePath);
+		JsonObj->TryGetStringField(TEXT("blueprintName"), Cmd.BlueprintName);
+		JsonObj->TryGetBoolField(TEXT("replaceExisting"), Cmd.bReplaceExisting);
+
+		FSaveActorAsBlueprintResponse Response;
+		Execute(Cmd, Response);
+		return SerializeSaveActorAsBlueprintResponse(Response);
+	}
+	else if (TypeStr == TEXT("DuplicateAsset"))
+	{
+		FDuplicateAssetCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("sourcePath"), Cmd.SourcePath);
+		JsonObj->TryGetStringField(TEXT("destPackagePath"), Cmd.DestPackagePath);
+		JsonObj->TryGetStringField(TEXT("destAssetName"), Cmd.DestAssetName);
+
+		FDuplicateAssetResponse Response;
+		Execute(Cmd, Response);
+		return SerializeDuplicateAssetResponse(Response);
+	}
+	else if (TypeStr == TEXT("GetAssetThumbnail"))
+	{
+		FGetAssetThumbnailCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("assetPath"), Cmd.AssetPath);
+		JsonObj->TryGetNumberField(TEXT("width"), Cmd.Width);
+		JsonObj->TryGetNumberField(TEXT("height"), Cmd.Height);
+
+		FGetAssetThumbnailResponse Response;
+		Execute(Cmd, Response);
+		return SerializeGetAssetThumbnailResponse(Response);
+	}
+	//~==============================================================================
+	// Component Commands (P1)
+	//~==============================================================================
+	else if (TypeStr == TEXT("GetComponentTransform"))
+	{
+		FGetComponentTransformCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("componentName"), Cmd.ComponentName);
+		JsonObj->TryGetBoolField(TEXT("worldSpace"), Cmd.bWorldSpace);
+
+		FGetComponentTransformResponse Response;
+		Execute(Cmd, Response);
+		return SerializeGetComponentTransformResponse(Response);
+	}
+	else if (TypeStr == TEXT("SetComponentTransform"))
+	{
+		FSetComponentTransformCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("componentName"), Cmd.ComponentName);
+		JsonObj->TryGetBoolField(TEXT("worldSpace"), Cmd.bWorldSpace);
+		JsonObj->TryGetBoolField(TEXT("sweep"), Cmd.bSweep);
+
+		// Parse location
+		const TSharedPtr<FJsonObject>* LocObj;
+		if (JsonObj->TryGetObjectField(TEXT("location"), LocObj))
+		{
+			FVector Loc;
+			(*LocObj)->TryGetNumberField(TEXT("x"), Loc.X);
+			(*LocObj)->TryGetNumberField(TEXT("y"), Loc.Y);
+			(*LocObj)->TryGetNumberField(TEXT("z"), Loc.Z);
+			Cmd.Location = Loc;
+		}
+
+		// Parse rotation
+		const TSharedPtr<FJsonObject>* RotObj;
+		if (JsonObj->TryGetObjectField(TEXT("rotation"), RotObj))
+		{
+			FRotator Rot;
+			(*RotObj)->TryGetNumberField(TEXT("pitch"), Rot.Pitch);
+			(*RotObj)->TryGetNumberField(TEXT("yaw"), Rot.Yaw);
+			(*RotObj)->TryGetNumberField(TEXT("roll"), Rot.Roll);
+			Cmd.Rotation = Rot;
+		}
+
+		// Parse scale
+		const TSharedPtr<FJsonObject>* ScaleObj;
+		if (JsonObj->TryGetObjectField(TEXT("scale"), ScaleObj))
+		{
+			FVector Scale;
+			(*ScaleObj)->TryGetNumberField(TEXT("x"), Scale.X);
+			(*ScaleObj)->TryGetNumberField(TEXT("y"), Scale.Y);
+			(*ScaleObj)->TryGetNumberField(TEXT("z"), Scale.Z);
+			Cmd.Scale = Scale;
+		}
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("AttachComponent"))
+	{
+		FAttachComponentCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("componentName"), Cmd.ComponentName);
+		JsonObj->TryGetStringField(TEXT("parentComponentName"), Cmd.ParentComponentName);
+		JsonObj->TryGetStringField(TEXT("socketName"), Cmd.SocketName);
+
+		// Parse attachment rules
+		FString RuleStr;
+		if (JsonObj->TryGetStringField(TEXT("locationRule"), RuleStr))
+		{
+			if (RuleStr.Equals(TEXT("KeepWorld"), ESearchCase::IgnoreCase)) Cmd.LocationRule = EAttachmentRuleType::KeepWorld;
+			else if (RuleStr.Equals(TEXT("SnapToTarget"), ESearchCase::IgnoreCase)) Cmd.LocationRule = EAttachmentRuleType::SnapToTarget;
+		}
+		if (JsonObj->TryGetStringField(TEXT("rotationRule"), RuleStr))
+		{
+			if (RuleStr.Equals(TEXT("KeepWorld"), ESearchCase::IgnoreCase)) Cmd.RotationRule = EAttachmentRuleType::KeepWorld;
+			else if (RuleStr.Equals(TEXT("SnapToTarget"), ESearchCase::IgnoreCase)) Cmd.RotationRule = EAttachmentRuleType::SnapToTarget;
+		}
+		if (JsonObj->TryGetStringField(TEXT("scaleRule"), RuleStr))
+		{
+			if (RuleStr.Equals(TEXT("KeepWorld"), ESearchCase::IgnoreCase)) Cmd.ScaleRule = EAttachmentRuleType::KeepWorld;
+			else if (RuleStr.Equals(TEXT("SnapToTarget"), ESearchCase::IgnoreCase)) Cmd.ScaleRule = EAttachmentRuleType::SnapToTarget;
+		}
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("AttachActor"))
+	{
+		FAttachActorCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("childActorId"), Cmd.ChildActorId);
+		JsonObj->TryGetStringField(TEXT("parentActorId"), Cmd.ParentActorId);
+		JsonObj->TryGetStringField(TEXT("parentComponentName"), Cmd.ParentComponentName);
+		JsonObj->TryGetStringField(TEXT("socketName"), Cmd.SocketName);
+
+		// Parse attachment rules
+		FString RuleStr;
+		if (JsonObj->TryGetStringField(TEXT("locationRule"), RuleStr))
+		{
+			if (RuleStr.Equals(TEXT("KeepRelative"), ESearchCase::IgnoreCase)) Cmd.LocationRule = EAttachmentRuleType::KeepRelative;
+			else if (RuleStr.Equals(TEXT("SnapToTarget"), ESearchCase::IgnoreCase)) Cmd.LocationRule = EAttachmentRuleType::SnapToTarget;
+		}
+		if (JsonObj->TryGetStringField(TEXT("rotationRule"), RuleStr))
+		{
+			if (RuleStr.Equals(TEXT("KeepRelative"), ESearchCase::IgnoreCase)) Cmd.RotationRule = EAttachmentRuleType::KeepRelative;
+			else if (RuleStr.Equals(TEXT("SnapToTarget"), ESearchCase::IgnoreCase)) Cmd.RotationRule = EAttachmentRuleType::SnapToTarget;
+		}
+		if (JsonObj->TryGetStringField(TEXT("scaleRule"), RuleStr))
+		{
+			if (RuleStr.Equals(TEXT("KeepRelative"), ESearchCase::IgnoreCase)) Cmd.ScaleRule = EAttachmentRuleType::KeepRelative;
+			else if (RuleStr.Equals(TEXT("SnapToTarget"), ESearchCase::IgnoreCase)) Cmd.ScaleRule = EAttachmentRuleType::SnapToTarget;
+		}
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("DetachComponent"))
+	{
+		FDetachComponentCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetStringField(TEXT("componentName"), Cmd.ComponentName);
+		JsonObj->TryGetBoolField(TEXT("maintainWorldPosition"), Cmd.bMaintainWorldPosition);
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("DetachActor"))
+	{
+		FDetachActorCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("actorId"), Cmd.ActorId);
+		JsonObj->TryGetBoolField(TEXT("maintainWorldPosition"), Cmd.bMaintainWorldPosition);
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	//~==============================================================================
+	// File Commands (P1)
+	//~==============================================================================
+	else if (TypeStr == TEXT("ReadProjectFile"))
+	{
+		FReadProjectFileCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("relativePath"), Cmd.RelativePath);
+		JsonObj->TryGetBoolField(TEXT("asBase64"), Cmd.bAsBase64);
+		JsonObj->TryGetNumberField(TEXT("maxBytes"), Cmd.MaxBytes);
+
+		FReadProjectFileResponse Response;
+		Execute(Cmd, Response);
+		return SerializeReadProjectFileResponse(Response);
+	}
+	else if (TypeStr == TEXT("WriteProjectFile"))
+	{
+		FWriteProjectFileCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("relativePath"), Cmd.RelativePath);
+		JsonObj->TryGetStringField(TEXT("content"), Cmd.Content);
+		JsonObj->TryGetBoolField(TEXT("isBase64"), Cmd.bIsBase64);
+		JsonObj->TryGetBoolField(TEXT("createDirectories"), Cmd.bCreateDirectories);
+		JsonObj->TryGetBoolField(TEXT("append"), Cmd.bAppend);
+
+		FWriteProjectFileResponse Response;
+		Execute(Cmd, Response);
+		return SerializeWriteProjectFileResponse(Response);
+	}
+	else if (TypeStr == TEXT("ListProjectDirectory"))
+	{
+		FListProjectDirectoryCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("relativePath"), Cmd.RelativePath);
+		JsonObj->TryGetStringField(TEXT("pattern"), Cmd.Pattern);
+		JsonObj->TryGetBoolField(TEXT("recursive"), Cmd.bRecursive);
+		JsonObj->TryGetNumberField(TEXT("limit"), Cmd.Limit);
+
+		FListProjectDirectoryResponse Response;
+		Execute(Cmd, Response);
+		return SerializeListProjectDirectoryResponse(Response);
+	}
+	else if (TypeStr == TEXT("CopyProjectFile"))
+	{
+		FCopyProjectFileCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("sourcePath"), Cmd.SourcePath);
+		JsonObj->TryGetStringField(TEXT("destPath"), Cmd.DestPath);
+		JsonObj->TryGetBoolField(TEXT("overwrite"), Cmd.bOverwrite);
+
+		FCopyProjectFileResponse Response;
+		Execute(Cmd, Response);
+		return SerializeCopyProjectFileResponse(Response);
+	}
+	else if (TypeStr == TEXT("DeleteProjectFile"))
+	{
+		FDeleteProjectFileCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("relativePath"), Cmd.RelativePath);
+		JsonObj->TryGetBoolField(TEXT("allowDirectoryDelete"), Cmd.bAllowDirectoryDelete);
 
 		FAgentResponseBase Response;
 		Execute(Cmd, Response);

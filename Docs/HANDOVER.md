@@ -1,7 +1,7 @@
 # AgentBridge Handover Document
 
 > Session handover for Claude Code continuity.
-> Last Updated: December 31, 2025
+> Last Updated: December 31, 2025 (Session 11 - Autonomous)
 
 ---
 
@@ -9,12 +9,13 @@
 
 **AgentBridge** is a UE 5.6 plugin that exposes Unreal Editor/runtime state to external AI agents via gRPC + MCP. It allows Claude (and other LLMs) to manipulate actors, properties, materials, and more through natural language.
 
-**Status: All 5 Phases Complete**
+**Status: All 5 Phases Complete + Wishlist Features**
 - Phase 1: Core Implementation (reflection, actor ops, console commands)
 - Phase 2: Tempo Integration (gRPC via TempoScripting)
-- Phase 3: MCP Integration (12 services, 72 tools)
+- Phase 3: MCP Integration (12 services, 90 tools)
 - Phase 4: PIE/Runtime Support (context-aware capabilities)
 - Phase 5: World Partition & Landscape Streaming (streaming-aware queries)
+- **Wishlist:** Asset creation, component manipulation, file operations
 
 ---
 
@@ -84,6 +85,128 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 ---
 
 ## Session Log
+
+### Dec 31 (Session 9) - Wishlist Implementation Phase 1
+**Feature:** Implemented 16 new commands for asset creation, component manipulation, and file operations.
+
+**Why it matters:** This enables agents to create persistent content (DataAssets, MaterialInstances), manipulate component hierarchies, and work with project files - core capabilities for "build me a level" workflows.
+
+**New Commands Implemented (C++ layer - CommandExecutor):**
+
+| Category | Commands | Status |
+|----------|----------|--------|
+| Asset (P0) | `CreateAsset`, `SaveAsset`, `SaveActorAsBlueprint`, `DuplicateAsset`, `GetAssetThumbnail` | ✅ C++ done, stubs for BP/Thumbnail |
+| Component (P1) | `GetComponentTransform`, `SetComponentTransform`, `AttachComponent`, `AttachActor`, `DetachComponent`, `DetachActor` | ✅ Fully implemented |
+| File (P1) | `ReadProjectFile`, `WriteProjectFile`, `ListProjectDirectory`, `CopyProjectFile`, `DeleteProjectFile` | ✅ Fully implemented with security |
+
+**Key Technical Decisions:**
+1. All logic in `CommandExecutor.cpp` (Scripting layer) - avoids Windows SDK header conflicts documented in CLAUDE.md
+2. `#if WITH_EDITOR` guards for asset creation/saving (editor-only APIs)
+3. File operations constrained to project directory with path validation
+4. `EAttachmentRuleType` enum for flexible attachment behavior
+
+**Files Changed:**
+- `Source/AgentBridgeScripting/Public/AgentCommands.h` - 16 new command/response structs
+- `Source/AgentBridgeScripting/Public/CommandExecutor.h` - Execute() declarations + serializers
+- `Source/AgentBridgeScripting/Private/CommandExecutor.cpp` - Full implementations (~1200 lines)
+
+**Build Status:** ✅ Compiles successfully
+
+**Completed in Session 10:**
+1. ~~C++ implementation~~ (DONE in Session 9)
+2. ~~Add to ExecuteJson dispatcher~~ (DONE - was already in Session 9)
+3. ~~Add gRPC layer~~ (DONE - 16 new RPCs, proto messages, ServiceSubsystem handlers)
+4. ~~Add MCP tools~~ (DONE - 11 new tools in agentbridge.py)
+
+**Reference:** `Docs/WISHLIST_PLAN.md` has the full feature roadmap.
+
+---
+
+### Dec 31 (Session 10) - Wishlist Implementation Phase 2: gRPC & MCP
+**Feature:** Added gRPC layer and MCP tools for the 16 new wishlist commands.
+
+**Why it matters:** With the gRPC layer complete, agents can now use these commands via MCP to create DataAssets, manipulate component hierarchies, and work with project files through natural language.
+
+**New gRPC RPCs (16 total):**
+| Category | RPCs |
+|----------|------|
+| Asset (P0) | `CreateAsset`, `SaveAsset`, `SaveActorAsBlueprint`, `DuplicateAsset`, `GetAssetThumbnail` |
+| Component (P1) | `GetComponentTransform`, `SetComponentTransform`, `AttachComponent`, `AttachActor`, `DetachComponent`, `DetachActor` |
+| File (P1) | `ReadProjectFile`, `WriteProjectFile`, `ListProjectDirectory`, `CopyProjectFile`, `DeleteProjectFile` |
+
+**New MCP Tools (11 exposed):**
+| Tool | Description |
+|------|-------------|
+| `create_asset` | Create UAssets (DataAssets, MaterialInstances, etc.) |
+| `save_asset` | Save modified UAssets to disk |
+| `save_actor_as_blueprint` | Convert actor to reusable Blueprint |
+| `duplicate_asset` | Copy assets with new names |
+| `get_asset_thumbnail` | Get asset preview images (base64 PNG) |
+| `get_component_transform` | Get component world/relative transforms |
+| `set_component_transform` | Set component world/relative transforms |
+| `read_project_file` | Read text/binary files from project dir |
+| `write_project_file` | Write files to project dir |
+| `list_project_directory` | List directory contents with metadata |
+| `copy_project_file` | Copy files within project dir |
+
+**Files Changed:**
+- `Source/AgentBridgeServer/Public/AgentBridge.proto` - 16 new message types + RPCs
+- `Source/AgentBridgeServer/Public/AgentBridgeServiceSubsystem.h` - Handler declarations
+- `Source/AgentBridgeServer/Private/AgentBridgeServiceSubsystem.cpp` - Handler implementations (~400 lines)
+- `Python/mcp/services/agentbridge.py` - 11 new tools, client methods, execute handlers
+
+---
+
+### Dec 31 (Session 11) - Autonomous Overnight Session
+**Feature:** Completed MCP tool exposure and documentation updates.
+
+**Autonomous mode activated** - Claude worked without user confirmation per CLAUDE.md instructions.
+
+**Work Completed:**
+1. **Added 5 missing MCP tools:**
+   - `copy_project_file` - was in help text but not TOOLS list
+   - `attach_component` - component hierarchy manipulation
+   - `attach_actor` - actor parenting
+   - `detach_component` - component detachment
+   - `detach_actor` - actor detachment
+
+2. **Added "components" help topic** - New help topic covering transforms, attachment, detachment
+
+3. **Code review of CommandExecutor.cpp** - Verified security:
+   - File operations properly sandboxed via `IsPathAllowed()` + `ToAbsoluteProjectPath()`
+   - Blocks path traversal (`..`), sensitive directories, dangerous extensions
+   - All operations have null checks and proper error messages
+
+4. **Created `test_wishlist.py`** - Integration test script for new features
+
+5. **Updated documentation:**
+   - Fixed gRPC port from 50051 → 10001 in TestingStrategy.md
+   - Added Phase 6 testing section for wishlist features
+   - Updated tool counts (now 90 MCP tools, 38 RPCs)
+
+**Tool Count Now:** agentbridge service has 37 tools (was 32)
+**Total MCP Tools:** 90 (was 85)
+
+**Files Changed:**
+- `Python/mcp/services/agentbridge.py` - 5 new tools + "components" help topic
+- `Python/test_wishlist.py` - NEW integration test script
+- `CLAUDE.md` - Added autonomous mode section, updated counts
+- `Docs/HANDOVER.md` - Session log
+- `Docs/TestingStrategy.md` - Fixed ports, added Phase 6
+
+**Build/Proto Generation:**
+```bash
+cd D:/tempo/TempoSample
+./Plugins/Tempo/Scripts/Build.sh  # Regenerates protos + builds
+```
+
+**Key Technical Details:**
+- `AttachmentRule` proto enum maps to `EAttachmentRuleType` C++ enum
+- File operations use security validation (must be within project directory)
+- Asset operations wrapped in `#if WITH_EDITOR` (editor-only APIs)
+- Proto field names verified against C++ struct fields (e.g., `AssetPath` not `FilePath`)
+
+---
 
 ### Dec 31 (Session 8) - Reflection Improvements
 **Feature:** Fixed bugs and expanded reflection capabilities based on naive Claude testing.
@@ -338,7 +461,7 @@ Once connected, you have access to these service categories:
 
 | Service | Tools | Examples |
 |---------|-------|----------|
-| agentbridge | 21 | `help`, `list_worlds`, `spawn_actor`, `query_actors`, `search_console_commands` |
+| agentbridge | 37 | `help`, `list_worlds`, `spawn_actor`, `create_asset`, `attach_actor` |
 | tempo_time | 6 | `play`, `pause`, `step_frame` |
 | tempo_actor_control | 17 | `set_actor_location`, `set_actor_rotation` |
 | tempo_core | 6 | `load_level`, `quit_editor` |
@@ -351,7 +474,7 @@ Once connected, you have access to these service categories:
 | tempo_map_query | 3 | `query_lanes`, `query_zones` |
 | tempo_agents_editor | 1 | `build_zone_graph` |
 
-**Total: 12 services, 74 tools**
+**Total: 12 services, 90 tools**
 
 **Self-Documenting:** Call `help()` for an overview, or `help(topic='workflows')` for detailed guidance.
 

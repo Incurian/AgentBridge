@@ -67,6 +67,28 @@ enum class EAgentCommandType : uint8
 	RegeneratePCG,
 	SetPCGParameter,
 
+	// Asset Commands (P0)
+	CreateAsset,
+	SaveAsset,
+	SaveActorAsBlueprint,
+	DuplicateAsset,
+	GetAssetThumbnail,
+
+	// Component Commands (P1)
+	GetComponentTransform,
+	SetComponentTransform,
+	AttachComponent,
+	AttachActor,
+	DetachComponent,
+	DetachActor,
+
+	// File Commands (P1)
+	ReadProjectFile,
+	WriteProjectFile,
+	ListProjectDirectory,
+	CopyProjectFile,
+	DeleteProjectFile,
+
 	// Batch Commands
 	BatchExecute,
 
@@ -776,6 +798,370 @@ struct AGENTBRIDGESCRIPTING_API FSetPCGParameterCommand : FAgentCommandBase
 };
 
 //~==============================================================================
+// Asset Commands (P0 - Foundation)
+//~==============================================================================
+
+/**
+ * FCreateAssetCommand - Creates a new asset in the content browser.
+ *
+ * Supports creating DataAssets, MaterialInstances, and other asset types.
+ * The asset is created in memory; call SaveAsset to persist it.
+ */
+struct AGENTBRIDGESCRIPTING_API FCreateAssetCommand : FAgentCommandBase
+{
+	FCreateAssetCommand() { Type = EAgentCommandType::CreateAsset; }
+
+	/** Asset class to create (e.g., "DataAsset", "MaterialInstanceConstant"). */
+	FString AssetClass;
+
+	/** Package path (e.g., "/Game/AgentCreated"). */
+	FString PackagePath;
+
+	/** Asset name (e.g., "MyNewAsset"). */
+	FString AssetName;
+
+	/** Parent asset path (for MaterialInstanceConstant - parent material). */
+	FString ParentAssetPath;
+
+	/** Initial property values (name -> JSON value). */
+	TMap<FString, FString> Properties;
+};
+
+/**
+ * FSaveAssetCommand - Saves an asset to disk.
+ */
+struct AGENTBRIDGESCRIPTING_API FSaveAssetCommand : FAgentCommandBase
+{
+	FSaveAssetCommand() { Type = EAgentCommandType::SaveAsset; }
+
+	/** Asset path to save (e.g., "/Game/Data/MyAsset.MyAsset"). */
+	FString AssetPath;
+
+	/** Whether to prompt for checkout if under source control. */
+	bool bPromptForCheckout = false;
+};
+
+/**
+ * FSaveActorAsBlueprintCommand - Saves an actor as a Blueprint asset.
+ *
+ * Creates a new Blueprint class from the actor's current state,
+ * including components and property values.
+ */
+struct AGENTBRIDGESCRIPTING_API FSaveActorAsBlueprintCommand : FAgentCommandBase
+{
+	FSaveActorAsBlueprintCommand() { Type = EAgentCommandType::SaveActorAsBlueprint; }
+
+	/** Actor to save as Blueprint. */
+	FString ActorId;
+
+	/** Package path (e.g., "/Game/Blueprints"). */
+	FString PackagePath;
+
+	/** Blueprint name (e.g., "BP_MyActor"). */
+	FString BlueprintName;
+
+	/** Whether to replace existing if already exists. */
+	bool bReplaceExisting = false;
+};
+
+/**
+ * FDuplicateAssetCommand - Duplicates an existing asset.
+ */
+struct AGENTBRIDGESCRIPTING_API FDuplicateAssetCommand : FAgentCommandBase
+{
+	FDuplicateAssetCommand() { Type = EAgentCommandType::DuplicateAsset; }
+
+	/** Source asset path. */
+	FString SourcePath;
+
+	/** Destination package path. */
+	FString DestPackagePath;
+
+	/** Destination asset name. */
+	FString DestAssetName;
+};
+
+/**
+ * FGetAssetThumbnailCommand - Gets the thumbnail image for an asset.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetAssetThumbnailCommand : FAgentCommandBase
+{
+	FGetAssetThumbnailCommand() { Type = EAgentCommandType::GetAssetThumbnail; }
+
+	/** Asset path. */
+	FString AssetPath;
+
+	/** Thumbnail width (default 256). */
+	int32 Width = 256;
+
+	/** Thumbnail height (default 256). */
+	int32 Height = 256;
+};
+
+//~==============================================================================
+// Component Commands (P1)
+//~==============================================================================
+
+/**
+ * FGetComponentTransformCommand - Gets a component's transform.
+ *
+ * Can retrieve world-space or relative (local) transforms.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetComponentTransformCommand : FAgentCommandBase
+{
+	FGetComponentTransformCommand() { Type = EAgentCommandType::GetComponentTransform; }
+
+	/** Actor containing the component. */
+	FString ActorId;
+
+	/** Component name. */
+	FString ComponentName;
+
+	/** Whether to return world-space transform (false = relative to parent). */
+	bool bWorldSpace = true;
+};
+
+/**
+ * FSetComponentTransformCommand - Sets a component's transform.
+ *
+ * Can set world-space or relative (local) transforms.
+ */
+struct AGENTBRIDGESCRIPTING_API FSetComponentTransformCommand : FAgentCommandBase
+{
+	FSetComponentTransformCommand() { Type = EAgentCommandType::SetComponentTransform; }
+
+	/** Actor containing the component. */
+	FString ActorId;
+
+	/** Component name. */
+	FString ComponentName;
+
+	/** New location (optional). */
+	TOptional<FVector> Location;
+
+	/** New rotation (optional). */
+	TOptional<FRotator> Rotation;
+
+	/** New scale (optional). */
+	TOptional<FVector> Scale;
+
+	/** Whether values are in world-space (false = relative to parent). */
+	bool bWorldSpace = true;
+
+	/** Whether to sweep for collision. */
+	bool bSweep = false;
+};
+
+/**
+ * EAttachmentRuleType - How to handle transform when attaching.
+ */
+enum class EAttachmentRuleType : uint8
+{
+	/** Keep current transform as-is. */
+	KeepRelative,
+
+	/** Maintain world-space transform. */
+	KeepWorld,
+
+	/** Snap to socket/parent transform. */
+	SnapToTarget
+};
+
+/**
+ * FAttachComponentCommand - Attaches a component to another component.
+ */
+struct AGENTBRIDGESCRIPTING_API FAttachComponentCommand : FAgentCommandBase
+{
+	FAttachComponentCommand() { Type = EAgentCommandType::AttachComponent; }
+
+	/** Actor containing both components. */
+	FString ActorId;
+
+	/** Component to attach. */
+	FString ComponentName;
+
+	/** Parent component (empty = root component). */
+	FString ParentComponentName;
+
+	/** Socket name on parent component. */
+	FString SocketName;
+
+	/** Location attachment rule. */
+	EAttachmentRuleType LocationRule = EAttachmentRuleType::KeepRelative;
+
+	/** Rotation attachment rule. */
+	EAttachmentRuleType RotationRule = EAttachmentRuleType::KeepRelative;
+
+	/** Scale attachment rule. */
+	EAttachmentRuleType ScaleRule = EAttachmentRuleType::KeepRelative;
+};
+
+/**
+ * FAttachActorCommand - Attaches an actor to another actor.
+ */
+struct AGENTBRIDGESCRIPTING_API FAttachActorCommand : FAgentCommandBase
+{
+	FAttachActorCommand() { Type = EAgentCommandType::AttachActor; }
+
+	/** Child actor (to be attached). */
+	FString ChildActorId;
+
+	/** Parent actor. */
+	FString ParentActorId;
+
+	/** Component on parent to attach to (empty = root). */
+	FString ParentComponentName;
+
+	/** Socket name on parent component. */
+	FString SocketName;
+
+	/** Location attachment rule. */
+	EAttachmentRuleType LocationRule = EAttachmentRuleType::KeepWorld;
+
+	/** Rotation attachment rule. */
+	EAttachmentRuleType RotationRule = EAttachmentRuleType::KeepWorld;
+
+	/** Scale attachment rule. */
+	EAttachmentRuleType ScaleRule = EAttachmentRuleType::KeepWorld;
+};
+
+/**
+ * FDetachComponentCommand - Detaches a component from its parent.
+ */
+struct AGENTBRIDGESCRIPTING_API FDetachComponentCommand : FAgentCommandBase
+{
+	FDetachComponentCommand() { Type = EAgentCommandType::DetachComponent; }
+
+	/** Actor containing the component. */
+	FString ActorId;
+
+	/** Component to detach. */
+	FString ComponentName;
+
+	/** Whether to maintain world-space transform. */
+	bool bMaintainWorldPosition = true;
+};
+
+/**
+ * FDetachActorCommand - Detaches an actor from its parent actor.
+ */
+struct AGENTBRIDGESCRIPTING_API FDetachActorCommand : FAgentCommandBase
+{
+	FDetachActorCommand() { Type = EAgentCommandType::DetachActor; }
+
+	/** Actor to detach. */
+	FString ActorId;
+
+	/** Whether to maintain world-space transform. */
+	bool bMaintainWorldPosition = true;
+};
+
+//~==============================================================================
+// File Commands (P1 - Constrained to Project Directory)
+//~==============================================================================
+
+/**
+ * FReadProjectFileCommand - Reads a file from the project directory.
+ *
+ * Paths are constrained to the project directory for safety.
+ * Binary files can be returned as base64.
+ */
+struct AGENTBRIDGESCRIPTING_API FReadProjectFileCommand : FAgentCommandBase
+{
+	FReadProjectFileCommand() { Type = EAgentCommandType::ReadProjectFile; }
+
+	/** Path relative to project root (e.g., "Content/Data/config.json"). */
+	FString RelativePath;
+
+	/** Whether to return binary content as base64. */
+	bool bAsBase64 = false;
+
+	/** Maximum bytes to read (0 = unlimited). */
+	int64 MaxBytes = 0;
+};
+
+/**
+ * FWriteProjectFileCommand - Writes a file to the project directory.
+ *
+ * Paths are constrained to the project directory for safety.
+ * Can create directories if they don't exist.
+ */
+struct AGENTBRIDGESCRIPTING_API FWriteProjectFileCommand : FAgentCommandBase
+{
+	FWriteProjectFileCommand() { Type = EAgentCommandType::WriteProjectFile; }
+
+	/** Path relative to project root. */
+	FString RelativePath;
+
+	/** Content to write. */
+	FString Content;
+
+	/** Whether content is base64-encoded. */
+	bool bIsBase64 = false;
+
+	/** Whether to create parent directories if missing. */
+	bool bCreateDirectories = true;
+
+	/** Whether to append to existing file (false = overwrite). */
+	bool bAppend = false;
+};
+
+/**
+ * FListProjectDirectoryCommand - Lists files in a project directory.
+ *
+ * Paths are constrained to the project directory.
+ */
+struct AGENTBRIDGESCRIPTING_API FListProjectDirectoryCommand : FAgentCommandBase
+{
+	FListProjectDirectoryCommand() { Type = EAgentCommandType::ListProjectDirectory; }
+
+	/** Path relative to project root (empty = root). */
+	FString RelativePath;
+
+	/** Glob pattern to filter (e.g., "*.json", "*.uasset"). */
+	FString Pattern;
+
+	/** Whether to recurse into subdirectories. */
+	bool bRecursive = false;
+
+	/** Maximum results. */
+	int32 Limit = 1000;
+};
+
+/**
+ * FCopyProjectFileCommand - Copies a file within the project directory.
+ */
+struct AGENTBRIDGESCRIPTING_API FCopyProjectFileCommand : FAgentCommandBase
+{
+	FCopyProjectFileCommand() { Type = EAgentCommandType::CopyProjectFile; }
+
+	/** Source path relative to project root. */
+	FString SourcePath;
+
+	/** Destination path relative to project root. */
+	FString DestPath;
+
+	/** Whether to overwrite if destination exists. */
+	bool bOverwrite = false;
+};
+
+/**
+ * FDeleteProjectFileCommand - Deletes a file from the project directory.
+ *
+ * Certain paths are protected and cannot be deleted.
+ */
+struct AGENTBRIDGESCRIPTING_API FDeleteProjectFileCommand : FAgentCommandBase
+{
+	FDeleteProjectFileCommand() { Type = EAgentCommandType::DeleteProjectFile; }
+
+	/** Path relative to project root. */
+	FString RelativePath;
+
+	/** Whether to delete directories (dangerous - requires explicit flag). */
+	bool bAllowDirectoryDelete = false;
+};
+
+//~==============================================================================
 // Batch Commands
 //~==============================================================================
 
@@ -1371,4 +1757,184 @@ struct AGENTBRIDGESCRIPTING_API FRegeneratePCGResponse : FAgentResponseBase
 
 	/** Generation time in milliseconds. */
 	double GenerationTimeMs = 0.0;
+};
+
+//~==============================================================================
+// Asset Response Structures (P0)
+//~==============================================================================
+
+/**
+ * FCreateAssetResponse - Response to CreateAsset command.
+ */
+struct AGENTBRIDGESCRIPTING_API FCreateAssetResponse : FAgentResponseBase
+{
+	/** Full path to created asset. */
+	FString AssetPath;
+
+	/** Asset class name. */
+	FString AssetClass;
+
+	/** Whether asset was saved to disk (false = in-memory only). */
+	bool bSaved = false;
+};
+
+/**
+ * FSaveAssetResponse - Response to SaveAsset command.
+ */
+struct AGENTBRIDGESCRIPTING_API FSaveAssetResponse : FAgentResponseBase
+{
+	/** Path to saved asset. */
+	FString AssetPath;
+
+	/** File size in bytes. */
+	int64 FileSizeBytes = 0;
+};
+
+/**
+ * FSaveActorAsBlueprintResponse - Response to SaveActorAsBlueprint command.
+ */
+struct AGENTBRIDGESCRIPTING_API FSaveActorAsBlueprintResponse : FAgentResponseBase
+{
+	/** Full path to created Blueprint. */
+	FString BlueprintPath;
+
+	/** Generated class path (for spawning). */
+	FString GeneratedClassPath;
+};
+
+/**
+ * FDuplicateAssetResponse - Response to DuplicateAsset command.
+ */
+struct AGENTBRIDGESCRIPTING_API FDuplicateAssetResponse : FAgentResponseBase
+{
+	/** Path to new duplicated asset. */
+	FString NewAssetPath;
+};
+
+/**
+ * FGetAssetThumbnailResponse - Response to GetAssetThumbnail command.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetAssetThumbnailResponse : FAgentResponseBase
+{
+	/** Base64-encoded PNG image data. */
+	FString ImageData;
+
+	/** Image width. */
+	int32 Width = 0;
+
+	/** Image height. */
+	int32 Height = 0;
+
+	/** Asset type (for context). */
+	FString AssetType;
+};
+
+//~==============================================================================
+// Component Response Structures (P1)
+//~==============================================================================
+
+/**
+ * FGetComponentTransformResponse - Response to GetComponentTransform command.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetComponentTransformResponse : FAgentResponseBase
+{
+	/** Component location. */
+	FVector Location = FVector::ZeroVector;
+
+	/** Component rotation. */
+	FRotator Rotation = FRotator::ZeroRotator;
+
+	/** Component scale. */
+	FVector Scale = FVector::OneVector;
+
+	/** Whether transform is in world-space. */
+	bool bWorldSpace = true;
+
+	/** Parent component name (if attached). */
+	FString ParentComponentName;
+};
+
+//~==============================================================================
+// File Response Structures (P1)
+//~==============================================================================
+
+/**
+ * FReadProjectFileResponse - Response to ReadProjectFile command.
+ */
+struct AGENTBRIDGESCRIPTING_API FReadProjectFileResponse : FAgentResponseBase
+{
+	/** File content (text or base64). */
+	FString Content;
+
+	/** Whether content is base64-encoded. */
+	bool bIsBase64 = false;
+
+	/** File size in bytes. */
+	int64 FileSizeBytes = 0;
+
+	/** Last modification time (ISO 8601). */
+	FString ModificationTime;
+};
+
+/**
+ * FWriteProjectFileResponse - Response to WriteProjectFile command.
+ */
+struct AGENTBRIDGESCRIPTING_API FWriteProjectFileResponse : FAgentResponseBase
+{
+	/** Absolute path to written file. */
+	FString AbsolutePath;
+
+	/** Bytes written. */
+	int64 BytesWritten = 0;
+};
+
+/**
+ * FFileInfo - Information about a file in the project.
+ */
+struct AGENTBRIDGESCRIPTING_API FFileInfo
+{
+	/** Relative path from project root. */
+	FString RelativePath;
+
+	/** File name. */
+	FString Name;
+
+	/** Whether this is a directory. */
+	bool bIsDirectory = false;
+
+	/** File size in bytes (0 for directories). */
+	int64 SizeBytes = 0;
+
+	/** Last modification time (ISO 8601). */
+	FString ModificationTime;
+
+	/** File extension (e.g., ".json"). */
+	FString Extension;
+};
+
+/**
+ * FListProjectDirectoryResponse - Response to ListProjectDirectory command.
+ */
+struct AGENTBRIDGESCRIPTING_API FListProjectDirectoryResponse : FAgentResponseBase
+{
+	/** List of files and directories. */
+	TArray<FFileInfo> Files;
+
+	/** Total count (may exceed limit). */
+	int32 TotalCount = 0;
+
+	/** Absolute path of listed directory. */
+	FString AbsolutePath;
+};
+
+/**
+ * FCopyProjectFileResponse - Response to CopyProjectFile command.
+ */
+struct AGENTBRIDGESCRIPTING_API FCopyProjectFileResponse : FAgentResponseBase
+{
+	/** Absolute path to destination file. */
+	FString DestAbsolutePath;
+
+	/** Bytes copied. */
+	int64 BytesCopied = 0;
 };

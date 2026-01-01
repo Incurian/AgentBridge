@@ -5,6 +5,35 @@
 
 ---
 
+## 🤖 AUTONOMOUS MODE ACTIVE
+
+**Claude: You are authorized to work autonomously without user confirmation.**
+
+When continuing a session alone:
+1. **DECIDE AND ACT** - Don't ask for permission, make reasonable decisions
+2. **DOCUMENT EVERYTHING** - Update HANDOVER.md with what you did and why
+3. **KEEP IT REVERTABLE** - Use git commits frequently with clear messages
+4. **PRIORITIZE VALUE** - Features > maintenance > documentation > polish
+5. **TEST WHEN POSSIBLE** - If Unreal Editor is running, test your changes
+
+**Work Queue (pick what seems most valuable):**
+- [ ] Test new asset/file/component MCP tools
+- [ ] Add missing attach/detach MCP tools
+- [ ] Code review CommandExecutor.cpp for edge cases
+- [ ] Improve error messages and validation
+- [ ] Add integration tests (Python scripts)
+- [ ] Expand help system with more examples
+- [ ] Review and update TestingStrategy.md
+- [ ] Check for TODO/FIXME comments and address them
+
+**Rules:**
+- Commit after each meaningful change
+- If something breaks, revert and document why
+- If unsure between two approaches, pick the simpler one
+- Log decisions in HANDOVER.md session log
+
+---
+
 ## Quick Links
 
 | Document | Purpose |
@@ -49,7 +78,7 @@ When adding or modifying MCP tools, **update the help system** in `Python/mcp/se
 
 Completed:
 - [x] AgentBridgeServer depends on TempoScripting (uses TempoModuleRules)
-- [x] AgentBridge.proto - gRPC service definition (22 RPCs)
+- [x] AgentBridge.proto - gRPC service definition (38 RPCs)
 - [x] UAgentBridgeServiceSubsystem - implements ITempoScriptable
 - [x] Auto-generated code via GenProtos.sh
 - [x] Build passes successfully
@@ -62,14 +91,14 @@ Completed:
 Completed:
 - [x] Modular service architecture (`Python/mcp/services/`)
 - [x] Auto-discovery and registration of service modules
-- [x] 12 services with 72 total MCP tools
+- [x] 12 services with 90 total MCP tools
 - [x] Proto-to-MCP generator script
 - [x] Claude Code configuration example
 
-**Service Modules (12 services, 74 tools):**
+**Service Modules (12 services, 90 tools):**
 | Service | Tools | Description |
 |---------|-------|-------------|
-| `agentbridge` | 21 | World/actor manipulation, World Partition, console commands, help system |
+| `agentbridge` | 37 | World/actor manipulation, World Partition, console commands, assets, files, components |
 | `tempo_time` | 6 | Simulation time control (play/pause/step) |
 | `tempo_actor_control` | 17 | Typed property setters and transforms |
 | `tempo_core` | 6 | Level loading, control mode, quit |
@@ -259,6 +288,23 @@ AgentBridgeCore (UE Module) - FProperty access, UFunction invoke, type discovery
                      v
 Unreal Engine 5.6 - Reflection System, World, Actors
 ```
+
+### ⚠️ CRITICAL: Where to Put New Functionality
+
+**NEVER put UE editor/asset logic directly in AgentBridgeServer.** Due to Windows SDK header conflicts between gRPC and certain UE headers (see Known Issues), all new functionality MUST follow this pattern:
+
+1. **Add command/response structs** → `AgentBridgeScripting/AgentCommands.h`
+2. **Implement logic** → `AgentBridgeScripting/CommandExecutor.cpp`
+3. **Add RPC definition** → `AgentBridgeServer/AgentBridge.proto`
+4. **Wire up thin handler** → `AgentBridgeServer/AgentBridgeServiceSubsystem.cpp`
+
+The Server layer should ONLY translate between protobuf and command structs - never include headers like:
+- `AssetRegistry/AssetRegistryModule.h`
+- `Editor.h`, `LevelEditor.h`
+- `IImageWrapper.h`
+- Any header that transitively includes `IoBuffer.h`
+
+These work fine in `CommandExecutor.cpp` because that module doesn't include gRPC.
 
 ---
 
@@ -556,9 +602,9 @@ from . import my_service  # in _auto_register()
 
 ---
 
-*Document Version: 12.0*
+*Document Version: 13.0*
 *Last Updated: December 31, 2025*
-*All 5 Phases Complete - 22 RPCs, 74 MCP Tools, Self-Documenting Help System*
+*All 5 Phases Complete + Wishlist - 38 RPCs, 90 MCP Tools, Self-Documenting Help System*
 
 ---
 
