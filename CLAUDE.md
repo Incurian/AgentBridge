@@ -187,6 +187,28 @@ D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_client.py
 
 See `.claude/HANDOVER.md` for current session context and next steps. Update FREQUENTLY!
 
+## Documentation Process
+
+When fixing bugs or adding features, documentation is a multi-step process:
+
+| Step | What to Update | Why |
+|------|---------------|-----|
+| 1. Code docs | Comments in C++/Python code | For developers |
+| 2. Module CLAUDE.md | Per-module context files | For AI continuity |
+| 3. Help text | `_get_help_text()` in `agentbridge.py` | For agents using the tools |
+| 4. Tool descriptions | MCP tool `description` fields | Agents see these first |
+| 5. Handover | `.claude/HANDOVER.md` | For session continuity |
+
+**Help text is critical** - it's what agents see when they call `help()`. If a limitation is
+fixed, remove any warnings. If new capabilities are added, document them with examples.
+
+Help topics in `agentbridge.py`:
+- `actors` - Finding, creating, modifying actors
+- `properties` - Reading/writing properties with paths
+- `classes` - Type discovery
+- `console` - Console commands
+- `workflows` - Common multi-step operations
+
 ---
 
 *38 RPCs, 90 MCP Tools, Self-Documenting Help System*

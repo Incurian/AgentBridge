@@ -172,19 +172,23 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 - Movement: `tempo_command_vehicle`, `tempo_pawn_move_to`
 - And more...
 
-## Known Issues
+## Component Names in Property Paths
 
-### Component Names in Property Paths
-
-Use INSTANCE names (like `LightComponent0`), not CLASS names:
+Use INSTANCE names (like `LightComponent0`), not CLASS names. Both GET and SET work:
 
 ```python
-# Wrong
+# Wrong - class name won't work
 get_property(actor="MyLight", path="PointLightComponent.Intensity")
 
-# Correct - use tempo_get_components to find actual names
+# Correct - use instance name (use tempo_get_components to find actual names)
 get_property(actor="MyLight", path="LightComponent0.Intensity")
+set_property(actor="MyLight", path="LightComponent0.Intensity", value="10000")
+
+# RootComponent paths also work
+set_property(actor="MyActor", path="RootComponent.RelativeLocation", value="(X=100,Y=200,Z=300)")
 ```
+
+**Tip:** Partial name matching works - `LightComponent` will match `LightComponent0`.
 
 ## Completed Items
 
@@ -196,14 +200,16 @@ get_property(actor="MyLight", path="LightComponent0.Intensity")
 - [x] `label_pattern` parameter for `query_actors`
 - [x] Enhanced error messages with suggestions
 - [x] PCG Biome workflow documentation in help
-
-## Todos
-
+- [x] Component property paths GET/SET (`LightComponent0.Intensity`)
+- [x] Nested object paths GET/SET (`RootComponent.RelativeLocation`)
 - [x] Self-documenting help system (`help()` and `help(topic="...")`)
 - [x] Asset operations (create, save, duplicate)
 - [x] Component operations (attach, detach, transforms)
 - [x] File operations (read, write, list, copy)
-- [ ] Blueprint class normalization (auto-add `_C` suffix)
+- [x] Blueprint class normalization (auto-add `_C` suffix)
+
+## Todos
+
 - [ ] Unified property setter (auto-detect type, route correctly)
 
 ## Stretch Goals
