@@ -494,28 +494,24 @@ FLandscapeBounds FWorldPartitionOps::GetLandscapeBounds(UWorld* World)
 			? Proxy->CollisionComponents[0]
 			: nullptr;
 
-		if (CollisionComp)
+		// Use the proxy's full bounding box for accurate bounds
+		// Note: CachedLocalBox on collision components doesn't account for the full
+		// landscape segment extent - it can be off by half a segment (the collision
+		// bounds are centered differently than the visual geometry).
+		FBox ProxyBounds = Proxy->GetComponentsBoundingBox(false, true);
+		if (ProxyBounds.IsValid)
 		{
-			// CachedLocalBox contains the local-space bounds of the heightfield
+			MinBounds = MinBounds.ComponentMin(ProxyBounds.Min);
+			MaxBounds = MaxBounds.ComponentMax(ProxyBounds.Max);
+		}
+		else if (CollisionComp)
+		{
+			// Fallback: use collision bounds if bounding box not available
 			FBox LocalBox = CollisionComp->CachedLocalBox;
-
-			// Convert to world space using proxy location and landscape scale
 			FVector WorldMin = ProxyLocation + LocalBox.Min * LandscapeScale;
 			FVector WorldMax = ProxyLocation + LocalBox.Max * LandscapeScale;
-
-			// Expand our overall bounds
 			MinBounds = MinBounds.ComponentMin(WorldMin);
 			MaxBounds = MaxBounds.ComponentMax(WorldMax);
-		}
-		else
-		{
-			// Fallback: use the proxy's bounding box
-			FBox ProxyBounds = Proxy->GetComponentsBoundingBox(false, true);
-			if (ProxyBounds.IsValid)
-			{
-				MinBounds = MinBounds.ComponentMin(ProxyBounds.Min);
-				MaxBounds = MaxBounds.ComponentMax(ProxyBounds.Max);
-			}
 		}
 	}
 
