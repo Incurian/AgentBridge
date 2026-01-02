@@ -3612,6 +3612,10 @@ FString FCommandExecutor::PropertyValueToJson(const FAgentPropertyValue& Value)
 			Scale.X, Scale.Y, Scale.Z
 		);
 	}
+	case EAgentPropertyType::Color:
+		// Color is stored as "(R=0.2,G=0.8,B=0.2,A=1.0)" in StringValue by PropertyAccessor
+		// Return as-is - this format is what FLinearColor::ToString() produces
+		return Value.StringValue;
 
 	case EAgentPropertyType::Object:
 	case EAgentPropertyType::SoftObject:

@@ -12,6 +12,7 @@
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonWriter.h"
 #include "Serialization/JsonSerializer.h"
+#include "Math/Color.h"  // For FLinearColor
 
 // gRPC includes
 #include <grpcpp/grpcpp.h>
@@ -348,19 +349,37 @@ namespace
 				}
 			}
 		}
-		else if (TypeName.Contains(TEXT("Color")) && JsonStr.StartsWith(TEXT("{")))
+		else if (TypeName.Contains(TEXT("Color")))
 		{
-			// Parse {"r":..., "g":..., "b":..., "a":...}
 			OutValue->set_type(PROPERTY_TYPE_COLOR);
-			TSharedPtr<FJsonObject> JsonObj;
-			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
-			if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+			Color* C = OutValue->mutable_color_value();
+
+			if (JsonStr.StartsWith(TEXT("{")))
 			{
-				Color* C = OutValue->mutable_color_value();
-				C->set_r(static_cast<int32>(JsonObj->GetNumberField(TEXT("r")) * 255));
-				C->set_g(static_cast<int32>(JsonObj->GetNumberField(TEXT("g")) * 255));
-				C->set_b(static_cast<int32>(JsonObj->GetNumberField(TEXT("b")) * 255));
-				C->set_a(static_cast<int32>(JsonObj->GetNumberField(TEXT("a")) * 255));
+				// Parse JSON format: {"r":..., "g":..., "b":..., "a":...}
+				TSharedPtr<FJsonObject> JsonObj;
+				TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
+				if (FJsonSerializer::Deserialize(Reader, JsonObj) && JsonObj.IsValid())
+				{
+					C->set_r(static_cast<int32>(JsonObj->GetNumberField(TEXT("r")) * 255));
+					C->set_g(static_cast<int32>(JsonObj->GetNumberField(TEXT("g")) * 255));
+					C->set_b(static_cast<int32>(JsonObj->GetNumberField(TEXT("b")) * 255));
+					C->set_a(static_cast<int32>(JsonObj->GetNumberField(TEXT("a")) * 255));
+				}
+			}
+			else if (JsonStr.StartsWith(TEXT("(")))
+			{
+				// Parse Unreal native format: (R=0.2,G=0.8,B=0.2,A=1.0)
+				// Used by FLinearColor::ToString() and FColor::ToString()
+				FLinearColor LinearColor;
+				if (LinearColor.InitFromString(JsonStr))
+				{
+					// FLinearColor has float 0-1 range
+					C->set_r(static_cast<int32>(LinearColor.R * 255));
+					C->set_g(static_cast<int32>(LinearColor.G * 255));
+					C->set_b(static_cast<int32>(LinearColor.B * 255));
+					C->set_a(static_cast<int32>(LinearColor.A * 255));
+				}
 			}
 		}
 		else if (JsonStr.StartsWith(TEXT("[")))
