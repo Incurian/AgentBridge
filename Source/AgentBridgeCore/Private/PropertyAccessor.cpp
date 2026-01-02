@@ -982,9 +982,61 @@ bool FPropertyAccessor::WriteArrayProperty(void* ValuePtr, FArrayProperty* Prope
 		void* ElementPtr = ArrayHelper.GetRawPtr(i);
 		const FAgentPropertyValue& ElementValue = *Value.ArrayValue[i];
 
-		// Write using ImportText for simplicity
-		const TCHAR* Result = InnerProp->ImportText_Direct(*ElementValue.StringValue, ElementPtr, nullptr, PPF_None);
-		if (!Result)
+		// Dispatch to type-specific writers for proper handling
+		// Following "tools should just work" philosophy: object references need proper resolution
+		bool bElementSuccess = false;
+
+		if (FObjectPropertyBase* ObjProp = CastField<FObjectPropertyBase>(InnerProp))
+		{
+			// Object properties need our WriteObjectProperty which loads/resolves objects
+			bElementSuccess = WriteObjectProperty(ElementPtr, ObjProp, ElementValue);
+		}
+		else if (FStructProperty* StructProp = CastField<FStructProperty>(InnerProp))
+		{
+			// Structs need WriteStructProperty for proper member handling
+			bElementSuccess = WriteStructProperty(ElementPtr, StructProp, ElementValue);
+		}
+		else if (FBoolProperty* BoolProp = CastField<FBoolProperty>(InnerProp))
+		{
+			bElementSuccess = WriteBoolProperty(ElementPtr, BoolProp, ElementValue);
+		}
+		else if (FNumericProperty* NumProp = CastField<FNumericProperty>(InnerProp))
+		{
+			bElementSuccess = WriteNumericProperty(ElementPtr, NumProp, ElementValue);
+		}
+		else if (CastField<FStrProperty>(InnerProp) ||
+				 CastField<FNameProperty>(InnerProp) ||
+				 CastField<FTextProperty>(InnerProp))
+		{
+			bElementSuccess = WriteStringProperty(ElementPtr, InnerProp, ElementValue);
+		}
+		else if (FEnumProperty* EnumProp = CastField<FEnumProperty>(InnerProp))
+		{
+			bElementSuccess = WriteEnumProperty(ElementPtr, InnerProp, ElementValue);
+		}
+		else if (FByteProperty* ByteProp = CastField<FByteProperty>(InnerProp))
+		{
+			if (ByteProp->Enum)
+			{
+				bElementSuccess = WriteEnumProperty(ElementPtr, InnerProp, ElementValue);
+			}
+			else
+			{
+				bElementSuccess = WriteNumericProperty(ElementPtr, ByteProp, ElementValue);
+			}
+		}
+		else if (FArrayProperty* NestedArrayProp = CastField<FArrayProperty>(InnerProp))
+		{
+			bElementSuccess = WriteArrayProperty(ElementPtr, NestedArrayProp, ElementValue);
+		}
+		else
+		{
+			// Fallback to ImportText for unknown types
+			const TCHAR* Result = InnerProp->ImportText_Direct(*ElementValue.StringValue, ElementPtr, nullptr, PPF_None);
+			bElementSuccess = (Result != nullptr);
+		}
+
+		if (!bElementSuccess)
 		{
 			bAllSuccess = false;
 		}

@@ -62,9 +62,15 @@ be minimal and obvious. If something "should just work," make it work automatica
 | HTTP Port | 8080 (fallback) |
 | Python Env | `D:/tempo/TempoSample/TempoEnv/Scripts/python.exe` |
 | Build Script | `D:/tempo/TempoSample/Scripts/Build.sh` |
-| Run Editor | `cd D:/tempo/TempoSample && ./Plugins/Tempo/Scripts/Run.sh` |
-| Kill Editor | `cmd //c "taskkill /F /IM UnrealEditor-Cmd.exe"` |
+| Run Editor (GUI) | `cd D:/tempo/TempoSample && ./Plugins/Tempo/Scripts/Run.sh` |
+| Kill Editor | `cmd //c "taskkill /F /IM UnrealEditor.exe"` |
 | User Docs | `README.md` |
+| **Testing** | |
+| Test Level | `Content/freshtest/FreshMap_1` |
+| Generated Content | `Content/freshtest/CreatedThings/` |
+| Trash/Experiments | `Content/freshtest/Trash/` |
+| Test Results Log | `Content/freshtest/TEST_RESULTS.md` |
+| bp_toolkit Assets | `D:/tempo/uassets/` |
 
 ## Current Status
 
@@ -123,6 +129,7 @@ Each module has its own CLAUDE.md with detailed context:
 
 ### Never Do
 
+- **Delete files or folders without asking first** - always ask for confirmation
 - Modify Tempo plugin or UE Engine source - work around limitations
 - Put UE editor headers in AgentBridgeServer (gRPC header conflicts)
 - Use `git push --force` or destructive git commands
@@ -135,6 +142,16 @@ Each module has its own CLAUDE.md with detailed context:
 - Use `TWeakObjectPtr` for stored UObject references
 - Bounce UObject operations to game thread from async contexts
 
+### Centaur Testing Protocol
+
+When doing human-AI collaborative testing with visual verification:
+- **Wait for human verification before cleanup** - don't delete test actors until user confirms they saw the expected result
+- Record unexpected behaviors in `TEST_RESULTS.md` immediately, even if test eventually passes
+- Explain what the human should look for before running each test
+- **Save the level before killing the editor** - otherwise recovery dialog blocks next launch
+  - Either save via Ctrl+S or delete test actors before exit
+  - Or use `taskkill /F` which skips save prompts (data loss is OK for test actors)
+
 ### Header Conflict Warning
 
 **AgentBridgeServer cannot include certain UE headers** due to Windows SDK conflicts with gRPC:
@@ -146,8 +163,13 @@ Put such functionality in AgentBridgeScripting/CommandExecutor.cpp instead.
 
 ## Build Commands
 
+**IMPORTANT: Kill the editor before building!** DLLs will be locked and build will fail.
+
 ```bash
-# Full build (~1 min)
+# STEP 1: Kill editor first (REQUIRED for full builds)
+cmd //c "taskkill /F /IM UnrealEditor.exe"
+
+# STEP 2: Full build (~1 min)
 cd D:/tempo/TempoSample/Scripts && ./Build.sh
 
 # Or direct UBT
@@ -155,20 +177,32 @@ cd D:/tempo/TempoSample/Scripts && ./Build.sh
   TempoSampleEditor Win64 Development \
   -Project="D:/tempo/TempoSample/TempoSample.uproject" -WaitMutex
 
-# Live Coding (editor running)
+# ALTERNATIVE: Live Coding (editor stays running, for small changes only)
 Ctrl+Alt+F11
 ```
 
 ## Running the Editor
 
+**Two editor modes:**
+
+| Executable | Mode | When to Use |
+|------------|------|-------------|
+| `UnrealEditor.exe` | **Full GUI** | Interactive work, visual testing, Run.sh uses this |
+| `UnrealEditor-Cmd.exe` | **Headless** | Automation, CI, ExecCmds scripts |
+
 ```bash
-# Start editor (headless, runs in background)
+# Start editor with full GUI (Run.sh uses UnrealEditor.exe)
 cd D:/tempo/TempoSample && ./Plugins/Tempo/Scripts/Run.sh
 
 # Wait ~30 seconds for gRPC server to be ready on port 10001
 
-# Force-quit editor (IMPORTANT: use cmd wrapper in Git Bash)
-cmd //c "taskkill /F /IM UnrealEditor-Cmd.exe"
+# Force-quit GUI editor (IMPORTANT: use cmd wrapper in Git Bash)
+cmd //c "taskkill /F /IM UnrealEditor.exe"
+
+# Headless mode for automation (separate executable, not Run.sh)
+"D:/EL_UE/UE_5.6/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" \
+  "D:/tempo/TempoSample/TempoSample.uproject" \
+  -ExecCmds="AgentBridge.ListWorlds,Quit" -unattended -NullRHI -nosplash
 ```
 
 **Important Gotchas:**
@@ -179,6 +213,7 @@ cmd //c "taskkill /F /IM UnrealEditor-Cmd.exe"
 | `tempo_quit` may hang on save dialog | Use `taskkill /F` for guaranteed termination |
 | gRPC not ready immediately | Wait ~30 seconds after Run.sh starts |
 | Editor already running | Kill first, then rebuild, then run |
+| Wrong taskkill target | GUI = `UnrealEditor.exe`, Headless = `UnrealEditor-Cmd.exe` |
 
 ## Testing
 

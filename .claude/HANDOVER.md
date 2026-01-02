@@ -1,6 +1,6 @@
 # AgentBridge Session Handover
 
-> Last Updated: January 1, 2026 (Session 21)
+> Last Updated: January 2, 2026 (Session 22)
 
 ## Current State
 
@@ -32,7 +32,29 @@ git add . && git commit -m "msg" && git push
 cd .. && git add bp_toolkit && git commit -m "Update bp_toolkit" && git push
 ```
 
-## Session 21 (Current)
+## Session 22 (Current)
+
+Continuing bug fixes from IMPROVEMENT_PLAN.md.
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Fix UB-004: TArray setting | **DONE** | Python `json.dumps()` + C++ array parsing |
+| Fix UB-008: GET returns empty | **DONE** | C++ `PropertyTypeToString()` + Python `_extract_property_value()` |
+| UB-006: Struct schema support | Pending | `get_class_schema` for UScriptStruct |
+| UB-007: TArray element_type | Pending | Add `element_type` to array property schema |
+| UB-005: Asset path auto-fix | Pending | `/Game/Foo/Asset` → `/Game/Foo/Asset.Asset` |
+| ENH-002: PCG property docs | Pending | BoxExtent workflow in help |
+
+### UB-008 Fix Details
+
+**Root Cause:** `Response.TypeName` was set to numeric enum `"3"` instead of `"Float"`.
+`JsonToProtoPropertyValue()` uses `TypeName.Contains("Float")` to match, so `"3"` never matched.
+
+**Solution:**
+1. Added `PropertyTypeToString()` in CommandExecutor.cpp - converts enum to string names
+2. Added `_extract_property_value()` in agentbridge.py - reads typed proto fields
+
+## Session 21
 
 | Task | Status | Notes |
 |------|--------|-------|
@@ -147,6 +169,75 @@ set_actor_transform("Parent", location=[500,500,100])
 ```
 
 **Human verifies:** Light moves with mesh when parent moves.
+
+#### 4.3 PCG Workflow (Procedural Content Generation)
+
+> **Goal:** Demonstrate full PCG pipeline - spawn volume, configure bounds, discover graphs, modify properties.
+
+**Step 1: Discover existing PCG setup**
+```
+# Query for any PCG actors already in the scene
+query_actors(class_name="PCG")
+
+# Check landscape bounds (PCG often covers landscapes)
+get_landscape_bounds()
+```
+
+**Step 2: Spawn and configure a PCG volume**
+```
+# Spawn a PCG volume actor
+spawn_actor("PCGVolume", location=[0,0,0], label="TestPCGVolume")
+
+# Get the actor details to find component names
+get_actor("TestPCGVolume", include_components=True)
+
+# Scale the volume to cover an area (e.g., 50m x 50m x 10m)
+set_actor_transform("TestPCGVolume", scale=[50,50,10])
+```
+
+**Step 3: Explore PCG Graph asset (bp_toolkit - offline)**
+```
+# Export a PCG graph to inspect its structure
+bp_export_asset("D:/tempo/TempoSample/Content/PCG/SomePCGGraph.uasset")
+bp_detect_type("SomePCGGraph.json")  # Should return "PCGGraph"
+bp_list_graphs("SomePCGGraph.json")  # List nodes in the graph
+bp_query("SomePCGGraph.json", "list-nodes")  # Get all PCG nodes
+```
+
+**Step 4: Modify PCG graph properties**
+```
+# Get a specific property from the PCG graph
+bp_get_property("SomePCGGraph.json", "SomeNodeProperty")
+
+# Modify a property (e.g., density, spacing, seed)
+bp_set_property("SomePCGGraph.json", "SomeNodeProperty", "NewValue")
+
+# Import back
+bp_import_asset("SomePCGGraph.json")
+```
+
+**Step 5: Assign graph to volume and generate**
+```
+# Set the PCG graph on the volume (requires knowing the property path)
+get_actor("TestPCGVolume", include_properties=True)
+
+# Look for Graph or PCGGraph property and set it
+# This may require tempo_set_asset_property for object references
+```
+
+| Checkpoint | Human Verifies |
+|------------|----------------|
+| PCG volume visible | Box/volume appears in scene |
+| Volume scaled correctly | Covers expected area |
+| Graph assignment | PCG component shows graph reference |
+| Generation triggered | Procedural content appears (meshes, foliage, etc.) |
+
+**Cleanup:**
+```
+delete_actor("TestPCGVolume")
+```
+
+**Human verifies:** All generated content removed with volume.
 
 ---
 

@@ -1411,8 +1411,8 @@ def _normalize_property_value(value: any, property_hint: str = "") -> str:
             roll = float(value.get('roll', 0))
             return f"(Pitch={pitch},Yaw={yaw},Roll={roll})"
 
-        # Generic dict - return as string
-        return str(value)
+        # Generic dict - return as JSON string for proper double-quote format
+        return json.dumps(value)
 
     # List/tuple - determine type from hint or length
     if isinstance(value, (list, tuple)):
@@ -1431,11 +1431,95 @@ def _normalize_property_value(value: any, property_hint: str = "") -> str:
             v = [float(x) for x in value]
             return f"(R={v[0]},G={v[1]},B={v[2]},A={v[3]})"
         else:
-            # Other array - return as string
-            return str(value)
+            # Other array - return as JSON string (NOT str() which uses single quotes!)
+            # C++ JsonToPropertyValue expects valid JSON with double quotes
+            return json.dumps(value)
 
-    # Fallback
+    # Fallback - for dicts and other types, use JSON to ensure proper quoting
+    if isinstance(value, (dict, list)):
+        return json.dumps(value)
     return str(value)
+
+
+def _extract_property_value(prop_value) -> Any:
+    """
+    Extract the typed value from a PropertyValue proto response.
+
+    The proto has typed fields (float_value, int_value, vector_value, etc.)
+    and we need to return the appropriate one based on the type enum.
+
+    Property types (from proto):
+      0: NONE, 1: BOOL, 2: INT, 3: FLOAT, 4: STRING
+      5: NAME, 6: VECTOR, 7: ROTATOR, 8: TRANSFORM, 9: COLOR
+      10: OBJECT, 11: CLASS, 12: STRUCT, 13: ARRAY
+    """
+    ptype = prop_value.type
+
+    # NONE
+    if ptype == 0:
+        return None
+
+    # BOOL
+    elif ptype == 1:
+        return prop_value.bool_value
+
+    # INT
+    elif ptype == 2:
+        return prop_value.int_value
+
+    # FLOAT
+    elif ptype == 3:
+        return prop_value.float_value
+
+    # STRING, NAME (4, 5)
+    elif ptype in (4, 5):
+        return prop_value.string_value
+
+    # VECTOR
+    elif ptype == 6:
+        v = prop_value.vector_value
+        return {"x": v.x, "y": v.y, "z": v.z}
+
+    # ROTATOR
+    elif ptype == 7:
+        r = prop_value.rotation_value
+        return {"pitch": r.p, "yaw": r.y, "roll": r.r}
+
+    # TRANSFORM
+    elif ptype == 8:
+        t = prop_value.transform_value
+        return {
+            "location": {"x": t.location.x, "y": t.location.y, "z": t.location.z},
+            "rotation": {"pitch": t.rotation.p, "yaw": t.rotation.y, "roll": t.rotation.r},
+            "scale": {"x": t.scale.x, "y": t.scale.y, "z": t.scale.z},
+        }
+
+    # COLOR
+    elif ptype == 9:
+        c = prop_value.color_value
+        return {"r": c.r, "g": c.g, "b": c.b, "a": c.a if hasattr(c, 'a') else 1.0}
+
+    # OBJECT, CLASS (10, 11)
+    elif ptype in (10, 11):
+        return prop_value.string_value  # Object path as string
+
+    # STRUCT (12)
+    elif ptype == 12:
+        # Return struct fields if available, otherwise string representation
+        if prop_value.string_value:
+            return prop_value.string_value
+        return {"type": "struct", "fields": {}}  # TODO: expand struct fields
+
+    # ARRAY (13)
+    elif ptype == 13:
+        # Return array elements
+        if hasattr(prop_value, 'array_value') and prop_value.array_value:
+            return [_extract_property_value(elem) for elem in prop_value.array_value]
+        return prop_value.string_value or []
+
+    # Unknown - fallback to string_value
+    else:
+        return prop_value.string_value
 
 
 def _enhance_property_error(error_dict: Dict[str, Any], property_path: str, actor_id: str) -> Dict[str, Any]:
@@ -2338,7 +2422,9 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         result = safe_call(client.get_property, args["actor_id"], args["path"])
         if isinstance(result, dict) and "error" in result:
             return _enhance_property_error(result, args["path"], args["actor_id"])
-        return {"path": args["path"], "value": result.value.string_value}
+        # Extract typed value from PropertyValue proto (float, int, vector, etc.)
+        value = _extract_property_value(result.value)
+        return {"path": args["path"], "value": value, "type": result.type_name}
 
     elif tool_name == "set_property":
         # Normalize the value to Unreal's expected string format

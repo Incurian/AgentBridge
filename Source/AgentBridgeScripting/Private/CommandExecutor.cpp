@@ -45,6 +45,9 @@
 #include "Slate/SceneViewport.h"
 #endif
 
+// Forward declaration - implementation in JSON Serialization section
+static FString PropertyTypeToString(EAgentPropertyType Type);
+
 //~==============================================================================
 // Timing Helpers
 //~==============================================================================
@@ -658,7 +661,7 @@ void FCommandExecutor::Execute(const FGetPropertyPathCommand& Command, FProperty
 	}
 
 	Response.Value = PropertyValueToJson(Result.Value);
-	Response.TypeName = FString::Printf(TEXT("%d"), static_cast<int32>(Result.Value.Type));
+	Response.TypeName = PropertyTypeToString(Result.Value.Type);
 	Response.bSuccess = true;
 	Response.ExecutionTimeMs = EndTiming(StartTime);
 }
@@ -3330,6 +3333,43 @@ void FCommandExecutor::Execute(const FDeleteProjectFileCommand& Command, FAgentR
 // JSON Serialization
 //~==============================================================================
 
+// Convert EAgentPropertyType to string name for gRPC type hints
+// JsonToProtoPropertyValue uses Contains() to match these strings
+static FString PropertyTypeToString(EAgentPropertyType Type)
+{
+	switch (Type)
+	{
+	case EAgentPropertyType::Bool:       return TEXT("Bool");
+	case EAgentPropertyType::Int8:
+	case EAgentPropertyType::Int16:
+	case EAgentPropertyType::Int32:
+	case EAgentPropertyType::Int64:      return TEXT("Int");
+	case EAgentPropertyType::UInt8:
+	case EAgentPropertyType::UInt16:
+	case EAgentPropertyType::UInt32:
+	case EAgentPropertyType::UInt64:     return TEXT("Int");  // Also matched by Int
+	case EAgentPropertyType::Float:      return TEXT("Float");
+	case EAgentPropertyType::Double:     return TEXT("Double");
+	case EAgentPropertyType::String:
+	case EAgentPropertyType::Name:
+	case EAgentPropertyType::Text:       return TEXT("String");
+	case EAgentPropertyType::Vector:     return TEXT("Vector");
+	case EAgentPropertyType::Rotator:    return TEXT("Rotator");
+	case EAgentPropertyType::Transform:  return TEXT("Transform");
+	case EAgentPropertyType::Color:      return TEXT("Color");
+	case EAgentPropertyType::Object:
+	case EAgentPropertyType::SoftObject:
+	case EAgentPropertyType::WeakObject:
+	case EAgentPropertyType::Class:      return TEXT("Object");
+	case EAgentPropertyType::Struct:     return TEXT("Struct");
+	case EAgentPropertyType::Enum:       return TEXT("Enum");
+	case EAgentPropertyType::Array:      return TEXT("Array");
+	case EAgentPropertyType::Map:        return TEXT("Map");
+	case EAgentPropertyType::Set:        return TEXT("Set");
+	default:                             return TEXT("Unknown");
+	}
+}
+
 FString FCommandExecutor::PropertyValueToJson(const FAgentPropertyValue& Value)
 {
 	switch (Value.Type)
@@ -3476,7 +3516,164 @@ FAgentPropertyValue FCommandExecutor::JsonToPropertyValue(const FString& Json, E
 		}
 	}
 
-	// For complex types (objects, arrays), store as string and let the caller parse
+	// Array - parse JSON array into ArrayValue
+	// Following "tools should just work" philosophy: parse arrays so WriteArrayProperty works
+	if (Json.StartsWith(TEXT("[")) && Json.EndsWith(TEXT("]")))
+	{
+		TSharedPtr<FJsonValue> ParsedJson;
+		TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Json);
+		if (FJsonSerializer::Deserialize(Reader, ParsedJson) && ParsedJson.IsValid())
+		{
+			if (ParsedJson->Type == EJson::Array)
+			{
+				Value.Type = EAgentPropertyType::Array;
+				const TArray<TSharedPtr<FJsonValue>>& JsonArray = ParsedJson->AsArray();
+				for (const TSharedPtr<FJsonValue>& JsonElement : JsonArray)
+				{
+					FAgentPropertyValue ElementValue;
+					if (JsonElement.IsValid())
+					{
+						switch (JsonElement->Type)
+						{
+						case EJson::String:
+							ElementValue = FAgentPropertyValue(JsonElement->AsString());
+							break;
+						case EJson::Number:
+							ElementValue = FAgentPropertyValue(JsonElement->AsNumber());
+							break;
+						case EJson::Boolean:
+							ElementValue = FAgentPropertyValue(JsonElement->AsBool());
+							break;
+						case EJson::Object:
+							// Nested object - parse into StructValue for WriteStructProperty
+							{
+								ElementValue.Type = EAgentPropertyType::Struct;
+								const TSharedPtr<FJsonObject>& NestedObj = JsonElement->AsObject();
+								for (const auto& NestedPair : NestedObj->Values)
+								{
+									FAgentPropertyValue NestedValue;
+									if (NestedPair.Value.IsValid())
+									{
+										switch (NestedPair.Value->Type)
+										{
+										case EJson::String:
+											NestedValue = FAgentPropertyValue(NestedPair.Value->AsString());
+											break;
+										case EJson::Number:
+											NestedValue = FAgentPropertyValue(NestedPair.Value->AsNumber());
+											break;
+										case EJson::Boolean:
+											NestedValue = FAgentPropertyValue(NestedPair.Value->AsBool());
+											break;
+										default:
+											// Deeper nesting - serialize to string as fallback
+											{
+												FString NestedJson;
+												TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&NestedJson);
+												if (NestedPair.Value->Type == EJson::Object)
+												{
+													FJsonSerializer::Serialize(NestedPair.Value->AsObject().ToSharedRef(), Writer);
+												}
+												else if (NestedPair.Value->Type == EJson::Array)
+												{
+													FJsonSerializer::Serialize(NestedPair.Value->AsArray(), *Writer);
+												}
+												NestedValue.Type = EAgentPropertyType::String;
+												NestedValue.StringValue = NestedJson;
+											}
+											break;
+										}
+									}
+									ElementValue.StructValue.Add(NestedPair.Key, MakeShared<FAgentPropertyValue>(MoveTemp(NestedValue)));
+								}
+							}
+							break;
+						case EJson::Array:
+							// Nested array - recursively parse (for TArray<TArray<...>>)
+							{
+								FString NestedArrayJson;
+								TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&NestedArrayJson);
+								FJsonSerializer::Serialize(JsonElement->AsArray(), *Writer);
+								// Re-parse through JsonToPropertyValue for proper handling
+								ElementValue = JsonToPropertyValue(NestedArrayJson);
+							}
+							break;
+						default:
+							ElementValue.Type = EAgentPropertyType::Unknown;
+							break;
+						}
+					}
+					Value.ArrayValue.Add(MakeShared<FAgentPropertyValue>(MoveTemp(ElementValue)));
+				}
+				return Value;
+			}
+		}
+		// If JSON parse failed, fall through to string handling
+	}
+
+	// Object - parse JSON object into StructValue (for map/struct properties)
+	if (Json.StartsWith(TEXT("{")) && Json.EndsWith(TEXT("}")))
+	{
+		TSharedPtr<FJsonValue> ParsedJson;
+		TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Json);
+		if (FJsonSerializer::Deserialize(Reader, ParsedJson) && ParsedJson.IsValid())
+		{
+			if (ParsedJson->Type == EJson::Object)
+			{
+				Value.Type = EAgentPropertyType::Struct;
+				const TSharedPtr<FJsonObject>& JsonObj = ParsedJson->AsObject();
+				for (const auto& Pair : JsonObj->Values)
+				{
+					FAgentPropertyValue MemberValue;
+					if (Pair.Value.IsValid())
+					{
+						switch (Pair.Value->Type)
+						{
+						case EJson::String:
+							MemberValue = FAgentPropertyValue(Pair.Value->AsString());
+							break;
+						case EJson::Number:
+							MemberValue = FAgentPropertyValue(Pair.Value->AsNumber());
+							break;
+						case EJson::Boolean:
+							MemberValue = FAgentPropertyValue(Pair.Value->AsBool());
+							break;
+						case EJson::Object:
+							// Nested object - serialize to string
+							{
+								FString MemberJson;
+								TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&MemberJson);
+								FJsonSerializer::Serialize(Pair.Value->AsObject().ToSharedRef(), Writer);
+								MemberValue.Type = EAgentPropertyType::String;
+								MemberValue.StringValue = MemberJson;
+							}
+							break;
+						case EJson::Array:
+							// Nested array - serialize to string
+							{
+								FString MemberJson;
+								TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&MemberJson);
+								FJsonSerializer::Serialize(Pair.Value->AsArray(), *Writer);
+								MemberValue.Type = EAgentPropertyType::String;
+								MemberValue.StringValue = MemberJson;
+							}
+							break;
+						default:
+							// Unknown type - leave as unknown
+							MemberValue.Type = EAgentPropertyType::Unknown;
+							break;
+						}
+					}
+					Value.StructValue.Add(Pair.Key, MakeShared<FAgentPropertyValue>(MoveTemp(MemberValue)));
+				}
+				return Value;
+			}
+		}
+		// If JSON parse failed, fall through to string handling
+	}
+
+	// For unrecognized formats, store as string and let ImportText handle it
+	// This covers UE-style literals like "(X=1,Y=2,Z=3)" for vectors
 	Value.Type = EAgentPropertyType::String;
 	Value.StringValue = Json;
 	return Value;

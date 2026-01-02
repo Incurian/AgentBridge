@@ -117,6 +117,43 @@ FString PropertyValueToJson(const FAgentPropertyValue& Value);
 
 Supports: Bool, Int, Float, String, Vector, Rotator, Transform, Color, Arrays, Structs
 
+## Resolved Issues (Session 21)
+
+### TArray Property Setting - ✅ FIXED
+
+Setting array properties now works correctly. Two issues were fixed:
+
+1. **Python MCP Layer:** `_normalize_property_value()` used `str()` on lists, producing single
+   quotes. Changed to `json.dumps()` for proper JSON with double quotes.
+
+2. **C++ Scripting Layer:** `JsonToPropertyValue()` now parses JSON arrays into
+   `FAgentPropertyValue` with `Type = Array` and populated `ArrayValue`. Previously it stored
+   arrays as raw strings.
+
+```python
+# This now works:
+set_property("ArrayTestCube", "Tags", '["TestTag1", "TestTag2"]')
+# Result: Tags = [TestTag1, TestTag2]
+```
+
+### GET Property Returns Empty - ✅ FIXED
+
+Reading properties now returns actual typed values instead of empty strings. Two issues fixed:
+
+1. **C++ Scripting Layer:** `Response.TypeName` was set to numeric enum value like `"3"` instead
+   of `"Float"`. Added `PropertyTypeToString()` helper to convert enums to string names that
+   `JsonToProtoPropertyValue()` can match with `Contains()`.
+
+2. **Python MCP Layer:** Handler only extracted `result.value.string_value`. Added
+   `_extract_property_value()` to read typed fields (`float_value`, `vector_value`, etc.).
+
+```python
+# All now return proper typed values:
+get_property("Light", "LightComponent0.Intensity")      # → 5000.0
+get_property("Cube", "RootComponent.RelativeLocation")  # → {"x": 0, "y": 0, "z": 100}
+get_property("Actor", "bHidden")                        # → False
+```
+
 ## Resolved Issues (Session 19)
 
 ### Nested Struct Property Writes - ✅ FIXED
