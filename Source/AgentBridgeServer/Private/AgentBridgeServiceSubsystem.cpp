@@ -1003,6 +1003,15 @@ void UAgentBridgeServiceSubsystem::GetClassSchema(
 			PropProto->set_is_read_only(Prop.bIsReadOnly);
 			PropProto->set_category(TCHAR_TO_UTF8(*Prop.Category));
 			PropProto->set_description(TCHAR_TO_UTF8(*Prop.Description));
+			// Container element types (TArray, TSet, TMap)
+			if (!Prop.ElementType.IsEmpty())
+			{
+				PropProto->set_element_type(TCHAR_TO_UTF8(*Prop.ElementType));
+			}
+			if (!Prop.KeyType.IsEmpty())
+			{
+				PropProto->set_key_type(TCHAR_TO_UTF8(*Prop.KeyType));
+			}
 		}
 
 		// Functions

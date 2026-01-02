@@ -877,16 +877,118 @@ void FCommandExecutor::Execute(const FFindClassCommand& Command, FAgentResponseB
 	Response.ExecutionTimeMs = EndTiming(StartTime);
 }
 
+// Helper to find UScriptStruct by name (tries multiple name variants)
+static UScriptStruct* FindStructByName(const FString& Name)
+{
+	// Try exact name
+	if (UScriptStruct* Struct = FindObject<UScriptStruct>(nullptr, *Name, true))
+	{
+		return Struct;
+	}
+
+	// Try with F prefix (UE convention for structs)
+	if (!Name.StartsWith(TEXT("F")))
+	{
+		FString WithF = TEXT("F") + Name;
+		if (UScriptStruct* Struct = FindObject<UScriptStruct>(nullptr, *WithF, true))
+		{
+			return Struct;
+		}
+	}
+
+	// Try without F prefix
+	if (Name.StartsWith(TEXT("F")))
+	{
+		FString WithoutF = Name.Mid(1);
+		if (UScriptStruct* Struct = FindObject<UScriptStruct>(nullptr, *WithoutF, true))
+		{
+			return Struct;
+		}
+	}
+
+	// Search through all packages (slower but more thorough)
+	for (TObjectIterator<UScriptStruct> It; It; ++It)
+	{
+		UScriptStruct* Struct = *It;
+		if (Struct->GetName() == Name ||
+		    Struct->GetName() == (TEXT("F") + Name) ||
+		    (Name.StartsWith(TEXT("F")) && Struct->GetName() == Name.Mid(1)))
+		{
+			return Struct;
+		}
+	}
+
+	return nullptr;
+}
+
 void FCommandExecutor::Execute(const FGetClassSchemaCommand& Command, FGetClassSchemaResponse& Response)
 {
 	double StartTime = StartTiming();
 	Response.CommandId = Command.CommandId;
 
+	// First try to find as UClass
 	UClass* Class = FTypeDiscovery::FindClassByName(Command.ClassName);
+
+	// If not found as class, try as UScriptStruct
+	// This allows get_class_schema to work on struct types like FBiomeAsset
 	if (!Class)
 	{
+		UScriptStruct* Struct = FindStructByName(Command.ClassName);
+		if (Struct)
+		{
+			// Build schema for struct
+			FClassInfo& Schema = Response.Schema;
+			Schema.ClassName = Struct->GetName();
+			Schema.DisplayName = Struct->GetDisplayNameText().ToString();
+			Schema.ClassPath = Struct->GetPathName();
+			Schema.ParentClassName = Struct->GetSuperStruct() ? Struct->GetSuperStruct()->GetName() : TEXT("");
+			Schema.bIsBlueprint = false;
+			Schema.bIsAbstract = false;
+
+			// Struct properties
+			for (TFieldIterator<FProperty> PropIt(Struct); PropIt; ++PropIt)
+			{
+				FProperty* Prop = *PropIt;
+				if (Prop->HasAnyPropertyFlags(CPF_Deprecated))
+				{
+					continue;
+				}
+
+				FAgentPropertyInfo Info;
+				Info.PropertyName = Prop->GetName();
+				Info.DisplayName = Prop->GetDisplayNameText().ToString();
+				Info.TypeName = Prop->GetCPPType();
+				Info.bIsReadOnly = Prop->HasAnyPropertyFlags(CPF_BlueprintReadOnly);
+				Info.Category = Prop->GetMetaData(TEXT("Category"));
+				Info.Description = Prop->GetMetaData(TEXT("ToolTip"));
+
+				// Extract element type for container properties
+				if (FArrayProperty* ArrayProp = CastField<FArrayProperty>(Prop))
+				{
+					Info.ElementType = ArrayProp->Inner->GetCPPType();
+				}
+				else if (FSetProperty* SetProp = CastField<FSetProperty>(Prop))
+				{
+					Info.ElementType = SetProp->ElementProp->GetCPPType();
+				}
+				else if (FMapProperty* MapProp = CastField<FMapProperty>(Prop))
+				{
+					Info.KeyType = MapProp->KeyProp->GetCPPType();
+					Info.ElementType = MapProp->ValueProp->GetCPPType();
+				}
+
+				Schema.Properties.Add(MoveTemp(Info));
+			}
+
+			// Structs don't have functions
+			Response.bSuccess = true;
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+
+		// Neither class nor struct found
 		Response.bSuccess = false;
-		Response.ErrorMessage = FString::Printf(TEXT("Class '%s' not found"), *Command.ClassName);
+		Response.ErrorMessage = FString::Printf(TEXT("Class or struct '%s' not found"), *Command.ClassName);
 		Response.ExecutionTimeMs = EndTiming(StartTime);
 		return;
 	}
@@ -922,6 +1024,21 @@ void FCommandExecutor::Execute(const FGetClassSchemaCommand& Command, FGetClassS
 		Info.bIsReadOnly = Prop->HasAnyPropertyFlags(CPF_BlueprintReadOnly);
 		Info.Category = Prop->GetMetaData(TEXT("Category"));
 		Info.Description = Prop->GetMetaData(TEXT("ToolTip"));
+
+		// Extract element type for container properties
+		if (FArrayProperty* ArrayProp = CastField<FArrayProperty>(Prop))
+		{
+			Info.ElementType = ArrayProp->Inner->GetCPPType();
+		}
+		else if (FSetProperty* SetProp = CastField<FSetProperty>(Prop))
+		{
+			Info.ElementType = SetProp->ElementProp->GetCPPType();
+		}
+		else if (FMapProperty* MapProp = CastField<FMapProperty>(Prop))
+		{
+			Info.KeyType = MapProp->KeyProp->GetCPPType();
+			Info.ElementType = MapProp->ValueProp->GetCPPType();
+		}
 
 		Schema.Properties.Add(MoveTemp(Info));
 	}

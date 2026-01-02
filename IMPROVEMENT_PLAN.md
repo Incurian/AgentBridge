@@ -17,8 +17,8 @@ Every fix below should be invisible to the user. No new parameters, no special s
 |----|-------|----------|--------|--------|
 | UB-004 | TArray setting fails | HIGH | Scripting + MCP | **✅ FIXED** |
 | UB-008 | get_property returns empty for numeric/struct | HIGH | Scripting + MCP | **✅ FIXED** |
-| UB-006 | get_class_schema doesn't support structs | MEDIUM | Core | Pending |
-| UB-007 | TArray schema missing element_type | MEDIUM | Core | Pending |
+| UB-006 | get_class_schema doesn't support structs | MEDIUM | Scripting | **✅ FIXED** |
+| UB-007 | TArray schema missing element_type | MEDIUM | Core + Proto | **✅ FIXED** |
 | UB-005 | DataAsset paths need `.AssetName` suffix | MEDIUM | MCP | Pending |
 | ENH-002 | PCG workflow needs specific property guidance | LOW | MCP Help | Pending |
 
@@ -145,52 +145,41 @@ get_property("Actor", "bHidden")                          # → False
 
 ---
 
-## Fix 3: Struct Schema Support (UB-006)
+## Fix 3: Struct Schema Support (UB-006) - ✅ FIXED
 
-### Current Behavior
+### Root Cause
 
-```python
-get_class_schema("BiomeAsset")   # → NOT_FOUND
-get_class_schema("FBiomeAsset")  # → NOT_FOUND
-```
+`get_class_schema` only searched `UClass` via `FTypeDiscovery::FindClassByName()`. Structs are
+`UScriptStruct`, not `UClass`, so they were never found.
 
-### Implementation Module: `AgentBridgeCore/TypeDiscovery.cpp`
+### Solution Implemented
 
+**C++ (`CommandExecutor.cpp`):**
 ```cpp
-TSharedPtr<FAgentClassSchema> UTypeDiscovery::GetClassSchema(const FString& ClassName)
+// Added helper function to find UScriptStruct by name
+static UScriptStruct* FindStructByName(const FString& Name)
 {
-    // Current: Only searches UClass
-    UClass* Class = FindClass(ClassName);
-    if (Class) return BuildSchemaForClass(Class);
-
-    // NEW: Also search UScriptStruct
-    UScriptStruct* Struct = FindStruct(ClassName);
-    if (Struct) return BuildSchemaForStruct(Struct);
-
-    return nullptr;
+    // Try exact name, with F prefix, without F prefix
+    // Falls back to TObjectIterator search for thorough lookup
 }
 
-UScriptStruct* FindStruct(const FString& Name)
+// In Execute(FGetClassSchemaCommand):
+// First try as UClass (existing behavior)
+UClass* Class = FTypeDiscovery::FindClassByName(Command.ClassName);
+
+// If not found, try as UScriptStruct
+if (!Class)
 {
-    // Try exact name
-    if (UScriptStruct* S = FindObject<UScriptStruct>(ANY_PACKAGE, *Name))
-        return S;
-    // Try with F prefix (UE convention)
-    if (UScriptStruct* S = FindObject<UScriptStruct>(ANY_PACKAGE, *(TEXT("F") + Name)))
-        return S;
-    // Try without F prefix
-    if (Name.StartsWith(TEXT("F")))
-        if (UScriptStruct* S = FindObject<UScriptStruct>(ANY_PACKAGE, *Name.Mid(1)))
-            return S;
-    return nullptr;
+    UScriptStruct* Struct = FindStructByName(Command.ClassName);
+    if (Struct)
+    {
+        // Build schema from struct properties (no functions)
+        // ...
+    }
 }
 ```
 
-### No MCP Changes Needed
-
-The existing `get_class_schema` tool signature works - just extend the C++ to handle structs.
-
-### Success Criteria
+### Verified Working
 
 ```python
 get_class_schema("BiomeAsset")
@@ -203,62 +192,58 @@ get_class_schema("BiomeAsset")
 
 ---
 
-## Fix 4: TArray Element Type (UB-007)
+## Fix 4: TArray Element Type (UB-007) - ✅ FIXED
 
-### Current Behavior
+### Root Cause
+
+`get_class_schema` returned `type_name: "TArray"` without indicating what type the array contains.
+
+### Solution Implemented
+
+**1. Added fields to `FAgentPropertyInfo` (`AgentBridgeTypes.h`):**
+```cpp
+struct FAgentPropertyInfo
+{
+    // ... existing fields ...
+    FString ElementType;  // For TArray/TSet/TMap: inner type name
+    FString KeyType;      // For TMap: key type name
+};
+```
+
+**2. Updated `BuildPropertyInfo` (`TypeDiscovery.cpp`):**
+```cpp
+if (FArrayProperty* ArrayProp = CastField<FArrayProperty>(Property))
+{
+    Info.ElementType = FPropertyAccessor::GetPropertyTypeName(ArrayProp->Inner);
+}
+else if (FSetProperty* SetProp = CastField<FSetProperty>(Property))
+{
+    Info.ElementType = FPropertyAccessor::GetPropertyTypeName(SetProp->ElementProp);
+}
+else if (FMapProperty* MapProp = CastField<FMapProperty>(Property))
+{
+    Info.KeyType = FPropertyAccessor::GetPropertyTypeName(MapProp->KeyProp);
+    Info.ElementType = FPropertyAccessor::GetPropertyTypeName(MapProp->ValueProp);
+}
+```
+
+**3. Updated proto (`AgentBridge.proto`):**
+```protobuf
+message PropertyInfo {
+    // ... existing fields ...
+    string element_type = 9;  // For TArray/TSet/TMap
+    string key_type = 10;     // For TMap
+}
+```
+
+**4. Updated gRPC serialization (`AgentBridgeServiceSubsystem.cpp`):**
+- Added `set_element_type()` and `set_key_type()` calls
+
+### Verified Working
 
 ```python
 get_class_schema("BiomeAssetTemplate")
-# → properties: [{"name": "BiomeAssets", "type_name": "TArray", ...}]
-```
-
-### Implementation Module: `AgentBridgeCore/TypeDiscovery.cpp`
-
-In schema property building:
-
-```cpp
-FAgentPropertySchema BuildPropertySchema(FProperty* Prop)
-{
-    FAgentPropertySchema Schema;
-    Schema.Name = Prop->GetAuthoredName();
-
-    if (FArrayProperty* ArrayProp = CastField<FArrayProperty>(Prop))
-    {
-        Schema.TypeName = TEXT("TArray");
-        // NEW: Add element type
-        Schema.ElementType = GetPropertyTypeName(ArrayProp->Inner);
-    }
-    else
-    {
-        Schema.TypeName = GetPropertyTypeName(Prop);
-    }
-
-    return Schema;
-}
-```
-
-### Schema JSON Update
-
-Add `element_type` field to property schema:
-
-```json
-{
-  "name": "BiomeAssets",
-  "type_name": "TArray",
-  "element_type": "FBiomeAsset",
-  "is_read_only": false
-}
-```
-
-### Proto Update (if using gRPC schema)
-
-```protobuf
-message PropertySchema {
-    string name = 1;
-    string type_name = 2;
-    bool is_read_only = 3;
-    string element_type = 4;  // NEW: For TArray/TSet/TMap
-}
+# → properties: [{"name": "BiomeAssets", "type_name": "TArray", "element_type": "FBiomeAsset", ...}]
 ```
 
 ---

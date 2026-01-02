@@ -462,6 +462,21 @@ FAgentPropertyInfo FTypeDiscovery::BuildPropertyInfo(FProperty* Property)
 	Info.TypeName = FPropertyAccessor::GetPropertyTypeName(Property);
 	Info.bIsReadOnly = !FPropertyAccessor::IsPropertyWritable(Property);
 
+	// Extract element type for container properties (TArray, TSet, TMap)
+	if (FArrayProperty* ArrayProp = CastField<FArrayProperty>(Property))
+	{
+		Info.ElementType = FPropertyAccessor::GetPropertyTypeName(ArrayProp->Inner);
+	}
+	else if (FSetProperty* SetProp = CastField<FSetProperty>(Property))
+	{
+		Info.ElementType = FPropertyAccessor::GetPropertyTypeName(SetProp->ElementProp);
+	}
+	else if (FMapProperty* MapProp = CastField<FMapProperty>(Property))
+	{
+		Info.KeyType = FPropertyAccessor::GetPropertyTypeName(MapProp->KeyProp);
+		Info.ElementType = FPropertyAccessor::GetPropertyTypeName(MapProp->ValueProp);
+	}
+
 	// Check for editor-only
 	Info.bIsEditorOnly = Property->HasAnyPropertyFlags(CPF_EditorOnly);
 

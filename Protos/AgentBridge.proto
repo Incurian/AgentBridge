@@ -394,6 +394,8 @@ message PropertyInfo {
   bool is_blueprint_visible = 6;
   string category = 7;
   string description = 8;
+  string element_type = 9;  // For TArray/TSet/TMap: inner type name
+  string key_type = 10;     // For TMap: key type name
 }
 
 message ClassInfo {

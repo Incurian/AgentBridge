@@ -86,6 +86,8 @@ struct AGENTBRIDGECORE_API FAgentPropertyInfo
 	FString DisplayName;
 	EAgentPropertyType Type = EAgentPropertyType::None;
 	FString TypeName;
+	FString ElementType;      // For TArray/TSet/TMap: the inner type name
+	FString KeyType;          // For TMap: the key type name
 	bool bIsReadOnly = false;
 	bool bIsEditorOnly = false;
 	FString Category;

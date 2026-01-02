@@ -3818,6 +3818,8 @@ class AGENTBRIDGESERVER_API PropertyInfo final :
     kTypeNameFieldNumber = 3,
     kCategoryFieldNumber = 7,
     kDescriptionFieldNumber = 8,
+    kElementTypeFieldNumber = 9,
+    kKeyTypeFieldNumber = 10,
     kTypeFieldNumber = 4,
     kIsReadOnlyFieldNumber = 5,
     kIsBlueprintVisibleFieldNumber = 6,
@@ -3902,6 +3904,38 @@ class AGENTBRIDGESERVER_API PropertyInfo final :
   std::string* _internal_mutable_description();
 
   public:
+  // string element_type = 9;
+  void clear_element_type() ;
+  const std::string& element_type() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_element_type(Arg_&& arg, Args_... args);
+  std::string* mutable_element_type();
+  PROTOBUF_NODISCARD std::string* release_element_type();
+  void set_allocated_element_type(std::string* value);
+
+  private:
+  const std::string& _internal_element_type() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_element_type(
+      const std::string& value);
+  std::string* _internal_mutable_element_type();
+
+  public:
+  // string key_type = 10;
+  void clear_key_type() ;
+  const std::string& key_type() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_key_type(Arg_&& arg, Args_... args);
+  std::string* mutable_key_type();
+  PROTOBUF_NODISCARD std::string* release_key_type();
+  void set_allocated_key_type(std::string* value);
+
+  private:
+  const std::string& _internal_key_type() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_key_type(
+      const std::string& value);
+  std::string* _internal_mutable_key_type();
+
+  public:
   // .AgentBridgeServer.PropertyType type = 4;
   void clear_type() ;
   ::AgentBridgeServer::PropertyType type() const;
@@ -3938,8 +3972,8 @@ class AGENTBRIDGESERVER_API PropertyInfo final :
 
   friend class ::google::protobuf_tempo::internal::TcParser;
   static const ::google::protobuf_tempo::internal::TcParseTable<
-      3, 8, 0,
-      91, 2>
+      4, 10, 0,
+      111, 2>
       _table_;
   friend class ::google::protobuf_tempo::MessageLite;
   friend class ::google::protobuf_tempo::Arena;
@@ -3960,6 +3994,8 @@ class AGENTBRIDGESERVER_API PropertyInfo final :
     ::google::protobuf_tempo::internal::ArenaStringPtr type_name_;
     ::google::protobuf_tempo::internal::ArenaStringPtr category_;
     ::google::protobuf_tempo::internal::ArenaStringPtr description_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr element_type_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr key_type_;
     int type_;
     bool is_read_only_;
     bool is_blueprint_visible_;
@@ -24421,6 +24457,112 @@ inline void PropertyInfo::set_allocated_description(std::string* value) {
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.PropertyInfo.description)
+}
+
+// string element_type = 9;
+inline void PropertyInfo::clear_element_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.element_type_.ClearToEmpty();
+}
+inline const std::string& PropertyInfo::element_type() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.PropertyInfo.element_type)
+  return _internal_element_type();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void PropertyInfo::set_element_type(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.element_type_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.PropertyInfo.element_type)
+}
+inline std::string* PropertyInfo::mutable_element_type() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_element_type();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.PropertyInfo.element_type)
+  return _s;
+}
+inline const std::string& PropertyInfo::_internal_element_type() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.element_type_.Get();
+}
+inline void PropertyInfo::_internal_set_element_type(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.element_type_.Set(value, GetArena());
+}
+inline std::string* PropertyInfo::_internal_mutable_element_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.element_type_.Mutable( GetArena());
+}
+inline std::string* PropertyInfo::release_element_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.PropertyInfo.element_type)
+  return _impl_.element_type_.Release();
+}
+inline void PropertyInfo::set_allocated_element_type(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.element_type_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.element_type_.IsDefault()) {
+          _impl_.element_type_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.PropertyInfo.element_type)
+}
+
+// string key_type = 10;
+inline void PropertyInfo::clear_key_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.key_type_.ClearToEmpty();
+}
+inline const std::string& PropertyInfo::key_type() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.PropertyInfo.key_type)
+  return _internal_key_type();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void PropertyInfo::set_key_type(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.key_type_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.PropertyInfo.key_type)
+}
+inline std::string* PropertyInfo::mutable_key_type() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_key_type();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.PropertyInfo.key_type)
+  return _s;
+}
+inline const std::string& PropertyInfo::_internal_key_type() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.key_type_.Get();
+}
+inline void PropertyInfo::_internal_set_key_type(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.key_type_.Set(value, GetArena());
+}
+inline std::string* PropertyInfo::_internal_mutable_key_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.key_type_.Mutable( GetArena());
+}
+inline std::string* PropertyInfo::release_key_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.PropertyInfo.key_type)
+  return _impl_.key_type_.Release();
+}
+inline void PropertyInfo::set_allocated_key_type(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.key_type_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.key_type_.IsDefault()) {
+          _impl_.key_type_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.PropertyInfo.key_type)
 }
 
 // -------------------------------------------------------------------
