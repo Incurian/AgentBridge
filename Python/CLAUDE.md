@@ -220,6 +220,50 @@ set_property(actor="MyActor", path="RootComponent.RelativeLocation", value="(X=1
 
 **Tip:** Partial name matching works - `LightComponent` will match `LightComponent0`.
 
+## DataAsset Properties
+
+Property access also works with DataAssets using asset paths as `actor_id`:
+
+```python
+# Read DataAsset property
+get_property(actor_id="/Game/Biomes/ForestBiome.ForestBiome",
+             path="BiomeDefinition.BiomeName")
+
+# Write DataAsset property
+set_property(actor_id="/Game/Biomes/ForestBiome.ForestBiome",
+             path="BiomeDefinition.BiomePriority", value=10)
+```
+
+**Note:** Use the full asset path with double name format (`AssetName.AssetName`).
+
+### Arrays with Object References
+
+Arrays of structs containing object refs require a two-step process:
+
+```python
+# Step 1: Create array elements with simple properties only
+set_property(actor_id="/Game/Biomes/TreeAssets.TreeAssets",
+             path="BiomeAssets",
+             value='[{"Enabled":true, "Weight":1.0}]')
+
+# Step 2: Set object references individually
+set_property(actor_id="/Game/Biomes/TreeAssets.TreeAssets",
+             path="BiomeAssets[0].Mesh",
+             value="/Game/Foliage/SM_Tree.SM_Tree")
+```
+
+### Reading Nested Structs
+
+When reading nested struct properties, use the full property path:
+
+```python
+# Returns {} (empty) - parent struct serialization issue
+get_property(path="DefaultDefinition")
+
+# Returns "Forest" - individual nested fields work!
+get_property(path="DefaultDefinition.BiomeName")
+```
+
 ## Completed Items
 
 - [x] `get_actor` returns properties/components when flags set

@@ -187,6 +187,45 @@ TOOLS = [
         },
     },
     {
+        "name": "duplicate_actor",
+        "description": "Create a copy of an existing actor. Copies all non-transient properties from the source actor.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "actor_id": {
+                    "type": "string",
+                    "description": "Source actor identifier: name, label, path, or GUID",
+                },
+                "location": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "description": "New location [X, Y, Z] (default: same as source)",
+                    "minItems": 3,
+                    "maxItems": 3,
+                },
+                "rotation": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "description": "New rotation [Pitch, Yaw, Roll] in degrees (default: same as source)",
+                    "minItems": 3,
+                    "maxItems": 3,
+                },
+                "scale": {
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "description": "New scale [X, Y, Z] (default: same as source)",
+                    "minItems": 3,
+                    "maxItems": 3,
+                },
+                "new_label": {
+                    "type": "string",
+                    "description": "Label for the duplicate (default: auto-generated)",
+                },
+            },
+            "required": ["actor_id"],
+        },
+    },
+    {
         "name": "set_actor_transform",
         "description": "Move, rotate, or scale an actor. You can set any combination of location, rotation, and scale.",
         "inputSchema": {
@@ -1046,6 +1085,23 @@ class AgentBridgeClient:
 
     def delete_actor(self, actor_id: str):
         return self.stub.DeleteActor(pb.DeleteActorRequest(actor_id=actor_id))
+
+    def duplicate_actor(self, actor_id: str, location=None, rotation=None, scale=None, new_label=""):
+        # Build transform only if any transform parameters are provided
+        transform = None
+        if location or rotation or scale:
+            transform = pb.ActorTransform()
+            if location:
+                transform.location.CopyFrom(self._make_vector(*location))
+            if rotation:
+                transform.rotation.CopyFrom(self._make_rotation(*rotation))
+            if scale:
+                transform.scale.CopyFrom(pb.Scale(x=scale[0], y=scale[1], z=scale[2]))
+
+        request = pb.DuplicateActorRequest(actor_id=actor_id, new_label=new_label)
+        if transform:
+            request.new_transform.CopyFrom(transform)
+        return self.stub.DuplicateActor(request)
 
     def set_actor_transform(self, actor_id: str, location=None, rotation=None, scale=None, sweep=False):
         transform = pb.ActorTransform()
@@ -1989,6 +2045,49 @@ Common instance names:
 - StaticMeshActor -> StaticMeshComponent0
 - CameraActor -> CameraComponent0
 
+WORKING WITH DATAASSETS:
+set_property and get_property work with DataAssets, not just actors!
+
+Use the full asset path as actor_id:
+  get_property(actor_id="/Game/MyFolder/MyDataAsset.MyDataAsset",
+               path="SomeProperty")
+
+  set_property(actor_id="/Game/MyFolder/MyDataAsset.MyDataAsset",
+               path="SomeProperty", value="NewValue")
+
+This enables programmatic configuration of:
+- BiomeDefinitionTemplate assets
+- BiomeAssetTemplate assets
+- Any PrimaryDataAsset subclass
+- MaterialInstanceConstant (parent references)
+
+Note: The double name format (AssetName.AssetName) is required for UObject resolution.
+
+SETTING ARRAYS WITH OBJECT REFERENCES:
+Arrays of structs containing object refs require a two-step process:
+
+Step 1: Create array elements with simple properties only
+  set_property(actor_id="MyActor", path="MyArray",
+               value='[{"Enabled":true, "Weight":1.0}]')
+
+Step 2: Set object references individually
+  set_property(actor_id="MyActor", path="MyArray[0].Mesh",
+               value="/Game/Meshes/SM_Tree.SM_Tree")
+
+WRONG (will fail):
+  set_property(path="MyArray",
+      value='[{"Mesh":"/Game/..."}]')  # Object ref in initial set = FAIL
+
+READING NESTED STRUCT PROPERTIES:
+When reading nested struct properties:
+  get_property(path="DefaultDefinition")
+  # Returns: {} (empty, even when populated!)
+
+  get_property(path="DefaultDefinition.BiomeName")
+  # Returns: "Forest" (correct!)
+
+Always use the full property path to read nested struct values.
+
 Use get_class_schema(class_name) to discover available properties!
 """,
         "classes": """
@@ -2168,44 +2267,75 @@ Working with project files:
 2. read_project_file("Config/DefaultGame.ini") - Read config
 3. write_project_file("Saved/MyBackup.json", '{"key": "value"}') - Write data
 
-PCG BIOME WORKFLOW:
+PCG BIOME WORKFLOW (Complete with DataAssets):
 Setting up procedural content generation with biomes:
 
-1. Find landscape bounds:
+1. Get landscape bounds:
    bounds = get_landscape_bounds()
-   # Returns: min_point, max_point, center, half_extents
+   # Returns: center, half_extents, min, max
 
-2. Spawn PCG volume to cover landscape:
-   spawn_actor(class_name="PCGVolume", location=bounds["center"],
-               label="BiomePCG")
+2. Spawn biome actors at landscape center:
+   spawn_actor(class_name="BP_PCGBiomeCore",
+               location=bounds["center"], label="MyBiomeCore")
+   spawn_actor(class_name="BP_PCGBiomeVolume",
+               location=bounds["center"], label="MyBiomeVolume")
 
-3. SIZE THE VOLUME (KEY PROPERTIES):
-   # PCG volumes use BoxComponent. Use tempo_set_vector_property for these:
+3. Size the volumes (ALWAYS verify component names first!):
+   tempo_get_components(actor="MyBiomeVolume")  # Returns "BiomeVolume"
 
-   # BoxExtent is HALF-SIZE - the actual volume is 2x this value!
-   # Add Z margin (5000+) for spawn variation above terrain
-   tempo_set_vector_property(actor="BiomePCG", component="Volume",
+   tempo_set_vector_property(actor="MyBiomeVolume", component="BiomeVolume",
        property="BoxExtent",
-       x=bounds["half_extents"][0],  # Match landscape X
-       y=bounds["half_extents"][1],  # Match landscape Y
-       z=bounds["half_extents"][2] + 5000)  # Add Z margin for spawning
+       x=bounds["half_extents"][0],
+       y=bounds["half_extents"][1],
+       z=bounds["half_extents"][2] + 5000)  # Z margin for spawning
 
-   # IMPORTANT: Reset scale to 1,1,1 when using BoxExtent directly!
-   tempo_set_vector_property(actor="BiomePCG", component="Volume",
+   tempo_set_vector_property(actor="MyBiomeVolume", component="BiomeVolume",
        property="RelativeScale3D", x=1, y=1, z=1)
 
-4. Create biome DataAsset with initial properties:
-   create_asset(asset_class="BiomeDataAsset", package_path="/Game/Biomes",
-                asset_name="Forest", properties={"TreeDensity": 0.5, "GrassHeight": 30})
-   save_asset(asset_path="/Game/Biomes/Forest")
+4. Create and configure BiomeDefinition DataAsset:
+   create_asset(asset_class="BiomeDefinitionTemplate",
+                package_path="/Game/Biomes", asset_name="ForestBiome")
 
-5. Query PCG actors to check spawned content:
-   query_actors(class_name="PCGComponent")
-   # Or find actors by tag if PCG assigns tags
+   # Use asset path as actor_id to set DataAsset properties!
+   set_property(actor_id="/Game/Biomes/ForestBiome.ForestBiome",
+                path="BiomeDefinition.BiomeName", value="Forest")
+   set_property(actor_id="/Game/Biomes/ForestBiome.ForestBiome",
+                path="BiomeDefinition.BiomePriority", value=10)
+   set_property(actor_id="/Game/Biomes/ForestBiome.ForestBiome",
+                path="BiomeDefinition.BiomeColor",
+                value="(R=0.2,G=0.6,B=0.1,A=1.0)")
 
-6. Regenerate after parameter changes:
-   # Use execute_console_command if PCG supports it, or
-   # modify DataAsset properties and resave
+   save_asset(asset_path="/Game/Biomes/ForestBiome")
+
+5. Create and configure BiomeAsset DataAsset:
+   create_asset(asset_class="BiomeAssetTemplate",
+                package_path="/Game/Biomes", asset_name="TreeAssets")
+
+   # Two-step process: create array element first (no object refs)
+   set_property(actor_id="/Game/Biomes/TreeAssets.TreeAssets",
+                path="BiomeAssets",
+                value='[{"Enabled":true, "AssetType":"Mesh", "Weight":1.0}]')
+
+   # Then set object reference separately
+   set_property(actor_id="/Game/Biomes/TreeAssets.TreeAssets",
+                path="BiomeAssets[0].Mesh",
+                value="/Game/Foliage/SM_Tree.SM_Tree")
+
+   save_asset(asset_path="/Game/Biomes/TreeAssets")
+
+6. Link DataAssets to the biome volume:
+   set_property(actor_id="MyBiomeVolume", path="Definition",
+                value="/Game/Biomes/ForestBiome.ForestBiome")
+
+   set_property(actor_id="MyBiomeVolume", path="Assets",
+                value='["/Game/Biomes/TreeAssets.TreeAssets"]')
+
+7. PCG generation runs automatically or on editor interaction.
+
+FUNCTION CALL LIMITATIONS:
+tempo_call_function only supports functions with NO parameters and void return.
+For functions like PCGComponent.Generate(bForce), use property setters instead
+(e.g., set bRegenerateInEditor = true) or trigger via console commands.
 
 SIZING VOLUMES TO LANDSCAPE - KEY PROPERTIES:
 When you need to size a BoxComponent volume (PCGVolume, TriggerVolume, etc.):
@@ -2246,27 +2376,44 @@ TIPS:
 """,
         # Aliases for specific workflow sub-topics
         "pcg_volume": """
-SIZING PCG VOLUMES TO LANDSCAPE:
+PCG VOLUME TYPES:
 
-PCG volumes use BoxComponent for their bounds. Here's how to size them correctly:
+There are different PCG volume types with different component structures:
+
+NATIVE PCGVolume (NOT recommended for biomes):
+  - Uses BrushComponent (harder to resize programmatically)
+  - spawn_actor(class_name="PCGVolume", ...)
+  - Component name: "BrushComponent0"
+
+BP_PCGBiomeVolume (RECOMMENDED for biomes):
+  - Uses BoxComponent named "BiomeVolume"
+  - spawn_actor(class_name="BP_PCGBiomeVolume", ...)
+  - Has Definition, Assets, DefaultDefinition, LocalAssets properties
+  - Component name: "BiomeVolume"
+
+BP_PCGBiomeCore (main biome system):
+  - Uses BoxComponent named "Volume"
+  - Contains BiomeCore PCGComponent
+  - spawn_actor(class_name="BP_PCGBiomeCore", ...)
+  - Component name: "Volume"
+
+SIZING BP VOLUMES:
 
 1. GET LANDSCAPE BOUNDS:
    bounds = get_landscape_bounds()
-   # Returns:
-   #   center: [X, Y, Z] - center point of landscape
-   #   half_extents: [X, Y, Z] - half-size in each axis
-   #   min: [X, Y, Z] - minimum corner
-   #   max: [X, Y, Z] - maximum corner
+   # Returns: center, half_extents, min, max
 
 2. SPAWN THE VOLUME:
-   spawn_actor(class_name="PCGVolume", location=bounds["center"], label="BiomePCG")
+   spawn_actor(class_name="BP_PCGBiomeVolume", location=bounds["center"],
+               label="MyBiomeVolume")
 
-3. FIND COMPONENT NAME:
-   tempo_get_components(actor="BiomePCG")
-   # Returns: "Volume" (typically) or "BoxComponent0"
+3. ALWAYS VERIFY COMPONENT NAME FIRST:
+   tempo_get_components(actor="MyBiomeVolume")
+   # Returns: "BiomeVolume" for BP_PCGBiomeVolume
+   # Returns: "Volume" for BP_PCGBiomeCore
 
 4. SET BOXEXTENT (CRITICAL - this is HALF-SIZE!):
-   tempo_set_vector_property(actor="BiomePCG", component="Volume",
+   tempo_set_vector_property(actor="MyBiomeVolume", component="BiomeVolume",
        property="BoxExtent",
        x=bounds["half_extents"][0],
        y=bounds["half_extents"][1],
@@ -2276,7 +2423,7 @@ PCG volumes use BoxComponent for their bounds. Here's how to size them correctly
    # A BoxExtent of [1000, 1000, 500] creates a 2000x2000x1000 volume
 
 5. RESET SCALE (when using BoxExtent directly):
-   tempo_set_vector_property(actor="BiomePCG", component="Volume",
+   tempo_set_vector_property(actor="MyBiomeVolume", component="BiomeVolume",
        property="RelativeScale3D", x=1, y=1, z=1)
 
 WHY ADD Z MARGIN?
@@ -2284,7 +2431,8 @@ PCG spawns content within the volume. Add 5000+ units to Z so spawned
 objects can vary in height above the terrain surface.
 
 COMMON MISTAKES:
-- Using "BoxComponent" (class) instead of "Volume" (instance name)
+- Using native PCGVolume (BrushComponent) instead of BP_PCGBiomeVolume (BoxComponent)
+- Using "BoxComponent" (class) instead of "BiomeVolume" or "Volume" (instance name)
 - Forgetting BoxExtent is HALF-SIZE, not full size
 - Not resetting RelativeScale3D when setting BoxExtent
 - Forgetting Z margin causes all spawns at exact terrain height
@@ -2589,6 +2737,22 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         if isinstance(result, dict) and "error" in result:
             return result
         return {"success": True}
+
+    elif tool_name == "duplicate_actor":
+        result = safe_call(
+            client.duplicate_actor,
+            actor_id=args["actor_id"],
+            location=tuple(args["location"]) if "location" in args else None,
+            rotation=tuple(args["rotation"]) if "rotation" in args else None,
+            scale=tuple(args["scale"]) if "scale" in args else None,
+            new_label=args.get("new_label", ""),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        if result.HasField("duplicated_actor"):
+            actor = client._parse_actor_descriptor(result.duplicated_actor)
+            return {"success": True, "actor": _actor_to_dict(actor)}
+        return {"success": False, "error": "Failed to duplicate actor"}
 
     elif tool_name == "set_actor_transform":
         result = safe_call(
