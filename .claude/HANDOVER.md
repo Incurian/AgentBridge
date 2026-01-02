@@ -1,6 +1,6 @@
 # AgentBridge Session Handover
 
-> Last Updated: January 2, 2026 (Session 24)
+> Last Updated: January 2, 2026 (Session 25 - continued)
 
 ## Current State
 
@@ -12,7 +12,7 @@ AgentBridge is **feature-complete** with:
 - PIE/Runtime support
 - Comprehensive README.md documentation
 - **GitHub repos configured** (private)
-- **All Session 22/23/24 bugs FIXED and VERIFIED**
+- **All Session 22/23/24/25 bugs FIXED and VERIFIED**
 
 ## Session 24 (Current)
 
@@ -32,22 +32,27 @@ AgentBridge is **feature-complete** with:
 
 **Verified:** BiomeColor now round-trips correctly through SET → GET
 
-### Known Issue: Struct GET Returns Empty Fields
+### Struct GET Empty Fields Bug - FIXED
 
-**Problem:** Reading an entire struct returns empty fields:
+**Problem:** Reading an entire struct returned empty fields:
 ```python
 get_property("Actor", "DefaultDefinition")
-# Returns: {"type": "struct", "fields": {}}
+# Returned: {"type": "struct", "fields": {}}
 ```
 
-**Workaround:** Read individual struct members:
+**Root Cause:** Python `_extract_property_value()` had a TODO placeholder at line 1511:
 ```python
-get_property("Actor", "DefaultDefinition.BiomeName")     # Works
-get_property("Actor", "DefaultDefinition.BiomePriority") # Works
-get_property("Actor", "DefaultDefinition.BiomeColor")    # Works
+return {"type": "struct", "fields": {}}  # TODO: expand struct fields
 ```
 
-**Status:** Low priority - individual paths work fine. May fix in future session.
+**Fix:** Properly iterate over `prop_value.struct_values` (the proto KeyValuePair repeated field):
+```python
+if hasattr(prop_value, 'struct_values') and prop_value.struct_values:
+    return {kv.key: _extract_property_value(kv.value) for kv in prop_value.struct_values}
+```
+
+**Verified:** Struct GETs now return full field data. The C++ side was already correctly populating
+`struct_values` in `JsonToProtoPropertyValue()` - this was purely a Python extraction bug.
 
 ## GitHub Repositories
 
