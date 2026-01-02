@@ -19,8 +19,8 @@ Every fix below should be invisible to the user. No new parameters, no special s
 | UB-008 | get_property returns empty for numeric/struct | HIGH | Scripting + MCP | **✅ FIXED** |
 | UB-006 | get_class_schema doesn't support structs | MEDIUM | Scripting | **✅ FIXED** |
 | UB-007 | TArray schema missing element_type | MEDIUM | Core + Proto | **✅ FIXED** |
-| UB-005 | DataAsset paths need `.AssetName` suffix | MEDIUM | MCP | Pending |
-| ENH-002 | PCG workflow needs specific property guidance | LOW | MCP Help | Pending |
+| UB-005 | DataAsset paths need `.AssetName` suffix | MEDIUM | MCP | **✅ FIXED** |
+| ENH-002 | PCG workflow needs specific property guidance | LOW | MCP Help | **✅ FIXED** |
 
 ---
 
@@ -248,98 +248,93 @@ get_class_schema("BiomeAssetTemplate")
 
 ---
 
-## Fix 5: DataAsset Path Auto-Resolution (UB-005)
+## Fix 5: DataAsset Path Auto-Resolution (UB-005) - ✅ FIXED
 
-### Current Behavior
+### Root Cause
 
-User must know to use `/Game/path/Asset.Asset` not `/Game/path/Asset`.
+Unreal asset paths have two forms:
+- **Package path:** `/Game/Folder/MyAsset` (what users naturally type)
+- **Object path:** `/Game/Folder/MyAsset.MyAsset` (what Unreal's API expects)
 
-### Implementation Module: `Python/mcp/services/agentbridge.py`
+Users shouldn't need to know this implementation detail.
 
+### Solution Implemented
+
+**Python (`agentbridge.py`):**
 ```python
 def _normalize_asset_path(path: str) -> str:
     """
-    Auto-fix asset paths for Blueprint-derived assets.
-    /Game/Foo/MyAsset → /Game/Foo/MyAsset.MyAsset (if needed)
+    Auto-fix asset paths by adding the .AssetName suffix if missing.
+    '/Game/Biomes/Forest' -> '/Game/Biomes/Forest.Forest'
     """
-    if "." not in path.split("/")[-1]:
-        # No extension - try adding asset name suffix
-        asset_name = path.split("/")[-1]
-        return f"{path}.{asset_name}"
-    return path
+    if not path or not path.startswith("/"):
+        return path  # Not an asset path
 
-def get_property(actor_id: str, path: str) -> dict:
-    # If actor_id looks like an asset path, normalize it
-    if actor_id.startswith("/Game/"):
-        normalized = _normalize_asset_path(actor_id)
-        result = client.get_property(normalized, path)
-        if result.get("value") != "":
-            return result
-        # If still empty, try original path
-        return client.get_property(actor_id, path)
-    return client.get_property(actor_id, path)
+    final_part = path[path.rfind("/") + 1:]
+    if "." in final_part:
+        return path  # Already has object name
+
+    return f"{path}.{final_part}"
+
+# In get_property/set_property handlers:
+actor_id = _normalize_asset_path(args["actor_id"])
+result = safe_call(client.get_property, actor_id, args["path"])
+if isinstance(result, dict) and "error" in result:
+    # Fallback to original path if normalized fails
+    if actor_id != args["actor_id"]:
+        result = safe_call(client.get_property, args["actor_id"], args["path"])
 ```
 
-### Success Criteria
+### Verified Working
 
 ```python
-# Both should work identically:
+# Both now work identically:
 get_property("/Game/freshtest/TestBiome", "BiomeDefinition.BiomeName")
 get_property("/Game/freshtest/TestBiome.TestBiome", "BiomeDefinition.BiomeName")
 ```
 
 ---
 
-## Fix 6: PCG Workflow Property Guidance (ENH-002)
+## Fix 6: PCG Workflow Property Guidance (ENH-002) - ✅ FIXED
 
 ### Problem
 
 When sizing volumes to landscape, agents get 100+ properties and don't know which to use.
 
-### Implementation Module: `Python/mcp/services/agentbridge.py` - Help System
+### Solution Implemented
 
-Add specific property lists to workflow guidance:
+Added dedicated help topics in `agentbridge.py` with focused property guidance:
 
-```python
-PCG_VOLUME_PROPERTIES = """
-## Sizing a BoxComponent Volume to Landscape
+**1. Enhanced "workflows" topic** with detailed PCG volume sizing steps:
+- Step-by-step instructions for sizing BoxComponent volumes
+- Key properties: `BoxExtent`, `RelativeScale3D`
+- Warning that BoxExtent is HALF-SIZE
+- Z margin recommendation for PCG spawn variation
 
-### Key Properties (in order of use):
+**2. New help topics:**
+- `help(topic="pcg_volume")` - Dedicated guide for PCG volume sizing
+- `help(topic="volume_sizing")` - General BoxComponent sizing guide
 
-1. **Get landscape bounds:**
-   ```
-   bounds = get_landscape_bounds()
-   # Returns: center, extent (half-size), min, max
-   ```
+### Key Guidance Added
 
-2. **Set BoxComponent size** (component name is typically "Volume"):
-   - `BoxExtent` (FVector) - Half-size in each axis
-   - `RelativeScale3D` (FVector) - Set to (1,1,1) when using BoxExtent directly
+```
+KEY PROPERTIES ON BOXCOMPONENT:
+- BoxExtent (FVector): HALF-SIZE in each axis
+- RelativeScale3D (FVector): Set to 1,1,1 when using BoxExtent directly
 
-3. **Position the actor:**
-   - Use `set_actor_transform(location=bounds["center"])`
-
-### Z Margin for PCG:
-Add 5000+ units to BoxExtent.Z for spawn variation above terrain:
-```python
-tempo_set_vector_property(actor, component="Volume", property="BoxExtent",
-    x=bounds["extent"][0],
-    y=bounds["extent"][1],
-    z=bounds["extent"][2] + 5000)  # Z margin for spawning
+COMMON MISTAKES:
+- Using "BoxComponent" (class) instead of "Volume" (instance name)
+- Forgetting BoxExtent is HALF-SIZE, not full size
+- Not resetting RelativeScale3D when setting BoxExtent
+- Forgetting Z margin for PCG spawn variation
 ```
 
-### Important Notes:
-- BoxExtent is HALF-SIZE (full coverage = extent * 2)
-- When scale=(1,1,1), BoxExtent directly controls the volume size
-- Always reset scale to 1 when setting BoxExtent manually
-"""
-```
-
-### Help Topic Addition
+### Verified Working
 
 ```python
-HELP_TOPICS["pcg_volume"] = PCG_VOLUME_PROPERTIES
-HELP_TOPICS["volume_sizing"] = PCG_VOLUME_PROPERTIES  # Alias
+help(topic="pcg_volume")   # Returns focused PCG volume guidance
+help(topic="volume_sizing") # Returns general BoxComponent sizing
+help(topic="workflows")     # Now includes detailed PCG section
 ```
 
 ---

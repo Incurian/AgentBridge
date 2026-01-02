@@ -28,7 +28,7 @@ TOOLS = [
             "properties": {
                 "topic": {
                     "type": "string",
-                    "description": "Optional topic: 'actors', 'properties', 'classes', 'console', 'workflows', 'bp_toolkit', or leave empty for overview",
+                    "description": "Optional topic: 'actors', 'properties', 'classes', 'console', 'workflows', 'pcg_volume', 'volume_sizing', 'bp_toolkit', or leave empty for overview",
                 },
             },
             "required": [],
@@ -1613,6 +1613,52 @@ def _find_similar_actors(client, search_term: str, limit: int = 5) -> List[str]:
     return suggestions[:limit]
 
 
+def _normalize_asset_path(path: str) -> str:
+    """
+    Auto-fix asset paths by adding the .AssetName suffix if missing.
+
+    Unreal asset paths have two forms:
+    - Package path: '/Game/Folder/MyAsset' (what users type)
+    - Object path: '/Game/Folder/MyAsset.MyAsset' (what API expects)
+
+    For DataAssets and other assets, the object name typically matches
+    the package name. This function auto-appends it when missing.
+
+    Examples:
+        '/Game/Biomes/Forest' -> '/Game/Biomes/Forest.Forest'
+        '/Game/Biomes/Forest.Forest' -> '/Game/Biomes/Forest.Forest' (unchanged)
+        '/Game/BP_Enemy.BP_Enemy_C' -> '/Game/BP_Enemy.BP_Enemy_C' (unchanged)
+        'MyActor' -> 'MyActor' (not an asset path, unchanged)
+
+    Args:
+        path: Asset path or actor identifier
+
+    Returns:
+        Normalized path with .AssetName suffix if needed
+    """
+    if not path:
+        return path
+
+    # Only process asset paths (start with /Game/, /Script/, etc.)
+    if not path.startswith("/"):
+        return path
+
+    # Get the last component (after the last /)
+    last_slash = path.rfind("/")
+    if last_slash == -1:
+        return path
+
+    final_part = path[last_slash + 1:]
+
+    # Already has object name (contains a dot)
+    if "." in final_part:
+        return path
+
+    # Auto-append the asset name
+    # /Game/Folder/MyAsset -> /Game/Folder/MyAsset.MyAsset
+    return f"{path}.{final_part}"
+
+
 def _normalize_blueprint_class(class_name: str) -> str:
     """
     Normalize Blueprint class names by auto-appending _C suffix if needed.
@@ -1853,7 +1899,7 @@ IMPORTANT - COMPONENT NAMES:
 - Use tempo_get_components(actor) to find the correct component name
 - For colors, use tempo_set_color_property instead of set_property_path
 
-Use help(topic='actors|properties|classes|assets|components|console|workflows|bp_toolkit') for detailed help.
+Use help(topic='actors|properties|classes|console|workflows|pcg_volume|volume_sizing|bp_toolkit') for detailed help.
 """
 
     topics = {
@@ -2128,27 +2174,158 @@ Setting up procedural content generation with biomes:
 
 2. Spawn PCG volume to cover landscape:
    spawn_actor(class_name="PCGVolume", location=bounds["center"],
-               scale=[bounds["half_extents"][0]/50, bounds["half_extents"][1]/50, 100],
                label="BiomePCG")
 
-3. Create biome DataAsset with initial properties:
+3. SIZE THE VOLUME (KEY PROPERTIES):
+   # PCG volumes use BoxComponent. Use tempo_set_vector_property for these:
+
+   # BoxExtent is HALF-SIZE - the actual volume is 2x this value!
+   # Add Z margin (5000+) for spawn variation above terrain
+   tempo_set_vector_property(actor="BiomePCG", component="Volume",
+       property="BoxExtent",
+       x=bounds["half_extents"][0],  # Match landscape X
+       y=bounds["half_extents"][1],  # Match landscape Y
+       z=bounds["half_extents"][2] + 5000)  # Add Z margin for spawning
+
+   # IMPORTANT: Reset scale to 1,1,1 when using BoxExtent directly!
+   tempo_set_vector_property(actor="BiomePCG", component="Volume",
+       property="RelativeScale3D", x=1, y=1, z=1)
+
+4. Create biome DataAsset with initial properties:
    create_asset(asset_class="BiomeDataAsset", package_path="/Game/Biomes",
                 asset_name="Forest", properties={"TreeDensity": 0.5, "GrassHeight": 30})
    save_asset(asset_path="/Game/Biomes/Forest")
 
-4. Query PCG actors to check spawned content:
+5. Query PCG actors to check spawned content:
    query_actors(class_name="PCGComponent")
    # Or find actors by tag if PCG assigns tags
 
-5. Regenerate after parameter changes:
+6. Regenerate after parameter changes:
    # Use execute_console_command if PCG supports it, or
    # modify DataAsset properties and resave
+
+SIZING VOLUMES TO LANDSCAPE - KEY PROPERTIES:
+When you need to size a BoxComponent volume (PCGVolume, TriggerVolume, etc.):
+
+1. Get bounds:
+   bounds = get_landscape_bounds()
+   # center: [X, Y, Z] center point
+   # half_extents: [X, Y, Z] half-size in each axis
+   # min: [X, Y, Z] minimum corner
+   # max: [X, Y, Z] maximum corner
+
+2. Find the component name:
+   tempo_get_components(actor="MyVolume")
+   # Common names: "Volume", "BoxComponent0", "CollisionComponent"
+
+3. Set BoxExtent (HALF-SIZE in Unreal units/cm):
+   tempo_set_vector_property(actor="MyVolume", component="Volume",
+       property="BoxExtent", x=1000, y=1000, z=500)
+   # This creates a 2000x2000x1000 volume!
+
+4. Reset scale when using BoxExtent:
+   tempo_set_vector_property(actor="MyVolume", component="Volume",
+       property="RelativeScale3D", x=1, y=1, z=1)
+
+COMMON MISTAKES:
+- Using class name "BoxComponent" instead of instance name "Volume"
+- Forgetting BoxExtent is HALF the total size
+- Not resetting scale when manually setting BoxExtent
+- Forgetting Z margin for PCG spawn variation
 
 TIPS:
 - Use get_landscape_bounds() to size PCG volumes correctly
 - Create DataAssets with initial properties via create_asset()
 - Use label_pattern to find PCG-spawned actors
 - PCG regeneration may require editor commands or level reload
+""",
+        # Aliases for specific workflow sub-topics
+        "pcg_volume": """
+SIZING PCG VOLUMES TO LANDSCAPE:
+
+PCG volumes use BoxComponent for their bounds. Here's how to size them correctly:
+
+1. GET LANDSCAPE BOUNDS:
+   bounds = get_landscape_bounds()
+   # Returns:
+   #   center: [X, Y, Z] - center point of landscape
+   #   half_extents: [X, Y, Z] - half-size in each axis
+   #   min: [X, Y, Z] - minimum corner
+   #   max: [X, Y, Z] - maximum corner
+
+2. SPAWN THE VOLUME:
+   spawn_actor(class_name="PCGVolume", location=bounds["center"], label="BiomePCG")
+
+3. FIND COMPONENT NAME:
+   tempo_get_components(actor="BiomePCG")
+   # Returns: "Volume" (typically) or "BoxComponent0"
+
+4. SET BOXEXTENT (CRITICAL - this is HALF-SIZE!):
+   tempo_set_vector_property(actor="BiomePCG", component="Volume",
+       property="BoxExtent",
+       x=bounds["half_extents"][0],
+       y=bounds["half_extents"][1],
+       z=bounds["half_extents"][2] + 5000)  # Add Z margin!
+
+   # BoxExtent is HALF the actual volume size!
+   # A BoxExtent of [1000, 1000, 500] creates a 2000x2000x1000 volume
+
+5. RESET SCALE (when using BoxExtent directly):
+   tempo_set_vector_property(actor="BiomePCG", component="Volume",
+       property="RelativeScale3D", x=1, y=1, z=1)
+
+WHY ADD Z MARGIN?
+PCG spawns content within the volume. Add 5000+ units to Z so spawned
+objects can vary in height above the terrain surface.
+
+COMMON MISTAKES:
+- Using "BoxComponent" (class) instead of "Volume" (instance name)
+- Forgetting BoxExtent is HALF-SIZE, not full size
+- Not resetting RelativeScale3D when setting BoxExtent
+- Forgetting Z margin causes all spawns at exact terrain height
+""",
+        "volume_sizing": """
+SIZING BOXCOMPONENT VOLUMES:
+
+BoxComponent volumes (PCGVolume, TriggerVolume, BlockingVolume, etc.)
+use BoxExtent for their size. Here's how to set them correctly:
+
+KEY PROPERTIES ON BOXCOMPONENT:
+- BoxExtent (FVector): HALF-SIZE in each axis
+- RelativeScale3D (FVector): Scale multiplier (set to 1,1,1 when using BoxExtent)
+- RelativeLocation (FVector): Offset from actor root
+
+SIZING STEPS:
+
+1. Find the component instance name:
+   tempo_get_components(actor="MyVolume")
+   # Common names: "Volume", "BoxComponent0", "CollisionComponent"
+
+2. Set BoxExtent (HALF-SIZE):
+   tempo_set_vector_property(actor="MyVolume", component="Volume",
+       property="BoxExtent", x=1000, y=1000, z=500)
+   # Creates a 2000x2000x1000 unit volume (double the extent!)
+
+3. Reset scale:
+   tempo_set_vector_property(actor="MyVolume", component="Volume",
+       property="RelativeScale3D", x=1, y=1, z=1)
+
+FOR LANDSCAPE COVERAGE:
+   bounds = get_landscape_bounds()
+   tempo_set_vector_property(actor="MyVolume", component="Volume",
+       property="BoxExtent",
+       x=bounds["half_extents"][0],
+       y=bounds["half_extents"][1],
+       z=bounds["half_extents"][2])
+
+RELATIONSHIP: BoxExtent × Scale = Actual half-size
+- If BoxExtent=[100,100,100] and Scale=[2,2,2], volume is 400x400x400
+- To avoid confusion, set Scale to 1,1,1 and use BoxExtent directly
+
+UNITS: All values in Unreal units (centimeters)
+- 100 units = 1 meter
+- Typical game level: 10000-50000 units per axis
+- BoxExtent of [25000, 25000, 5000] covers a 500m × 500m × 100m volume
 """
     }
 
@@ -2419,19 +2596,34 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         return {"success": True}
 
     elif tool_name == "get_property":
-        result = safe_call(client.get_property, args["actor_id"], args["path"])
+        # Normalize asset paths: /Game/Foo/Asset -> /Game/Foo/Asset.Asset
+        actor_id = _normalize_asset_path(args["actor_id"])
+        result = safe_call(client.get_property, actor_id, args["path"])
         if isinstance(result, dict) and "error" in result:
+            # If normalized path failed, try original path as fallback
+            if actor_id != args["actor_id"]:
+                result = safe_call(client.get_property, args["actor_id"], args["path"])
+                if not (isinstance(result, dict) and "error" in result):
+                    value = _extract_property_value(result.value)
+                    return {"path": args["path"], "value": value, "type": result.type_name}
             return _enhance_property_error(result, args["path"], args["actor_id"])
         # Extract typed value from PropertyValue proto (float, int, vector, etc.)
         value = _extract_property_value(result.value)
         return {"path": args["path"], "value": value, "type": result.type_name}
 
     elif tool_name == "set_property":
+        # Normalize asset paths: /Game/Foo/Asset -> /Game/Foo/Asset.Asset
+        actor_id = _normalize_asset_path(args["actor_id"])
         # Normalize the value to Unreal's expected string format
         # This allows flexible input like [1,0,0] for colors or {"x":1,"y":2,"z":3} for vectors
         normalized_value = _normalize_property_value(args["value"], args["path"])
-        result = safe_call(client.set_property, args["actor_id"], args["path"], normalized_value)
+        result = safe_call(client.set_property, actor_id, args["path"], normalized_value)
         if isinstance(result, dict) and "error" in result:
+            # If normalized path failed, try original path as fallback
+            if actor_id != args["actor_id"]:
+                result = safe_call(client.set_property, args["actor_id"], args["path"], normalized_value)
+                if not (isinstance(result, dict) and "error" in result):
+                    return {"success": True}
             return _enhance_property_error(result, args["path"], args["actor_id"])
         return {"success": True}
 
