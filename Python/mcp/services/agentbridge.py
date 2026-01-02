@@ -1505,10 +1505,13 @@ def _extract_property_value(prop_value) -> Any:
 
     # STRUCT (12)
     elif ptype == 12:
-        # Return struct fields if available, otherwise string representation
+        # Extract struct fields from struct_values (KeyValuePair repeated field)
+        if hasattr(prop_value, 'struct_values') and prop_value.struct_values:
+            return {kv.key: _extract_property_value(kv.value) for kv in prop_value.struct_values}
+        # Fallback to string representation (e.g., "(X=0,Y=0,Z=100)")
         if prop_value.string_value:
             return prop_value.string_value
-        return {"type": "struct", "fields": {}}  # TODO: expand struct fields
+        return {}
 
     # ARRAY (13)
     elif ptype == 13:
