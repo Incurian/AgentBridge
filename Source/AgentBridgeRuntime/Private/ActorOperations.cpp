@@ -356,8 +356,38 @@ AActor* FActorOperations::DuplicateActor(
 
 	AActor* NewActor = SpawnActor(Params, World);
 
-	// TODO: Copy properties from source to duplicate
-	// This is complex and may require special handling
+	if (NewActor)
+	{
+		// Copy Blueprint-visible, non-transient properties from source to duplicate.
+		// Skip properties that should remain unique per-instance (GUID, path, etc.)
+		// or are handled by the spawn (transform, label).
+		for (TFieldIterator<FProperty> PropIt(Source->GetClass()); PropIt; ++PropIt)
+		{
+			FProperty* Property = *PropIt;
+
+			// Skip properties that shouldn't be copied
+			if (Property->HasAnyPropertyFlags(CPF_Transient | CPF_DuplicateTransient))
+			{
+				continue;
+			}
+
+			// Skip internal/structural properties
+			FString PropName = Property->GetName();
+			if (PropName == TEXT("ActorGuid") ||
+				PropName == TEXT("AttachParent") ||
+				PropName == TEXT("AttachSocketName") ||
+				PropName == TEXT("AttachChildren") ||
+				PropName.StartsWith(TEXT("RootComponent")))
+			{
+				continue;
+			}
+
+			// Copy the property value
+			const void* SourceValue = Property->ContainerPtrToValuePtr<void>(Source);
+			void* DestValue = Property->ContainerPtrToValuePtr<void>(NewActor);
+			Property->CopyCompleteValue(DestValue, SourceValue);
+		}
+	}
 
 	return NewActor;
 }

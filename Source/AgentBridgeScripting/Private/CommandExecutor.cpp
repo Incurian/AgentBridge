@@ -837,6 +837,10 @@ void FCommandExecutor::Execute(const FGetFunctionSignatureCommand& Command, FAge
 	double StartTime = StartTiming();
 	Response.CommandId = Command.CommandId;
 
+	// This command is deprecated - use GetClassSchema with include_functions=true instead.
+	// GetClassSchema provides full function signatures with parameter types, return values, etc.
+	// This stub remains for backwards compatibility with any HTTP JSON clients.
+
 	UClass* Class = FTypeDiscovery::FindClassByName(Command.ClassName);
 	if (!Class)
 	{
@@ -855,7 +859,7 @@ void FCommandExecutor::Execute(const FGetFunctionSignatureCommand& Command, FAge
 		return;
 	}
 
-	// TODO: Return signature in response
+	// Function exists - return success (signature details available via GetClassSchema)
 	Response.bSuccess = true;
 	Response.ExecutionTimeMs = EndTiming(StartTime);
 }
@@ -4959,10 +4963,6 @@ FString FCommandExecutor::ExecuteJson(const FString& CommandJson)
 
 	if (!FJsonSerializer::Deserialize(Reader, JsonObj) || !JsonObj.IsValid())
 	{
-		FAgentResponseBase ErrorResponse;
-		ErrorResponse.bSuccess = false;
-		ErrorResponse.ErrorMessage = TEXT("Failed to parse command JSON");
-		// TODO: Serialize error response
 		return TEXT("{\"success\":false,\"error\":\"Failed to parse command JSON\"}");
 	}
 
@@ -5769,6 +5769,89 @@ FString FCommandExecutor::ExecuteJson(const FString& CommandJson)
 
 FString FCommandExecutor::ExecuteBatchJson(const FString& CommandsJson, bool bStopOnError)
 {
-	// TODO: Implement batch execution
-	return TEXT("{\"success\":true,\"responses\":[]}");
+	// Parse batch request - expects {"commands": [...]} or just [...]
+	TArray<TSharedPtr<FJsonValue>> CommandArray;
+	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(CommandsJson);
+
+	// Try parsing as object with "commands" field first
+	TSharedPtr<FJsonObject> BatchObj;
+	if (FJsonSerializer::Deserialize(Reader, BatchObj) && BatchObj.IsValid())
+	{
+		const TArray<TSharedPtr<FJsonValue>>* Commands = nullptr;
+		if (BatchObj->TryGetArrayField(TEXT("commands"), Commands))
+		{
+			CommandArray = *Commands;
+		}
+	}
+
+	// If that didn't work, try parsing as direct array
+	if (CommandArray.Num() == 0)
+	{
+		TSharedRef<TJsonReader<>> ArrayReader = TJsonReaderFactory<>::Create(CommandsJson);
+		FJsonSerializer::Deserialize(ArrayReader, CommandArray);
+	}
+
+	if (CommandArray.Num() == 0)
+	{
+		return TEXT("{\"success\":false,\"error\":\"Expected {\\\"commands\\\":[...]} or [...]\",\"responses\":[]}");
+	}
+
+	// Execute each command
+	TArray<FString> Responses;
+	bool bAllSucceeded = true;
+
+	for (const TSharedPtr<FJsonValue>& CmdValue : CommandArray)
+	{
+		const TSharedPtr<FJsonObject>* CmdObj = nullptr;
+		if (!CmdValue->TryGetObject(CmdObj) || !CmdObj || !CmdObj->IsValid())
+		{
+			Responses.Add(TEXT("{\"success\":false,\"error\":\"Invalid command object\"}"));
+			bAllSucceeded = false;
+			if (bStopOnError)
+			{
+				break;
+			}
+			continue;
+		}
+
+		// Serialize command back to JSON and execute
+		FString CmdJson;
+		TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&CmdJson);
+		FJsonSerializer::Serialize(CmdObj->ToSharedRef(), Writer);
+
+		FString Response = ExecuteJson(CmdJson);
+		Responses.Add(Response);
+
+		// Check if this command failed
+		TSharedPtr<FJsonObject> ResponseObj;
+		TSharedRef<TJsonReader<>> ResponseReader = TJsonReaderFactory<>::Create(Response);
+		if (FJsonSerializer::Deserialize(ResponseReader, ResponseObj) && ResponseObj.IsValid())
+		{
+			bool bSuccess = false;
+			ResponseObj->TryGetBoolField(TEXT("success"), bSuccess);
+			if (!bSuccess)
+			{
+				bAllSucceeded = false;
+				if (bStopOnError)
+				{
+					break;
+				}
+			}
+		}
+	}
+
+	// Build batch response
+	FString Result = FString::Printf(TEXT("{\"success\":%s,\"executed\":%d,\"total\":%d,\"responses\":["),
+		bAllSucceeded ? TEXT("true") : TEXT("false"),
+		Responses.Num(),
+		CommandArray.Num());
+
+	for (int32 i = 0; i < Responses.Num(); i++)
+	{
+		if (i > 0) Result += TEXT(",");
+		Result += Responses[i];
+	}
+	Result += TEXT("]}");
+
+	return Result;
 }
