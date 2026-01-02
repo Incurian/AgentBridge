@@ -28,7 +28,7 @@ TOOLS = [
             "properties": {
                 "topic": {
                     "type": "string",
-                    "description": "Optional topic: 'actors', 'properties', 'classes', 'console', 'workflows', or leave empty for overview",
+                    "description": "Optional topic: 'actors', 'properties', 'classes', 'console', 'workflows', 'bp_toolkit', or leave empty for overview",
                 },
             },
             "required": [],
@@ -1769,7 +1769,7 @@ IMPORTANT - COMPONENT NAMES:
 - Use tempo_get_components(actor) to find the correct component name
 - For colors, use tempo_set_color_property instead of set_property_path
 
-Use help(topic='actors|properties|classes|assets|components|console|workflows') for detailed help.
+Use help(topic='actors|properties|classes|assets|components|console|workflows|bp_toolkit') for detailed help.
 """
 
     topics = {
@@ -2067,6 +2067,120 @@ TIPS:
 - PCG regeneration may require editor commands or level reload
 """
     }
+
+    # Check if bp_toolkit is available and add its workflows
+    try:
+        from . import get_all_services
+        if "bp_toolkit" in get_all_services():
+            topics["workflows"] += """
+
+BP_TOOLKIT WORKFLOWS (Offline Asset Manipulation):
+These tools work WITHOUT Unreal running - pure JSON manipulation via UAssetGUI.
+
+Exporting and analyzing a Blueprint:
+1. bp_export_asset(uasset_path="/Game/Blueprints/BP_Enemy.uasset")
+   # Creates BP_Enemy.json next to the uasset
+2. bp_detect_type(json_path="BP_Enemy.json")
+   # Returns: {"asset_type": "Blueprint"}
+3. bp_get_info(json_path="BP_Enemy.json")
+   # Returns: exports count, imports, graphs, namemap size
+4. bp_query(json_path="BP_Enemy.json", query_type="list-events")
+   # Returns: BeginPlay, Tick, etc.
+
+Modifying a DataAsset:
+1. bp_export_asset(uasset_path="D:/Content/BiomeDefinitions/Forest.uasset")
+2. bp_get_property(json_path="Forest.json", property_path="BiomeDefinition.BiomePriority")
+   # Returns: {"value": 3}
+3. bp_set_property(json_path="Forest.json", property_path="BiomeDefinition.BiomePriority", value=10)
+4. bp_import_asset(json_path="Forest.json")
+   # Converts back to .uasset - reload in editor to see changes
+
+Cloning an asset with modifications:
+1. bp_export_asset(uasset_path="D:/Content/Biomes/Forest.uasset")
+2. bp_clone_asset(json_path="Forest.json", new_name="Desert")
+   # Creates Desert.json with updated name/folder references
+3. bp_set_property(json_path="Desert.json", property_path="BiomeDefinition.BiomeColor",
+                   value={"R": 0.9, "G": 0.7, "B": 0.4, "A": 1.0})
+4. bp_import_asset(json_path="Desert.json")
+   # Creates Desert.uasset
+
+Adding documentation comments to a Blueprint:
+1. bp_export_asset(uasset_path="BP_Character.uasset")
+2. bp_list_graphs(json_path="BP_Character.json")
+   # Returns: EventGraph, Walk, Jump, etc.
+3. bp_add_comment(json_path="BP_Character.json", graph_name="EventGraph",
+                  text="TODO: Add death handling", x=0, y=-500, width=400, height=100)
+4. bp_import_asset(json_path="BP_Character.json")
+
+Searching and querying assets:
+- bp_find(json_path="BP_Enemy.json", pattern="Health")
+  # Searches namemap and exports for "Health"
+- bp_query(json_path="BP_Enemy.json", query_type="variables")
+  # Lists all variable Get/Set nodes
+- bp_query(json_path="BT_AI.json", query_type="list-tasks")
+  # Lists Behavior Tree task nodes
+- bp_query(json_path="M_Wood.json", query_type="textures")
+  # Lists texture references in material
+
+Full Blueprint parsing with call graphs:
+1. bp_export_asset(uasset_path="BP_ComplexCharacter.uasset")
+2. bp_parse(json_path="BP_ComplexCharacter.json", output_dir="./parsed/")
+   # Generates: call_graph.json, Mermaid diagrams, function docs
+
+QUERY TYPES BY ASSET:
+| Asset Type | Query Types |
+|------------|-------------|
+| Blueprint | list-events, list-functions, variables, comments, flow-tagged |
+| PCG Graph | list-nodes, connections, input-output |
+| Behavior Tree | list-tasks, list-decorators, blackboard |
+| Material | textures, shader-inputs |
+| Niagara | emitters, modules |
+"""
+
+            # Also add a dedicated bp_toolkit topic
+            topics["bp_toolkit"] = """
+BP_TOOLKIT - Offline Asset Manipulation Tools
+
+These 14 tools work WITHOUT Unreal running. They manipulate UAssetAPI JSON exports
+directly, using UAssetGUI for uasset <-> JSON conversion.
+
+EXPORT/IMPORT:
+- bp_export_asset(uasset_path) - Export .uasset to .json (uses UAssetGUI)
+- bp_import_asset(json_path) - Import .json back to .uasset
+
+ANALYSIS:
+- bp_detect_type(json_path) - Detect asset type (Blueprint, PCG, DataAsset, etc.)
+- bp_get_info(json_path) - Get summary (exports, imports, graphs, namemap)
+- bp_list_properties(json_path, export_index=0) - List all properties with types
+- bp_get_property(json_path, property_path) - Get property by path
+- bp_find(json_path, pattern) - Search namemap and exports
+- bp_query(json_path, query_type) - Type-specific queries
+
+MODIFICATION:
+- bp_set_property(json_path, property_path, value) - Modify property
+- bp_clone_asset(json_path, new_name) - Clone with new name
+- bp_add_comment(json_path, graph_name, text, x, y) - Add comment node
+- bp_clone_node(json_path, node_name) - Clone existing node
+- bp_list_graphs(json_path) - List graphs in Blueprint/PCG
+
+PARSING:
+- bp_parse(json_path, output_dir) - Full parsing with call graphs
+
+PROPERTY PATH SYNTAX:
+- Simple: "BiomePriority"
+- Nested struct: "BiomeDefinition.BiomePriority"
+- Array access: "BiomeAssets[0].Generator"
+- Deep nesting: "BiomeAssets[0].FilterOptions.MinScale"
+
+Note: Property names from Blueprints include GUID suffixes internally
+(e.g., "BiomePriority_29_308259B0449F...") but you can use just the base name.
+
+SETUP REQUIRED:
+1. git submodule update --init --recursive
+2. cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
+"""
+    except ImportError:
+        pass  # bp_toolkit not available, skip additional help
 
     topic = topic.lower().strip() if topic else ""
 
