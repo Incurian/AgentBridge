@@ -224,6 +224,10 @@ Blueprint logic, analyzing asset dependencies, and documenting complex Blueprint
 
 **Location:** `bp_toolkit/` (submodule from `D:\repos\bp_toolkit.git`)
 
+**MCP Integration:** When bp_toolkit is present, the MCP server automatically exposes 14 additional
+tools (`bp_export_asset`, `bp_import_asset`, `bp_detect_type`, `bp_get_property`, etc.) for offline
+asset manipulation. No Unreal connectivity required - these tools work directly on JSON exports.
+
 #### Setup
 
 ```bash

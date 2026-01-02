@@ -5,7 +5,7 @@
 ## Purpose
 
 This package provides the Python-side tools for AI agents to interact with Unreal:
-- MCP server with 90 tools across 12 services
+- MCP server with 104 tools across 13 services (90 core + 14 bp_toolkit when submodule present)
 - gRPC client for Tempo integration
 - HTTP client as fallback
 
@@ -48,7 +48,8 @@ Python/
 │       ├── tempo_labels.py         # 1 tool
 │       ├── tempo_sensors.py        # 1 tool
 │       ├── tempo_map_query.py      # 3 tools
-│       └── tempo_agents_editor.py  # 1 tool
+│       ├── tempo_agents_editor.py  # 1 tool
+│       └── bp_toolkit.py           # 14 tools (optional, requires submodule)
 ├── agentbridge/            # HTTP client package
 │   ├── __init__.py
 │   └── client.py
@@ -152,7 +153,7 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
   D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c "from mcp.services import agentbridge; print('OK')"
 ```
 
-## Available Tools (90 total)
+## Available Tools (90 core + 14 optional)
 
 ### AgentBridge Service (37 tools)
 - `help`, `list_worlds`, `set_target_world`
@@ -171,6 +172,35 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 - Geographic: `tempo_set_date`, `tempo_set_time_of_day`
 - Movement: `tempo_command_vehicle`, `tempo_pawn_move_to`
 - And more...
+
+### bp_toolkit Service (14 tools, optional)
+
+**Only available when bp_toolkit submodule is present.** These are LOCAL operations
+(no Unreal connectivity required) for offline asset manipulation using UAssetGUI.
+
+| Tool | Description |
+|------|-------------|
+| `bp_export_asset` | Export .uasset to JSON via UAssetGUI |
+| `bp_import_asset` | Import JSON back to .uasset |
+| `bp_detect_type` | Detect asset type (Blueprint, PCG, DataAsset, etc.) |
+| `bp_get_info` | Get asset summary (exports, imports, graphs) |
+| `bp_list_properties` | List all properties with types/values |
+| `bp_get_property` | Get property by path (`BiomeDefinition.BiomePriority`) |
+| `bp_set_property` | Set property by path |
+| `bp_clone_asset` | Clone asset with new name |
+| `bp_list_graphs` | List graphs in Blueprint/PCG |
+| `bp_add_comment` | Add comment node to Blueprint graph |
+| `bp_clone_node` | Clone existing Blueprint node |
+| `bp_find` | Search asset namemap and exports |
+| `bp_query` | Type-specific queries (list-events, list-tasks, textures) |
+| `bp_parse` | Full Blueprint parsing with call graphs |
+
+**Submodule setup:**
+```bash
+cd D:/tempo/TempoSample/Plugins/AgentBridge
+git submodule update --init --recursive
+cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
+```
 
 ## Component Names in Property Paths
 
@@ -207,6 +237,7 @@ set_property(actor="MyActor", path="RootComponent.RelativeLocation", value="(X=1
 - [x] Component operations (attach, detach, transforms)
 - [x] File operations (read, write, list, copy)
 - [x] Blueprint class normalization (auto-add `_C` suffix)
+- [x] bp_toolkit MCP integration (14 tools for offline asset manipulation)
 
 ## Todos
 

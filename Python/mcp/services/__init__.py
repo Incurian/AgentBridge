@@ -57,5 +57,9 @@ def _auto_register():
     from . import tempo_map_query
     from . import tempo_agents_editor
 
+    # Optional: bp_toolkit (only if submodule present)
+    # This import is safe - the module handles detection internally
+    from . import bp_toolkit
+
 
 _auto_register()
