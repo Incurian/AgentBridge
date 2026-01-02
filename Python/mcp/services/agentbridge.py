@@ -1513,8 +1513,8 @@ def _extract_property_value(prop_value) -> Any:
     # ARRAY (13)
     elif ptype == 13:
         # Return array elements
-        if hasattr(prop_value, 'array_value') and prop_value.array_value:
-            return [_extract_property_value(elem) for elem in prop_value.array_value]
+        if hasattr(prop_value, 'array_values') and prop_value.array_values:
+            return [_extract_property_value(elem) for elem in prop_value.array_values]
         return prop_value.string_value or []
 
     # Unknown - fallback to string_value
@@ -2217,6 +2217,8 @@ When you need to size a BoxComponent volume (PCGVolume, TriggerVolume, etc.):
 2. Find the component name:
    tempo_get_components(actor="MyVolume")
    # Common names: "Volume", "BoxComponent0", "CollisionComponent"
+   # WARNING: BP classes may use custom names! E.g., BP_PCGBiomeVolume uses "BiomeVolume"
+   # ALWAYS verify with tempo_get_components() first!
 
 3. Set BoxExtent (HALF-SIZE in Unreal units/cm):
    tempo_set_vector_property(actor="MyVolume", component="Volume",
@@ -2300,6 +2302,8 @@ SIZING STEPS:
 1. Find the component instance name:
    tempo_get_components(actor="MyVolume")
    # Common names: "Volume", "BoxComponent0", "CollisionComponent"
+   # WARNING: BP classes may use custom names! E.g., BP_PCGBiomeVolume uses "BiomeVolume"
+   # ALWAYS verify with tempo_get_components() first!
 
 2. Set BoxExtent (HALF-SIZE):
    tempo_set_vector_property(actor="MyVolume", component="Volume",
@@ -2681,6 +2685,7 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
                     "name": p.name,
                     "display_name": p.display_name,
                     "type_name": p.type_name,
+                    "element_type": p.element_type if p.element_type else None,
                     "category": p.category,
                     "is_read_only": p.is_read_only,
                     "is_blueprint_visible": p.is_blueprint_visible,

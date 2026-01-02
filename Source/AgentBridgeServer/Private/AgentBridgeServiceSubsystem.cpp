@@ -420,11 +420,17 @@ namespace
 							}
 						}
 					}
+					else if (Elem->Type == EJson::Null)
+					{
+						// Explicit null element
+						ElemValue->set_type(PROPERTY_TYPE_STRING);
+						ElemValue->set_string_value("");
+					}
 					else
 					{
-						// Other types - store as string placeholder
+						// Other types (nested arrays, etc.) - store as string placeholder
 						ElemValue->set_type(PROPERTY_TYPE_STRING);
-						ElemValue->set_string_value("(array/null)");
+						ElemValue->set_string_value("(nested/complex)");
 					}
 				}
 			}

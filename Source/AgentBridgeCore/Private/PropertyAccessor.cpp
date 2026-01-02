@@ -595,6 +595,17 @@ FAgentPropertyValue FPropertyAccessor::ReadArrayProperty(
 			ElementValue.Type = EAgentPropertyType::String;
 			ElementValue.StringValue = StrProp->GetPropertyValue(ElementValuePtr);
 		}
+		else if (FNameProperty* NameProp = CastField<FNameProperty>(InnerProp))
+		{
+			// FName array elements (e.g., Tags array)
+			ElementValue.Type = EAgentPropertyType::Name;
+			ElementValue.StringValue = NameProp->GetPropertyValue(ElementValuePtr).ToString();
+		}
+		else if (FTextProperty* TextProp = CastField<FTextProperty>(InnerProp))
+		{
+			ElementValue.Type = EAgentPropertyType::Text;
+			ElementValue.StringValue = TextProp->GetPropertyValue(ElementValuePtr).ToString();
+		}
 		else if (FStructProperty* StructProp = CastField<FStructProperty>(InnerProp))
 		{
 			// For structs, ElementPtr points directly to the struct data

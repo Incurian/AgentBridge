@@ -12,6 +12,7 @@
 #include "UObject/UObjectIterator.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "AssetRegistry/IAssetRegistry.h"
+#include "Engine/Blueprint.h"
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
 #include "Dom/JsonObject.h"
@@ -1112,7 +1113,11 @@ void FCommandExecutor::Execute(const FListClassesCommand& Command, FListClassesR
 		}
 	}
 
+	// Track class paths we've already added to avoid duplicates
+	TSet<FString> AddedClassPaths;
 	int32 Count = 0;
+
+	// Phase 1: Iterate loaded classes (fast, no asset loading)
 	for (TObjectIterator<UClass> It; It && Count < Command.Limit; ++It)
 	{
 		UClass* Class = *It;
@@ -1133,7 +1138,7 @@ void FCommandExecutor::Execute(const FListClassesCommand& Command, FListClassesR
 			continue;
 		}
 
-		if (!Command.NamePattern.IsEmpty() && !Class->GetName().Contains(Command.NamePattern))
+		if (!Command.NamePattern.IsEmpty() && !Class->GetName().MatchesWildcard(Command.NamePattern, ESearchCase::IgnoreCase))
 		{
 			continue;
 		}
@@ -1150,8 +1155,77 @@ void FCommandExecutor::Execute(const FListClassesCommand& Command, FListClassesR
 			Info.ParentClassName = Class->GetSuperClass()->GetName();
 		}
 
+		AddedClassPaths.Add(Info.ClassPath);
 		Response.Classes.Add(Info);
 		Count++;
+	}
+
+	// Phase 2: If requesting Blueprints and we have room, check AssetRegistry for unloaded BP classes
+	// This finds engine plugin BPs that aren't loaded into memory yet (e.g., PCGBiome classes)
+	if (Command.bIncludeBlueprint && Count < Command.Limit && !Command.NamePattern.IsEmpty())
+	{
+		FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+		IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+
+		// Query for Blueprint assets
+		TArray<FAssetData> BlueprintAssets;
+		AssetRegistry.GetAssetsByClass(UBlueprint::StaticClass()->GetClassPathName(), BlueprintAssets, true);
+
+		for (const FAssetData& AssetData : BlueprintAssets)
+		{
+			if (Count >= Command.Limit)
+			{
+				break;
+			}
+
+			// Get the generated class name (without loading the asset)
+			FString GeneratedClassName;
+			FAssetDataTagMapSharedView::FFindTagResult GeneratedClassResult =
+				AssetData.TagsAndValues.FindTag(FBlueprintTags::GeneratedClassPath);
+			if (GeneratedClassResult.IsSet())
+			{
+				GeneratedClassName = GeneratedClassResult.GetValue();
+			}
+
+			// Check if we already have this class from the loaded iteration
+			if (AddedClassPaths.Contains(GeneratedClassName))
+			{
+				continue;
+			}
+
+			// Extract the simple class name from the path
+			FString SimpleClassName = FPackageName::GetShortName(GeneratedClassName);
+			SimpleClassName.RemoveFromEnd(TEXT("_C"));
+
+			// Apply name pattern filter (supports wildcards like *Light*, BP_*)
+			if (!SimpleClassName.MatchesWildcard(Command.NamePattern, ESearchCase::IgnoreCase))
+			{
+				continue;
+			}
+
+			// Load the class to verify inheritance
+			UClass* GeneratedClass = LoadClass<UObject>(nullptr, *GeneratedClassName);
+			if (!GeneratedClass || !GeneratedClass->IsChildOf(BaseClass))
+			{
+				continue;
+			}
+
+			FClassInfo Info;
+			Info.ClassName = SimpleClassName;
+			Info.DisplayName = SimpleClassName;
+			Info.ClassPath = GeneratedClassName;
+			Info.bIsBlueprint = true;
+			Info.bIsAbstract = GeneratedClass->HasAnyClassFlags(CLASS_Abstract);
+
+			if (GeneratedClass->GetSuperClass())
+			{
+				Info.ParentClassName = GeneratedClass->GetSuperClass()->GetName();
+			}
+
+			AddedClassPaths.Add(Info.ClassPath);
+			Response.Classes.Add(Info);
+			Count++;
+		}
 	}
 
 	Response.bSuccess = true;
