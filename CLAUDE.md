@@ -57,6 +57,7 @@ be minimal and obvious. If something "should just work," make it work automatica
 
 | What | Where |
 |------|-------|
+| GitHub (private) | https://github.com/Incurian/AgentBridge |
 | gRPC Port | 10001 (via Tempo) |
 | HTTP Port | 8080 (fallback) |
 | Python Env | `D:/tempo/TempoSample/TempoEnv/Scripts/python.exe` |
@@ -202,7 +203,8 @@ D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_client.py
 | Project Logs | `D:/tempo/TempoSample/Saved/Logs/TempoSample.log` |
 | Tempo Plugin | `D:/tempo/TempoSample/Plugins/Tempo` |
 | bp_toolkit | `D:/tempo/TempoSample/Plugins/AgentBridge/bp_toolkit` (submodule) |
-| bp_toolkit repo | `D:/repos/bp_toolkit.git` (local bare repo) |
+| bp_toolkit GitHub | https://github.com/Incurian/BP_Toolkit |
+| bp_toolkit local | `D:/repos/bp_toolkit.git` (backup bare repo) |
 | UAssetGUI.exe | `bp_toolkit/vendor/UAssetGUI/UAssetGUI/bin/Release/net8.0-windows/UAssetGUI.exe` |
 
 ## Session Continuity
@@ -242,7 +244,7 @@ Help topics in `agentbridge.py`:
 A Python toolkit for parsing, modifying, and creating Unreal Engine assets via JSON manipulation.
 Works offline without Unreal running.
 
-**Location:** `bp_toolkit/` (submodule from `D:\repos\bp_toolkit.git`)
+**Location:** `bp_toolkit/` (submodule from https://github.com/Incurian/BP_Toolkit)
 
 **MCP Integration:** When bp_toolkit is present, the MCP server automatically exposes 14 additional
 tools for offline asset manipulation. Use `help(topic="bp_toolkit")` for tool reference.
@@ -305,7 +307,7 @@ cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 - **Build artifacts are gitignored** - Binary exists locally but not in repo
 - **UAssetGUI requires .NET 8+** - Build once after submodule init
 - **JSON files can be large** - 40-100MB for complex Blueprints, gitignored by default
-- **Local bare repo** at `D:\repos\bp_toolkit.git` - Push changes there
+- **GitHub is primary** - `git push` goes to GitHub, `local` remote is backup
 
 ---
 
