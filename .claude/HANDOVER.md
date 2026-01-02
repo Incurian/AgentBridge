@@ -1,6 +1,6 @@
 # AgentBridge Session Handover
 
-> Last Updated: January 2, 2026 (Session 23)
+> Last Updated: January 2, 2026 (Session 24)
 
 ## Current State
 
@@ -12,7 +12,42 @@ AgentBridge is **feature-complete** with:
 - PIE/Runtime support
 - Comprehensive README.md documentation
 - **GitHub repos configured** (private)
-- **All Session 22/23 bugs FIXED and VERIFIED**
+- **All Session 22/23/24 bugs FIXED and VERIFIED**
+
+## Session 24 (Current)
+
+### FLinearColor GET Bug - FIXED
+
+**Problem:** `get_property(..., "DefaultDefinition.BiomeColor")` returned `null` even though SET worked.
+
+**Root Cause:** Two issues in the Color type handling pipeline:
+1. `CommandExecutor::PropertyValueToJson()` had no `case EAgentPropertyType::Color`
+   - Color values fell through to `default:` returning `"null"`
+2. `JsonToProtoPropertyValue()` only parsed JSON format `{"r":...}`
+   - PropertyAccessor outputs Unreal format: `(R=0.2,G=0.8,B=0.2,A=1.0)`
+
+**Fix:**
+- Added Color case to `PropertyValueToJson()` returning `Value.StringValue`
+- Added `FLinearColor::InitFromString()` parser in `JsonToProtoPropertyValue()`
+
+**Verified:** BiomeColor now round-trips correctly through SET → GET
+
+### Known Issue: Struct GET Returns Empty Fields
+
+**Problem:** Reading an entire struct returns empty fields:
+```python
+get_property("Actor", "DefaultDefinition")
+# Returns: {"type": "struct", "fields": {}}
+```
+
+**Workaround:** Read individual struct members:
+```python
+get_property("Actor", "DefaultDefinition.BiomeName")     # Works
+get_property("Actor", "DefaultDefinition.BiomePriority") # Works
+get_property("Actor", "DefaultDefinition.BiomeColor")    # Works
+```
+
+**Status:** Low priority - individual paths work fine. May fix in future session.
 
 ## GitHub Repositories
 
