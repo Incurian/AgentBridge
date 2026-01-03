@@ -78,6 +78,12 @@ AGENTBRIDGESERVER_API extern AttachComponentRequestDefaultTypeInternal _AttachCo
 class BoundingBox;
 struct BoundingBoxDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern BoundingBoxDefaultTypeInternal _BoundingBox_default_instance_;
+class CallAssetFunctionRequest;
+struct CallAssetFunctionRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern CallAssetFunctionRequestDefaultTypeInternal _CallAssetFunctionRequest_default_instance_;
+class CallAssetFunctionResponse;
+struct CallAssetFunctionResponseDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern CallAssetFunctionResponseDefaultTypeInternal _CallAssetFunctionResponse_default_instance_;
 class CallFunctionRequest;
 struct CallFunctionRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern CallFunctionRequestDefaultTypeInternal _CallFunctionRequest_default_instance_;
@@ -123,6 +129,12 @@ AGENTBRIDGESERVER_API extern DetachActorRequestDefaultTypeInternal _DetachActorR
 class DetachComponentRequest;
 struct DetachComponentRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DetachComponentRequestDefaultTypeInternal _DetachComponentRequest_default_instance_;
+class DuplicateActorRequest;
+struct DuplicateActorRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern DuplicateActorRequestDefaultTypeInternal _DuplicateActorRequest_default_instance_;
+class DuplicateActorResponse;
+struct DuplicateActorResponseDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern DuplicateActorResponseDefaultTypeInternal _DuplicateActorResponse_default_instance_;
 class DuplicateAssetRequest;
 struct DuplicateAssetRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DuplicateAssetRequestDefaultTypeInternal _DuplicateAssetRequest_default_instance_;
@@ -503,7 +515,7 @@ class AGENTBRIDGESERVER_API WriteProjectFileResponse final :
                &_WriteProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    78;
+    82;
 
   friend void swap(WriteProjectFileResponse& a, WriteProjectFileResponse& b) {
     a.Swap(&b);
@@ -708,7 +720,7 @@ class AGENTBRIDGESERVER_API WriteProjectFileRequest final :
                &_WriteProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    77;
+    81;
 
   friend void swap(WriteProjectFileRequest& a, WriteProjectFileRequest& b) {
     a.Swap(&b);
@@ -1371,7 +1383,7 @@ class AGENTBRIDGESERVER_API SetActorPropertiesResponse final :
                &_SetActorPropertiesResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    23;
 
   friend void swap(SetActorPropertiesResponse& a, SetActorPropertiesResponse& b) {
     a.Swap(&b);
@@ -1606,7 +1618,7 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsRequest final :
                &_SearchConsoleCommandsRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    56;
+    60;
 
   friend void swap(SearchConsoleCommandsRequest& a, SearchConsoleCommandsRequest& b) {
     a.Swap(&b);
@@ -2022,7 +2034,7 @@ class AGENTBRIDGESERVER_API SaveAssetResponse final :
                &_SaveAssetResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    61;
+    65;
 
   friend void swap(SaveAssetResponse& a, SaveAssetResponse& b) {
     a.Swap(&b);
@@ -2233,7 +2245,7 @@ class AGENTBRIDGESERVER_API SaveAssetRequest final :
                &_SaveAssetRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    60;
+    64;
 
   friend void swap(SaveAssetRequest& a, SaveAssetRequest& b) {
     a.Swap(&b);
@@ -2426,7 +2438,7 @@ class AGENTBRIDGESERVER_API SaveActorAsBlueprintResponse final :
                &_SaveActorAsBlueprintResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    63;
+    67;
 
   friend void swap(SaveActorAsBlueprintResponse& a, SaveActorAsBlueprintResponse& b) {
     a.Swap(&b);
@@ -2637,7 +2649,7 @@ class AGENTBRIDGESERVER_API SaveActorAsBlueprintRequest final :
                &_SaveActorAsBlueprintRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    62;
+    66;
 
   friend void swap(SaveActorAsBlueprintRequest& a, SaveActorAsBlueprintRequest& b) {
     a.Swap(&b);
@@ -2866,7 +2878,7 @@ class AGENTBRIDGESERVER_API ReadProjectFileResponse final :
                &_ReadProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    76;
+    80;
 
   friend void swap(ReadProjectFileResponse& a, ReadProjectFileResponse& b) {
     a.Swap(&b);
@@ -3101,7 +3113,7 @@ class AGENTBRIDGESERVER_API ReadProjectFileRequest final :
                &_ReadProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    75;
+    79;
 
   friend void swap(ReadProjectFileRequest& a, ReadProjectFileRequest& b) {
     a.Swap(&b);
@@ -3306,7 +3318,7 @@ class AGENTBRIDGESERVER_API QueryLandscapeRequest final :
                &_QueryLandscapeRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    49;
 
   friend void swap(QueryLandscapeRequest& a, QueryLandscapeRequest& b) {
     a.Swap(&b);
@@ -3740,7 +3752,7 @@ class AGENTBRIDGESERVER_API PropertyInfo final :
                &_PropertyInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    31;
 
   friend void swap(PropertyInfo& a, PropertyInfo& b) {
     a.Swap(&b);
@@ -4201,7 +4213,7 @@ class AGENTBRIDGESERVER_API ListProjectDirectoryRequest final :
                &_ListProjectDirectoryRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    80;
+    84;
 
   friend void swap(ListProjectDirectoryRequest& a, ListProjectDirectoryRequest& b) {
     a.Swap(&b);
@@ -4424,7 +4436,7 @@ class AGENTBRIDGESERVER_API ListClassesRequest final :
                &_ListClassesRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    35;
 
   friend void swap(ListClassesRequest& a, ListClassesRequest& b) {
     a.Swap(&b);
@@ -4659,7 +4671,7 @@ class AGENTBRIDGESERVER_API IsWorldPartitionedResponse final :
                &_IsWorldPartitionedResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    44;
 
   friend void swap(IsWorldPartitionedResponse& a, IsWorldPartitionedResponse& b) {
     a.Swap(&b);
@@ -4851,7 +4863,7 @@ class AGENTBRIDGESERVER_API IsWorldPartitionedRequest final :
                &_IsWorldPartitionedRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    43;
 
   friend void swap(IsWorldPartitionedRequest& a, IsWorldPartitionedRequest& b) {
     a.Swap(&b);
@@ -4988,7 +5000,7 @@ class AGENTBRIDGESERVER_API GetStreamingStateRequest final :
                &_GetStreamingStateRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    43;
+    47;
 
   friend void swap(GetStreamingStateRequest& a, GetStreamingStateRequest& b) {
     a.Swap(&b);
@@ -5169,7 +5181,7 @@ class AGENTBRIDGESERVER_API GetPropertyPathRequest final :
                &_GetPropertyPathRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    24;
 
   friend void swap(GetPropertyPathRequest& a, GetPropertyPathRequest& b) {
     a.Swap(&b);
@@ -5367,7 +5379,7 @@ class AGENTBRIDGESERVER_API GetLandscapeBoundsRequest final :
                &_GetLandscapeBoundsRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    51;
 
   friend void swap(GetLandscapeBoundsRequest& a, GetLandscapeBoundsRequest& b) {
     a.Swap(&b);
@@ -5504,7 +5516,7 @@ class AGENTBRIDGESERVER_API GetDataLayersResponse final :
                &_GetDataLayersResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    50;
+    54;
 
   friend void swap(GetDataLayersResponse& a, GetDataLayersResponse& b) {
     a.Swap(&b);
@@ -5696,7 +5708,7 @@ class AGENTBRIDGESERVER_API GetDataLayersRequest final :
                &_GetDataLayersRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    49;
+    53;
 
   friend void swap(GetDataLayersRequest& a, GetDataLayersRequest& b) {
     a.Swap(&b);
@@ -5833,7 +5845,7 @@ class AGENTBRIDGESERVER_API GetComponentTransformRequest final :
                &_GetComponentTransformRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    68;
+    72;
 
   friend void swap(GetComponentTransformRequest& a, GetComponentTransformRequest& b) {
     a.Swap(&b);
@@ -6044,7 +6056,7 @@ class AGENTBRIDGESERVER_API GetClassSchemaRequest final :
                &_GetClassSchemaRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    37;
 
   friend void swap(GetClassSchemaRequest& a, GetClassSchemaRequest& b) {
     a.Swap(&b);
@@ -6249,7 +6261,7 @@ class AGENTBRIDGESERVER_API GetAssetThumbnailResponse final :
                &_GetAssetThumbnailResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    67;
+    71;
 
   friend void swap(GetAssetThumbnailResponse& a, GetAssetThumbnailResponse& b) {
     a.Swap(&b);
@@ -6484,7 +6496,7 @@ class AGENTBRIDGESERVER_API GetAssetThumbnailRequest final :
                &_GetAssetThumbnailRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    66;
+    70;
 
   friend void swap(GetAssetThumbnailRequest& a, GetAssetThumbnailRequest& b) {
     a.Swap(&b);
@@ -6689,7 +6701,7 @@ class AGENTBRIDGESERVER_API GetActorsInDataLayerRequest final :
                &_GetActorsInDataLayerRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    51;
+    55;
 
   friend void swap(GetActorsInDataLayerRequest& a, GetActorsInDataLayerRequest& b) {
     a.Swap(&b);
@@ -7111,7 +7123,7 @@ class AGENTBRIDGESERVER_API FindClassRequest final :
                &_FindClassRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    33;
 
   friend void swap(FindClassRequest& a, FindClassRequest& b) {
     a.Swap(&b);
@@ -7292,7 +7304,7 @@ class AGENTBRIDGESERVER_API FileInfo final :
                &_FileInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    79;
+    83;
 
   friend void swap(FileInfo& a, FileInfo& b) {
     a.Swap(&b);
@@ -7533,7 +7545,7 @@ class AGENTBRIDGESERVER_API ExecuteConsoleCommandResponse final :
                &_ExecuteConsoleCommandResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    54;
+    58;
 
   friend void swap(ExecuteConsoleCommandResponse& a, ExecuteConsoleCommandResponse& b) {
     a.Swap(&b);
@@ -7726,7 +7738,7 @@ class AGENTBRIDGESERVER_API ExecuteConsoleCommandRequest final :
                &_ExecuteConsoleCommandRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    53;
+    57;
 
   friend void swap(ExecuteConsoleCommandRequest& a, ExecuteConsoleCommandRequest& b) {
     a.Swap(&b);
@@ -7907,7 +7919,7 @@ class AGENTBRIDGESERVER_API DuplicateAssetResponse final :
                &_DuplicateAssetResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    65;
+    69;
 
   friend void swap(DuplicateAssetResponse& a, DuplicateAssetResponse& b) {
     a.Swap(&b);
@@ -8118,7 +8130,7 @@ class AGENTBRIDGESERVER_API DuplicateAssetRequest final :
                &_DuplicateAssetRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    64;
+    68;
 
   friend void swap(DuplicateAssetRequest& a, DuplicateAssetRequest& b) {
     a.Swap(&b);
@@ -8335,7 +8347,7 @@ class AGENTBRIDGESERVER_API DetachComponentRequest final :
                &_DetachComponentRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    73;
+    77;
 
   friend void swap(DetachComponentRequest& a, DetachComponentRequest& b) {
     a.Swap(&b);
@@ -8546,7 +8558,7 @@ class AGENTBRIDGESERVER_API DetachActorRequest final :
                &_DetachActorRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    74;
+    78;
 
   friend void swap(DetachActorRequest& a, DetachActorRequest& b) {
     a.Swap(&b);
@@ -8739,7 +8751,7 @@ class AGENTBRIDGESERVER_API DeleteProjectFileRequest final :
                &_DeleteProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    84;
+    88;
 
   friend void swap(DeleteProjectFileRequest& a, DeleteProjectFileRequest& b) {
     a.Swap(&b);
@@ -9113,7 +9125,7 @@ class AGENTBRIDGESERVER_API CreateAssetResponse final :
                &_CreateAssetResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    59;
+    63;
 
   friend void swap(CreateAssetResponse& a, CreateAssetResponse& b) {
     a.Swap(&b);
@@ -9342,7 +9354,7 @@ class AGENTBRIDGESERVER_API CopyProjectFileResponse final :
                &_CopyProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    83;
+    87;
 
   friend void swap(CopyProjectFileResponse& a, CopyProjectFileResponse& b) {
     a.Swap(&b);
@@ -9553,7 +9565,7 @@ class AGENTBRIDGESERVER_API CopyProjectFileRequest final :
                &_CopyProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    82;
+    86;
 
   friend void swap(CopyProjectFileRequest& a, CopyProjectFileRequest& b) {
     a.Swap(&b);
@@ -9764,7 +9776,7 @@ class AGENTBRIDGESERVER_API ConsoleCommandInfo final :
                &_ConsoleCommandInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    55;
+    59;
 
   friend void swap(ConsoleCommandInfo& a, ConsoleCommandInfo& b) {
     a.Swap(&b);
@@ -10222,7 +10234,7 @@ class AGENTBRIDGESERVER_API ClassInfo final :
                &_ClassInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    32;
 
   friend void swap(ClassInfo& a, ClassInfo& b) {
     a.Swap(&b);
@@ -10523,7 +10535,7 @@ class AGENTBRIDGESERVER_API AttachComponentRequest final :
                &_AttachComponentRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    71;
+    75;
 
   friend void swap(AttachComponentRequest& a, AttachComponentRequest& b) {
     a.Swap(&b);
@@ -10794,7 +10806,7 @@ class AGENTBRIDGESERVER_API AttachActorRequest final :
                &_AttachActorRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    72;
+    76;
 
   friend void swap(AttachActorRequest& a, AttachActorRequest& b) {
     a.Swap(&b);
@@ -11065,7 +11077,7 @@ class AGENTBRIDGESERVER_API SearchConsoleCommandsResponse final :
                &_SearchConsoleCommandsResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    57;
+    61;
 
   friend void swap(SearchConsoleCommandsResponse& a, SearchConsoleCommandsResponse& b) {
     a.Swap(&b);
@@ -11467,7 +11479,7 @@ class AGENTBRIDGESERVER_API ListProjectDirectoryResponse final :
                &_ListProjectDirectoryResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    81;
+    85;
 
   friend void swap(ListProjectDirectoryResponse& a, ListProjectDirectoryResponse& b) {
     a.Swap(&b);
@@ -11692,7 +11704,7 @@ class AGENTBRIDGESERVER_API ListClassesResponse final :
                &_ListClassesResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    36;
 
   friend void swap(ListClassesResponse& a, ListClassesResponse& b) {
     a.Swap(&b);
@@ -11887,7 +11899,7 @@ class AGENTBRIDGESERVER_API GetLandscapeBoundsResponse final :
                &_GetLandscapeBoundsResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    48;
+    52;
 
   friend void swap(GetLandscapeBoundsResponse& a, GetLandscapeBoundsResponse& b) {
     a.Swap(&b);
@@ -12161,7 +12173,7 @@ class AGENTBRIDGESERVER_API FunctionSignature final :
                &_FunctionSignature_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    38;
 
   friend void swap(FunctionSignature& a, FunctionSignature& b) {
     a.Swap(&b);
@@ -12446,7 +12458,7 @@ class AGENTBRIDGESERVER_API FindClassResponse final :
                &_FindClassResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    34;
 
   friend void swap(FindClassResponse& a, FindClassResponse& b) {
     a.Swap(&b);
@@ -12627,7 +12639,7 @@ class AGENTBRIDGESERVER_API BoundingBox final :
                &_BoundingBox_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    41;
 
   friend void swap(BoundingBox& a, BoundingBox& b) {
     a.Swap(&b);
@@ -13040,7 +13052,7 @@ class AGENTBRIDGESERVER_API SetComponentTransformRequest final :
                &_SetComponentTransformRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    70;
+    74;
 
   friend void swap(SetComponentTransformRequest& a, SetComponentTransformRequest& b) {
     a.Swap(&b);
@@ -13281,7 +13293,7 @@ class AGENTBRIDGESERVER_API SetActorTransformRequest final :
                &_SetActorTransformRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    21;
 
   friend void swap(SetActorTransformRequest& a, SetActorTransformRequest& b) {
     a.Swap(&b);
@@ -13504,7 +13516,7 @@ class AGENTBRIDGESERVER_API QueryAllActorsRequest final :
                &_QueryAllActorsRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    45;
 
   friend void swap(QueryAllActorsRequest& a, QueryAllActorsRequest& b) {
     a.Swap(&b);
@@ -14360,7 +14372,7 @@ class AGENTBRIDGESERVER_API GetComponentTransformResponse final :
                &_GetComponentTransformResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    69;
+    73;
 
   friend void swap(GetComponentTransformResponse& a, GetComponentTransformResponse& b) {
     a.Swap(&b);
@@ -14506,6 +14518,223 @@ class AGENTBRIDGESERVER_API GetComponentTransformResponse final :
     ::google::protobuf_tempo::internal::ArenaStringPtr error_message_;
     ::AgentBridgeServer::ActorTransform* transform_;
     bool success_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API DuplicateActorRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.DuplicateActorRequest) */ {
+ public:
+  inline DuplicateActorRequest() : DuplicateActorRequest(nullptr) {}
+  ~DuplicateActorRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR DuplicateActorRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline DuplicateActorRequest(const DuplicateActorRequest& from)
+      : DuplicateActorRequest(nullptr, from) {}
+  DuplicateActorRequest(DuplicateActorRequest&& from) noexcept
+    : DuplicateActorRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline DuplicateActorRequest& operator=(const DuplicateActorRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DuplicateActorRequest& operator=(DuplicateActorRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DuplicateActorRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DuplicateActorRequest* internal_default_instance() {
+    return reinterpret_cast<const DuplicateActorRequest*>(
+               &_DuplicateActorRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    19;
+
+  friend void swap(DuplicateActorRequest& a, DuplicateActorRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DuplicateActorRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DuplicateActorRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  DuplicateActorRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DuplicateActorRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const DuplicateActorRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const DuplicateActorRequest& from) {
+    DuplicateActorRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(DuplicateActorRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.DuplicateActorRequest";
+  }
+  protected:
+  explicit DuplicateActorRequest(::google::protobuf_tempo::Arena* arena);
+  DuplicateActorRequest(::google::protobuf_tempo::Arena* arena, const DuplicateActorRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kActorIdFieldNumber = 1,
+    kNewLabelFieldNumber = 3,
+    kNewTransformFieldNumber = 2,
+  };
+  // string actor_id = 1;
+  void clear_actor_id() ;
+  const std::string& actor_id() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_actor_id(Arg_&& arg, Args_... args);
+  std::string* mutable_actor_id();
+  PROTOBUF_NODISCARD std::string* release_actor_id();
+  void set_allocated_actor_id(std::string* value);
+
+  private:
+  const std::string& _internal_actor_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_actor_id(
+      const std::string& value);
+  std::string* _internal_mutable_actor_id();
+
+  public:
+  // string new_label = 3;
+  void clear_new_label() ;
+  const std::string& new_label() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_new_label(Arg_&& arg, Args_... args);
+  std::string* mutable_new_label();
+  PROTOBUF_NODISCARD std::string* release_new_label();
+  void set_allocated_new_label(std::string* value);
+
+  private:
+  const std::string& _internal_new_label() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_new_label(
+      const std::string& value);
+  std::string* _internal_mutable_new_label();
+
+  public:
+  // .AgentBridgeServer.ActorTransform new_transform = 2;
+  bool has_new_transform() const;
+  void clear_new_transform() ;
+  const ::AgentBridgeServer::ActorTransform& new_transform() const;
+  PROTOBUF_NODISCARD ::AgentBridgeServer::ActorTransform* release_new_transform();
+  ::AgentBridgeServer::ActorTransform* mutable_new_transform();
+  void set_allocated_new_transform(::AgentBridgeServer::ActorTransform* value);
+  void unsafe_arena_set_allocated_new_transform(::AgentBridgeServer::ActorTransform* value);
+  ::AgentBridgeServer::ActorTransform* unsafe_arena_release_new_transform();
+
+  private:
+  const ::AgentBridgeServer::ActorTransform& _internal_new_transform() const;
+  ::AgentBridgeServer::ActorTransform* _internal_mutable_new_transform();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.DuplicateActorRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      2, 3, 1,
+      65, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::HasBits<1> _has_bits_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr actor_id_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr new_label_;
+    ::AgentBridgeServer::ActorTransform* new_transform_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -14818,7 +15047,7 @@ class AGENTBRIDGESERVER_API ClassSchema final :
                &_ClassSchema_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    39;
 
   friend void swap(ClassSchema& a, ClassSchema& b) {
     a.Swap(&b);
@@ -15340,7 +15569,7 @@ class AGENTBRIDGESERVER_API StreamingActorInfo final :
                &_StreamingActorInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    42;
 
   friend void swap(StreamingActorInfo& a, StreamingActorInfo& b) {
     a.Swap(&b);
@@ -16058,7 +16287,7 @@ class AGENTBRIDGESERVER_API SetPropertyPathRequest final :
                &_SetPropertyPathRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    26;
 
   friend void swap(SetPropertyPathRequest& a, SetPropertyPathRequest& b) {
     a.Swap(&b);
@@ -16275,7 +16504,7 @@ class AGENTBRIDGESERVER_API SetActorPropertiesRequest final :
                &_SetActorPropertiesRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    22;
 
   friend void swap(SetActorPropertiesRequest& a, SetActorPropertiesRequest& b) {
     a.Swap(&b);
@@ -16671,7 +16900,7 @@ class AGENTBRIDGESERVER_API GetPropertyPathResponse final :
                &_GetPropertyPathResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    25;
 
   friend void swap(GetPropertyPathResponse& a, GetPropertyPathResponse& b) {
     a.Swap(&b);
@@ -16870,7 +17099,7 @@ class AGENTBRIDGESERVER_API GetClassSchemaResponse final :
                &_GetClassSchemaResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    40;
 
   friend void swap(GetClassSchemaResponse& a, GetClassSchemaResponse& b) {
     a.Swap(&b);
@@ -16992,6 +17221,187 @@ class AGENTBRIDGESERVER_API GetClassSchemaResponse final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API DuplicateActorResponse final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.DuplicateActorResponse) */ {
+ public:
+  inline DuplicateActorResponse() : DuplicateActorResponse(nullptr) {}
+  ~DuplicateActorResponse() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR DuplicateActorResponse(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline DuplicateActorResponse(const DuplicateActorResponse& from)
+      : DuplicateActorResponse(nullptr, from) {}
+  DuplicateActorResponse(DuplicateActorResponse&& from) noexcept
+    : DuplicateActorResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline DuplicateActorResponse& operator=(const DuplicateActorResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DuplicateActorResponse& operator=(DuplicateActorResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DuplicateActorResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DuplicateActorResponse* internal_default_instance() {
+    return reinterpret_cast<const DuplicateActorResponse*>(
+               &_DuplicateActorResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(DuplicateActorResponse& a, DuplicateActorResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DuplicateActorResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DuplicateActorResponse* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  DuplicateActorResponse* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DuplicateActorResponse>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const DuplicateActorResponse& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const DuplicateActorResponse& from) {
+    DuplicateActorResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(DuplicateActorResponse* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.DuplicateActorResponse";
+  }
+  protected:
+  explicit DuplicateActorResponse(::google::protobuf_tempo::Arena* arena);
+  DuplicateActorResponse(::google::protobuf_tempo::Arena* arena, const DuplicateActorResponse& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDuplicatedActorFieldNumber = 1,
+  };
+  // .AgentBridgeServer.ActorDescriptor duplicated_actor = 1;
+  bool has_duplicated_actor() const;
+  void clear_duplicated_actor() ;
+  const ::AgentBridgeServer::ActorDescriptor& duplicated_actor() const;
+  PROTOBUF_NODISCARD ::AgentBridgeServer::ActorDescriptor* release_duplicated_actor();
+  ::AgentBridgeServer::ActorDescriptor* mutable_duplicated_actor();
+  void set_allocated_duplicated_actor(::AgentBridgeServer::ActorDescriptor* value);
+  void unsafe_arena_set_allocated_duplicated_actor(::AgentBridgeServer::ActorDescriptor* value);
+  ::AgentBridgeServer::ActorDescriptor* unsafe_arena_release_duplicated_actor();
+
+  private:
+  const ::AgentBridgeServer::ActorDescriptor& _internal_duplicated_actor() const;
+  ::AgentBridgeServer::ActorDescriptor* _internal_mutable_duplicated_actor();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.DuplicateActorResponse)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      0, 1, 1,
+      0, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::HasBits<1> _has_bits_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    ::AgentBridgeServer::ActorDescriptor* duplicated_actor_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API CreateAssetRequest final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.CreateAssetRequest) */ {
  public:
@@ -17051,7 +17461,7 @@ class AGENTBRIDGESERVER_API CreateAssetRequest final :
                &_CreateAssetRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    58;
+    62;
 
   friend void swap(CreateAssetRequest& a, CreateAssetRequest& b) {
     a.Swap(&b);
@@ -17306,7 +17716,7 @@ class AGENTBRIDGESERVER_API CallFunctionResponse final :
                &_CallFunctionResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    28;
 
   friend void swap(CallFunctionResponse& a, CallFunctionResponse& b) {
     a.Swap(&b);
@@ -17507,7 +17917,7 @@ class AGENTBRIDGESERVER_API CallFunctionRequest final :
                &_CallFunctionRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    27;
 
   friend void swap(CallFunctionRequest& a, CallFunctionRequest& b) {
     a.Swap(&b);
@@ -17678,6 +18088,462 @@ class AGENTBRIDGESERVER_API CallFunctionRequest final :
     ::google::protobuf_tempo::internal::ArenaStringPtr actor_id_;
     ::google::protobuf_tempo::internal::ArenaStringPtr class_name_;
     ::google::protobuf_tempo::internal::ArenaStringPtr function_name_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API CallAssetFunctionResponse final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.CallAssetFunctionResponse) */ {
+ public:
+  inline CallAssetFunctionResponse() : CallAssetFunctionResponse(nullptr) {}
+  ~CallAssetFunctionResponse() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR CallAssetFunctionResponse(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline CallAssetFunctionResponse(const CallAssetFunctionResponse& from)
+      : CallAssetFunctionResponse(nullptr, from) {}
+  CallAssetFunctionResponse(CallAssetFunctionResponse&& from) noexcept
+    : CallAssetFunctionResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline CallAssetFunctionResponse& operator=(const CallAssetFunctionResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CallAssetFunctionResponse& operator=(CallAssetFunctionResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CallAssetFunctionResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CallAssetFunctionResponse* internal_default_instance() {
+    return reinterpret_cast<const CallAssetFunctionResponse*>(
+               &_CallAssetFunctionResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    30;
+
+  friend void swap(CallAssetFunctionResponse& a, CallAssetFunctionResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CallAssetFunctionResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CallAssetFunctionResponse* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CallAssetFunctionResponse* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CallAssetFunctionResponse>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const CallAssetFunctionResponse& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const CallAssetFunctionResponse& from) {
+    CallAssetFunctionResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(CallAssetFunctionResponse* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.CallAssetFunctionResponse";
+  }
+  protected:
+  explicit CallAssetFunctionResponse(::google::protobuf_tempo::Arena* arena);
+  CallAssetFunctionResponse(::google::protobuf_tempo::Arena* arena, const CallAssetFunctionResponse& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kOutParametersFieldNumber = 3,
+    kReturnTypeNameFieldNumber = 2,
+    kReturnValueFieldNumber = 1,
+  };
+  // repeated .AgentBridgeServer.PropertyKeyValue out_parameters = 3;
+  int out_parameters_size() const;
+  private:
+  int _internal_out_parameters_size() const;
+
+  public:
+  void clear_out_parameters() ;
+  ::AgentBridgeServer::PropertyKeyValue* mutable_out_parameters(int index);
+  ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::PropertyKeyValue >*
+      mutable_out_parameters();
+  private:
+  const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>& _internal_out_parameters() const;
+  ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>* _internal_mutable_out_parameters();
+  public:
+  const ::AgentBridgeServer::PropertyKeyValue& out_parameters(int index) const;
+  ::AgentBridgeServer::PropertyKeyValue* add_out_parameters();
+  const ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::PropertyKeyValue >&
+      out_parameters() const;
+  // string return_type_name = 2;
+  void clear_return_type_name() ;
+  const std::string& return_type_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_return_type_name(Arg_&& arg, Args_... args);
+  std::string* mutable_return_type_name();
+  PROTOBUF_NODISCARD std::string* release_return_type_name();
+  void set_allocated_return_type_name(std::string* value);
+
+  private:
+  const std::string& _internal_return_type_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_return_type_name(
+      const std::string& value);
+  std::string* _internal_mutable_return_type_name();
+
+  public:
+  // .AgentBridgeServer.PropertyValue return_value = 1;
+  bool has_return_value() const;
+  void clear_return_value() ;
+  const ::AgentBridgeServer::PropertyValue& return_value() const;
+  PROTOBUF_NODISCARD ::AgentBridgeServer::PropertyValue* release_return_value();
+  ::AgentBridgeServer::PropertyValue* mutable_return_value();
+  void set_allocated_return_value(::AgentBridgeServer::PropertyValue* value);
+  void unsafe_arena_set_allocated_return_value(::AgentBridgeServer::PropertyValue* value);
+  ::AgentBridgeServer::PropertyValue* unsafe_arena_release_return_value();
+
+  private:
+  const ::AgentBridgeServer::PropertyValue& _internal_return_value() const;
+  ::AgentBridgeServer::PropertyValue* _internal_mutable_return_value();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.CallAssetFunctionResponse)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      2, 3, 2,
+      68, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::HasBits<1> _has_bits_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::PropertyKeyValue > out_parameters_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr return_type_name_;
+    ::AgentBridgeServer::PropertyValue* return_value_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API CallAssetFunctionRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.CallAssetFunctionRequest) */ {
+ public:
+  inline CallAssetFunctionRequest() : CallAssetFunctionRequest(nullptr) {}
+  ~CallAssetFunctionRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR CallAssetFunctionRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline CallAssetFunctionRequest(const CallAssetFunctionRequest& from)
+      : CallAssetFunctionRequest(nullptr, from) {}
+  CallAssetFunctionRequest(CallAssetFunctionRequest&& from) noexcept
+    : CallAssetFunctionRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline CallAssetFunctionRequest& operator=(const CallAssetFunctionRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CallAssetFunctionRequest& operator=(CallAssetFunctionRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CallAssetFunctionRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CallAssetFunctionRequest* internal_default_instance() {
+    return reinterpret_cast<const CallAssetFunctionRequest*>(
+               &_CallAssetFunctionRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    29;
+
+  friend void swap(CallAssetFunctionRequest& a, CallAssetFunctionRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CallAssetFunctionRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CallAssetFunctionRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CallAssetFunctionRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CallAssetFunctionRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const CallAssetFunctionRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const CallAssetFunctionRequest& from) {
+    CallAssetFunctionRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(CallAssetFunctionRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.CallAssetFunctionRequest";
+  }
+  protected:
+  explicit CallAssetFunctionRequest(::google::protobuf_tempo::Arena* arena);
+  CallAssetFunctionRequest(::google::protobuf_tempo::Arena* arena, const CallAssetFunctionRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kParametersFieldNumber = 4,
+    kAssetPathFieldNumber = 1,
+    kFunctionNameFieldNumber = 2,
+    kSubobjectPathFieldNumber = 3,
+  };
+  // repeated .AgentBridgeServer.PropertyKeyValue parameters = 4;
+  int parameters_size() const;
+  private:
+  int _internal_parameters_size() const;
+
+  public:
+  void clear_parameters() ;
+  ::AgentBridgeServer::PropertyKeyValue* mutable_parameters(int index);
+  ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::PropertyKeyValue >*
+      mutable_parameters();
+  private:
+  const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>& _internal_parameters() const;
+  ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>* _internal_mutable_parameters();
+  public:
+  const ::AgentBridgeServer::PropertyKeyValue& parameters(int index) const;
+  ::AgentBridgeServer::PropertyKeyValue* add_parameters();
+  const ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::PropertyKeyValue >&
+      parameters() const;
+  // string asset_path = 1;
+  void clear_asset_path() ;
+  const std::string& asset_path() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_asset_path(Arg_&& arg, Args_... args);
+  std::string* mutable_asset_path();
+  PROTOBUF_NODISCARD std::string* release_asset_path();
+  void set_allocated_asset_path(std::string* value);
+
+  private:
+  const std::string& _internal_asset_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_asset_path(
+      const std::string& value);
+  std::string* _internal_mutable_asset_path();
+
+  public:
+  // string function_name = 2;
+  void clear_function_name() ;
+  const std::string& function_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_function_name(Arg_&& arg, Args_... args);
+  std::string* mutable_function_name();
+  PROTOBUF_NODISCARD std::string* release_function_name();
+  void set_allocated_function_name(std::string* value);
+
+  private:
+  const std::string& _internal_function_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_function_name(
+      const std::string& value);
+  std::string* _internal_mutable_function_name();
+
+  public:
+  // string subobject_path = 3;
+  void clear_subobject_path() ;
+  const std::string& subobject_path() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_subobject_path(Arg_&& arg, Args_... args);
+  std::string* mutable_subobject_path();
+  PROTOBUF_NODISCARD std::string* release_subobject_path();
+  void set_allocated_subobject_path(std::string* value);
+
+  private:
+  const std::string& _internal_subobject_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_subobject_path(
+      const std::string& value);
+  std::string* _internal_mutable_subobject_path();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.CallAssetFunctionRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      2, 4, 1,
+      88, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::PropertyKeyValue > parameters_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr asset_path_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr function_name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr subobject_path_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -18013,7 +18879,7 @@ class AGENTBRIDGESERVER_API QueryLandscapeResponse final :
                &_QueryLandscapeResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    50;
 
   friend void swap(QueryLandscapeResponse& a, QueryLandscapeResponse& b) {
     a.Swap(&b);
@@ -18208,7 +19074,7 @@ class AGENTBRIDGESERVER_API QueryAllActorsResponse final :
                &_QueryAllActorsResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    46;
 
   friend void swap(QueryAllActorsResponse& a, QueryAllActorsResponse& b) {
     a.Swap(&b);
@@ -18415,7 +19281,7 @@ class AGENTBRIDGESERVER_API GetStreamingStateResponse final :
                &_GetStreamingStateResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    44;
+    48;
 
   friend void swap(GetStreamingStateResponse& a, GetStreamingStateResponse& b) {
     a.Swap(&b);
@@ -18608,7 +19474,7 @@ class AGENTBRIDGESERVER_API GetActorsInDataLayerResponse final :
                &_GetActorsInDataLayerResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    52;
+    56;
 
   friend void swap(GetActorsInDataLayerResponse& a, GetActorsInDataLayerResponse& b) {
     a.Swap(&b);
@@ -22759,6 +23625,312 @@ inline void DeleteActorRequest::set_allocated_actor_id(std::string* value) {
 
 // -------------------------------------------------------------------
 
+// DuplicateActorRequest
+
+// string actor_id = 1;
+inline void DuplicateActorRequest::clear_actor_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.actor_id_.ClearToEmpty();
+}
+inline const std::string& DuplicateActorRequest::actor_id() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DuplicateActorRequest.actor_id)
+  return _internal_actor_id();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DuplicateActorRequest::set_actor_id(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.actor_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DuplicateActorRequest.actor_id)
+}
+inline std::string* DuplicateActorRequest::mutable_actor_id() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_actor_id();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DuplicateActorRequest.actor_id)
+  return _s;
+}
+inline const std::string& DuplicateActorRequest::_internal_actor_id() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.actor_id_.Get();
+}
+inline void DuplicateActorRequest::_internal_set_actor_id(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.actor_id_.Set(value, GetArena());
+}
+inline std::string* DuplicateActorRequest::_internal_mutable_actor_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.actor_id_.Mutable( GetArena());
+}
+inline std::string* DuplicateActorRequest::release_actor_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DuplicateActorRequest.actor_id)
+  return _impl_.actor_id_.Release();
+}
+inline void DuplicateActorRequest::set_allocated_actor_id(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.actor_id_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.actor_id_.IsDefault()) {
+          _impl_.actor_id_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DuplicateActorRequest.actor_id)
+}
+
+// .AgentBridgeServer.ActorTransform new_transform = 2;
+inline bool DuplicateActorRequest::has_new_transform() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.new_transform_ != nullptr);
+  return value;
+}
+inline void DuplicateActorRequest::clear_new_transform() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.new_transform_ != nullptr) _impl_.new_transform_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::AgentBridgeServer::ActorTransform& DuplicateActorRequest::_internal_new_transform() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::AgentBridgeServer::ActorTransform* p = _impl_.new_transform_;
+  return p != nullptr ? *p : reinterpret_cast<const ::AgentBridgeServer::ActorTransform&>(::AgentBridgeServer::_ActorTransform_default_instance_);
+}
+inline const ::AgentBridgeServer::ActorTransform& DuplicateActorRequest::new_transform() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DuplicateActorRequest.new_transform)
+  return _internal_new_transform();
+}
+inline void DuplicateActorRequest::unsafe_arena_set_allocated_new_transform(::AgentBridgeServer::ActorTransform* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.new_transform_);
+  }
+  _impl_.new_transform_ = reinterpret_cast<::AgentBridgeServer::ActorTransform*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.DuplicateActorRequest.new_transform)
+}
+inline ::AgentBridgeServer::ActorTransform* DuplicateActorRequest::release_new_transform() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::AgentBridgeServer::ActorTransform* released = _impl_.new_transform_;
+  _impl_.new_transform_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::AgentBridgeServer::ActorTransform* DuplicateActorRequest::unsafe_arena_release_new_transform() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DuplicateActorRequest.new_transform)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::AgentBridgeServer::ActorTransform* temp = _impl_.new_transform_;
+  _impl_.new_transform_ = nullptr;
+  return temp;
+}
+inline ::AgentBridgeServer::ActorTransform* DuplicateActorRequest::_internal_mutable_new_transform() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  if (_impl_.new_transform_ == nullptr) {
+    auto* p = CreateMaybeMessage<::AgentBridgeServer::ActorTransform>(GetArena());
+    _impl_.new_transform_ = reinterpret_cast<::AgentBridgeServer::ActorTransform*>(p);
+  }
+  return _impl_.new_transform_;
+}
+inline ::AgentBridgeServer::ActorTransform* DuplicateActorRequest::mutable_new_transform() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::AgentBridgeServer::ActorTransform* _msg = _internal_mutable_new_transform();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DuplicateActorRequest.new_transform)
+  return _msg;
+}
+inline void DuplicateActorRequest::set_allocated_new_transform(::AgentBridgeServer::ActorTransform* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::AgentBridgeServer::ActorTransform*>(_impl_.new_transform_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::AgentBridgeServer::ActorTransform*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.new_transform_ = reinterpret_cast<::AgentBridgeServer::ActorTransform*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DuplicateActorRequest.new_transform)
+}
+
+// string new_label = 3;
+inline void DuplicateActorRequest::clear_new_label() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.new_label_.ClearToEmpty();
+}
+inline const std::string& DuplicateActorRequest::new_label() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DuplicateActorRequest.new_label)
+  return _internal_new_label();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DuplicateActorRequest::set_new_label(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.new_label_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DuplicateActorRequest.new_label)
+}
+inline std::string* DuplicateActorRequest::mutable_new_label() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_new_label();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DuplicateActorRequest.new_label)
+  return _s;
+}
+inline const std::string& DuplicateActorRequest::_internal_new_label() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.new_label_.Get();
+}
+inline void DuplicateActorRequest::_internal_set_new_label(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.new_label_.Set(value, GetArena());
+}
+inline std::string* DuplicateActorRequest::_internal_mutable_new_label() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.new_label_.Mutable( GetArena());
+}
+inline std::string* DuplicateActorRequest::release_new_label() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DuplicateActorRequest.new_label)
+  return _impl_.new_label_.Release();
+}
+inline void DuplicateActorRequest::set_allocated_new_label(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.new_label_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.new_label_.IsDefault()) {
+          _impl_.new_label_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DuplicateActorRequest.new_label)
+}
+
+// -------------------------------------------------------------------
+
+// DuplicateActorResponse
+
+// .AgentBridgeServer.ActorDescriptor duplicated_actor = 1;
+inline bool DuplicateActorResponse::has_duplicated_actor() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.duplicated_actor_ != nullptr);
+  return value;
+}
+inline void DuplicateActorResponse::clear_duplicated_actor() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.duplicated_actor_ != nullptr) _impl_.duplicated_actor_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::AgentBridgeServer::ActorDescriptor& DuplicateActorResponse::_internal_duplicated_actor() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::AgentBridgeServer::ActorDescriptor* p = _impl_.duplicated_actor_;
+  return p != nullptr ? *p : reinterpret_cast<const ::AgentBridgeServer::ActorDescriptor&>(::AgentBridgeServer::_ActorDescriptor_default_instance_);
+}
+inline const ::AgentBridgeServer::ActorDescriptor& DuplicateActorResponse::duplicated_actor() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DuplicateActorResponse.duplicated_actor)
+  return _internal_duplicated_actor();
+}
+inline void DuplicateActorResponse::unsafe_arena_set_allocated_duplicated_actor(::AgentBridgeServer::ActorDescriptor* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.duplicated_actor_);
+  }
+  _impl_.duplicated_actor_ = reinterpret_cast<::AgentBridgeServer::ActorDescriptor*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.DuplicateActorResponse.duplicated_actor)
+}
+inline ::AgentBridgeServer::ActorDescriptor* DuplicateActorResponse::release_duplicated_actor() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::AgentBridgeServer::ActorDescriptor* released = _impl_.duplicated_actor_;
+  _impl_.duplicated_actor_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::AgentBridgeServer::ActorDescriptor* DuplicateActorResponse::unsafe_arena_release_duplicated_actor() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DuplicateActorResponse.duplicated_actor)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::AgentBridgeServer::ActorDescriptor* temp = _impl_.duplicated_actor_;
+  _impl_.duplicated_actor_ = nullptr;
+  return temp;
+}
+inline ::AgentBridgeServer::ActorDescriptor* DuplicateActorResponse::_internal_mutable_duplicated_actor() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  if (_impl_.duplicated_actor_ == nullptr) {
+    auto* p = CreateMaybeMessage<::AgentBridgeServer::ActorDescriptor>(GetArena());
+    _impl_.duplicated_actor_ = reinterpret_cast<::AgentBridgeServer::ActorDescriptor*>(p);
+  }
+  return _impl_.duplicated_actor_;
+}
+inline ::AgentBridgeServer::ActorDescriptor* DuplicateActorResponse::mutable_duplicated_actor() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::AgentBridgeServer::ActorDescriptor* _msg = _internal_mutable_duplicated_actor();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DuplicateActorResponse.duplicated_actor)
+  return _msg;
+}
+inline void DuplicateActorResponse::set_allocated_duplicated_actor(::AgentBridgeServer::ActorDescriptor* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::AgentBridgeServer::ActorDescriptor*>(_impl_.duplicated_actor_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::AgentBridgeServer::ActorDescriptor*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.duplicated_actor_ = reinterpret_cast<::AgentBridgeServer::ActorDescriptor*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DuplicateActorResponse.duplicated_actor)
+}
+
+// -------------------------------------------------------------------
+
 // SetActorTransformRequest
 
 // string actor_id = 1;
@@ -24117,6 +25289,420 @@ CallFunctionResponse::_internal_out_parameters() const {
 }
 inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>*
 CallFunctionResponse::_internal_mutable_out_parameters() {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return &_impl_.out_parameters_;
+}
+
+// -------------------------------------------------------------------
+
+// CallAssetFunctionRequest
+
+// string asset_path = 1;
+inline void CallAssetFunctionRequest::clear_asset_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.asset_path_.ClearToEmpty();
+}
+inline const std::string& CallAssetFunctionRequest::asset_path() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CallAssetFunctionRequest.asset_path)
+  return _internal_asset_path();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CallAssetFunctionRequest::set_asset_path(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.asset_path_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CallAssetFunctionRequest.asset_path)
+}
+inline std::string* CallAssetFunctionRequest::mutable_asset_path() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_asset_path();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CallAssetFunctionRequest.asset_path)
+  return _s;
+}
+inline const std::string& CallAssetFunctionRequest::_internal_asset_path() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.asset_path_.Get();
+}
+inline void CallAssetFunctionRequest::_internal_set_asset_path(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.asset_path_.Set(value, GetArena());
+}
+inline std::string* CallAssetFunctionRequest::_internal_mutable_asset_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.asset_path_.Mutable( GetArena());
+}
+inline std::string* CallAssetFunctionRequest::release_asset_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CallAssetFunctionRequest.asset_path)
+  return _impl_.asset_path_.Release();
+}
+inline void CallAssetFunctionRequest::set_allocated_asset_path(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.asset_path_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.asset_path_.IsDefault()) {
+          _impl_.asset_path_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CallAssetFunctionRequest.asset_path)
+}
+
+// string function_name = 2;
+inline void CallAssetFunctionRequest::clear_function_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.function_name_.ClearToEmpty();
+}
+inline const std::string& CallAssetFunctionRequest::function_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CallAssetFunctionRequest.function_name)
+  return _internal_function_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CallAssetFunctionRequest::set_function_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.function_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CallAssetFunctionRequest.function_name)
+}
+inline std::string* CallAssetFunctionRequest::mutable_function_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_function_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CallAssetFunctionRequest.function_name)
+  return _s;
+}
+inline const std::string& CallAssetFunctionRequest::_internal_function_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.function_name_.Get();
+}
+inline void CallAssetFunctionRequest::_internal_set_function_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.function_name_.Set(value, GetArena());
+}
+inline std::string* CallAssetFunctionRequest::_internal_mutable_function_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.function_name_.Mutable( GetArena());
+}
+inline std::string* CallAssetFunctionRequest::release_function_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CallAssetFunctionRequest.function_name)
+  return _impl_.function_name_.Release();
+}
+inline void CallAssetFunctionRequest::set_allocated_function_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.function_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.function_name_.IsDefault()) {
+          _impl_.function_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CallAssetFunctionRequest.function_name)
+}
+
+// string subobject_path = 3;
+inline void CallAssetFunctionRequest::clear_subobject_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.subobject_path_.ClearToEmpty();
+}
+inline const std::string& CallAssetFunctionRequest::subobject_path() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CallAssetFunctionRequest.subobject_path)
+  return _internal_subobject_path();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CallAssetFunctionRequest::set_subobject_path(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.subobject_path_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CallAssetFunctionRequest.subobject_path)
+}
+inline std::string* CallAssetFunctionRequest::mutable_subobject_path() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_subobject_path();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CallAssetFunctionRequest.subobject_path)
+  return _s;
+}
+inline const std::string& CallAssetFunctionRequest::_internal_subobject_path() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.subobject_path_.Get();
+}
+inline void CallAssetFunctionRequest::_internal_set_subobject_path(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.subobject_path_.Set(value, GetArena());
+}
+inline std::string* CallAssetFunctionRequest::_internal_mutable_subobject_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.subobject_path_.Mutable( GetArena());
+}
+inline std::string* CallAssetFunctionRequest::release_subobject_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CallAssetFunctionRequest.subobject_path)
+  return _impl_.subobject_path_.Release();
+}
+inline void CallAssetFunctionRequest::set_allocated_subobject_path(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.subobject_path_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.subobject_path_.IsDefault()) {
+          _impl_.subobject_path_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CallAssetFunctionRequest.subobject_path)
+}
+
+// repeated .AgentBridgeServer.PropertyKeyValue parameters = 4;
+inline int CallAssetFunctionRequest::_internal_parameters_size() const {
+  return _internal_parameters().size();
+}
+inline int CallAssetFunctionRequest::parameters_size() const {
+  return _internal_parameters_size();
+}
+inline void CallAssetFunctionRequest::clear_parameters() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.parameters_.Clear();
+}
+inline ::AgentBridgeServer::PropertyKeyValue* CallAssetFunctionRequest::mutable_parameters(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CallAssetFunctionRequest.parameters)
+  return _internal_mutable_parameters()->Mutable(index);
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>* CallAssetFunctionRequest::mutable_parameters()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:AgentBridgeServer.CallAssetFunctionRequest.parameters)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  return _internal_mutable_parameters();
+}
+inline const ::AgentBridgeServer::PropertyKeyValue& CallAssetFunctionRequest::parameters(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CallAssetFunctionRequest.parameters)
+  return _internal_parameters().Get(index);
+}
+inline ::AgentBridgeServer::PropertyKeyValue* CallAssetFunctionRequest::add_parameters() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::AgentBridgeServer::PropertyKeyValue* _add = _internal_mutable_parameters()->Add();
+  // @@protoc_insertion_point(field_add:AgentBridgeServer.CallAssetFunctionRequest.parameters)
+  return _add;
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>& CallAssetFunctionRequest::parameters() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:AgentBridgeServer.CallAssetFunctionRequest.parameters)
+  return _internal_parameters();
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>&
+CallAssetFunctionRequest::_internal_parameters() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.parameters_;
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>*
+CallAssetFunctionRequest::_internal_mutable_parameters() {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return &_impl_.parameters_;
+}
+
+// -------------------------------------------------------------------
+
+// CallAssetFunctionResponse
+
+// .AgentBridgeServer.PropertyValue return_value = 1;
+inline bool CallAssetFunctionResponse::has_return_value() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.return_value_ != nullptr);
+  return value;
+}
+inline void CallAssetFunctionResponse::clear_return_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.return_value_ != nullptr) _impl_.return_value_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::AgentBridgeServer::PropertyValue& CallAssetFunctionResponse::_internal_return_value() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::AgentBridgeServer::PropertyValue* p = _impl_.return_value_;
+  return p != nullptr ? *p : reinterpret_cast<const ::AgentBridgeServer::PropertyValue&>(::AgentBridgeServer::_PropertyValue_default_instance_);
+}
+inline const ::AgentBridgeServer::PropertyValue& CallAssetFunctionResponse::return_value() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CallAssetFunctionResponse.return_value)
+  return _internal_return_value();
+}
+inline void CallAssetFunctionResponse::unsafe_arena_set_allocated_return_value(::AgentBridgeServer::PropertyValue* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.return_value_);
+  }
+  _impl_.return_value_ = reinterpret_cast<::AgentBridgeServer::PropertyValue*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.CallAssetFunctionResponse.return_value)
+}
+inline ::AgentBridgeServer::PropertyValue* CallAssetFunctionResponse::release_return_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::AgentBridgeServer::PropertyValue* released = _impl_.return_value_;
+  _impl_.return_value_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::AgentBridgeServer::PropertyValue* CallAssetFunctionResponse::unsafe_arena_release_return_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CallAssetFunctionResponse.return_value)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::AgentBridgeServer::PropertyValue* temp = _impl_.return_value_;
+  _impl_.return_value_ = nullptr;
+  return temp;
+}
+inline ::AgentBridgeServer::PropertyValue* CallAssetFunctionResponse::_internal_mutable_return_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  if (_impl_.return_value_ == nullptr) {
+    auto* p = CreateMaybeMessage<::AgentBridgeServer::PropertyValue>(GetArena());
+    _impl_.return_value_ = reinterpret_cast<::AgentBridgeServer::PropertyValue*>(p);
+  }
+  return _impl_.return_value_;
+}
+inline ::AgentBridgeServer::PropertyValue* CallAssetFunctionResponse::mutable_return_value() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::AgentBridgeServer::PropertyValue* _msg = _internal_mutable_return_value();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CallAssetFunctionResponse.return_value)
+  return _msg;
+}
+inline void CallAssetFunctionResponse::set_allocated_return_value(::AgentBridgeServer::PropertyValue* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::AgentBridgeServer::PropertyValue*>(_impl_.return_value_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::AgentBridgeServer::PropertyValue*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.return_value_ = reinterpret_cast<::AgentBridgeServer::PropertyValue*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CallAssetFunctionResponse.return_value)
+}
+
+// string return_type_name = 2;
+inline void CallAssetFunctionResponse::clear_return_type_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.return_type_name_.ClearToEmpty();
+}
+inline const std::string& CallAssetFunctionResponse::return_type_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CallAssetFunctionResponse.return_type_name)
+  return _internal_return_type_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CallAssetFunctionResponse::set_return_type_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.return_type_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CallAssetFunctionResponse.return_type_name)
+}
+inline std::string* CallAssetFunctionResponse::mutable_return_type_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_return_type_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CallAssetFunctionResponse.return_type_name)
+  return _s;
+}
+inline const std::string& CallAssetFunctionResponse::_internal_return_type_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.return_type_name_.Get();
+}
+inline void CallAssetFunctionResponse::_internal_set_return_type_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.return_type_name_.Set(value, GetArena());
+}
+inline std::string* CallAssetFunctionResponse::_internal_mutable_return_type_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.return_type_name_.Mutable( GetArena());
+}
+inline std::string* CallAssetFunctionResponse::release_return_type_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CallAssetFunctionResponse.return_type_name)
+  return _impl_.return_type_name_.Release();
+}
+inline void CallAssetFunctionResponse::set_allocated_return_type_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.return_type_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.return_type_name_.IsDefault()) {
+          _impl_.return_type_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CallAssetFunctionResponse.return_type_name)
+}
+
+// repeated .AgentBridgeServer.PropertyKeyValue out_parameters = 3;
+inline int CallAssetFunctionResponse::_internal_out_parameters_size() const {
+  return _internal_out_parameters().size();
+}
+inline int CallAssetFunctionResponse::out_parameters_size() const {
+  return _internal_out_parameters_size();
+}
+inline void CallAssetFunctionResponse::clear_out_parameters() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.out_parameters_.Clear();
+}
+inline ::AgentBridgeServer::PropertyKeyValue* CallAssetFunctionResponse::mutable_out_parameters(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CallAssetFunctionResponse.out_parameters)
+  return _internal_mutable_out_parameters()->Mutable(index);
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>* CallAssetFunctionResponse::mutable_out_parameters()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:AgentBridgeServer.CallAssetFunctionResponse.out_parameters)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  return _internal_mutable_out_parameters();
+}
+inline const ::AgentBridgeServer::PropertyKeyValue& CallAssetFunctionResponse::out_parameters(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CallAssetFunctionResponse.out_parameters)
+  return _internal_out_parameters().Get(index);
+}
+inline ::AgentBridgeServer::PropertyKeyValue* CallAssetFunctionResponse::add_out_parameters() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::AgentBridgeServer::PropertyKeyValue* _add = _internal_mutable_out_parameters()->Add();
+  // @@protoc_insertion_point(field_add:AgentBridgeServer.CallAssetFunctionResponse.out_parameters)
+  return _add;
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>& CallAssetFunctionResponse::out_parameters() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:AgentBridgeServer.CallAssetFunctionResponse.out_parameters)
+  return _internal_out_parameters();
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>&
+CallAssetFunctionResponse::_internal_out_parameters() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.out_parameters_;
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::PropertyKeyValue>*
+CallAssetFunctionResponse::_internal_mutable_out_parameters() {
   PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
   return &_impl_.out_parameters_;
 }

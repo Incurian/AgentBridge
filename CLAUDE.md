@@ -242,10 +242,6 @@ D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_client.py
 | bp_toolkit local | `D:/repos/bp_toolkit.git` (backup bare repo) |
 | UAssetGUI.exe | `bp_toolkit/vendor/UAssetGUI/UAssetGUI/bin/Release/net8.0-windows/UAssetGUI.exe` |
 
-## Session Continuity
-
-See `.claude/HANDOVER.md` for current session context and next steps. Update FREQUENTLY!
-
 ## Documentation Process
 
 When fixing bugs or adding features, documentation is a multi-step process:
@@ -256,8 +252,7 @@ When fixing bugs or adding features, documentation is a multi-step process:
 | 2. Module CLAUDE.md | Per-module context files | For AI continuity |
 | 3. Help text | `_get_help_text()` in `agentbridge.py` | For agents using the tools |
 | 4. Tool descriptions | MCP tool `description` fields | Agents see these first |
-| 5. Handover | `.claude/HANDOVER.md` | For session continuity |
-| 6. README.md | User-facing documentation | For humans reading the repo |
+| 5. README.md | User-facing documentation | For humans reading the repo |
 
 **Help text is critical** - it's what agents see when they call `help()`. If a limitation is
 fixed, remove any warnings. If new capabilities are added, document them with examples.
@@ -346,6 +341,26 @@ cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 
 ---
 
+## Archived Documentation
+
+Historical development notes are preserved in `.old.claude/` for reference:
+
+| File | Contents |
+|------|----------|
+| `IMPROVEMENT_PLAN.md` | Detailed fix documentation for Sessions 22-25 (TArray, GET/SET, struct schema, element_type) |
+| `RESEARCH.md` | UAssetAPI round-trip research, Blueprint/PCG creation approaches validated |
+| `BP_JSON_WORKFLOW.md` | Step-by-step guide for exporting/parsing Blueprint JSON with UAssetAPI |
+| `UASSET_DISSECTION_GUIDE.md` | Comprehensive AI agent guide for analyzing Blueprint assets |
+| `HANDOVER.md` | Session-by-session development log with testing plans |
+
+**Key findings preserved here:**
+
+- **UAssetAPI round-trip validated**: Export→JSON→modify→reimport works for Blueprints, PCG Graphs, Behavior Trees
+- **MetaDataMap workaround**: UE 5.7 Blueprints need MetaDataMap nulled before reimport (FName key issue)
+- **All major bugs fixed**: TArray SET, GET returns empty, struct schema, element_type, asset path normalization
+
+---
+
 ## Known Limitations
 
 | Limitation | Status | Workaround |
@@ -356,4 +371,27 @@ cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 
 ---
 
-*38 RPCs, 104 MCP Tools (90 + 14 bp_toolkit), Self-Documenting Help System*
+*39 RPCs, 105 MCP Tools (90 + 14 bp_toolkit), Self-Documenting Help System*
+
+---
+
+## Recent Addition: call_asset_function (2026-01-02)
+
+New tool for calling instance methods on UObject assets:
+
+```python
+# Works - parameterless functions
+call_asset_function(
+    asset_path='/Game/MyPCG.MyPCG',
+    function_name='GetInputNode'
+)
+
+# Crashes - TSubclassOf<> parameters need FFunctionInvoker fix
+call_asset_function(
+    asset_path='/Game/MyPCG.MyPCG',
+    function_name='AddNodeOfType',
+    parameters={'InSettingsClass': '/Script/PCG.PCGSurfaceSamplerSettings'}
+)
+```
+
+**Status:** Parameterless works, complex parameters need FFunctionInvoker enhancement for `FClassProperty` handling.

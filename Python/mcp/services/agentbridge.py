@@ -392,6 +392,35 @@ TOOLS = [
             "required": ["class_name", "function_name"],
         },
     },
+    {
+        "name": "call_asset_function",
+        "description": "Call a function on a loaded UObject asset. "
+                       "Works with PCGGraph, Blueprint CDO, DataAsset, etc. "
+                       "Use subobject_path for nested objects (e.g., 'Graph' in PCG assets).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "asset_path": {
+                    "type": "string",
+                    "description": "Full asset path (e.g., '/Game/PCG/MyGraph.MyGraph')",
+                },
+                "function_name": {
+                    "type": "string",
+                    "description": "Function name to call (e.g., 'AddNodeOfType', 'GetNodes')",
+                },
+                "subobject_path": {
+                    "type": "string",
+                    "description": "Optional path to subobject (e.g., 'Graph' for PCG assets)",
+                },
+                "parameters": {
+                    "type": "object",
+                    "description": "Function parameters as key-value pairs",
+                    "additionalProperties": True,
+                },
+            },
+            "required": ["asset_path", "function_name"],
+        },
+    },
 
     # =========================================================================
     # World Partition & Streaming
@@ -1158,6 +1187,31 @@ class AgentBridgeClient:
                 kv.key = key
                 _set_property_value(kv.value, value)
         return self.stub.CallFunction(request)
+
+    def call_asset_function(self, asset_path: str, function_name: str,
+                            subobject_path: str = "", parameters: dict = None):
+        """Call a function on a loaded UObject asset (PCGGraph, Blueprint CDO, DataAsset, etc.).
+
+        Args:
+            asset_path: Full asset path (e.g., '/Game/PCG/MyGraph.MyGraph')
+            function_name: Name of the function to call
+            subobject_path: Optional path to subobject (e.g., 'Graph' for PCG assets)
+            parameters: Optional dict of parameter name -> value
+
+        Returns:
+            CallAssetFunctionResponse with return_value and out_parameters
+        """
+        request = pb.CallAssetFunctionRequest(
+            asset_path=asset_path,
+            function_name=function_name,
+            subobject_path=subobject_path,
+        )
+        if parameters:
+            for key, value in parameters.items():
+                kv = request.parameters.add()
+                kv.key = key
+                _set_property_value(kv.value, value)
+        return self.stub.CallAssetFunction(request)
 
     # World Partition methods
     def is_world_partitioned(self):
@@ -2900,6 +2954,31 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
 
         return response
 
+
+    elif tool_name == "call_asset_function":
+        result = safe_call(
+            client.call_asset_function,
+            asset_path=args["asset_path"],
+            function_name=args["function_name"],
+            subobject_path=args.get("subobject_path", ""),
+            parameters=args.get("parameters", {}),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        response = {"success": True}
+
+        # Parse return value if present
+        if result.HasField("return_value") and result.return_value.type != 0:
+            response["return_value"] = _property_value_to_dict(result.return_value)
+
+        # Parse out parameters if present
+        if result.out_parameters:
+            response["out_parameters"] = {
+                kv.key: _property_value_to_dict(kv.value)
+                for kv in result.out_parameters
+            }
+
+        return response
     # World Partition & Streaming
     elif tool_name == "is_world_partitioned":
         result = safe_call(client.is_world_partitioned)

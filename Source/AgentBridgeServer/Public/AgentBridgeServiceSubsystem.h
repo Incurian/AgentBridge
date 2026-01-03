@@ -19,6 +19,8 @@ namespace AgentBridgeServer
 	class SpawnActorRequest;
 	class SpawnActorResponse;
 	class DeleteActorRequest;
+	class DuplicateActorRequest;
+	class DuplicateActorResponse;
 	class SetActorTransformRequest;
 	class SetActorPropertiesRequest;
 	class SetActorPropertiesResponse;
@@ -27,6 +29,8 @@ namespace AgentBridgeServer
 	class SetPropertyPathRequest;
 	class CallFunctionRequest;
 	class CallFunctionResponse;
+	class CallAssetFunctionRequest;
+	class CallAssetFunctionResponse;
 	class FindClassRequest;
 	class FindClassResponse;
 	class GetClassSchemaRequest;
@@ -164,6 +168,10 @@ public:
 		const AgentBridgeServer::DeleteActorRequest& Request,
 		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
 
+	void DuplicateActor(
+		const AgentBridgeServer::DuplicateActorRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::DuplicateActorResponse>& ResponseContinuation);
+
 	void SetActorTransform(
 		const AgentBridgeServer::SetActorTransformRequest& Request,
 		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
@@ -191,6 +199,9 @@ public:
 	void CallFunction(
 		const AgentBridgeServer::CallFunctionRequest& Request,
 		const TResponseDelegate<AgentBridgeServer::CallFunctionResponse>& ResponseContinuation);
+	void CallAssetFunction(
+		const AgentBridgeServer::CallAssetFunctionRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::CallAssetFunctionResponse>& ResponseContinuation);
 
 	//~==============================================================================
 	// gRPC Service Handlers - Type Discovery

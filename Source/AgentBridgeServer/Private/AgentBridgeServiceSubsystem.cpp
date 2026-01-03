@@ -87,6 +87,8 @@ void UAgentBridgeServiceSubsystem::RegisterScriptingServices(FTempoScriptingServ
 			&UAgentBridgeServiceSubsystem::SpawnActor),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDeleteActor,
 			&UAgentBridgeServiceSubsystem::DeleteActor),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDuplicateActor,
+			&UAgentBridgeServiceSubsystem::DuplicateActor),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestSetActorTransform,
 			&UAgentBridgeServiceSubsystem::SetActorTransform),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestSetActorProperties,
@@ -101,6 +103,8 @@ void UAgentBridgeServiceSubsystem::RegisterScriptingServices(FTempoScriptingServ
 		// Function Invocation
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestCallFunction,
 			&UAgentBridgeServiceSubsystem::CallFunction),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestCallAssetFunction,
+			&UAgentBridgeServiceSubsystem::CallAssetFunction),
 
 		// Type Discovery
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestFindClass,
@@ -782,6 +786,48 @@ void UAgentBridgeServiceSubsystem::DeleteActor(
 	}
 }
 
+void UAgentBridgeServiceSubsystem::DuplicateActor(
+	const DuplicateActorRequest& Request,
+	const TResponseDelegate<DuplicateActorResponse>& ResponseContinuation)
+{
+	FDuplicateActorCommand Cmd;
+	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
+	Cmd.NewLabel = UTF8_TO_TCHAR(Request.new_label().c_str());
+
+	if (Request.has_new_transform())
+	{
+		const ActorTransform& T = Request.new_transform();
+		if (T.has_location())
+		{
+			Cmd.Location = FromProtoVector(T.location());
+		}
+		if (T.has_rotation())
+		{
+			Cmd.Rotation = FromProtoRotation(T.rotation());
+		}
+		if (T.has_scale())
+		{
+			Cmd.Scale = FromProtoScale(T.scale());
+		}
+	}
+
+	FSpawnActorResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	DuplicateActorResponse Response;
+
+	if (CmdResponse.bSuccess)
+	{
+		FillActorDescriptor(Response.mutable_duplicated_actor(), CmdResponse.Actor);
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INVALID_ARGUMENT, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+}
+
 void UAgentBridgeServiceSubsystem::SetActorTransform(
 	const SetActorTransformRequest& Request,
 	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
@@ -940,6 +986,51 @@ void UAgentBridgeServiceSubsystem::CallFunction(
 	{
 		// Convert return value (JSON string to proto PropertyValue)
 		JsonToProtoPropertyValue(CmdResponse.ReturnValue, TEXT(""), Response.mutable_return_value());
+
+		// Convert out parameters
+		for (const auto& Pair : CmdResponse.OutParameters)
+		{
+			PropertyKeyValue* KV = Response.add_out_parameters();
+			KV->set_key(TCHAR_TO_UTF8(*Pair.Key));
+			JsonToProtoPropertyValue(Pair.Value, TEXT(""), KV->mutable_value());
+		}
+
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+}
+
+void UAgentBridgeServiceSubsystem::CallAssetFunction(
+	const CallAssetFunctionRequest& Request,
+	const TResponseDelegate<CallAssetFunctionResponse>& ResponseContinuation)
+{
+	FCallAssetFunctionCommand Cmd;
+	Cmd.AssetPath = UTF8_TO_TCHAR(Request.asset_path().c_str());
+	Cmd.FunctionName = UTF8_TO_TCHAR(Request.function_name().c_str());
+	Cmd.SubobjectPath = UTF8_TO_TCHAR(Request.subobject_path().c_str());
+
+	// Convert parameters from proto to JSON strings
+	for (const auto& Param : Request.parameters())
+	{
+		FString Key = UTF8_TO_TCHAR(Param.key().c_str());
+		FString JsonValue = ProtoPropertyValueToJson(Param.value());
+		Cmd.Parameters.Add(Key, JsonValue);
+	}
+
+	FCallAssetFunctionResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	CallAssetFunctionResponse Response;
+
+	if (CmdResponse.bSuccess)
+	{
+		// Convert return value (JSON string to proto PropertyValue)
+		JsonToProtoPropertyValue(CmdResponse.ReturnValue, TEXT(""), Response.mutable_return_value());
+		Response.set_return_type_name(TCHAR_TO_UTF8(*CmdResponse.ReturnTypeName));
 
 		// Convert out parameters
 		for (const auto& Pair : CmdResponse.OutParameters)

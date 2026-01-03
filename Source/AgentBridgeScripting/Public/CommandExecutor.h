@@ -94,6 +94,7 @@ public:
 
 	static void Execute(const FSpawnActorCommand& Command, FSpawnActorResponse& Response);
 	static void Execute(const FDeleteActorCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FDuplicateActorCommand& Command, FSpawnActorResponse& Response);
 	static void Execute(const FSetActorPropertiesCommand& Command, FAgentResponseBase& Response);
 	static void Execute(const FSetActorTransformCommand& Command, FAgentResponseBase& Response);
 
@@ -109,6 +110,7 @@ public:
 	//~==============================================================================
 
 	static void Execute(const FCallFunctionCommand& Command, FFunctionCallResponse& Response);
+	static void Execute(const FCallAssetFunctionCommand& Command, FCallAssetFunctionResponse& Response);
 	static void Execute(const FGetFunctionSignatureCommand& Command, FAgentResponseBase& Response);
 
 	//~==============================================================================

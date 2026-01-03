@@ -34,6 +34,7 @@ enum class EAgentCommandType : uint8
 
 	// Function Commands
 	CallFunction,
+	CallAssetFunction,
 	GetFunctionSignature,
 
 	// Type Discovery Commands
@@ -259,6 +260,29 @@ struct AGENTBRIDGESCRIPTING_API FDeleteActorCommand : FAgentCommandBase
 };
 
 /**
+ * FDuplicateActorCommand - Duplicates an existing actor.
+ */
+struct AGENTBRIDGESCRIPTING_API FDuplicateActorCommand : FAgentCommandBase
+{
+	FDuplicateActorCommand() { Type = EAgentCommandType::DuplicateActor; }
+
+	/** Source actor identifier. */
+	FString ActorId;
+
+	/** New actor label (optional). */
+	FString NewLabel;
+
+	/** New location (optional - defaults to source location). */
+	TOptional<FVector> Location;
+
+	/** New rotation (optional - defaults to source rotation). */
+	TOptional<FRotator> Rotation;
+
+	/** New scale (optional - defaults to source scale). */
+	TOptional<FVector> Scale;
+};
+
+/**
  * FSetActorPropertiesCommand - Sets properties on an actor.
  */
 struct AGENTBRIDGESCRIPTING_API FSetActorPropertiesCommand : FAgentCommandBase
@@ -349,6 +373,30 @@ struct AGENTBRIDGESCRIPTING_API FCallFunctionCommand : FAgentCommandBase
 
 	/** Function name. */
 	FString FunctionName;
+
+	/** Parameters (name -> JSON value). */
+	TMap<FString, FString> Parameters;
+};
+
+/**
+ * FCallAssetFunctionCommand - Calls a function on a loaded UObject asset.
+ *
+ * Unlike FCallFunctionCommand which works on actors in the world,
+ * this command operates on UObject assets like PCGGraph, Blueprint, DataAsset, etc.
+ * This enables programmatic manipulation of asset internals (e.g., PCGGraph::AddNodeOfType).
+ */
+struct AGENTBRIDGESCRIPTING_API FCallAssetFunctionCommand : FAgentCommandBase
+{
+	FCallAssetFunctionCommand() { Type = EAgentCommandType::CallAssetFunction; }
+
+	/** Asset path (e.g., "/Game/MyAssets/MyPCGGraph.MyPCGGraph"). */
+	FString AssetPath;
+
+	/** Function name to call on the asset. */
+	FString FunctionName;
+
+	/** Optional subobject path within the asset (e.g., "Nodes[0]" for a PCG node). */
+	FString SubobjectPath;
 
 	/** Parameters (name -> JSON value). */
 	TMap<FString, FString> Parameters;
@@ -1207,6 +1255,21 @@ struct AGENTBRIDGESCRIPTING_API FAgentResponseBase
 	double ExecutionTimeMs = 0.0;
 
 	virtual ~FAgentResponseBase() = default;
+};
+
+/**
+ * FCallAssetFunctionResponse - Response to CallAssetFunction command.
+ */
+struct AGENTBRIDGESCRIPTING_API FCallAssetFunctionResponse : FAgentResponseBase
+{
+	/** Return value (JSON encoded, empty if void). */
+	FString ReturnValue;
+
+	/** Return value type name. */
+	FString ReturnTypeName;
+
+	/** Out parameters (name -> JSON value). */
+	TMap<FString, FString> OutParameters;
 };
 
 /**

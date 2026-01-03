@@ -568,6 +568,51 @@ void FCommandExecutor::Execute(const FDeleteActorCommand& Command, FAgentRespons
 	Response.ExecutionTimeMs = EndTiming(StartTime);
 }
 
+void FCommandExecutor::Execute(const FDuplicateActorCommand& Command, FSpawnActorResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	FString Error;
+	AActor* SourceActor = ResolveActor(Command.ActorId, &Error);
+	if (!SourceActor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Build transform - use source transform as base, override with provided values
+	FTransform NewTransform = SourceActor->GetActorTransform();
+	if (Command.Location.IsSet())
+	{
+		NewTransform.SetLocation(Command.Location.GetValue());
+	}
+	if (Command.Rotation.IsSet())
+	{
+		NewTransform.SetRotation(Command.Rotation.GetValue().Quaternion());
+	}
+	if (Command.Scale.IsSet())
+	{
+		NewTransform.SetScale3D(Command.Scale.GetValue());
+	}
+
+	AActor* NewActor = FActorOperations::DuplicateActor(SourceActor, NewTransform, Command.NewLabel);
+
+	if (!NewActor)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to duplicate actor");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	Response.Actor = BuildActorInfo(NewActor, false, false, 0);
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
 void FCommandExecutor::Execute(const FSetActorPropertiesCommand& Command, FAgentResponseBase& Response)
 {
 	double StartTime = StartTiming();
@@ -818,6 +863,115 @@ void FCommandExecutor::Execute(const FCallFunctionCommand& Command, FFunctionCal
 		if (Result.ReturnValue.Type != EAgentPropertyType::None)
 		{
 			Response.ReturnValue = PropertyValueToJson(Result.ReturnValue);
+		}
+
+		for (const auto& Pair : Result.OutParams)
+		{
+			if (Pair.Value.IsValid())
+			{
+				Response.OutParameters.Add(Pair.Key, PropertyValueToJson(*Pair.Value));
+			}
+		}
+	}
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FCallAssetFunctionCommand& Command, FCallAssetFunctionResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	// Load the asset
+	UObject* Asset = LoadObject<UObject>(nullptr, *Command.AssetPath);
+	if (!Asset)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Asset '%s' not found"), *Command.AssetPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Navigate to subobject if specified
+	UObject* Target = Asset;
+	if (!Command.SubobjectPath.IsEmpty())
+	{
+		// Try to resolve the subobject path
+		// For now, support simple property paths like "Nodes[0]"
+		FPropertyPathResult PathResult = FAgentPropertyPath::GetValue(Asset, Command.SubobjectPath);
+		if (!PathResult.bSuccess)
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = FString::Printf(TEXT("Subobject path '%s' not found: %s"),
+				*Command.SubobjectPath, *PathResult.ErrorMessage);
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+
+		// The path should resolve to a UObject
+		if (PathResult.Value.Type != EAgentPropertyType::Object)
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = FString::Printf(TEXT("Subobject path '%s' did not resolve to a UObject (type: %d)"),
+				*Command.SubobjectPath, (int32)PathResult.Value.Type);
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+
+		// Extract the UObject pointer from the property value
+		// Note: ObjectValue is stored as a path string, we need to load it
+		if (!PathResult.Value.StringValue.IsEmpty())
+		{
+			Target = LoadObject<UObject>(nullptr, *PathResult.Value.StringValue);
+			if (!Target)
+			{
+				Response.bSuccess = false;
+				Response.ErrorMessage = FString::Printf(TEXT("Failed to load subobject at '%s'"),
+					*PathResult.Value.StringValue);
+				Response.ExecutionTimeMs = EndTiming(StartTime);
+				return;
+			}
+		}
+		else
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = FString::Printf(TEXT("Subobject path '%s' resolved to null object"),
+				*Command.SubobjectPath);
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+	}
+
+	// Find function on target
+	UFunction* Function = FFunctionInvoker::FindFunction(Target->GetClass(), Command.FunctionName);
+	if (!Function)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Function '%s' not found on '%s' (class: %s)"),
+			*Command.FunctionName, *Target->GetName(), *Target->GetClass()->GetName());
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Convert parameters
+	TMap<FString, FAgentPropertyValue> Params;
+	for (const auto& Pair : Command.Parameters)
+	{
+		Params.Add(Pair.Key, JsonToPropertyValue(Pair.Value));
+	}
+
+	// Invoke the function
+	FAgentFunctionResult Result = FFunctionInvoker::InvokeFunction(Target, Function, Params);
+
+	Response.bSuccess = Result.bSuccess;
+	Response.ErrorMessage = Result.ErrorMessage;
+
+	if (Result.bSuccess)
+	{
+		if (Result.ReturnValue.Type != EAgentPropertyType::None)
+		{
+			Response.ReturnValue = PropertyValueToJson(Result.ReturnValue);
+			Response.ReturnTypeName = PropertyTypeToString(Result.ReturnValue.Type);
 		}
 
 		for (const auto& Pair : Result.OutParams)

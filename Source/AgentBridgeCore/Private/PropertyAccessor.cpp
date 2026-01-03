@@ -882,6 +882,65 @@ bool FPropertyAccessor::WriteObjectProperty(void* ValuePtr, FObjectPropertyBase*
 		return true;
 	}
 
+
+	// Handle FClassProperty (TSubclassOf<>) - need to load a UClass, not a UObject
+	if (FClassProperty* ClassProp = CastField<FClassProperty>(Property))
+	{
+		if (Value.StringValue.IsEmpty())
+		{
+			ClassProp->SetObjectPropertyValue(ValuePtr, nullptr);
+			return true;
+		}
+
+		UClass* LoadedClass = nullptr;
+		FString ClassPath = Value.StringValue;
+
+		// Try multiple loading strategies for flexibility
+
+		// 1. Try StaticLoadClass with the path directly (works for "/Script/Module.ClassName")
+		LoadedClass = StaticLoadClass(ClassProp->MetaClass, nullptr, *ClassPath, nullptr, LOAD_None, nullptr);
+
+		// 2. If that fails and it's a short name, try FindObject
+		if (!LoadedClass && !ClassPath.Contains(TEXT("/")))
+		{
+			LoadedClass = FindObject<UClass>(nullptr, *ClassPath);
+
+			// Also try common package prefixes
+			if (!LoadedClass)
+			{
+				LoadedClass = FindObject<UClass>(nullptr, *(FString(TEXT("/Script/Engine.")) + ClassPath));
+			}
+			if (!LoadedClass)
+			{
+				LoadedClass = FindObject<UClass>(nullptr, *(FString(TEXT("/Script/CoreUObject.")) + ClassPath));
+			}
+		}
+
+		// 3. Try with _C suffix for Blueprint classes
+		if (!LoadedClass && !ClassPath.EndsWith(TEXT("_C")))
+		{
+			FString BPPath = ClassPath + TEXT("_C");
+			LoadedClass = StaticLoadClass(ClassProp->MetaClass, nullptr, *BPPath, nullptr, LOAD_None, nullptr);
+		}
+
+		if (!LoadedClass)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("WriteObjectProperty: Could not load class '%s' for TSubclassOf property"), *ClassPath);
+			return false;
+		}
+
+		// Verify the loaded class is compatible with the property's meta class
+		if (ClassProp->MetaClass && !LoadedClass->IsChildOf(ClassProp->MetaClass))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("WriteObjectProperty: Loaded class '%s' is not a child of required '%s'"),
+				*LoadedClass->GetName(), *ClassProp->MetaClass->GetName());
+			return false;
+		}
+
+		ClassProp->SetObjectPropertyValue(ValuePtr, LoadedClass);
+		return true;
+	}
+
 	// For regular object properties (TObjectPtr, raw pointers), resolve and load the object
 	FSoftObjectPath SoftPath(Value.StringValue);
 	UObject* Object = nullptr;

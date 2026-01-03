@@ -188,6 +188,16 @@ message DeleteActorRequest {
   string actor_id = 1;
 }
 
+message DuplicateActorRequest {
+  string actor_id = 1;                 // Source actor to duplicate
+  ActorTransform new_transform = 2;    // Optional: new transform (uses source if not set)
+  string new_label = 3;                // Optional: label for duplicated actor
+}
+
+message DuplicateActorResponse {
+  ActorDescriptor duplicated_actor = 1;
+}
+
 message SetActorTransformRequest {
   string actor_id = 1;
   ActorTransform transform = 2;
@@ -240,6 +250,19 @@ message CallFunctionRequest {
 message CallFunctionResponse {
   PropertyValue return_value = 1;
   repeated PropertyKeyValue out_parameters = 2;
+}
+
+message CallAssetFunctionRequest {
+  string asset_path = 1;           // Asset path (e.g., "/Game/MyAssets/MyPCGGraph.MyPCGGraph")
+  string function_name = 2;        // Function name to call on the asset
+  string subobject_path = 3;       // Optional: path to subobject within asset (e.g., "Nodes[0]")
+  repeated PropertyKeyValue parameters = 4;
+}
+
+message CallAssetFunctionResponse {
+  PropertyValue return_value = 1;
+  string return_type_name = 2;
+  repeated PropertyKeyValue out_parameters = 3;
 }
 
 //=============================================================================
@@ -664,6 +687,7 @@ service AgentBridgeService {
   //--- Actor Manipulation ---
   rpc SpawnActor(SpawnActorRequest) returns (SpawnActorResponse);
   rpc DeleteActor(DeleteActorRequest) returns (TempoScripting.Empty);
+  rpc DuplicateActor(DuplicateActorRequest) returns (DuplicateActorResponse);
   rpc SetActorTransform(SetActorTransformRequest) returns (TempoScripting.Empty);
   rpc SetActorProperties(SetActorPropertiesRequest) returns (SetActorPropertiesResponse);
 
@@ -673,6 +697,7 @@ service AgentBridgeService {
 
   //--- Function Invocation ---
   rpc CallFunction(CallFunctionRequest) returns (CallFunctionResponse);
+  rpc CallAssetFunction(CallAssetFunctionRequest) returns (CallAssetFunctionResponse);
 
   //--- Type Discovery ---
   rpc FindClass(FindClassRequest) returns (FindClassResponse);
