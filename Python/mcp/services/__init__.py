@@ -116,10 +116,7 @@ MODULES = {
             "tempo_get_all_actors", "tempo_spawn_actor", "tempo_destroy_actor",
             "tempo_get_components", "tempo_add_component",
             "tempo_get_actor_properties", "tempo_get_component_properties",
-            "tempo_set_float_property", "tempo_set_int_property",
-            "tempo_set_bool_property", "tempo_set_string_property",
-            "tempo_set_vector_property", "tempo_set_rotator_property",
-            "tempo_set_color_property", "tempo_set_asset_property",
+            "tempo_set_property",  # Unified setter (replaces 8 typed setters)
             "tempo_set_actor_transform", "tempo_call_function",
         ],
         "description": "Tempo native actor operations",
