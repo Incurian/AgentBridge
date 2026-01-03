@@ -803,3 +803,195 @@ call_asset_function(node_path, 'SetNodePosition', {'InPositionX': 400, 'InPositi
 ```
 
 **Key takeaway:** Always query actual pin labels rather than guessing. Different node types use different naming conventions.
+
+---
+
+## PCG Node Position Behavior (2026-01-02)
+
+**Finding:** `SetNodePosition` correctly sets `PositionX` and `PositionY` values, but the graph editor doesn't refresh live to show the changes.
+
+**Verification:**
+```python
+# Set position
+call_asset_function(node_path, 'SetNodePosition', {'InPositionX': 500, 'InPositionY': 0})
+
+# Query position - values ARE updated
+pos_x = get_property(node_path, 'PositionX')  # Returns int_value: 500
+pos_y = get_property(node_path, 'PositionY')  # Returns int_value: 0
+```
+
+**Important:** When reading int32 properties, use `int_value` not `string_value` from the response.
+
+**Workaround:** Restart Unreal Editor to see updated positions. Simply closing/reopening the graph asset is NOT sufficient.
+
+**Status:** This is an editor caching issue, not a bug in the tooling. The underlying data is correctly modified and persists to disk.
+
+---
+
+## Phase 1 Summary: PCG Manipulation COMPLETE ✅
+
+Full programmatic PCG graph manipulation now works:
+
+| Capability | Status | Tool |
+|------------|--------|------|
+| Create empty graph | ✅ | `create_asset("PCGGraph", ...)` |
+| Add nodes | ✅ | `call_asset_function(graph, "AddNodeOfType", {TSubclassOf})` |
+| Connect nodes | ✅ | `call_asset_function(graph, "AddEdge", {...})` |
+| Set node positions | ✅ | `call_asset_function(node, "SetNodePosition", {...})` |
+| Configure settings | ✅ | `set_property(node.SettingsInterface, path, value)` |
+| Save graph | ✅ | `save_asset(graph_path)` |
+
+**Complete Working Example:**
+```python
+# 1. Create graph
+create_asset("PCGGraph", "/Game/Test", "MyGraph")
+graph = "/Game/Test/MyGraph.MyGraph"
+
+# 2. Get default nodes
+input_node = call_asset_function(graph, "GetInputNode").return_value.string_value
+output_node = call_asset_function(graph, "GetOutputNode").return_value.string_value
+
+# 3. Add processing nodes
+sampler = call_asset_function(graph, "AddNodeOfType",
+    {"InSettingsClass": "/Script/PCG.PCGSurfaceSamplerSettings"}).return_value.string_value
+spawner = call_asset_function(graph, "AddNodeOfType",
+    {"InSettingsClass": "/Script/PCG.PCGStaticMeshSpawnerSettings"}).return_value.string_value
+
+# 4. Connect pipeline (use queried pin labels!)
+call_asset_function(graph, "AddEdge", {"From": input_node, "FromPinLabel": "In",
+    "To": sampler, "ToPinLabel": "Surface"})
+call_asset_function(graph, "AddEdge", {"From": sampler, "FromPinLabel": "Out",
+    "To": spawner, "ToPinLabel": "In"})
+call_asset_function(graph, "AddEdge", {"From": spawner, "FromPinLabel": "Out",
+    "To": output_node, "ToPinLabel": "Out"})
+
+# 5. Position nodes (values update, editor needs refresh to display)
+call_asset_function(sampler, "SetNodePosition", {"InPositionX": 0, "InPositionY": 0})
+call_asset_function(spawner, "SetNodePosition", {"InPositionX": 500, "InPositionY": 0})
+
+# 6. Save
+save_asset("/Game/Test/MyGraph")
+```
+
+---
+
+## Phase 3: Blueprint Manipulation Analysis (2026-01-02)
+
+### Research Findings
+
+Unlike PCG which exposes `AddNodeOfType()` and `AddEdge()` as UFUNCTIONs, Blueprint graph manipulation
+is done through C++ editor utilities (`FBlueprintEditorUtils`) that are **not** exposed via reflection.
+
+### Available: BlueprintEditorLibrary
+
+The `BlueprintEditorLibrary` class provides static functions callable via `call_static_function`:
+
+| Function | Status | Purpose |
+|----------|--------|---------|
+| `CreateBlueprintAssetWithParent` | ✅ Works | Create Blueprint with parent class |
+| `AddFunctionGraph` | ✅ Works | Add custom function |
+| `RemoveFunctionGraph` | ✅ Works | Remove function |
+| `AddMemberVariable` | ✅ Works | Add variable with FEdGraphPinType |
+| `AddMemberVariableWithValue` | ⚠️ Limited | Infers type from int value only |
+| `CompileBlueprint` | ✅ Works | Compile the Blueprint |
+| `FindGraph` / `FindEventGraph` | ✅ Works | Get graph references |
+| `RenameGraph` | ✅ Works | Rename a graph |
+| `RemoveGraph` | ✅ Works | Remove a graph |
+| `ReparentBlueprint` | ✅ Works | Change parent class |
+| `RefreshOpenEditorsForBlueprint` | ✅ Works | Refresh editor UI |
+| `SetBlueprintVariableInstanceEditable` | ✅ Works | Variable property |
+| `SetBlueprintVariableExposeOnSpawn` | ✅ Works | Variable property |
+| `RemoveUnusedVariables` | ✅ Works | Cleanup |
+| `RemoveUnusedNodes` | ✅ Works | Cleanup |
+
+### NOT Available
+
+| Capability | Status | Reason |
+|------------|--------|--------|
+| Add K2Node to graph | ❌ | `FBlueprintEditorUtils::AddNode` is C++ only |
+| Connect pins | ❌ | `UEdGraphPin::MakeLinkTo` is C++ only |
+| Create Event nodes | ❌ | Requires `UK2Node_Event` construction |
+| Create CallFunction nodes | ❌ | Requires pin allocation |
+| Access pin data | ❌ | Pins stored in binary, not properties |
+
+### Working Example: Blueprint Structure Creation
+
+```python
+# Create a Blueprint with structure but no logic
+from mcp.services.agentbridge import call_static_function, save_asset
+
+# 1. Create Blueprint
+bp_path = call_static_function(
+    "BlueprintEditorLibrary",
+    "CreateBlueprintAssetWithParent",
+    {"AssetPath": "/Game/Test/BP_MyActor", "ParentClass": "/Script/Engine.Actor"}
+).return_value
+
+# 2. Add a function
+func_path = call_static_function(
+    "BlueprintEditorLibrary",
+    "AddFunctionGraph",
+    {"Blueprint": bp_path, "FuncName": "DoSomething"}
+).return_value
+
+# 3. Add a variable (using FEdGraphPinType)
+call_static_function(
+    "BlueprintEditorLibrary",
+    "AddMemberVariable",
+    {"Blueprint": bp_path, "MemberName": "Health",
+     "VariableType": {"PinCategory": "real", "PinSubCategory": "double"}}
+)
+
+# 4. Compile
+call_static_function("BlueprintEditorLibrary", "CompileBlueprint", {"Blueprint": bp_path})
+
+# 5. Save
+save_asset("/Game/Test/BP_MyActor")
+```
+
+### Variable Type Reference
+
+Use `GetBasicTypeByName` or construct `FEdGraphPinType` directly:
+
+| Type | PinCategory | PinSubCategory |
+|------|-------------|----------------|
+| Boolean | `bool` | - |
+| Integer | `int` | - |
+| Float | `real` | `double` or `float` |
+| String | `string` | - |
+| Name | `name` | - |
+| Text | `text` | - |
+| Byte | `byte` | - |
+
+For object/struct types, use `GetObjectReferenceType`, `GetClassReferenceType`, or `GetStructType`.
+
+### Options for Full Node Manipulation
+
+1. **ElgKismetEditorWidget Plugin** (Recommended)
+   - Third-party plugin with full graph manipulation
+   - GitHub: https://github.com/ElgSoft/ElgKismetEditorWidget
+   - Would need to be installed in project
+
+2. **Add Custom UFUNCTIONs to AgentBridge**
+   - Wrap `FBlueprintEditorUtils::AddNode`
+   - Wrap `UK2Node` creation and pin allocation
+   - Effort: ~8-12 hours
+
+3. **bp_toolkit Offline Manipulation**
+   - Works for UE 5.4 and earlier
+   - JSON-based node cloning
+   - Limited by UAssetGUI version support
+
+### Phase 3 Summary
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ❌ | No exposed API |
+| Connect pins | ❌ | No exposed API |
+| Full logic graphs | ❌ | Requires plugin or custom code |
+
+**Conclusion:** We can create Blueprint *scaffolding* (structure, variables, functions) but not *logic* (nodes, connections). For full programmatic Blueprint creation, either install ElgKismetEditorWidget or extend AgentBridge with custom node creation functions.

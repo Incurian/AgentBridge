@@ -636,3 +636,63 @@ Created `/Game/AgentBridge/Test/PCG_NodeTest` with:
 - Primitives (int, float, bool, string) - existing support
 
 **Next Phase:** Blueprint K2Node manipulation (Phase 3 in original plan)
+
+---
+
+## Session 3: Blueprint Research Complete (2026-01-02)
+
+### Findings
+
+Blueprint node manipulation differs fundamentally from PCG:
+
+| Aspect | PCG | Blueprint |
+|--------|-----|-----------|
+| Node creation API | `AddNodeOfType()` UFUNCTION | C++ only (`FBlueprintEditorUtils`) |
+| Edge/pin API | `AddEdge()` UFUNCTION | C++ only (`MakeLinkTo`) |
+| Exposed via reflection | ✅ Yes | ❌ No |
+
+### What Works via BlueprintEditorLibrary
+
+```python
+# Create Blueprint with parent
+call_static_function("BlueprintEditorLibrary", "CreateBlueprintAssetWithParent",
+    {"AssetPath": "/Game/Test/BP_Test", "ParentClass": "/Script/Engine.Actor"})
+
+# Add function
+call_static_function("BlueprintEditorLibrary", "AddFunctionGraph",
+    {"Blueprint": bp_path, "FuncName": "MyFunction"})
+
+# Add variable
+call_static_function("BlueprintEditorLibrary", "AddMemberVariable",
+    {"Blueprint": bp_path, "MemberName": "Health",
+     "VariableType": {"PinCategory": "real", "PinSubCategory": "double"}})
+
+# Compile
+call_static_function("BlueprintEditorLibrary", "CompileBlueprint", {"Blueprint": bp_path})
+```
+
+### What Doesn't Work
+
+- Adding K2Nodes (events, function calls, branches, etc.)
+- Connecting pins between nodes
+- Any logic/visual scripting content
+
+### Recommendation
+
+For full Blueprint node manipulation, options are:
+
+1. **Install ElgKismetEditorWidget** - Third-party plugin with full API
+2. **Extend AgentBridge** - Add custom UFUNCTIONs wrapping FBlueprintEditorUtils
+3. **Accept limitation** - Use BlueprintEditorLibrary for structure, duplicate for logic
+
+### Phase 3 Status: RESEARCH COMPLETE ⚠️
+
+Structure manipulation works, but node/pin manipulation requires additional development or third-party plugin.
+
+### Overall Project Status
+
+| Phase | Status | Capability |
+|-------|--------|------------|
+| Phase 1 | ✅ COMPLETE | `call_asset_function` with TSubclassOf |
+| Phase 2 | ✅ COMPLETE | Full PCG graph manipulation |
+| Phase 3 | ⚠️ PARTIAL | Blueprint structure only, no nodes |
