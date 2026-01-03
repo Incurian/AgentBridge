@@ -192,12 +192,78 @@ Cannot assign `TSoftObjectPtr<>` properties directly - use `TObjectPtr<>` where 
 - [x] Nested struct property writes - fixed via `WritePropertyDirect()`
 - [x] UObject property access - unified via `ResolveObject()`
 
+## Blueprint Node Commands (P2) - COMPLETE
+
+Full implementation complete across all layers. Ready for testing.
+
+### Commands Implemented
+
+| Command | Response | Status |
+|---------|----------|--------|
+| `FCreateBlueprintNodeCommand` | `FCreateBlueprintNodeResponse` | ✅ Complete |
+| `FConnectBlueprintPinsCommand` | `FAgentResponseBase` | ✅ Complete |
+| `FDisconnectBlueprintPinsCommand` | `FAgentResponseBase` | ✅ Complete |
+| `FDeleteBlueprintNodeCommand` | `FAgentResponseBase` | ✅ Complete |
+| `FListBlueprintNodesCommand` | `FListBlueprintNodesResponse` | ✅ Complete |
+| `FListBlueprintPinsCommand` | `FListBlueprintPinsResponse` | ✅ Complete |
+
+### MCP Tools Added
+
+- `bp_create_node` - Create nodes (CallFunction, Event, Variable, Branch, Sequence, Comment)
+- `bp_connect_pins` - Connect two Blueprint pins
+- `bp_disconnect_pins` - Disconnect Blueprint pins
+- `bp_delete_node` - Delete a node from a graph
+- `bp_list_nodes` - List all nodes in a graph
+- `bp_list_pins` - List all pins on a node
+
+### Supported Node Types
+
+- `CallFunction` - Requires `FunctionReference` like `KismetSystemLibrary.PrintString`
+- `Event` - Requires `EventName` like `ReceiveBeginPlay`
+- `VariableGet` / `VariableSet` - Requires `VariableName`
+- `Branch` - If/Then/Else node
+- `Sequence` - Execution sequence
+- `Comment` - Comment box
+
+### Key Implementation Details
+
+```cpp
+// Node creation pattern (in CommandExecutor.cpp)
+UK2Node_CallFunction* CallNode = NewObject<UK2Node_CallFunction>(Graph);
+Graph->AddNode(CallNode, false, false);
+CallNode->SetFromFunction(Function);
+CallNode->AllocateDefaultPins();
+CallNode->NodePosX = PosX;
+CallNode->NodePosY = PosY;
+FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
+
+// Pin connection pattern
+const UEdGraphSchema* Schema = Graph->GetSchema();
+Schema->TryCreateConnection(SourcePin, TargetPin);
+```
+
+### Implementation Layers (All Complete)
+
+1. ✅ **gRPC protos** in `AgentBridge.proto` - 6 messages + 6 RPCs
+2. ✅ **gRPC handlers** in `AgentBridgeServiceSubsystem.cpp` - Proto↔Command conversion
+3. ✅ **Python MCP tools** in `agentbridge.py` - 6 tools with response handling
+4. ⏳ **Test end-to-end**: Create Blueprint with BeginPlay → PrintString
+
+### Dependencies Added
+
+```csharp
+// In AgentBridgeScripting.Build.cs (editor-only)
+PrivateDependencyModuleNames.AddRange(new string[] {
+    "BlueprintGraph",    // K2Node classes
+    "KismetCompiler",    // Blueprint compilation
+});
+```
+
 ## Stretch Goals
 
 | Feature | Effort | Notes |
 |---------|--------|-------|
 | INI/Config automation | Medium | Read/write DefaultEngine.ini, DefaultGame.ini |
-| Graph editing | Very High | Blueprint nodes, Material nodes, PCG nodes |
 | Function parameters | Medium | `tempo_call_function(params={...})` support |
 
 ## Dependencies

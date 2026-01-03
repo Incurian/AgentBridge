@@ -1029,6 +1029,178 @@ TOOLS = [
         },
     },
 
+    # =========================================================================
+    # Blueprint Node Operations (P2)
+    # =========================================================================
+    {
+        "name": "bp_create_node",
+        "description": "Create a node in a Blueprint graph (CallFunction, Event, Variable, Branch, Sequence, Comment). Returns the created node's GUID and pin information.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "blueprint_path": {
+                    "type": "string",
+                    "description": "Blueprint asset path (e.g., '/Game/Blueprints/BP_MyActor.BP_MyActor')",
+                },
+                "graph_name": {
+                    "type": "string",
+                    "description": "Target graph name (default: 'EventGraph')",
+                    "default": "EventGraph",
+                },
+                "node_type": {
+                    "type": "string",
+                    "enum": ["CallFunction", "Event", "VariableGet", "VariableSet", "Branch", "Sequence", "Comment"],
+                    "description": "Type of node to create",
+                },
+                "function_reference": {
+                    "type": "string",
+                    "description": "For CallFunction: 'Class.Function' or '/Script/Module.Class:Function' (e.g., 'KismetSystemLibrary.PrintString')",
+                },
+                "event_name": {
+                    "type": "string",
+                    "description": "For Event: 'ReceiveBeginPlay', 'ReceiveTick', etc.",
+                },
+                "variable_name": {
+                    "type": "string",
+                    "description": "For VariableGet/VariableSet: Blueprint variable name",
+                },
+                "comment": {
+                    "type": "string",
+                    "description": "For Comment: The comment text",
+                },
+                "pos_x": {
+                    "type": "integer",
+                    "description": "X position in graph",
+                    "default": 0,
+                },
+                "pos_y": {
+                    "type": "integer",
+                    "description": "Y position in graph",
+                    "default": 0,
+                },
+            },
+            "required": ["blueprint_path", "node_type"],
+        },
+    },
+    {
+        "name": "bp_connect_pins",
+        "description": "Connect two pins between Blueprint nodes. Use ListBlueprintPins to find available pin names.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "blueprint_path": {
+                    "type": "string",
+                    "description": "Blueprint asset path",
+                },
+                "source_node": {
+                    "type": "string",
+                    "description": "Source node GUID or name",
+                },
+                "source_pin": {
+                    "type": "string",
+                    "description": "Source pin name (e.g., 'then', 'execute', 'ReturnValue')",
+                },
+                "target_node": {
+                    "type": "string",
+                    "description": "Target node GUID or name",
+                },
+                "target_pin": {
+                    "type": "string",
+                    "description": "Target pin name (e.g., 'execute', 'InString')",
+                },
+            },
+            "required": ["blueprint_path", "source_node", "source_pin", "target_node", "target_pin"],
+        },
+    },
+    {
+        "name": "bp_disconnect_pins",
+        "description": "Disconnect two connected Blueprint pins.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "blueprint_path": {
+                    "type": "string",
+                    "description": "Blueprint asset path",
+                },
+                "source_node": {
+                    "type": "string",
+                    "description": "Source node GUID or name",
+                },
+                "source_pin": {
+                    "type": "string",
+                    "description": "Source pin name",
+                },
+                "target_node": {
+                    "type": "string",
+                    "description": "Target node GUID or name",
+                },
+                "target_pin": {
+                    "type": "string",
+                    "description": "Target pin name",
+                },
+            },
+            "required": ["blueprint_path", "source_node", "source_pin", "target_node", "target_pin"],
+        },
+    },
+    {
+        "name": "bp_delete_node",
+        "description": "Delete a node from a Blueprint graph.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "blueprint_path": {
+                    "type": "string",
+                    "description": "Blueprint asset path",
+                },
+                "node_id": {
+                    "type": "string",
+                    "description": "Node GUID or name to delete",
+                },
+            },
+            "required": ["blueprint_path", "node_id"],
+        },
+    },
+    {
+        "name": "bp_list_nodes",
+        "description": "List all nodes in a Blueprint graph. Returns node GUIDs, types, positions, and pin information.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "blueprint_path": {
+                    "type": "string",
+                    "description": "Blueprint asset path",
+                },
+                "graph_name": {
+                    "type": "string",
+                    "description": "Target graph (empty = all graphs)",
+                },
+                "node_class_filter": {
+                    "type": "string",
+                    "description": "Optional filter by node class (e.g., 'K2Node_CallFunction')",
+                },
+            },
+            "required": ["blueprint_path"],
+        },
+    },
+    {
+        "name": "bp_list_pins",
+        "description": "List all pins on a Blueprint node. Returns pin names, directions, types, connections.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "blueprint_path": {
+                    "type": "string",
+                    "description": "Blueprint asset path",
+                },
+                "node_id": {
+                    "type": "string",
+                    "description": "Node GUID or name",
+                },
+            },
+            "required": ["blueprint_path", "node_id"],
+        },
+    },
+
 ]
 
 
@@ -1380,6 +1552,72 @@ class AgentBridgeClient:
             source_path=source_path,
             dest_path=dest_path,
             overwrite=overwrite,
+        ))
+
+    # -------------------------------------------------------------------------
+    # Blueprint Node Operations (P2)
+    # -------------------------------------------------------------------------
+
+    def create_blueprint_node(self, blueprint_path: str, node_type: str,
+                              graph_name: str = "EventGraph",
+                              function_reference: str = "",
+                              event_name: str = "",
+                              variable_name: str = "",
+                              comment: str = "",
+                              pos_x: int = 0, pos_y: int = 0):
+        return self.stub.CreateBlueprintNode(pb.CreateBlueprintNodeRequest(
+            blueprint_path=blueprint_path,
+            graph_name=graph_name,
+            node_type=node_type,
+            function_reference=function_reference,
+            event_name=event_name,
+            variable_name=variable_name,
+            comment=comment,
+            pos_x=pos_x,
+            pos_y=pos_y,
+        ))
+
+    def connect_blueprint_pins(self, blueprint_path: str,
+                               source_node: str, source_pin: str,
+                               target_node: str, target_pin: str):
+        return self.stub.ConnectBlueprintPins(pb.ConnectBlueprintPinsRequest(
+            blueprint_path=blueprint_path,
+            source_node=source_node,
+            source_pin=source_pin,
+            target_node=target_node,
+            target_pin=target_pin,
+        ))
+
+    def disconnect_blueprint_pins(self, blueprint_path: str,
+                                  source_node: str, source_pin: str,
+                                  target_node: str, target_pin: str):
+        return self.stub.DisconnectBlueprintPins(pb.DisconnectBlueprintPinsRequest(
+            blueprint_path=blueprint_path,
+            source_node=source_node,
+            source_pin=source_pin,
+            target_node=target_node,
+            target_pin=target_pin,
+        ))
+
+    def delete_blueprint_node(self, blueprint_path: str, node_id: str):
+        return self.stub.DeleteBlueprintNode(pb.DeleteBlueprintNodeRequest(
+            blueprint_path=blueprint_path,
+            node_id=node_id,
+        ))
+
+    def list_blueprint_nodes(self, blueprint_path: str,
+                             graph_name: str = "",
+                             node_class_filter: str = ""):
+        return self.stub.ListBlueprintNodes(pb.ListBlueprintNodesRequest(
+            blueprint_path=blueprint_path,
+            graph_name=graph_name,
+            node_class_filter=node_class_filter,
+        ))
+
+    def list_blueprint_pins(self, blueprint_path: str, node_id: str):
+        return self.stub.ListBlueprintPins(pb.ListBlueprintPinsRequest(
+            blueprint_path=blueprint_path,
+            node_id=node_id,
         ))
 
     # -------------------------------------------------------------------------
@@ -3390,6 +3628,155 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         if isinstance(result, dict) and "error" in result:
             return result
         return {"success": True}
+
+    # =========================================================================
+    # Blueprint Node Operations (P2)
+    # =========================================================================
+    elif tool_name == "bp_create_node":
+        result = safe_call(
+            client.create_blueprint_node,
+            args["blueprint_path"],
+            args["node_type"],
+            args.get("graph_name", "EventGraph"),
+            args.get("function_reference", ""),
+            args.get("event_name", ""),
+            args.get("variable_name", ""),
+            args.get("comment", ""),
+            args.get("pos_x", 0),
+            args.get("pos_y", 0),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        # Build node info dict with pins
+        node = result.node
+        pins = []
+        for pin in node.pins:
+            pins.append({
+                "name": pin.name,
+                "direction": pin.direction,
+                "type": pin.type,
+                "type_display_name": pin.type_display_name,
+                "is_connected": pin.is_connected,
+                "default_value": pin.default_value,
+                "connected_to": list(pin.connected_to),
+            })
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "node": {
+                "guid": node.guid,
+                "class_name": node.class_name,
+                "title": node.title,
+                "pos_x": node.pos_x,
+                "pos_y": node.pos_y,
+                "comment": node.comment,
+                "function_reference": node.function_reference,
+                "event_name": node.event_name,
+                "variable_name": node.variable_name,
+                "pins": pins,
+            } if result.success else None,
+        }
+
+    elif tool_name == "bp_connect_pins":
+        result = safe_call(
+            client.connect_blueprint_pins,
+            args["blueprint_path"],
+            args["source_node"],
+            args["source_pin"],
+            args["target_node"],
+            args["target_pin"],
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "bp_disconnect_pins":
+        result = safe_call(
+            client.disconnect_blueprint_pins,
+            args["blueprint_path"],
+            args["source_node"],
+            args["source_pin"],
+            args["target_node"],
+            args["target_pin"],
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "bp_delete_node":
+        result = safe_call(
+            client.delete_blueprint_node,
+            args["blueprint_path"],
+            args["node_id"],
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "bp_list_nodes":
+        result = safe_call(
+            client.list_blueprint_nodes,
+            args["blueprint_path"],
+            args.get("graph_name", ""),
+            args.get("node_class_filter", ""),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        nodes = []
+        for node in result.nodes:
+            pins = []
+            for pin in node.pins:
+                pins.append({
+                    "name": pin.name,
+                    "direction": pin.direction,
+                    "type": pin.type,
+                    "type_display_name": pin.type_display_name,
+                    "is_connected": pin.is_connected,
+                    "default_value": pin.default_value,
+                    "connected_to": list(pin.connected_to),
+                })
+            nodes.append({
+                "guid": node.guid,
+                "class_name": node.class_name,
+                "title": node.title,
+                "pos_x": node.pos_x,
+                "pos_y": node.pos_y,
+                "comment": node.comment,
+                "function_reference": node.function_reference,
+                "event_name": node.event_name,
+                "variable_name": node.variable_name,
+                "pins": pins,
+            })
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "nodes": nodes,
+        }
+
+    elif tool_name == "bp_list_pins":
+        result = safe_call(
+            client.list_blueprint_pins,
+            args["blueprint_path"],
+            args["node_id"],
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        pins = []
+        for pin in result.pins:
+            pins.append({
+                "name": pin.name,
+                "direction": pin.direction,
+                "type": pin.type,
+                "type_display_name": pin.type_display_name,
+                "is_connected": pin.is_connected,
+                "default_value": pin.default_value,
+                "connected_to": list(pin.connected_to),
+            })
+        return {
+            "success": result.success,
+            "error_message": result.error_message if not result.success else None,
+            "pins": pins,
+        }
 
     else:
         return {"error": f"Unknown tool: {tool_name}"}

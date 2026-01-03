@@ -343,6 +343,49 @@ class AgentBridgeService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> PrepareAsyncDeleteProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(PrepareAsyncDeleteProjectFileRaw(context, request, cq));
     }
+    // --- Blueprint Node Operations (P2) ---
+    virtual ::grpc::Status CreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::CreateBlueprintNodeResponse>> AsyncCreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::CreateBlueprintNodeResponse>>(AsyncCreateBlueprintNodeRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::CreateBlueprintNodeResponse>> PrepareAsyncCreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::CreateBlueprintNodeResponse>>(PrepareAsyncCreateBlueprintNodeRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::TempoScripting::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> AsyncConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(AsyncConnectBlueprintPinsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> PrepareAsyncConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(PrepareAsyncConnectBlueprintPinsRaw(context, request, cq));
+    }
+    virtual ::grpc::Status DisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::TempoScripting::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> AsyncDisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(AsyncDisconnectBlueprintPinsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> PrepareAsyncDisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(PrepareAsyncDisconnectBlueprintPinsRaw(context, request, cq));
+    }
+    virtual ::grpc::Status DeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::TempoScripting::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> AsyncDeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(AsyncDeleteBlueprintNodeRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> PrepareAsyncDeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(PrepareAsyncDeleteBlueprintNodeRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::AgentBridgeServer::ListBlueprintNodesResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintNodesResponse>> AsyncListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintNodesResponse>>(AsyncListBlueprintNodesRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintNodesResponse>> PrepareAsyncListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintNodesResponse>>(PrepareAsyncListBlueprintNodesRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::AgentBridgeServer::ListBlueprintPinsResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintPinsResponse>> AsyncListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintPinsResponse>>(AsyncListBlueprintPinsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintPinsResponse>> PrepareAsyncListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintPinsResponse>>(PrepareAsyncListBlueprintPinsRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -439,6 +482,19 @@ class AgentBridgeService final {
       virtual void CopyProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::CopyProjectFileRequest* request, ::AgentBridgeServer::CopyProjectFileResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void DeleteProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) = 0;
       virtual void DeleteProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      // --- Blueprint Node Operations (P2) ---
+      virtual void CreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void CreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void DisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void DisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void DeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void DeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::AgentBridgeServer::ListBlueprintNodesResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::AgentBridgeServer::ListBlueprintNodesResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::AgentBridgeServer::ListBlueprintPinsResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::AgentBridgeServer::ListBlueprintPinsResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -526,6 +582,18 @@ class AgentBridgeService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::CopyProjectFileResponse>* PrepareAsyncCopyProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::CopyProjectFileRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* AsyncDeleteProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncDeleteProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::CreateBlueprintNodeResponse>* AsyncCreateBlueprintNodeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::CreateBlueprintNodeResponse>* PrepareAsyncCreateBlueprintNodeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* AsyncConnectBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncConnectBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* AsyncDisconnectBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncDisconnectBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* AsyncDeleteBlueprintNodeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncDeleteBlueprintNodeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintNodesResponse>* AsyncListBlueprintNodesRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintNodesResponse>* PrepareAsyncListBlueprintNodesRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintPinsResponse>* AsyncListBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ListBlueprintPinsResponse>* PrepareAsyncListBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -817,6 +885,48 @@ class AgentBridgeService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> PrepareAsyncDeleteProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(PrepareAsyncDeleteProjectFileRaw(context, request, cq));
     }
+    ::grpc::Status CreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::CreateBlueprintNodeResponse>> AsyncCreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::CreateBlueprintNodeResponse>>(AsyncCreateBlueprintNodeRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::CreateBlueprintNodeResponse>> PrepareAsyncCreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::CreateBlueprintNodeResponse>>(PrepareAsyncCreateBlueprintNodeRaw(context, request, cq));
+    }
+    ::grpc::Status ConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::TempoScripting::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> AsyncConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(AsyncConnectBlueprintPinsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> PrepareAsyncConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(PrepareAsyncConnectBlueprintPinsRaw(context, request, cq));
+    }
+    ::grpc::Status DisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::TempoScripting::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> AsyncDisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(AsyncDisconnectBlueprintPinsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> PrepareAsyncDisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(PrepareAsyncDisconnectBlueprintPinsRaw(context, request, cq));
+    }
+    ::grpc::Status DeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::TempoScripting::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> AsyncDeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(AsyncDeleteBlueprintNodeRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> PrepareAsyncDeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(PrepareAsyncDeleteBlueprintNodeRaw(context, request, cq));
+    }
+    ::grpc::Status ListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::AgentBridgeServer::ListBlueprintNodesResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintNodesResponse>> AsyncListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintNodesResponse>>(AsyncListBlueprintNodesRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintNodesResponse>> PrepareAsyncListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintNodesResponse>>(PrepareAsyncListBlueprintNodesRaw(context, request, cq));
+    }
+    ::grpc::Status ListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::AgentBridgeServer::ListBlueprintPinsResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintPinsResponse>> AsyncListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintPinsResponse>>(AsyncListBlueprintPinsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintPinsResponse>> PrepareAsyncListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintPinsResponse>>(PrepareAsyncListBlueprintPinsRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -902,6 +1012,18 @@ class AgentBridgeService final {
       void CopyProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::CopyProjectFileRequest* request, ::AgentBridgeServer::CopyProjectFileResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void DeleteProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) override;
       void DeleteProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void CreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response, std::function<void(::grpc::Status)>) override;
+      void CreateBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) override;
+      void ConnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void DisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) override;
+      void DisconnectBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void DeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) override;
+      void DeleteBlueprintNode(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::AgentBridgeServer::ListBlueprintNodesResponse* response, std::function<void(::grpc::Status)>) override;
+      void ListBlueprintNodes(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::AgentBridgeServer::ListBlueprintNodesResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::AgentBridgeServer::ListBlueprintPinsResponse* response, std::function<void(::grpc::Status)>) override;
+      void ListBlueprintPins(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::AgentBridgeServer::ListBlueprintPinsResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -995,6 +1117,18 @@ class AgentBridgeService final {
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::CopyProjectFileResponse>* PrepareAsyncCopyProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::CopyProjectFileRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AsyncDeleteProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncDeleteProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::CreateBlueprintNodeResponse>* AsyncCreateBlueprintNodeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::CreateBlueprintNodeResponse>* PrepareAsyncCreateBlueprintNodeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AsyncConnectBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncConnectBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AsyncDisconnectBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncDisconnectBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AsyncDeleteBlueprintNodeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncDeleteBlueprintNodeRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintNodesResponse>* AsyncListBlueprintNodesRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintNodesResponse>* PrepareAsyncListBlueprintNodesRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintPinsResponse>* AsyncListBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ListBlueprintPinsResponse>* PrepareAsyncListBlueprintPinsRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_ListWorlds_;
     const ::grpc::internal::RpcMethod rpcmethod_SetTargetWorld_;
     const ::grpc::internal::RpcMethod rpcmethod_QueryActors_;
@@ -1036,6 +1170,12 @@ class AgentBridgeService final {
     const ::grpc::internal::RpcMethod rpcmethod_ListProjectDirectory_;
     const ::grpc::internal::RpcMethod rpcmethod_CopyProjectFile_;
     const ::grpc::internal::RpcMethod rpcmethod_DeleteProjectFile_;
+    const ::grpc::internal::RpcMethod rpcmethod_CreateBlueprintNode_;
+    const ::grpc::internal::RpcMethod rpcmethod_ConnectBlueprintPins_;
+    const ::grpc::internal::RpcMethod rpcmethod_DisconnectBlueprintPins_;
+    const ::grpc::internal::RpcMethod rpcmethod_DeleteBlueprintNode_;
+    const ::grpc::internal::RpcMethod rpcmethod_ListBlueprintNodes_;
+    const ::grpc::internal::RpcMethod rpcmethod_ListBlueprintPins_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -1095,6 +1235,13 @@ class AgentBridgeService final {
     virtual ::grpc::Status ListProjectDirectory(::grpc::ServerContext* context, const ::AgentBridgeServer::ListProjectDirectoryRequest* request, ::AgentBridgeServer::ListProjectDirectoryResponse* response);
     virtual ::grpc::Status CopyProjectFile(::grpc::ServerContext* context, const ::AgentBridgeServer::CopyProjectFileRequest* request, ::AgentBridgeServer::CopyProjectFileResponse* response);
     virtual ::grpc::Status DeleteProjectFile(::grpc::ServerContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest* request, ::TempoScripting::Empty* response);
+    // --- Blueprint Node Operations (P2) ---
+    virtual ::grpc::Status CreateBlueprintNode(::grpc::ServerContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response);
+    virtual ::grpc::Status ConnectBlueprintPins(::grpc::ServerContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response);
+    virtual ::grpc::Status DisconnectBlueprintPins(::grpc::ServerContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response);
+    virtual ::grpc::Status DeleteBlueprintNode(::grpc::ServerContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::TempoScripting::Empty* response);
+    virtual ::grpc::Status ListBlueprintNodes(::grpc::ServerContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::AgentBridgeServer::ListBlueprintNodesResponse* response);
+    virtual ::grpc::Status ListBlueprintPins(::grpc::ServerContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::AgentBridgeServer::ListBlueprintPinsResponse* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_ListWorlds : public BaseClass {
@@ -1916,7 +2063,127 @@ class AgentBridgeService final {
       ::grpc::Service::RequestAsyncUnary(40, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_ListWorlds<WithAsyncMethod_SetTargetWorld<WithAsyncMethod_QueryActors<WithAsyncMethod_GetActor<WithAsyncMethod_SpawnActor<WithAsyncMethod_DeleteActor<WithAsyncMethod_DuplicateActor<WithAsyncMethod_SetActorTransform<WithAsyncMethod_SetActorProperties<WithAsyncMethod_GetPropertyPath<WithAsyncMethod_SetPropertyPath<WithAsyncMethod_CallFunction<WithAsyncMethod_CallAssetFunction<WithAsyncMethod_FindClass<WithAsyncMethod_GetClassSchema<WithAsyncMethod_ListClasses<WithAsyncMethod_IsWorldPartitioned<WithAsyncMethod_QueryAllActors<WithAsyncMethod_GetStreamingState<WithAsyncMethod_QueryLandscape<WithAsyncMethod_GetLandscapeBounds<WithAsyncMethod_GetDataLayers<WithAsyncMethod_GetActorsInDataLayer<WithAsyncMethod_ExecuteConsoleCommand<WithAsyncMethod_SearchConsoleCommands<WithAsyncMethod_CreateAsset<WithAsyncMethod_SaveAsset<WithAsyncMethod_SaveActorAsBlueprint<WithAsyncMethod_DuplicateAsset<WithAsyncMethod_GetAssetThumbnail<WithAsyncMethod_GetComponentTransform<WithAsyncMethod_SetComponentTransform<WithAsyncMethod_AttachComponent<WithAsyncMethod_AttachActor<WithAsyncMethod_DetachComponent<WithAsyncMethod_DetachActor<WithAsyncMethod_ReadProjectFile<WithAsyncMethod_WriteProjectFile<WithAsyncMethod_ListProjectDirectory<WithAsyncMethod_CopyProjectFile<WithAsyncMethod_DeleteProjectFile<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_CreateBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_CreateBlueprintNode() {
+      ::grpc::Service::MarkMethodAsync(41);
+    }
+    ~WithAsyncMethod_CreateBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CreateBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::CreateBlueprintNodeRequest* /*request*/, ::AgentBridgeServer::CreateBlueprintNodeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestCreateBlueprintNode(::grpc::ServerContext* context, ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::CreateBlueprintNodeResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(41, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ConnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ConnectBlueprintPins() {
+      ::grpc::Service::MarkMethodAsync(42);
+    }
+    ~WithAsyncMethod_ConnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ConnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestConnectBlueprintPins(::grpc::ServerContext* context, ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(42, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_DisconnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_DisconnectBlueprintPins() {
+      ::grpc::Service::MarkMethodAsync(43);
+    }
+    ~WithAsyncMethod_DisconnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DisconnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDisconnectBlueprintPins(::grpc::ServerContext* context, ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(43, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_DeleteBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_DeleteBlueprintNode() {
+      ::grpc::Service::MarkMethodAsync(44);
+    }
+    ~WithAsyncMethod_DeleteBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DeleteBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDeleteBlueprintNode(::grpc::ServerContext* context, ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(44, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ListBlueprintNodes : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ListBlueprintNodes() {
+      ::grpc::Service::MarkMethodAsync(45);
+    }
+    ~WithAsyncMethod_ListBlueprintNodes() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintNodes(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintNodesRequest* /*request*/, ::AgentBridgeServer::ListBlueprintNodesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListBlueprintNodes(::grpc::ServerContext* context, ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::ListBlueprintNodesResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(45, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ListBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ListBlueprintPins() {
+      ::grpc::Service::MarkMethodAsync(46);
+    }
+    ~WithAsyncMethod_ListBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintPinsRequest* /*request*/, ::AgentBridgeServer::ListBlueprintPinsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListBlueprintPins(::grpc::ServerContext* context, ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::ListBlueprintPinsResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(46, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_ListWorlds<WithAsyncMethod_SetTargetWorld<WithAsyncMethod_QueryActors<WithAsyncMethod_GetActor<WithAsyncMethod_SpawnActor<WithAsyncMethod_DeleteActor<WithAsyncMethod_DuplicateActor<WithAsyncMethod_SetActorTransform<WithAsyncMethod_SetActorProperties<WithAsyncMethod_GetPropertyPath<WithAsyncMethod_SetPropertyPath<WithAsyncMethod_CallFunction<WithAsyncMethod_CallAssetFunction<WithAsyncMethod_FindClass<WithAsyncMethod_GetClassSchema<WithAsyncMethod_ListClasses<WithAsyncMethod_IsWorldPartitioned<WithAsyncMethod_QueryAllActors<WithAsyncMethod_GetStreamingState<WithAsyncMethod_QueryLandscape<WithAsyncMethod_GetLandscapeBounds<WithAsyncMethod_GetDataLayers<WithAsyncMethod_GetActorsInDataLayer<WithAsyncMethod_ExecuteConsoleCommand<WithAsyncMethod_SearchConsoleCommands<WithAsyncMethod_CreateAsset<WithAsyncMethod_SaveAsset<WithAsyncMethod_SaveActorAsBlueprint<WithAsyncMethod_DuplicateAsset<WithAsyncMethod_GetAssetThumbnail<WithAsyncMethod_GetComponentTransform<WithAsyncMethod_SetComponentTransform<WithAsyncMethod_AttachComponent<WithAsyncMethod_AttachActor<WithAsyncMethod_DetachComponent<WithAsyncMethod_DetachActor<WithAsyncMethod_ReadProjectFile<WithAsyncMethod_WriteProjectFile<WithAsyncMethod_ListProjectDirectory<WithAsyncMethod_CopyProjectFile<WithAsyncMethod_DeleteProjectFile<WithAsyncMethod_CreateBlueprintNode<WithAsyncMethod_ConnectBlueprintPins<WithAsyncMethod_DisconnectBlueprintPins<WithAsyncMethod_DeleteBlueprintNode<WithAsyncMethod_ListBlueprintNodes<WithAsyncMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_ListWorlds : public BaseClass {
    private:
@@ -3024,7 +3291,169 @@ class AgentBridgeService final {
     virtual ::grpc::ServerUnaryReactor* DeleteProjectFile(
       ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::DeleteProjectFileRequest* /*request*/, ::TempoScripting::Empty* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_ListWorlds<WithCallbackMethod_SetTargetWorld<WithCallbackMethod_QueryActors<WithCallbackMethod_GetActor<WithCallbackMethod_SpawnActor<WithCallbackMethod_DeleteActor<WithCallbackMethod_DuplicateActor<WithCallbackMethod_SetActorTransform<WithCallbackMethod_SetActorProperties<WithCallbackMethod_GetPropertyPath<WithCallbackMethod_SetPropertyPath<WithCallbackMethod_CallFunction<WithCallbackMethod_CallAssetFunction<WithCallbackMethod_FindClass<WithCallbackMethod_GetClassSchema<WithCallbackMethod_ListClasses<WithCallbackMethod_IsWorldPartitioned<WithCallbackMethod_QueryAllActors<WithCallbackMethod_GetStreamingState<WithCallbackMethod_QueryLandscape<WithCallbackMethod_GetLandscapeBounds<WithCallbackMethod_GetDataLayers<WithCallbackMethod_GetActorsInDataLayer<WithCallbackMethod_ExecuteConsoleCommand<WithCallbackMethod_SearchConsoleCommands<WithCallbackMethod_CreateAsset<WithCallbackMethod_SaveAsset<WithCallbackMethod_SaveActorAsBlueprint<WithCallbackMethod_DuplicateAsset<WithCallbackMethod_GetAssetThumbnail<WithCallbackMethod_GetComponentTransform<WithCallbackMethod_SetComponentTransform<WithCallbackMethod_AttachComponent<WithCallbackMethod_AttachActor<WithCallbackMethod_DetachComponent<WithCallbackMethod_DetachActor<WithCallbackMethod_ReadProjectFile<WithCallbackMethod_WriteProjectFile<WithCallbackMethod_ListProjectDirectory<WithCallbackMethod_CopyProjectFile<WithCallbackMethod_DeleteProjectFile<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_CreateBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_CreateBlueprintNode() {
+      ::grpc::Service::MarkMethodCallback(41,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response) { return this->CreateBlueprintNode(context, request, response); }));}
+    void SetMessageAllocatorFor_CreateBlueprintNode(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(41);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_CreateBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CreateBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::CreateBlueprintNodeRequest* /*request*/, ::AgentBridgeServer::CreateBlueprintNodeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* CreateBlueprintNode(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::CreateBlueprintNodeRequest* /*request*/, ::AgentBridgeServer::CreateBlueprintNodeResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ConnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ConnectBlueprintPins() {
+      ::grpc::Service::MarkMethodCallback(42,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response) { return this->ConnectBlueprintPins(context, request, response); }));}
+    void SetMessageAllocatorFor_ConnectBlueprintPins(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(42);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ConnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ConnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ConnectBlueprintPins(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_DisconnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_DisconnectBlueprintPins() {
+      ::grpc::Service::MarkMethodCallback(43,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response) { return this->DisconnectBlueprintPins(context, request, response); }));}
+    void SetMessageAllocatorFor_DisconnectBlueprintPins(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(43);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_DisconnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DisconnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* DisconnectBlueprintPins(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_DeleteBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_DeleteBlueprintNode() {
+      ::grpc::Service::MarkMethodCallback(44,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::TempoScripting::Empty* response) { return this->DeleteBlueprintNode(context, request, response); }));}
+    void SetMessageAllocatorFor_DeleteBlueprintNode(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(44);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_DeleteBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DeleteBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* DeleteBlueprintNode(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* /*request*/, ::TempoScripting::Empty* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ListBlueprintNodes : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ListBlueprintNodes() {
+      ::grpc::Service::MarkMethodCallback(45,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::AgentBridgeServer::ListBlueprintNodesResponse* response) { return this->ListBlueprintNodes(context, request, response); }));}
+    void SetMessageAllocatorFor_ListBlueprintNodes(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(45);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ListBlueprintNodes() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintNodes(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintNodesRequest* /*request*/, ::AgentBridgeServer::ListBlueprintNodesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListBlueprintNodes(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintNodesRequest* /*request*/, ::AgentBridgeServer::ListBlueprintNodesResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ListBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ListBlueprintPins() {
+      ::grpc::Service::MarkMethodCallback(46,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::AgentBridgeServer::ListBlueprintPinsResponse* response) { return this->ListBlueprintPins(context, request, response); }));}
+    void SetMessageAllocatorFor_ListBlueprintPins(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(46);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ListBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintPinsRequest* /*request*/, ::AgentBridgeServer::ListBlueprintPinsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListBlueprintPins(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintPinsRequest* /*request*/, ::AgentBridgeServer::ListBlueprintPinsResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_ListWorlds<WithCallbackMethod_SetTargetWorld<WithCallbackMethod_QueryActors<WithCallbackMethod_GetActor<WithCallbackMethod_SpawnActor<WithCallbackMethod_DeleteActor<WithCallbackMethod_DuplicateActor<WithCallbackMethod_SetActorTransform<WithCallbackMethod_SetActorProperties<WithCallbackMethod_GetPropertyPath<WithCallbackMethod_SetPropertyPath<WithCallbackMethod_CallFunction<WithCallbackMethod_CallAssetFunction<WithCallbackMethod_FindClass<WithCallbackMethod_GetClassSchema<WithCallbackMethod_ListClasses<WithCallbackMethod_IsWorldPartitioned<WithCallbackMethod_QueryAllActors<WithCallbackMethod_GetStreamingState<WithCallbackMethod_QueryLandscape<WithCallbackMethod_GetLandscapeBounds<WithCallbackMethod_GetDataLayers<WithCallbackMethod_GetActorsInDataLayer<WithCallbackMethod_ExecuteConsoleCommand<WithCallbackMethod_SearchConsoleCommands<WithCallbackMethod_CreateAsset<WithCallbackMethod_SaveAsset<WithCallbackMethod_SaveActorAsBlueprint<WithCallbackMethod_DuplicateAsset<WithCallbackMethod_GetAssetThumbnail<WithCallbackMethod_GetComponentTransform<WithCallbackMethod_SetComponentTransform<WithCallbackMethod_AttachComponent<WithCallbackMethod_AttachActor<WithCallbackMethod_DetachComponent<WithCallbackMethod_DetachActor<WithCallbackMethod_ReadProjectFile<WithCallbackMethod_WriteProjectFile<WithCallbackMethod_ListProjectDirectory<WithCallbackMethod_CopyProjectFile<WithCallbackMethod_DeleteProjectFile<WithCallbackMethod_CreateBlueprintNode<WithCallbackMethod_ConnectBlueprintPins<WithCallbackMethod_DisconnectBlueprintPins<WithCallbackMethod_DeleteBlueprintNode<WithCallbackMethod_ListBlueprintNodes<WithCallbackMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_ListWorlds : public BaseClass {
@@ -3719,6 +4148,108 @@ class AgentBridgeService final {
     }
     // disable synchronous version of this method
     ::grpc::Status DeleteProjectFile(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DeleteProjectFileRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_CreateBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_CreateBlueprintNode() {
+      ::grpc::Service::MarkMethodGeneric(41);
+    }
+    ~WithGenericMethod_CreateBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CreateBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::CreateBlueprintNodeRequest* /*request*/, ::AgentBridgeServer::CreateBlueprintNodeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ConnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ConnectBlueprintPins() {
+      ::grpc::Service::MarkMethodGeneric(42);
+    }
+    ~WithGenericMethod_ConnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ConnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_DisconnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_DisconnectBlueprintPins() {
+      ::grpc::Service::MarkMethodGeneric(43);
+    }
+    ~WithGenericMethod_DisconnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DisconnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_DeleteBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_DeleteBlueprintNode() {
+      ::grpc::Service::MarkMethodGeneric(44);
+    }
+    ~WithGenericMethod_DeleteBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DeleteBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ListBlueprintNodes : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ListBlueprintNodes() {
+      ::grpc::Service::MarkMethodGeneric(45);
+    }
+    ~WithGenericMethod_ListBlueprintNodes() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintNodes(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintNodesRequest* /*request*/, ::AgentBridgeServer::ListBlueprintNodesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ListBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ListBlueprintPins() {
+      ::grpc::Service::MarkMethodGeneric(46);
+    }
+    ~WithGenericMethod_ListBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintPinsRequest* /*request*/, ::AgentBridgeServer::ListBlueprintPinsResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -4541,6 +5072,126 @@ class AgentBridgeService final {
     }
     void RequestDeleteProjectFile(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(40, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_CreateBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_CreateBlueprintNode() {
+      ::grpc::Service::MarkMethodRaw(41);
+    }
+    ~WithRawMethod_CreateBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CreateBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::CreateBlueprintNodeRequest* /*request*/, ::AgentBridgeServer::CreateBlueprintNodeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestCreateBlueprintNode(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(41, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ConnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ConnectBlueprintPins() {
+      ::grpc::Service::MarkMethodRaw(42);
+    }
+    ~WithRawMethod_ConnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ConnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestConnectBlueprintPins(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(42, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_DisconnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_DisconnectBlueprintPins() {
+      ::grpc::Service::MarkMethodRaw(43);
+    }
+    ~WithRawMethod_DisconnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DisconnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDisconnectBlueprintPins(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(43, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_DeleteBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_DeleteBlueprintNode() {
+      ::grpc::Service::MarkMethodRaw(44);
+    }
+    ~WithRawMethod_DeleteBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DeleteBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDeleteBlueprintNode(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(44, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ListBlueprintNodes : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ListBlueprintNodes() {
+      ::grpc::Service::MarkMethodRaw(45);
+    }
+    ~WithRawMethod_ListBlueprintNodes() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintNodes(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintNodesRequest* /*request*/, ::AgentBridgeServer::ListBlueprintNodesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListBlueprintNodes(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(45, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ListBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ListBlueprintPins() {
+      ::grpc::Service::MarkMethodRaw(46);
+    }
+    ~WithRawMethod_ListBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintPinsRequest* /*request*/, ::AgentBridgeServer::ListBlueprintPinsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListBlueprintPins(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(46, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5443,6 +6094,138 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* DeleteProjectFile(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_CreateBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_CreateBlueprintNode() {
+      ::grpc::Service::MarkMethodRawCallback(41,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->CreateBlueprintNode(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_CreateBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CreateBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::CreateBlueprintNodeRequest* /*request*/, ::AgentBridgeServer::CreateBlueprintNodeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* CreateBlueprintNode(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ConnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ConnectBlueprintPins() {
+      ::grpc::Service::MarkMethodRawCallback(42,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ConnectBlueprintPins(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ConnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ConnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ConnectBlueprintPins(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_DisconnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_DisconnectBlueprintPins() {
+      ::grpc::Service::MarkMethodRawCallback(43,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->DisconnectBlueprintPins(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_DisconnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DisconnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* DisconnectBlueprintPins(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_DeleteBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_DeleteBlueprintNode() {
+      ::grpc::Service::MarkMethodRawCallback(44,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->DeleteBlueprintNode(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_DeleteBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DeleteBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* DeleteBlueprintNode(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ListBlueprintNodes : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ListBlueprintNodes() {
+      ::grpc::Service::MarkMethodRawCallback(45,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListBlueprintNodes(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ListBlueprintNodes() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintNodes(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintNodesRequest* /*request*/, ::AgentBridgeServer::ListBlueprintNodesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListBlueprintNodes(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ListBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ListBlueprintPins() {
+      ::grpc::Service::MarkMethodRawCallback(46,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListBlueprintPins(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ListBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintPinsRequest* /*request*/, ::AgentBridgeServer::ListBlueprintPinsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListBlueprintPins(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -6552,9 +7335,171 @@ class AgentBridgeService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedDeleteProjectFile(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::DeleteProjectFileRequest,::TempoScripting::Empty>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_DuplicateActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_CallAssetFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetLandscapeBounds<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<WithStreamedUnaryMethod_CreateAsset<WithStreamedUnaryMethod_SaveAsset<WithStreamedUnaryMethod_SaveActorAsBlueprint<WithStreamedUnaryMethod_DuplicateAsset<WithStreamedUnaryMethod_GetAssetThumbnail<WithStreamedUnaryMethod_GetComponentTransform<WithStreamedUnaryMethod_SetComponentTransform<WithStreamedUnaryMethod_AttachComponent<WithStreamedUnaryMethod_AttachActor<WithStreamedUnaryMethod_DetachComponent<WithStreamedUnaryMethod_DetachActor<WithStreamedUnaryMethod_ReadProjectFile<WithStreamedUnaryMethod_WriteProjectFile<WithStreamedUnaryMethod_ListProjectDirectory<WithStreamedUnaryMethod_CopyProjectFile<WithStreamedUnaryMethod_DeleteProjectFile<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_CreateBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_CreateBlueprintNode() {
+      ::grpc::Service::MarkMethodStreamed(41,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>* streamer) {
+                       return this->StreamedCreateBlueprintNode(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_CreateBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status CreateBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::CreateBlueprintNodeRequest* /*request*/, ::AgentBridgeServer::CreateBlueprintNodeResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedCreateBlueprintNode(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::CreateBlueprintNodeRequest,::AgentBridgeServer::CreateBlueprintNodeResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ConnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ConnectBlueprintPins() {
+      ::grpc::Service::MarkMethodStreamed(42,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>* streamer) {
+                       return this->StreamedConnectBlueprintPins(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ConnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ConnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedConnectBlueprintPins(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::ConnectBlueprintPinsRequest,::TempoScripting::Empty>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_DisconnectBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_DisconnectBlueprintPins() {
+      ::grpc::Service::MarkMethodStreamed(43,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>* streamer) {
+                       return this->StreamedDisconnectBlueprintPins(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_DisconnectBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status DisconnectBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedDisconnectBlueprintPins(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::DisconnectBlueprintPinsRequest,::TempoScripting::Empty>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_DeleteBlueprintNode : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_DeleteBlueprintNode() {
+      ::grpc::Service::MarkMethodStreamed(44,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>* streamer) {
+                       return this->StreamedDeleteBlueprintNode(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_DeleteBlueprintNode() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status DeleteBlueprintNode(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedDeleteBlueprintNode(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::DeleteBlueprintNodeRequest,::TempoScripting::Empty>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ListBlueprintNodes : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ListBlueprintNodes() {
+      ::grpc::Service::MarkMethodStreamed(45,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>* streamer) {
+                       return this->StreamedListBlueprintNodes(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ListBlueprintNodes() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ListBlueprintNodes(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintNodesRequest* /*request*/, ::AgentBridgeServer::ListBlueprintNodesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedListBlueprintNodes(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::ListBlueprintNodesRequest,::AgentBridgeServer::ListBlueprintNodesResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ListBlueprintPins : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ListBlueprintPins() {
+      ::grpc::Service::MarkMethodStreamed(46,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>* streamer) {
+                       return this->StreamedListBlueprintPins(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ListBlueprintPins() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ListBlueprintPins(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintPinsRequest* /*request*/, ::AgentBridgeServer::ListBlueprintPinsResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedListBlueprintPins(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::ListBlueprintPinsRequest,::AgentBridgeServer::ListBlueprintPinsResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_DuplicateActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_CallAssetFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetLandscapeBounds<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<WithStreamedUnaryMethod_CreateAsset<WithStreamedUnaryMethod_SaveAsset<WithStreamedUnaryMethod_SaveActorAsBlueprint<WithStreamedUnaryMethod_DuplicateAsset<WithStreamedUnaryMethod_GetAssetThumbnail<WithStreamedUnaryMethod_GetComponentTransform<WithStreamedUnaryMethod_SetComponentTransform<WithStreamedUnaryMethod_AttachComponent<WithStreamedUnaryMethod_AttachActor<WithStreamedUnaryMethod_DetachComponent<WithStreamedUnaryMethod_DetachActor<WithStreamedUnaryMethod_ReadProjectFile<WithStreamedUnaryMethod_WriteProjectFile<WithStreamedUnaryMethod_ListProjectDirectory<WithStreamedUnaryMethod_CopyProjectFile<WithStreamedUnaryMethod_DeleteProjectFile<WithStreamedUnaryMethod_CreateBlueprintNode<WithStreamedUnaryMethod_ConnectBlueprintPins<WithStreamedUnaryMethod_DisconnectBlueprintPins<WithStreamedUnaryMethod_DeleteBlueprintNode<WithStreamedUnaryMethod_ListBlueprintNodes<WithStreamedUnaryMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_DuplicateActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_CallAssetFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetLandscapeBounds<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<WithStreamedUnaryMethod_CreateAsset<WithStreamedUnaryMethod_SaveAsset<WithStreamedUnaryMethod_SaveActorAsBlueprint<WithStreamedUnaryMethod_DuplicateAsset<WithStreamedUnaryMethod_GetAssetThumbnail<WithStreamedUnaryMethod_GetComponentTransform<WithStreamedUnaryMethod_SetComponentTransform<WithStreamedUnaryMethod_AttachComponent<WithStreamedUnaryMethod_AttachActor<WithStreamedUnaryMethod_DetachComponent<WithStreamedUnaryMethod_DetachActor<WithStreamedUnaryMethod_ReadProjectFile<WithStreamedUnaryMethod_WriteProjectFile<WithStreamedUnaryMethod_ListProjectDirectory<WithStreamedUnaryMethod_CopyProjectFile<WithStreamedUnaryMethod_DeleteProjectFile<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_DuplicateActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_CallAssetFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetLandscapeBounds<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<WithStreamedUnaryMethod_CreateAsset<WithStreamedUnaryMethod_SaveAsset<WithStreamedUnaryMethod_SaveActorAsBlueprint<WithStreamedUnaryMethod_DuplicateAsset<WithStreamedUnaryMethod_GetAssetThumbnail<WithStreamedUnaryMethod_GetComponentTransform<WithStreamedUnaryMethod_SetComponentTransform<WithStreamedUnaryMethod_AttachComponent<WithStreamedUnaryMethod_AttachActor<WithStreamedUnaryMethod_DetachComponent<WithStreamedUnaryMethod_DetachActor<WithStreamedUnaryMethod_ReadProjectFile<WithStreamedUnaryMethod_WriteProjectFile<WithStreamedUnaryMethod_ListProjectDirectory<WithStreamedUnaryMethod_CopyProjectFile<WithStreamedUnaryMethod_DeleteProjectFile<WithStreamedUnaryMethod_CreateBlueprintNode<WithStreamedUnaryMethod_ConnectBlueprintPins<WithStreamedUnaryMethod_DisconnectBlueprintPins<WithStreamedUnaryMethod_DeleteBlueprintNode<WithStreamedUnaryMethod_ListBlueprintNodes<WithStreamedUnaryMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace AgentBridgeServer

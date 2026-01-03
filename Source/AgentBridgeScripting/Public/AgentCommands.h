@@ -90,6 +90,14 @@ enum class EAgentCommandType : uint8
 	CopyProjectFile,
 	DeleteProjectFile,
 
+	// Blueprint Node Commands (P2)
+	CreateBlueprintNode,
+	ConnectBlueprintPins,
+	DisconnectBlueprintPins,
+	DeleteBlueprintNode,
+	ListBlueprintNodes,
+	ListBlueprintPins,
+
 	// Batch Commands
 	BatchExecute,
 
@@ -1213,6 +1221,149 @@ struct AGENTBRIDGESCRIPTING_API FDeleteProjectFileCommand : FAgentCommandBase
 };
 
 //~==============================================================================
+// Blueprint Node Commands (P2 - Visual Scripting)
+//~==============================================================================
+
+/**
+ * FCreateBlueprintNodeCommand - Creates a K2Node in a Blueprint graph.
+ *
+ * Supports creating various node types:
+ * - CallFunction: Calls a function (requires FunctionReference)
+ * - Event: Event entry point like BeginPlay, Tick (requires EventName)
+ * - VariableGet/VariableSet: Read/write a variable (requires VariableName)
+ * - Branch: If/then/else node
+ * - Sequence: Execution sequence node
+ * - Comment: Comment box (requires Comment text)
+ */
+struct AGENTBRIDGESCRIPTING_API FCreateBlueprintNodeCommand : FAgentCommandBase
+{
+	FCreateBlueprintNodeCommand() { Type = EAgentCommandType::CreateBlueprintNode; }
+
+	/** Asset path to the Blueprint (e.g., "/Game/Blueprints/BP_MyActor.BP_MyActor"). */
+	FString BlueprintPath;
+
+	/** Graph name (e.g., "EventGraph", or a function graph name). Empty = EventGraph. */
+	FString GraphName;
+
+	/** Node type: "CallFunction", "Event", "VariableGet", "VariableSet",
+	    "Branch", "Sequence", "Comment" */
+	FString NodeType;
+
+	/** For CallFunction: Function path like "KismetSystemLibrary.PrintString"
+	    or "/Script/Engine.KismetSystemLibrary:PrintString" */
+	FString FunctionReference;
+
+	/** For Event: Event name like "ReceiveBeginPlay", "ReceiveTick", or custom event name. */
+	FString EventName;
+
+	/** For Variable nodes: Variable name in the Blueprint. */
+	FString VariableName;
+
+	/** For Comment: Comment text. */
+	FString Comment;
+
+	/** Graph position X. */
+	int32 PosX = 0;
+
+	/** Graph position Y. */
+	int32 PosY = 0;
+};
+
+/**
+ * FConnectBlueprintPinsCommand - Connects two pins in a Blueprint graph.
+ *
+ * Uses the K2 schema to validate pin compatibility before connecting.
+ * Works for both execution pins (white) and data pins (colored).
+ */
+struct AGENTBRIDGESCRIPTING_API FConnectBlueprintPinsCommand : FAgentCommandBase
+{
+	FConnectBlueprintPinsCommand() { Type = EAgentCommandType::ConnectBlueprintPins; }
+
+	/** Asset path to the Blueprint. */
+	FString BlueprintPath;
+
+	/** Source node identifier (GUID or node name). */
+	FString SourceNode;
+
+	/** Source pin name (e.g., "then", "ReturnValue", "execute"). */
+	FString SourcePin;
+
+	/** Target node identifier (GUID or node name). */
+	FString TargetNode;
+
+	/** Target pin name (e.g., "execute", "InString"). */
+	FString TargetPin;
+};
+
+/**
+ * FDisconnectBlueprintPinsCommand - Disconnects two pins in a Blueprint graph.
+ */
+struct AGENTBRIDGESCRIPTING_API FDisconnectBlueprintPinsCommand : FAgentCommandBase
+{
+	FDisconnectBlueprintPinsCommand() { Type = EAgentCommandType::DisconnectBlueprintPins; }
+
+	/** Asset path to the Blueprint. */
+	FString BlueprintPath;
+
+	/** Source node identifier (GUID or node name). */
+	FString SourceNode;
+
+	/** Source pin name. */
+	FString SourcePin;
+
+	/** Target node identifier (GUID or node name). */
+	FString TargetNode;
+
+	/** Target pin name. */
+	FString TargetPin;
+};
+
+/**
+ * FDeleteBlueprintNodeCommand - Deletes a node from a Blueprint graph.
+ */
+struct AGENTBRIDGESCRIPTING_API FDeleteBlueprintNodeCommand : FAgentCommandBase
+{
+	FDeleteBlueprintNodeCommand() { Type = EAgentCommandType::DeleteBlueprintNode; }
+
+	/** Asset path to the Blueprint. */
+	FString BlueprintPath;
+
+	/** Node identifier (GUID or node path). */
+	FString NodeId;
+};
+
+/**
+ * FListBlueprintNodesCommand - Lists all nodes in a Blueprint graph.
+ */
+struct AGENTBRIDGESCRIPTING_API FListBlueprintNodesCommand : FAgentCommandBase
+{
+	FListBlueprintNodesCommand() { Type = EAgentCommandType::ListBlueprintNodes; }
+
+	/** Asset path to the Blueprint. */
+	FString BlueprintPath;
+
+	/** Graph name (empty = EventGraph). */
+	FString GraphName;
+
+	/** Filter by node class (e.g., "K2Node_CallFunction"). Empty = all nodes. */
+	FString NodeClassFilter;
+};
+
+/**
+ * FListBlueprintPinsCommand - Lists all pins on a Blueprint node.
+ */
+struct AGENTBRIDGESCRIPTING_API FListBlueprintPinsCommand : FAgentCommandBase
+{
+	FListBlueprintPinsCommand() { Type = EAgentCommandType::ListBlueprintPins; }
+
+	/** Asset path to the Blueprint. */
+	FString BlueprintPath;
+
+	/** Node identifier (GUID or node path). */
+	FString NodeId;
+};
+
+//~==============================================================================
 // Batch Commands
 //~==============================================================================
 
@@ -2003,4 +2154,107 @@ struct AGENTBRIDGESCRIPTING_API FCopyProjectFileResponse : FAgentResponseBase
 
 	/** Bytes copied. */
 	int64 BytesCopied = 0;
+};
+
+//~==============================================================================
+// Blueprint Node Response Structures (P2)
+//~==============================================================================
+
+/**
+ * FBlueprintPinInfo - Information about a Blueprint node pin.
+ */
+struct AGENTBRIDGESCRIPTING_API FBlueprintPinInfo
+{
+	/** Pin name (e.g., "execute", "then", "ReturnValue", "InString"). */
+	FString Name;
+
+	/** Pin direction: "Input" or "Output". */
+	FString Direction;
+
+	/** Pin type (e.g., "exec", "bool", "float", "int", "string", "object"). */
+	FString Type;
+
+	/** Friendly type name for display (e.g., "Boolean", "Float", "String"). */
+	FString TypeDisplayName;
+
+	/** Whether this pin is currently connected. */
+	bool bIsConnected = false;
+
+	/** Default value for input pins. */
+	FString DefaultValue;
+
+	/** Connected pin identifiers (format: "NodeGUID.PinName"). */
+	TArray<FString> ConnectedTo;
+};
+
+/**
+ * FBlueprintNodeInfo - Information about a Blueprint node.
+ */
+struct AGENTBRIDGESCRIPTING_API FBlueprintNodeInfo
+{
+	/** Node GUID (unique identifier). */
+	FString Guid;
+
+	/** Node class name (e.g., "K2Node_CallFunction", "K2Node_Event"). */
+	FString ClassName;
+
+	/** Node title/display name (e.g., "Print String", "Event BeginPlay"). */
+	FString Title;
+
+	/** Graph position X. */
+	int32 PosX = 0;
+
+	/** Graph position Y. */
+	int32 PosY = 0;
+
+	/** Node comment (if any). */
+	FString Comment;
+
+	/** For CallFunction nodes: the function being called. */
+	FString FunctionReference;
+
+	/** For Event nodes: the event name. */
+	FString EventName;
+
+	/** For Variable nodes: the variable name. */
+	FString VariableName;
+
+	/** All pins on this node. */
+	TArray<FBlueprintPinInfo> Pins;
+};
+
+/**
+ * FCreateBlueprintNodeResponse - Response to CreateBlueprintNode command.
+ */
+struct AGENTBRIDGESCRIPTING_API FCreateBlueprintNodeResponse : FAgentResponseBase
+{
+	/** Created node information. */
+	FBlueprintNodeInfo Node;
+};
+
+/**
+ * FListBlueprintNodesResponse - Response to ListBlueprintNodes command.
+ */
+struct AGENTBRIDGESCRIPTING_API FListBlueprintNodesResponse : FAgentResponseBase
+{
+	/** Graph name. */
+	FString GraphName;
+
+	/** Nodes in the graph. */
+	TArray<FBlueprintNodeInfo> Nodes;
+};
+
+/**
+ * FListBlueprintPinsResponse - Response to ListBlueprintPins command.
+ */
+struct AGENTBRIDGESCRIPTING_API FListBlueprintPinsResponse : FAgentResponseBase
+{
+	/** Node GUID. */
+	FString NodeGuid;
+
+	/** Node title. */
+	FString NodeTitle;
+
+	/** All pins on the node. */
+	TArray<FBlueprintPinInfo> Pins;
 };

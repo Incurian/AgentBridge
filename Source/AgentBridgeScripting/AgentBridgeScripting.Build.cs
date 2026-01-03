@@ -27,7 +27,12 @@ public class AgentBridgeScripting : ModuleRules
 
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.Add("UnrealEd");
+			PrivateDependencyModuleNames.AddRange(new string[]
+			{
+				"UnrealEd",
+				"BlueprintGraph",    // K2Node classes for Blueprint node manipulation
+				"KismetCompiler",    // Blueprint compilation utilities
+			});
 		}
 	}
 }

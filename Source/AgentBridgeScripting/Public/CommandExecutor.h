@@ -194,6 +194,17 @@ public:
 	static void Execute(const FDeleteProjectFileCommand& Command, FAgentResponseBase& Response);
 
 	//~==============================================================================
+	// Typed Execution - Blueprint Node Commands (P2)
+	//~==============================================================================
+
+	static void Execute(const FCreateBlueprintNodeCommand& Command, FCreateBlueprintNodeResponse& Response);
+	static void Execute(const FConnectBlueprintPinsCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FDisconnectBlueprintPinsCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FDeleteBlueprintNodeCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FListBlueprintNodesCommand& Command, FListBlueprintNodesResponse& Response);
+	static void Execute(const FListBlueprintPinsCommand& Command, FListBlueprintPinsResponse& Response);
+
+	//~==============================================================================
 	// JSON Serialization Helpers
 	//~==============================================================================
 
@@ -291,6 +302,11 @@ private:
 	static FString SerializeWriteProjectFileResponse(const FWriteProjectFileResponse& Response);
 	static FString SerializeListProjectDirectoryResponse(const FListProjectDirectoryResponse& Response);
 	static FString SerializeCopyProjectFileResponse(const FCopyProjectFileResponse& Response);
+
+	// Blueprint node response serialization (P2)
+	static FString SerializeCreateBlueprintNodeResponse(const FCreateBlueprintNodeResponse& Response);
+	static FString SerializeListBlueprintNodesResponse(const FListBlueprintNodesResponse& Response);
+	static FString SerializeListBlueprintPinsResponse(const FListBlueprintPinsResponse& Response);
 
 	//~==============================================================================
 	// File Path Validation (P1)

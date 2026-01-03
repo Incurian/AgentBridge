@@ -672,6 +672,95 @@ message DeleteProjectFileRequest {
 }
 
 //=============================================================================
+// Blueprint Node Operations (P2)
+//=============================================================================
+
+message BlueprintPinInfo {
+  string name = 1;                     // Pin name
+  string direction = 2;                // "Input" or "Output"
+  string type = 3;                     // Type category (e.g., "exec", "object", "float")
+  string type_display_name = 4;        // Human-readable type name
+  bool is_connected = 5;
+  string default_value = 6;            // Default value as string
+  repeated string connected_to = 7;    // Connected pin paths (Node.Pin format)
+}
+
+message BlueprintNodeInfo {
+  string guid = 1;                     // Unique node identifier
+  string class_name = 2;               // e.g., "K2Node_CallFunction"
+  string title = 3;                    // Display title
+  int32 pos_x = 4;
+  int32 pos_y = 5;
+  string comment = 6;                  // Node comment
+  string function_reference = 7;       // For CallFunction nodes
+  string event_name = 8;               // For Event nodes
+  string variable_name = 9;            // For VariableGet/Set nodes
+  repeated BlueprintPinInfo pins = 10;
+}
+
+message CreateBlueprintNodeRequest {
+  string blueprint_path = 1;           // Blueprint asset path (e.g., "/Game/Test/BP_Test.BP_Test")
+  string graph_name = 2;               // Target graph (default: "EventGraph")
+  string node_type = 3;                // "CallFunction", "Event", "VariableGet", "VariableSet", "Branch", "Sequence", "Comment"
+  string function_reference = 4;       // For CallFunction: "Class.Function" or "/Script/Module.Class:Function"
+  string event_name = 5;               // For Event: "ReceiveBeginPlay", "ReceiveTick", etc.
+  string variable_name = 6;            // For VariableGet/Set: Variable name
+  string comment = 7;                  // For Comment: Comment text
+  int32 pos_x = 8;
+  int32 pos_y = 9;
+}
+
+message CreateBlueprintNodeResponse {
+  bool success = 1;
+  string error_message = 2;
+  BlueprintNodeInfo node = 3;          // Created node info
+}
+
+message ConnectBlueprintPinsRequest {
+  string blueprint_path = 1;
+  string source_node = 2;              // Source node GUID or name
+  string source_pin = 3;               // Source pin name
+  string target_node = 4;              // Target node GUID or name
+  string target_pin = 5;               // Target pin name
+}
+
+message DisconnectBlueprintPinsRequest {
+  string blueprint_path = 1;
+  string source_node = 2;
+  string source_pin = 3;
+  string target_node = 4;
+  string target_pin = 5;
+}
+
+message DeleteBlueprintNodeRequest {
+  string blueprint_path = 1;
+  string node_id = 2;                  // Node GUID or name
+}
+
+message ListBlueprintNodesRequest {
+  string blueprint_path = 1;
+  string graph_name = 2;               // Target graph (empty = all graphs)
+  string node_class_filter = 3;        // Optional class filter
+}
+
+message ListBlueprintNodesResponse {
+  bool success = 1;
+  string error_message = 2;
+  repeated BlueprintNodeInfo nodes = 3;
+}
+
+message ListBlueprintPinsRequest {
+  string blueprint_path = 1;
+  string node_id = 2;                  // Node GUID or name
+}
+
+message ListBlueprintPinsResponse {
+  bool success = 1;
+  string error_message = 2;
+  repeated BlueprintPinInfo pins = 3;
+}
+
+//=============================================================================
 // AgentBridge Service Definition
 //=============================================================================
 
@@ -738,4 +827,12 @@ service AgentBridgeService {
   rpc ListProjectDirectory(ListProjectDirectoryRequest) returns (ListProjectDirectoryResponse);
   rpc CopyProjectFile(CopyProjectFileRequest) returns (CopyProjectFileResponse);
   rpc DeleteProjectFile(DeleteProjectFileRequest) returns (TempoScripting.Empty);
+
+  //--- Blueprint Node Operations (P2) ---
+  rpc CreateBlueprintNode(CreateBlueprintNodeRequest) returns (CreateBlueprintNodeResponse);
+  rpc ConnectBlueprintPins(ConnectBlueprintPinsRequest) returns (TempoScripting.Empty);
+  rpc DisconnectBlueprintPins(DisconnectBlueprintPinsRequest) returns (TempoScripting.Empty);
+  rpc DeleteBlueprintNode(DeleteBlueprintNodeRequest) returns (TempoScripting.Empty);
+  rpc ListBlueprintNodes(ListBlueprintNodesRequest) returns (ListBlueprintNodesResponse);
+  rpc ListBlueprintPins(ListBlueprintPinsRequest) returns (ListBlueprintPinsResponse);
 }

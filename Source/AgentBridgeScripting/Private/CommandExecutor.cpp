@@ -44,6 +44,20 @@
 #include "UnrealEdGlobals.h"
 #include "HighResScreenshot.h"
 #include "Slate/SceneViewport.h"
+
+// Blueprint node manipulation includes
+#include "Kismet2/BlueprintEditorUtils.h"
+#include "K2Node_CallFunction.h"
+#include "K2Node_Event.h"
+#include "K2Node_VariableGet.h"
+#include "K2Node_VariableSet.h"
+#include "K2Node_IfThenElse.h"
+#include "K2Node_ExecutionSequence.h"
+#include "EdGraph/EdGraph.h"
+#include "EdGraphSchema_K2.h"
+#include "EdGraph/EdGraphNode.h"
+#include "EdGraphNode_Comment.h"
+#include "Kismet2/KismetEditorUtilities.h"
 #endif
 
 // Forward declaration - implementation in JSON Serialization section
@@ -3679,6 +3693,823 @@ void FCommandExecutor::Execute(const FDeleteProjectFileCommand& Command, FAgentR
 }
 
 //~==============================================================================
+// Blueprint Node Commands (P2 - Visual Scripting)
+//~==============================================================================
+
+#if WITH_EDITOR
+
+// Helper: Build pin info from UEdGraphPin
+static FBlueprintPinInfo BuildPinInfo(UEdGraphPin* Pin)
+{
+	FBlueprintPinInfo Info;
+	if (!Pin)
+	{
+		return Info;
+	}
+
+	Info.Name = Pin->GetFName().ToString();
+	Info.Direction = (Pin->Direction == EGPD_Input) ? TEXT("Input") : TEXT("Output");
+
+	// Get type from category
+	Info.Type = Pin->PinType.PinCategory.ToString();
+	if (Pin->PinType.PinSubCategory != NAME_None)
+	{
+		Info.Type += TEXT(":") + Pin->PinType.PinSubCategory.ToString();
+	}
+
+	// Friendly display name
+	const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
+	if (K2Schema)
+	{
+		Info.TypeDisplayName = K2Schema->TypeToText(Pin->PinType).ToString();
+	}
+
+	Info.bIsConnected = Pin->LinkedTo.Num() > 0;
+	Info.DefaultValue = Pin->DefaultValue;
+
+	// Collect connected pins
+	for (UEdGraphPin* LinkedPin : Pin->LinkedTo)
+	{
+		if (LinkedPin && LinkedPin->GetOwningNode())
+		{
+			FString ConnectedId = FString::Printf(TEXT("%s.%s"),
+				*LinkedPin->GetOwningNode()->NodeGuid.ToString(),
+				*LinkedPin->GetFName().ToString());
+			Info.ConnectedTo.Add(ConnectedId);
+		}
+	}
+
+	return Info;
+}
+
+// Helper: Build node info from UEdGraphNode
+static FBlueprintNodeInfo BuildNodeInfo(UEdGraphNode* Node)
+{
+	FBlueprintNodeInfo Info;
+	if (!Node)
+	{
+		return Info;
+	}
+
+	Info.Guid = Node->NodeGuid.ToString();
+	Info.ClassName = Node->GetClass()->GetName();
+	Info.Title = Node->GetNodeTitle(ENodeTitleType::FullTitle).ToString();
+	Info.PosX = Node->NodePosX;
+	Info.PosY = Node->NodePosY;
+	Info.Comment = Node->NodeComment;
+
+	// Extract type-specific data
+	if (UK2Node_CallFunction* CallNode = Cast<UK2Node_CallFunction>(Node))
+	{
+		UFunction* Func = CallNode->GetTargetFunction();
+		if (Func && Func->GetOwnerClass())
+		{
+			Info.FunctionReference = FString::Printf(TEXT("%s.%s"),
+				*Func->GetOwnerClass()->GetName(), *Func->GetName());
+		}
+	}
+	else if (UK2Node_Event* EventNode = Cast<UK2Node_Event>(Node))
+	{
+		UFunction* EventFunc = EventNode->FindEventSignatureFunction();
+		if (EventFunc)
+		{
+			Info.EventName = EventFunc->GetName();
+		}
+		else if (!EventNode->CustomFunctionName.IsNone())
+		{
+			Info.EventName = EventNode->CustomFunctionName.ToString();
+		}
+	}
+	else if (UK2Node_VariableGet* VarGetNode = Cast<UK2Node_VariableGet>(Node))
+	{
+		Info.VariableName = VarGetNode->GetVarName().ToString();
+	}
+	else if (UK2Node_VariableSet* VarSetNode = Cast<UK2Node_VariableSet>(Node))
+	{
+		Info.VariableName = VarSetNode->GetVarName().ToString();
+	}
+
+	// Collect pins
+	for (UEdGraphPin* Pin : Node->Pins)
+	{
+		if (Pin && !Pin->bHidden)
+		{
+			Info.Pins.Add(BuildPinInfo(Pin));
+		}
+	}
+
+	return Info;
+}
+
+// Helper: Find node by GUID or name in a Blueprint
+static UEdGraphNode* FindBlueprintNode(UBlueprint* Blueprint, const FString& NodeId, FString* OutError = nullptr)
+{
+	if (!Blueprint)
+	{
+		if (OutError) *OutError = TEXT("Blueprint is null");
+		return nullptr;
+	}
+
+	// Try parsing as GUID first
+	FGuid NodeGuid;
+	if (FGuid::Parse(NodeId, NodeGuid))
+	{
+		// Search all graphs
+		TArray<UEdGraph*> AllGraphs;
+		Blueprint->GetAllGraphs(AllGraphs);
+
+		for (UEdGraph* Graph : AllGraphs)
+		{
+			for (UEdGraphNode* Node : Graph->Nodes)
+			{
+				if (Node && Node->NodeGuid == NodeGuid)
+				{
+					return Node;
+				}
+			}
+		}
+	}
+
+	// Try finding by path/name
+	TArray<UEdGraph*> AllGraphs;
+	Blueprint->GetAllGraphs(AllGraphs);
+
+	for (UEdGraph* Graph : AllGraphs)
+	{
+		for (UEdGraphNode* Node : Graph->Nodes)
+		{
+			if (Node && (Node->GetPathName().Contains(NodeId) ||
+				Node->GetNodeTitle(ENodeTitleType::FullTitle).ToString().Contains(NodeId)))
+			{
+				return Node;
+			}
+		}
+	}
+
+	if (OutError) *OutError = FString::Printf(TEXT("Node '%s' not found"), *NodeId);
+	return nullptr;
+}
+
+// Helper: Find graph by name in Blueprint
+static UEdGraph* FindBlueprintGraph(UBlueprint* Blueprint, const FString& GraphName)
+{
+	if (!Blueprint)
+	{
+		return nullptr;
+	}
+
+	// Empty or "EventGraph" means the main event graph
+	if (GraphName.IsEmpty() || GraphName.Equals(TEXT("EventGraph"), ESearchCase::IgnoreCase))
+	{
+		return FBlueprintEditorUtils::FindEventGraph(Blueprint);
+	}
+
+	// Search in all graphs
+	TArray<UEdGraph*> AllGraphs;
+	Blueprint->GetAllGraphs(AllGraphs);
+
+	for (UEdGraph* Graph : AllGraphs)
+	{
+		if (Graph && Graph->GetName().Equals(GraphName, ESearchCase::IgnoreCase))
+		{
+			return Graph;
+		}
+	}
+
+	return nullptr;
+}
+
+// Helper: Parse function reference like "KismetSystemLibrary.PrintString" or "/Script/Engine.Actor:K2_DestroyActor"
+static bool ParseFunctionReference(const FString& FunctionRef, UClass*& OutClass, UFunction*& OutFunction, FString& OutError)
+{
+	OutClass = nullptr;
+	OutFunction = nullptr;
+
+	// Handle format: Class.Function or Class:Function
+	FString ClassName, FunctionName;
+	if (FunctionRef.Contains(TEXT(":")))
+	{
+		// Path format: /Script/Module.Class:Function
+		int32 ColonIdx = FunctionRef.Find(TEXT(":"), ESearchCase::IgnoreCase, ESearchDir::FromEnd);
+		ClassName = FunctionRef.Left(ColonIdx);
+		FunctionName = FunctionRef.Mid(ColonIdx + 1);
+	}
+	else if (FunctionRef.Contains(TEXT(".")))
+	{
+		// Simple format: Class.Function
+		int32 DotIdx = FunctionRef.Find(TEXT("."), ESearchCase::IgnoreCase, ESearchDir::FromEnd);
+		ClassName = FunctionRef.Left(DotIdx);
+		FunctionName = FunctionRef.Mid(DotIdx + 1);
+	}
+	else
+	{
+		OutError = FString::Printf(TEXT("Invalid function reference: %s (expected Class.Function)"), *FunctionRef);
+		return false;
+	}
+
+	// Find the class
+	OutClass = FindObject<UClass>(nullptr, *ClassName);
+	if (!OutClass)
+	{
+		// Try common library prefixes
+		TArray<FString> Prefixes = {
+			TEXT("/Script/Engine."),
+			TEXT("/Script/CoreUObject."),
+			TEXT("/Script/UMG."),
+			TEXT("")
+		};
+
+		for (const FString& Prefix : Prefixes)
+		{
+			OutClass = FindObject<UClass>(nullptr, *(Prefix + ClassName));
+			if (OutClass)
+			{
+				break;
+			}
+		}
+	}
+
+	if (!OutClass)
+	{
+		OutError = FString::Printf(TEXT("Class not found: %s"), *ClassName);
+		return false;
+	}
+
+	// Find the function
+	OutFunction = OutClass->FindFunctionByName(*FunctionName);
+	if (!OutFunction)
+	{
+		OutError = FString::Printf(TEXT("Function '%s' not found in class '%s'"), *FunctionName, *ClassName);
+		return false;
+	}
+
+	return true;
+}
+
+#endif // WITH_EDITOR
+
+void FCommandExecutor::Execute(const FCreateBlueprintNodeCommand& Command, FCreateBlueprintNodeResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.BlueprintPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("BlueprintPath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Load the Blueprint
+	UBlueprint* Blueprint = LoadObject<UBlueprint>(nullptr, *Command.BlueprintPath);
+	if (!Blueprint)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Blueprint not found: %s"), *Command.BlueprintPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find the graph
+	UEdGraph* Graph = FindBlueprintGraph(Blueprint, Command.GraphName);
+	if (!Graph)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Graph not found: %s"), *Command.GraphName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UEdGraphNode* NewNode = nullptr;
+	FString Error;
+
+	// Create node based on type
+	if (Command.NodeType.Equals(TEXT("CallFunction"), ESearchCase::IgnoreCase))
+	{
+		if (Command.FunctionReference.IsEmpty())
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = TEXT("FunctionReference is required for CallFunction nodes");
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+
+		UClass* FuncClass = nullptr;
+		UFunction* Function = nullptr;
+		if (!ParseFunctionReference(Command.FunctionReference, FuncClass, Function, Error))
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = Error;
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+
+		UK2Node_CallFunction* CallNode = NewObject<UK2Node_CallFunction>(Graph);
+		Graph->AddNode(CallNode, false, false);
+		CallNode->SetFromFunction(Function);
+		CallNode->AllocateDefaultPins();
+		NewNode = CallNode;
+	}
+	else if (Command.NodeType.Equals(TEXT("Event"), ESearchCase::IgnoreCase))
+	{
+		if (Command.EventName.IsEmpty())
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = TEXT("EventName is required for Event nodes");
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+
+		// Check if event already exists
+		UClass* ParentClass = Blueprint->ParentClass;
+		UFunction* EventFunc = nullptr;
+
+		// Try to find the event in parent class hierarchy
+		if (ParentClass)
+		{
+			EventFunc = ParentClass->FindFunctionByName(*Command.EventName);
+		}
+
+		// Also try in AActor if not found (common events like ReceiveBeginPlay)
+		if (!EventFunc)
+		{
+			EventFunc = AActor::StaticClass()->FindFunctionByName(*Command.EventName);
+		}
+
+		UK2Node_Event* EventNode = NewObject<UK2Node_Event>(Graph);
+		Graph->AddNode(EventNode, false, false);
+
+		if (EventFunc)
+		{
+			// Override existing event
+			EventNode->EventReference.SetFromField<UFunction>(EventFunc, false);
+			EventNode->bOverrideFunction = true;
+		}
+		else
+		{
+			// Custom event
+			EventNode->CustomFunctionName = *Command.EventName;
+			EventNode->bOverrideFunction = false;
+		}
+
+		EventNode->AllocateDefaultPins();
+		NewNode = EventNode;
+	}
+	else if (Command.NodeType.Equals(TEXT("VariableGet"), ESearchCase::IgnoreCase))
+	{
+		if (Command.VariableName.IsEmpty())
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = TEXT("VariableName is required for VariableGet nodes");
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+
+		UK2Node_VariableGet* VarNode = NewObject<UK2Node_VariableGet>(Graph);
+		Graph->AddNode(VarNode, false, false);
+
+		// Find the variable property
+		FProperty* VarProp = Blueprint->GeneratedClass ?
+			Blueprint->GeneratedClass->FindPropertyByName(*Command.VariableName) : nullptr;
+
+		if (VarProp)
+		{
+			VarNode->VariableReference.SetFromField<FProperty>(VarProp, Blueprint->GeneratedClass);
+		}
+		else
+		{
+			// Set variable by name
+			VarNode->VariableReference.SetSelfMember(*Command.VariableName);
+		}
+
+		VarNode->AllocateDefaultPins();
+		NewNode = VarNode;
+	}
+	else if (Command.NodeType.Equals(TEXT("VariableSet"), ESearchCase::IgnoreCase))
+	{
+		if (Command.VariableName.IsEmpty())
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = TEXT("VariableName is required for VariableSet nodes");
+			Response.ExecutionTimeMs = EndTiming(StartTime);
+			return;
+		}
+
+		UK2Node_VariableSet* VarNode = NewObject<UK2Node_VariableSet>(Graph);
+		Graph->AddNode(VarNode, false, false);
+
+		FProperty* VarProp = Blueprint->GeneratedClass ?
+			Blueprint->GeneratedClass->FindPropertyByName(*Command.VariableName) : nullptr;
+
+		if (VarProp)
+		{
+			VarNode->VariableReference.SetFromField<FProperty>(VarProp, Blueprint->GeneratedClass);
+		}
+		else
+		{
+			VarNode->VariableReference.SetSelfMember(*Command.VariableName);
+		}
+
+		VarNode->AllocateDefaultPins();
+		NewNode = VarNode;
+	}
+	else if (Command.NodeType.Equals(TEXT("Branch"), ESearchCase::IgnoreCase))
+	{
+		UK2Node_IfThenElse* BranchNode = NewObject<UK2Node_IfThenElse>(Graph);
+		Graph->AddNode(BranchNode, false, false);
+		BranchNode->AllocateDefaultPins();
+		NewNode = BranchNode;
+	}
+	else if (Command.NodeType.Equals(TEXT("Sequence"), ESearchCase::IgnoreCase))
+	{
+		UK2Node_ExecutionSequence* SeqNode = NewObject<UK2Node_ExecutionSequence>(Graph);
+		Graph->AddNode(SeqNode, false, false);
+		SeqNode->AllocateDefaultPins();
+		NewNode = SeqNode;
+	}
+	else if (Command.NodeType.Equals(TEXT("Comment"), ESearchCase::IgnoreCase))
+	{
+		UEdGraphNode_Comment* CommentNode = NewObject<UEdGraphNode_Comment>(Graph);
+		Graph->AddNode(CommentNode, false, false);
+		CommentNode->NodeComment = Command.Comment;
+		// Comments don't need AllocateDefaultPins
+		NewNode = CommentNode;
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Unknown node type: %s. Supported: CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment"), *Command.NodeType);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	if (!NewNode)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to create node");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Ensure node has a valid GUID (required for reliable identification)
+	if (!NewNode->NodeGuid.IsValid())
+	{
+		NewNode->CreateNewGuid();
+	}
+
+	// Set position
+	NewNode->NodePosX = Command.PosX;
+	NewNode->NodePosY = Command.PosY;
+
+	// Mark blueprint as modified
+	FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
+
+	// Build response
+	Response.bSuccess = true;
+	Response.Node = BuildNodeInfo(NewNode);
+
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("Blueprint node creation is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FConnectBlueprintPinsCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.BlueprintPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("BlueprintPath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UBlueprint* Blueprint = LoadObject<UBlueprint>(nullptr, *Command.BlueprintPath);
+	if (!Blueprint)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Blueprint not found: %s"), *Command.BlueprintPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString Error;
+	UEdGraphNode* SourceNode = FindBlueprintNode(Blueprint, Command.SourceNode, &Error);
+	if (!SourceNode)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Source node not found: %s"), *Error);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UEdGraphNode* TargetNode = FindBlueprintNode(Blueprint, Command.TargetNode, &Error);
+	if (!TargetNode)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Target node not found: %s"), *Error);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Find pins
+	UEdGraphPin* SourcePin = SourceNode->FindPin(*Command.SourcePin);
+	if (!SourcePin)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Source pin '%s' not found on node"), *Command.SourcePin);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UEdGraphPin* TargetPin = TargetNode->FindPin(*Command.TargetPin);
+	if (!TargetPin)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Target pin '%s' not found on node"), *Command.TargetPin);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Get schema for validated connection
+	UEdGraph* Graph = SourceNode->GetGraph();
+	const UEdGraphSchema* Schema = Graph->GetSchema();
+
+	// Try to create connection
+	if (!Schema->TryCreateConnection(SourcePin, TargetPin))
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Failed to connect pins - types may be incompatible");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
+	Response.bSuccess = true;
+
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("Blueprint pin connection is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FDisconnectBlueprintPinsCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.BlueprintPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("BlueprintPath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UBlueprint* Blueprint = LoadObject<UBlueprint>(nullptr, *Command.BlueprintPath);
+	if (!Blueprint)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Blueprint not found: %s"), *Command.BlueprintPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString Error;
+	UEdGraphNode* SourceNode = FindBlueprintNode(Blueprint, Command.SourceNode, &Error);
+	if (!SourceNode)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UEdGraphNode* TargetNode = FindBlueprintNode(Blueprint, Command.TargetNode, &Error);
+	if (!TargetNode)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UEdGraphPin* SourcePin = SourceNode->FindPin(*Command.SourcePin);
+	if (!SourcePin)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Source pin '%s' not found"), *Command.SourcePin);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UEdGraphPin* TargetPin = TargetNode->FindPin(*Command.TargetPin);
+	if (!TargetPin)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Target pin '%s' not found"), *Command.TargetPin);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Break the link
+	SourcePin->BreakLinkTo(TargetPin);
+
+	FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
+	Response.bSuccess = true;
+
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("Blueprint pin disconnection is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FDeleteBlueprintNodeCommand& Command, FAgentResponseBase& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.BlueprintPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("BlueprintPath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UBlueprint* Blueprint = LoadObject<UBlueprint>(nullptr, *Command.BlueprintPath);
+	if (!Blueprint)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Blueprint not found: %s"), *Command.BlueprintPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString Error;
+	UEdGraphNode* Node = FindBlueprintNode(Blueprint, Command.NodeId, &Error);
+	if (!Node)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UEdGraph* Graph = Node->GetGraph();
+	if (!Graph)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Node is not in a graph");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Use FBlueprintEditorUtils to properly remove the node
+	FBlueprintEditorUtils::RemoveNode(Blueprint, Node, true);
+
+	Response.bSuccess = true;
+
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("Blueprint node deletion is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FListBlueprintNodesCommand& Command, FListBlueprintNodesResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.BlueprintPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("BlueprintPath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UBlueprint* Blueprint = LoadObject<UBlueprint>(nullptr, *Command.BlueprintPath);
+	if (!Blueprint)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Blueprint not found: %s"), *Command.BlueprintPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UEdGraph* Graph = FindBlueprintGraph(Blueprint, Command.GraphName);
+	if (!Graph)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Graph not found: %s"), *Command.GraphName);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	Response.GraphName = Graph->GetName();
+
+	for (UEdGraphNode* Node : Graph->Nodes)
+	{
+		if (!Node)
+		{
+			continue;
+		}
+
+		// Apply class filter if specified
+		if (!Command.NodeClassFilter.IsEmpty())
+		{
+			if (!Node->GetClass()->GetName().Contains(Command.NodeClassFilter))
+			{
+				continue;
+			}
+		}
+
+		Response.Nodes.Add(BuildNodeInfo(Node));
+	}
+
+	Response.bSuccess = true;
+
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("Blueprint node listing is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FListBlueprintPinsCommand& Command, FListBlueprintPinsResponse& Response)
+{
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+#if WITH_EDITOR
+	if (Command.BlueprintPath.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("BlueprintPath is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	UBlueprint* Blueprint = LoadObject<UBlueprint>(nullptr, *Command.BlueprintPath);
+	if (!Blueprint)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("Blueprint not found: %s"), *Command.BlueprintPath);
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	FString Error;
+	UEdGraphNode* Node = FindBlueprintNode(Blueprint, Command.NodeId, &Error);
+	if (!Node)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	Response.NodeGuid = Node->NodeGuid.ToString();
+	Response.NodeTitle = Node->GetNodeTitle(ENodeTitleType::FullTitle).ToString();
+
+	for (UEdGraphPin* Pin : Node->Pins)
+	{
+		if (Pin && !Pin->bHidden)
+		{
+			Response.Pins.Add(BuildPinInfo(Pin));
+		}
+	}
+
+	Response.bSuccess = true;
+
+#else
+	Response.bSuccess = false;
+	Response.ErrorMessage = TEXT("Blueprint pin listing is only available in Editor builds");
+#endif
+
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+//~==============================================================================
 // JSON Serialization
 //~==============================================================================
 
@@ -5105,6 +5936,132 @@ FString FCommandExecutor::SerializeCopyProjectFileResponse(const FCopyProjectFil
 	return OutputString;
 }
 
+// Helper: Serialize FBlueprintPinInfo to JSON object
+static TSharedPtr<FJsonObject> BlueprintPinInfoToJson(const FBlueprintPinInfo& Pin)
+{
+	TSharedPtr<FJsonObject> PinObj = MakeShared<FJsonObject>();
+	PinObj->SetStringField(TEXT("name"), Pin.Name);
+	PinObj->SetStringField(TEXT("direction"), Pin.Direction);
+	PinObj->SetStringField(TEXT("type"), Pin.Type);
+	PinObj->SetStringField(TEXT("typeDisplayName"), Pin.TypeDisplayName);
+	PinObj->SetBoolField(TEXT("isConnected"), Pin.bIsConnected);
+	PinObj->SetStringField(TEXT("defaultValue"), Pin.DefaultValue);
+
+	TArray<TSharedPtr<FJsonValue>> ConnectedArr;
+	for (const FString& Conn : Pin.ConnectedTo)
+	{
+		ConnectedArr.Add(MakeShared<FJsonValueString>(Conn));
+	}
+	PinObj->SetArrayField(TEXT("connectedTo"), ConnectedArr);
+
+	return PinObj;
+}
+
+// Helper: Serialize FBlueprintNodeInfo to JSON object
+static TSharedPtr<FJsonObject> BlueprintNodeInfoToJson(const FBlueprintNodeInfo& Node)
+{
+	TSharedPtr<FJsonObject> NodeObj = MakeShared<FJsonObject>();
+	NodeObj->SetStringField(TEXT("guid"), Node.Guid);
+	NodeObj->SetStringField(TEXT("className"), Node.ClassName);
+	NodeObj->SetStringField(TEXT("title"), Node.Title);
+	NodeObj->SetNumberField(TEXT("posX"), Node.PosX);
+	NodeObj->SetNumberField(TEXT("posY"), Node.PosY);
+	NodeObj->SetStringField(TEXT("comment"), Node.Comment);
+	NodeObj->SetStringField(TEXT("functionReference"), Node.FunctionReference);
+	NodeObj->SetStringField(TEXT("eventName"), Node.EventName);
+	NodeObj->SetStringField(TEXT("variableName"), Node.VariableName);
+
+	TArray<TSharedPtr<FJsonValue>> PinsArr;
+	for (const FBlueprintPinInfo& Pin : Node.Pins)
+	{
+		PinsArr.Add(MakeShared<FJsonValueObject>(BlueprintPinInfoToJson(Pin)));
+	}
+	NodeObj->SetArrayField(TEXT("pins"), PinsArr);
+
+	return NodeObj;
+}
+
+FString FCommandExecutor::SerializeCreateBlueprintNodeResponse(const FCreateBlueprintNodeResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetObjectField(TEXT("node"), BlueprintNodeInfoToJson(Response.Node));
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeListBlueprintNodesResponse(const FListBlueprintNodesResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("graphName"), Response.GraphName);
+
+		TArray<TSharedPtr<FJsonValue>> NodesArr;
+		for (const FBlueprintNodeInfo& Node : Response.Nodes)
+		{
+			NodesArr.Add(MakeShared<FJsonValueObject>(BlueprintNodeInfoToJson(Node)));
+		}
+		Obj->SetArrayField(TEXT("nodes"), NodesArr);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
+FString FCommandExecutor::SerializeListBlueprintPinsResponse(const FListBlueprintPinsResponse& Response)
+{
+	TSharedPtr<FJsonObject> Obj = MakeShared<FJsonObject>();
+	Obj->SetBoolField(TEXT("success"), Response.bSuccess);
+	if (!Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("error"), Response.ErrorMessage);
+	}
+	Obj->SetStringField(TEXT("commandId"), Response.CommandId);
+	Obj->SetNumberField(TEXT("executionTimeMs"), Response.ExecutionTimeMs);
+
+	if (Response.bSuccess)
+	{
+		Obj->SetStringField(TEXT("nodeGuid"), Response.NodeGuid);
+		Obj->SetStringField(TEXT("nodeTitle"), Response.NodeTitle);
+
+		TArray<TSharedPtr<FJsonValue>> PinsArr;
+		for (const FBlueprintPinInfo& Pin : Response.Pins)
+		{
+			PinsArr.Add(MakeShared<FJsonValueObject>(BlueprintPinInfoToJson(Pin)));
+		}
+		Obj->SetArrayField(TEXT("pins"), PinsArr);
+	}
+
+	FString OutputString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	FJsonSerializer::Serialize(Obj.ToSharedRef(), Writer);
+	return OutputString;
+}
+
 //~==============================================================================
 // JSON Command Execution
 //~==============================================================================
@@ -5916,6 +6873,87 @@ FString FCommandExecutor::ExecuteJson(const FString& CommandJson)
 		FAgentResponseBase Response;
 		Execute(Cmd, Response);
 		return SerializeBaseResponse(Response);
+	}
+	// Blueprint Node Commands
+	else if (TypeStr == TEXT("CreateBlueprintNode"))
+	{
+		FCreateBlueprintNodeCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("blueprintPath"), Cmd.BlueprintPath);
+		JsonObj->TryGetStringField(TEXT("graphName"), Cmd.GraphName);
+		JsonObj->TryGetStringField(TEXT("nodeType"), Cmd.NodeType);
+		JsonObj->TryGetStringField(TEXT("functionReference"), Cmd.FunctionReference);
+		JsonObj->TryGetStringField(TEXT("eventName"), Cmd.EventName);
+		JsonObj->TryGetStringField(TEXT("variableName"), Cmd.VariableName);
+		JsonObj->TryGetStringField(TEXT("comment"), Cmd.Comment);
+		JsonObj->TryGetNumberField(TEXT("posX"), Cmd.PosX);
+		JsonObj->TryGetNumberField(TEXT("posY"), Cmd.PosY);
+
+		FCreateBlueprintNodeResponse Response;
+		Execute(Cmd, Response);
+		return SerializeCreateBlueprintNodeResponse(Response);
+	}
+	else if (TypeStr == TEXT("ConnectBlueprintPins"))
+	{
+		FConnectBlueprintPinsCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("blueprintPath"), Cmd.BlueprintPath);
+		JsonObj->TryGetStringField(TEXT("sourceNode"), Cmd.SourceNode);
+		JsonObj->TryGetStringField(TEXT("sourcePin"), Cmd.SourcePin);
+		JsonObj->TryGetStringField(TEXT("targetNode"), Cmd.TargetNode);
+		JsonObj->TryGetStringField(TEXT("targetPin"), Cmd.TargetPin);
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("DisconnectBlueprintPins"))
+	{
+		FDisconnectBlueprintPinsCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("blueprintPath"), Cmd.BlueprintPath);
+		JsonObj->TryGetStringField(TEXT("sourceNode"), Cmd.SourceNode);
+		JsonObj->TryGetStringField(TEXT("sourcePin"), Cmd.SourcePin);
+		JsonObj->TryGetStringField(TEXT("targetNode"), Cmd.TargetNode);
+		JsonObj->TryGetStringField(TEXT("targetPin"), Cmd.TargetPin);
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("DeleteBlueprintNode"))
+	{
+		FDeleteBlueprintNodeCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("blueprintPath"), Cmd.BlueprintPath);
+		JsonObj->TryGetStringField(TEXT("nodeId"), Cmd.NodeId);
+
+		FAgentResponseBase Response;
+		Execute(Cmd, Response);
+		return SerializeBaseResponse(Response);
+	}
+	else if (TypeStr == TEXT("ListBlueprintNodes"))
+	{
+		FListBlueprintNodesCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("blueprintPath"), Cmd.BlueprintPath);
+		JsonObj->TryGetStringField(TEXT("graphName"), Cmd.GraphName);
+		JsonObj->TryGetStringField(TEXT("nodeClassFilter"), Cmd.NodeClassFilter);
+
+		FListBlueprintNodesResponse Response;
+		Execute(Cmd, Response);
+		return SerializeListBlueprintNodesResponse(Response);
+	}
+	else if (TypeStr == TEXT("ListBlueprintPins"))
+	{
+		FListBlueprintPinsCommand Cmd;
+		Cmd.CommandId = CommandId;
+		JsonObj->TryGetStringField(TEXT("blueprintPath"), Cmd.BlueprintPath);
+		JsonObj->TryGetStringField(TEXT("nodeId"), Cmd.NodeId);
+
+		FListBlueprintPinsResponse Response;
+		Execute(Cmd, Response);
+		return SerializeListBlueprintPinsResponse(Response);
 	}
 
 	return TEXT("{\"success\":false,\"error\":\"Unknown command type\"}");

@@ -53,6 +53,37 @@ Every friction point discovered is an opportunity to either:
 **When adding features:** Put the intelligence in lower modules. The user-facing API should
 be minimal and obvious. If something "should just work," make it work automatically.
 
+---
+
+## MCP Tool Size Reduction Project
+
+**Goal:** Reduce MCP tool context usage by ~75% while preserving ALL functionality.
+
+**Planning Documents:**
+- `MCP_SHRINK_STRATEGY.md` - Overview and impact analysis
+- `MCP_PHASE1_COMPRESSION.md` - Description compression + token bloat investigation
+- `MCP_PHASE2_MODULAR.md` - Modular loading architecture
+- `MCP_PHASE3_CONSOLIDATION.md` - Tool consolidation deep dive
+
+**Critical Requirements:**
+
+1. **Preserve ALL functionality** - Tools may do significant work under the hood. Similar names
+   don't mean redundant functionality. Before consolidating, analyze what each tool actually does.
+
+2. **Identify downstream changes** - Consolidating MCP tools may require changes in:
+   - `AgentBridgeServer` (proto definitions, gRPC handlers)
+   - `AgentBridgeScripting` (CommandExecutor dispatch)
+   - `AgentBridgeRuntime` (actual operation logic)
+   - Proto files (`AgentBridge.proto`)
+
+3. **User/Agent ergonomics** - Modular loading should be easy to configure. Default should
+   be sensible for common use cases.
+
+4. **Investigate token bloat** - Tools are consuming ~600 tokens each in Claude's context.
+   This is 6x higher than the ~90 token estimate. Find the actual sources.
+
+---
+
 ## Quick Reference
 
 | What | Where |
@@ -84,8 +115,72 @@ be minimal and obvious. If something "should just work," make it work automatica
 | World Partition | **WORKING** | Query streaming actors, landscape bounds |
 | Console commands | **WORKING** | Execute and search 5000+ commands |
 | bp_toolkit (offline) | **WORKING** | 14 tools for JSON asset manipulation |
+| **Blueprint nodes** | **COMPLETE** | 6 MCP tools for BP graph manipulation |
 
-**Tool Count:** 104 MCP tools across 13 services (90 core + 14 bp_toolkit when present)
+**Tool Count:** 110 MCP tools across 13 services (96 core + 14 bp_toolkit when present)
+
+---
+
+## Blueprint Node Manipulation - COMPLETE
+
+**Status:** Full implementation complete across all layers. Ready for testing.
+
+### Implementation Complete
+
+- **C++ Commands** (`AgentCommands.h`): 6 command/response structs
+- **C++ Executor** (`CommandExecutor.cpp`): Full implementations with K2Node creation
+- **gRPC Protos** (`AgentBridge.proto`): 6 new messages and RPCs
+- **gRPC Handlers** (`AgentBridgeServiceSubsystem.cpp`): Proto-to-command conversion
+- **Python MCP** (`agentbridge.py`): 6 tools with full response handling
+- **Build verified**: Project compiles successfully
+
+### Next Step
+
+**Testing** - Create a Blueprint with BeginPlay → PrintString flow to verify end-to-end
+
+### Supported Node Types
+
+`CallFunction`, `Event`, `VariableGet`, `VariableSet`, `Branch`, `Sequence`, `Comment`
+
+### Example Usage (once complete)
+
+```python
+# Create BeginPlay event
+event = bp_create_node(
+    blueprint_path="/Game/Test/BP_Test.BP_Test",
+    node_type="Event",
+    event_name="ReceiveBeginPlay",
+    pos_x=0, pos_y=0
+)
+
+# Create PrintString call
+print_node = bp_create_node(
+    blueprint_path="/Game/Test/BP_Test.BP_Test",
+    node_type="CallFunction",
+    function_reference="KismetSystemLibrary.PrintString",
+    pos_x=300, pos_y=0
+)
+
+# Connect them
+bp_connect_pins(
+    blueprint_path="/Game/Test/BP_Test.BP_Test",
+    source_node=event["guid"],
+    source_pin="then",
+    target_node=print_node["guid"],
+    target_pin="execute"
+)
+```
+
+---
+
+## TODO: PCG Manipulation MCP Tools
+
+**REMINDER:** After Blueprint nodes are complete, discuss with user about exposing PCG graph manipulation as MCP tools. PCG already works via `call_asset_function` but may benefit from dedicated tools like:
+- `pcg_add_node` - Add node to PCG graph
+- `pcg_connect_nodes` - Connect PCG nodes
+- `pcg_set_node_settings` - Set node settings/parameters
+
+---
 
 ## Architecture
 

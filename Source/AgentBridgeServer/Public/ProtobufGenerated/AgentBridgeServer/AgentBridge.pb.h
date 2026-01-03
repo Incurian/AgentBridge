@@ -75,6 +75,12 @@ AGENTBRIDGESERVER_API extern AttachActorRequestDefaultTypeInternal _AttachActorR
 class AttachComponentRequest;
 struct AttachComponentRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern AttachComponentRequestDefaultTypeInternal _AttachComponentRequest_default_instance_;
+class BlueprintNodeInfo;
+struct BlueprintNodeInfoDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern BlueprintNodeInfoDefaultTypeInternal _BlueprintNodeInfo_default_instance_;
+class BlueprintPinInfo;
+struct BlueprintPinInfoDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern BlueprintPinInfoDefaultTypeInternal _BlueprintPinInfo_default_instance_;
 class BoundingBox;
 struct BoundingBoxDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern BoundingBoxDefaultTypeInternal _BoundingBox_default_instance_;
@@ -102,6 +108,9 @@ AGENTBRIDGESERVER_API extern ColorDefaultTypeInternal _Color_default_instance_;
 class ComponentDescriptor;
 struct ComponentDescriptorDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern ComponentDescriptorDefaultTypeInternal _ComponentDescriptor_default_instance_;
+class ConnectBlueprintPinsRequest;
+struct ConnectBlueprintPinsRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern ConnectBlueprintPinsRequestDefaultTypeInternal _ConnectBlueprintPinsRequest_default_instance_;
 class ConsoleCommandInfo;
 struct ConsoleCommandInfoDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern ConsoleCommandInfoDefaultTypeInternal _ConsoleCommandInfo_default_instance_;
@@ -117,9 +126,18 @@ AGENTBRIDGESERVER_API extern CreateAssetRequestDefaultTypeInternal _CreateAssetR
 class CreateAssetResponse;
 struct CreateAssetResponseDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern CreateAssetResponseDefaultTypeInternal _CreateAssetResponse_default_instance_;
+class CreateBlueprintNodeRequest;
+struct CreateBlueprintNodeRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern CreateBlueprintNodeRequestDefaultTypeInternal _CreateBlueprintNodeRequest_default_instance_;
+class CreateBlueprintNodeResponse;
+struct CreateBlueprintNodeResponseDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern CreateBlueprintNodeResponseDefaultTypeInternal _CreateBlueprintNodeResponse_default_instance_;
 class DeleteActorRequest;
 struct DeleteActorRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DeleteActorRequestDefaultTypeInternal _DeleteActorRequest_default_instance_;
+class DeleteBlueprintNodeRequest;
+struct DeleteBlueprintNodeRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern DeleteBlueprintNodeRequestDefaultTypeInternal _DeleteBlueprintNodeRequest_default_instance_;
 class DeleteProjectFileRequest;
 struct DeleteProjectFileRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DeleteProjectFileRequestDefaultTypeInternal _DeleteProjectFileRequest_default_instance_;
@@ -129,6 +147,9 @@ AGENTBRIDGESERVER_API extern DetachActorRequestDefaultTypeInternal _DetachActorR
 class DetachComponentRequest;
 struct DetachComponentRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DetachComponentRequestDefaultTypeInternal _DetachComponentRequest_default_instance_;
+class DisconnectBlueprintPinsRequest;
+struct DisconnectBlueprintPinsRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern DisconnectBlueprintPinsRequestDefaultTypeInternal _DisconnectBlueprintPinsRequest_default_instance_;
 class DuplicateActorRequest;
 struct DuplicateActorRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DuplicateActorRequestDefaultTypeInternal _DuplicateActorRequest_default_instance_;
@@ -219,6 +240,18 @@ AGENTBRIDGESERVER_API extern IsWorldPartitionedRequestDefaultTypeInternal _IsWor
 class IsWorldPartitionedResponse;
 struct IsWorldPartitionedResponseDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern IsWorldPartitionedResponseDefaultTypeInternal _IsWorldPartitionedResponse_default_instance_;
+class ListBlueprintNodesRequest;
+struct ListBlueprintNodesRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern ListBlueprintNodesRequestDefaultTypeInternal _ListBlueprintNodesRequest_default_instance_;
+class ListBlueprintNodesResponse;
+struct ListBlueprintNodesResponseDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern ListBlueprintNodesResponseDefaultTypeInternal _ListBlueprintNodesResponse_default_instance_;
+class ListBlueprintPinsRequest;
+struct ListBlueprintPinsRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern ListBlueprintPinsRequestDefaultTypeInternal _ListBlueprintPinsRequest_default_instance_;
+class ListBlueprintPinsResponse;
+struct ListBlueprintPinsResponseDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern ListBlueprintPinsResponseDefaultTypeInternal _ListBlueprintPinsResponse_default_instance_;
 class ListClassesRequest;
 struct ListClassesRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern ListClassesRequestDefaultTypeInternal _ListClassesRequest_default_instance_;
@@ -4612,6 +4645,422 @@ class AGENTBRIDGESERVER_API ListClassesRequest final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API ListBlueprintPinsRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.ListBlueprintPinsRequest) */ {
+ public:
+  inline ListBlueprintPinsRequest() : ListBlueprintPinsRequest(nullptr) {}
+  ~ListBlueprintPinsRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR ListBlueprintPinsRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline ListBlueprintPinsRequest(const ListBlueprintPinsRequest& from)
+      : ListBlueprintPinsRequest(nullptr, from) {}
+  ListBlueprintPinsRequest(ListBlueprintPinsRequest&& from) noexcept
+    : ListBlueprintPinsRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ListBlueprintPinsRequest& operator=(const ListBlueprintPinsRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListBlueprintPinsRequest& operator=(ListBlueprintPinsRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListBlueprintPinsRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListBlueprintPinsRequest* internal_default_instance() {
+    return reinterpret_cast<const ListBlueprintPinsRequest*>(
+               &_ListBlueprintPinsRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    98;
+
+  friend void swap(ListBlueprintPinsRequest& a, ListBlueprintPinsRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListBlueprintPinsRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListBlueprintPinsRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListBlueprintPinsRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListBlueprintPinsRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const ListBlueprintPinsRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const ListBlueprintPinsRequest& from) {
+    ListBlueprintPinsRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(ListBlueprintPinsRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.ListBlueprintPinsRequest";
+  }
+  protected:
+  explicit ListBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena);
+  ListBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena, const ListBlueprintPinsRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kBlueprintPathFieldNumber = 1,
+    kNodeIdFieldNumber = 2,
+  };
+  // string blueprint_path = 1;
+  void clear_blueprint_path() ;
+  const std::string& blueprint_path() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_blueprint_path(Arg_&& arg, Args_... args);
+  std::string* mutable_blueprint_path();
+  PROTOBUF_NODISCARD std::string* release_blueprint_path();
+  void set_allocated_blueprint_path(std::string* value);
+
+  private:
+  const std::string& _internal_blueprint_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_blueprint_path(
+      const std::string& value);
+  std::string* _internal_mutable_blueprint_path();
+
+  public:
+  // string node_id = 2;
+  void clear_node_id() ;
+  const std::string& node_id() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_node_id(Arg_&& arg, Args_... args);
+  std::string* mutable_node_id();
+  PROTOBUF_NODISCARD std::string* release_node_id();
+  void set_allocated_node_id(std::string* value);
+
+  private:
+  const std::string& _internal_node_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_node_id(
+      const std::string& value);
+  std::string* _internal_mutable_node_id();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.ListBlueprintPinsRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      1, 2, 0,
+      72, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr blueprint_path_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr node_id_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API ListBlueprintNodesRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.ListBlueprintNodesRequest) */ {
+ public:
+  inline ListBlueprintNodesRequest() : ListBlueprintNodesRequest(nullptr) {}
+  ~ListBlueprintNodesRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR ListBlueprintNodesRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline ListBlueprintNodesRequest(const ListBlueprintNodesRequest& from)
+      : ListBlueprintNodesRequest(nullptr, from) {}
+  ListBlueprintNodesRequest(ListBlueprintNodesRequest&& from) noexcept
+    : ListBlueprintNodesRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ListBlueprintNodesRequest& operator=(const ListBlueprintNodesRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListBlueprintNodesRequest& operator=(ListBlueprintNodesRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListBlueprintNodesRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListBlueprintNodesRequest* internal_default_instance() {
+    return reinterpret_cast<const ListBlueprintNodesRequest*>(
+               &_ListBlueprintNodesRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    96;
+
+  friend void swap(ListBlueprintNodesRequest& a, ListBlueprintNodesRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListBlueprintNodesRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListBlueprintNodesRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListBlueprintNodesRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListBlueprintNodesRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const ListBlueprintNodesRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const ListBlueprintNodesRequest& from) {
+    ListBlueprintNodesRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(ListBlueprintNodesRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.ListBlueprintNodesRequest";
+  }
+  protected:
+  explicit ListBlueprintNodesRequest(::google::protobuf_tempo::Arena* arena);
+  ListBlueprintNodesRequest(::google::protobuf_tempo::Arena* arena, const ListBlueprintNodesRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kBlueprintPathFieldNumber = 1,
+    kGraphNameFieldNumber = 2,
+    kNodeClassFilterFieldNumber = 3,
+  };
+  // string blueprint_path = 1;
+  void clear_blueprint_path() ;
+  const std::string& blueprint_path() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_blueprint_path(Arg_&& arg, Args_... args);
+  std::string* mutable_blueprint_path();
+  PROTOBUF_NODISCARD std::string* release_blueprint_path();
+  void set_allocated_blueprint_path(std::string* value);
+
+  private:
+  const std::string& _internal_blueprint_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_blueprint_path(
+      const std::string& value);
+  std::string* _internal_mutable_blueprint_path();
+
+  public:
+  // string graph_name = 2;
+  void clear_graph_name() ;
+  const std::string& graph_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_graph_name(Arg_&& arg, Args_... args);
+  std::string* mutable_graph_name();
+  PROTOBUF_NODISCARD std::string* release_graph_name();
+  void set_allocated_graph_name(std::string* value);
+
+  private:
+  const std::string& _internal_graph_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_graph_name(
+      const std::string& value);
+  std::string* _internal_mutable_graph_name();
+
+  public:
+  // string node_class_filter = 3;
+  void clear_node_class_filter() ;
+  const std::string& node_class_filter() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_node_class_filter(Arg_&& arg, Args_... args);
+  std::string* mutable_node_class_filter();
+  PROTOBUF_NODISCARD std::string* release_node_class_filter();
+  void set_allocated_node_class_filter(std::string* value);
+
+  private:
+  const std::string& _internal_node_class_filter() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_node_class_filter(
+      const std::string& value);
+  std::string* _internal_mutable_node_class_filter();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.ListBlueprintNodesRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      2, 3, 0,
+      93, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr blueprint_path_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr graph_name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr node_class_filter_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API IsWorldPartitionedResponse final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.IsWorldPartitionedResponse) */ {
  public:
@@ -8288,6 +8737,259 @@ class AGENTBRIDGESERVER_API DuplicateAssetRequest final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API DisconnectBlueprintPinsRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.DisconnectBlueprintPinsRequest) */ {
+ public:
+  inline DisconnectBlueprintPinsRequest() : DisconnectBlueprintPinsRequest(nullptr) {}
+  ~DisconnectBlueprintPinsRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR DisconnectBlueprintPinsRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline DisconnectBlueprintPinsRequest(const DisconnectBlueprintPinsRequest& from)
+      : DisconnectBlueprintPinsRequest(nullptr, from) {}
+  DisconnectBlueprintPinsRequest(DisconnectBlueprintPinsRequest&& from) noexcept
+    : DisconnectBlueprintPinsRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline DisconnectBlueprintPinsRequest& operator=(const DisconnectBlueprintPinsRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DisconnectBlueprintPinsRequest& operator=(DisconnectBlueprintPinsRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DisconnectBlueprintPinsRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DisconnectBlueprintPinsRequest* internal_default_instance() {
+    return reinterpret_cast<const DisconnectBlueprintPinsRequest*>(
+               &_DisconnectBlueprintPinsRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    94;
+
+  friend void swap(DisconnectBlueprintPinsRequest& a, DisconnectBlueprintPinsRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DisconnectBlueprintPinsRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DisconnectBlueprintPinsRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  DisconnectBlueprintPinsRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DisconnectBlueprintPinsRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const DisconnectBlueprintPinsRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const DisconnectBlueprintPinsRequest& from) {
+    DisconnectBlueprintPinsRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(DisconnectBlueprintPinsRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.DisconnectBlueprintPinsRequest";
+  }
+  protected:
+  explicit DisconnectBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena);
+  DisconnectBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena, const DisconnectBlueprintPinsRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kBlueprintPathFieldNumber = 1,
+    kSourceNodeFieldNumber = 2,
+    kSourcePinFieldNumber = 3,
+    kTargetNodeFieldNumber = 4,
+    kTargetPinFieldNumber = 5,
+  };
+  // string blueprint_path = 1;
+  void clear_blueprint_path() ;
+  const std::string& blueprint_path() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_blueprint_path(Arg_&& arg, Args_... args);
+  std::string* mutable_blueprint_path();
+  PROTOBUF_NODISCARD std::string* release_blueprint_path();
+  void set_allocated_blueprint_path(std::string* value);
+
+  private:
+  const std::string& _internal_blueprint_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_blueprint_path(
+      const std::string& value);
+  std::string* _internal_mutable_blueprint_path();
+
+  public:
+  // string source_node = 2;
+  void clear_source_node() ;
+  const std::string& source_node() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_source_node(Arg_&& arg, Args_... args);
+  std::string* mutable_source_node();
+  PROTOBUF_NODISCARD std::string* release_source_node();
+  void set_allocated_source_node(std::string* value);
+
+  private:
+  const std::string& _internal_source_node() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_source_node(
+      const std::string& value);
+  std::string* _internal_mutable_source_node();
+
+  public:
+  // string source_pin = 3;
+  void clear_source_pin() ;
+  const std::string& source_pin() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_source_pin(Arg_&& arg, Args_... args);
+  std::string* mutable_source_pin();
+  PROTOBUF_NODISCARD std::string* release_source_pin();
+  void set_allocated_source_pin(std::string* value);
+
+  private:
+  const std::string& _internal_source_pin() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_source_pin(
+      const std::string& value);
+  std::string* _internal_mutable_source_pin();
+
+  public:
+  // string target_node = 4;
+  void clear_target_node() ;
+  const std::string& target_node() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_target_node(Arg_&& arg, Args_... args);
+  std::string* mutable_target_node();
+  PROTOBUF_NODISCARD std::string* release_target_node();
+  void set_allocated_target_node(std::string* value);
+
+  private:
+  const std::string& _internal_target_node() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target_node(
+      const std::string& value);
+  std::string* _internal_mutable_target_node();
+
+  public:
+  // string target_pin = 5;
+  void clear_target_pin() ;
+  const std::string& target_pin() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_target_pin(Arg_&& arg, Args_... args);
+  std::string* mutable_target_pin();
+  PROTOBUF_NODISCARD std::string* release_target_pin();
+  void set_allocated_target_pin(std::string* value);
+
+  private:
+  const std::string& _internal_target_pin() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target_pin(
+      const std::string& value);
+  std::string* _internal_mutable_target_pin();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      3, 5, 0,
+      113, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr blueprint_path_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr source_node_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr source_pin_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr target_node_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr target_pin_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API DetachComponentRequest final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.DetachComponentRequest) */ {
  public:
@@ -8885,6 +9587,205 @@ class AGENTBRIDGESERVER_API DeleteProjectFileRequest final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API DeleteBlueprintNodeRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.DeleteBlueprintNodeRequest) */ {
+ public:
+  inline DeleteBlueprintNodeRequest() : DeleteBlueprintNodeRequest(nullptr) {}
+  ~DeleteBlueprintNodeRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR DeleteBlueprintNodeRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline DeleteBlueprintNodeRequest(const DeleteBlueprintNodeRequest& from)
+      : DeleteBlueprintNodeRequest(nullptr, from) {}
+  DeleteBlueprintNodeRequest(DeleteBlueprintNodeRequest&& from) noexcept
+    : DeleteBlueprintNodeRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline DeleteBlueprintNodeRequest& operator=(const DeleteBlueprintNodeRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DeleteBlueprintNodeRequest& operator=(DeleteBlueprintNodeRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DeleteBlueprintNodeRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DeleteBlueprintNodeRequest* internal_default_instance() {
+    return reinterpret_cast<const DeleteBlueprintNodeRequest*>(
+               &_DeleteBlueprintNodeRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    95;
+
+  friend void swap(DeleteBlueprintNodeRequest& a, DeleteBlueprintNodeRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DeleteBlueprintNodeRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DeleteBlueprintNodeRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  DeleteBlueprintNodeRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DeleteBlueprintNodeRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const DeleteBlueprintNodeRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const DeleteBlueprintNodeRequest& from) {
+    DeleteBlueprintNodeRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(DeleteBlueprintNodeRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.DeleteBlueprintNodeRequest";
+  }
+  protected:
+  explicit DeleteBlueprintNodeRequest(::google::protobuf_tempo::Arena* arena);
+  DeleteBlueprintNodeRequest(::google::protobuf_tempo::Arena* arena, const DeleteBlueprintNodeRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kBlueprintPathFieldNumber = 1,
+    kNodeIdFieldNumber = 2,
+  };
+  // string blueprint_path = 1;
+  void clear_blueprint_path() ;
+  const std::string& blueprint_path() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_blueprint_path(Arg_&& arg, Args_... args);
+  std::string* mutable_blueprint_path();
+  PROTOBUF_NODISCARD std::string* release_blueprint_path();
+  void set_allocated_blueprint_path(std::string* value);
+
+  private:
+  const std::string& _internal_blueprint_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_blueprint_path(
+      const std::string& value);
+  std::string* _internal_mutable_blueprint_path();
+
+  public:
+  // string node_id = 2;
+  void clear_node_id() ;
+  const std::string& node_id() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_node_id(Arg_&& arg, Args_... args);
+  std::string* mutable_node_id();
+  PROTOBUF_NODISCARD std::string* release_node_id();
+  void set_allocated_node_id(std::string* value);
+
+  private:
+  const std::string& _internal_node_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_node_id(
+      const std::string& value);
+  std::string* _internal_mutable_node_id();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.DeleteBlueprintNodeRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      1, 2, 0,
+      74, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr blueprint_path_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr node_id_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API DeleteActorRequest final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.DeleteActorRequest) */ {
  public:
@@ -9059,6 +9960,319 @@ class AGENTBRIDGESERVER_API DeleteActorRequest final :
         inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
                               ::google::protobuf_tempo::Arena* arena, const Impl_& from);
     ::google::protobuf_tempo::internal::ArenaStringPtr actor_id_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API CreateBlueprintNodeRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.CreateBlueprintNodeRequest) */ {
+ public:
+  inline CreateBlueprintNodeRequest() : CreateBlueprintNodeRequest(nullptr) {}
+  ~CreateBlueprintNodeRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR CreateBlueprintNodeRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline CreateBlueprintNodeRequest(const CreateBlueprintNodeRequest& from)
+      : CreateBlueprintNodeRequest(nullptr, from) {}
+  CreateBlueprintNodeRequest(CreateBlueprintNodeRequest&& from) noexcept
+    : CreateBlueprintNodeRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline CreateBlueprintNodeRequest& operator=(const CreateBlueprintNodeRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CreateBlueprintNodeRequest& operator=(CreateBlueprintNodeRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CreateBlueprintNodeRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CreateBlueprintNodeRequest* internal_default_instance() {
+    return reinterpret_cast<const CreateBlueprintNodeRequest*>(
+               &_CreateBlueprintNodeRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    91;
+
+  friend void swap(CreateBlueprintNodeRequest& a, CreateBlueprintNodeRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CreateBlueprintNodeRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CreateBlueprintNodeRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CreateBlueprintNodeRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CreateBlueprintNodeRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const CreateBlueprintNodeRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const CreateBlueprintNodeRequest& from) {
+    CreateBlueprintNodeRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(CreateBlueprintNodeRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.CreateBlueprintNodeRequest";
+  }
+  protected:
+  explicit CreateBlueprintNodeRequest(::google::protobuf_tempo::Arena* arena);
+  CreateBlueprintNodeRequest(::google::protobuf_tempo::Arena* arena, const CreateBlueprintNodeRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kBlueprintPathFieldNumber = 1,
+    kGraphNameFieldNumber = 2,
+    kNodeTypeFieldNumber = 3,
+    kFunctionReferenceFieldNumber = 4,
+    kEventNameFieldNumber = 5,
+    kVariableNameFieldNumber = 6,
+    kCommentFieldNumber = 7,
+    kPosXFieldNumber = 8,
+    kPosYFieldNumber = 9,
+  };
+  // string blueprint_path = 1;
+  void clear_blueprint_path() ;
+  const std::string& blueprint_path() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_blueprint_path(Arg_&& arg, Args_... args);
+  std::string* mutable_blueprint_path();
+  PROTOBUF_NODISCARD std::string* release_blueprint_path();
+  void set_allocated_blueprint_path(std::string* value);
+
+  private:
+  const std::string& _internal_blueprint_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_blueprint_path(
+      const std::string& value);
+  std::string* _internal_mutable_blueprint_path();
+
+  public:
+  // string graph_name = 2;
+  void clear_graph_name() ;
+  const std::string& graph_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_graph_name(Arg_&& arg, Args_... args);
+  std::string* mutable_graph_name();
+  PROTOBUF_NODISCARD std::string* release_graph_name();
+  void set_allocated_graph_name(std::string* value);
+
+  private:
+  const std::string& _internal_graph_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_graph_name(
+      const std::string& value);
+  std::string* _internal_mutable_graph_name();
+
+  public:
+  // string node_type = 3;
+  void clear_node_type() ;
+  const std::string& node_type() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_node_type(Arg_&& arg, Args_... args);
+  std::string* mutable_node_type();
+  PROTOBUF_NODISCARD std::string* release_node_type();
+  void set_allocated_node_type(std::string* value);
+
+  private:
+  const std::string& _internal_node_type() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_node_type(
+      const std::string& value);
+  std::string* _internal_mutable_node_type();
+
+  public:
+  // string function_reference = 4;
+  void clear_function_reference() ;
+  const std::string& function_reference() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_function_reference(Arg_&& arg, Args_... args);
+  std::string* mutable_function_reference();
+  PROTOBUF_NODISCARD std::string* release_function_reference();
+  void set_allocated_function_reference(std::string* value);
+
+  private:
+  const std::string& _internal_function_reference() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_function_reference(
+      const std::string& value);
+  std::string* _internal_mutable_function_reference();
+
+  public:
+  // string event_name = 5;
+  void clear_event_name() ;
+  const std::string& event_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_event_name(Arg_&& arg, Args_... args);
+  std::string* mutable_event_name();
+  PROTOBUF_NODISCARD std::string* release_event_name();
+  void set_allocated_event_name(std::string* value);
+
+  private:
+  const std::string& _internal_event_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_event_name(
+      const std::string& value);
+  std::string* _internal_mutable_event_name();
+
+  public:
+  // string variable_name = 6;
+  void clear_variable_name() ;
+  const std::string& variable_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_variable_name(Arg_&& arg, Args_... args);
+  std::string* mutable_variable_name();
+  PROTOBUF_NODISCARD std::string* release_variable_name();
+  void set_allocated_variable_name(std::string* value);
+
+  private:
+  const std::string& _internal_variable_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_variable_name(
+      const std::string& value);
+  std::string* _internal_mutable_variable_name();
+
+  public:
+  // string comment = 7;
+  void clear_comment() ;
+  const std::string& comment() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_comment(Arg_&& arg, Args_... args);
+  std::string* mutable_comment();
+  PROTOBUF_NODISCARD std::string* release_comment();
+  void set_allocated_comment(std::string* value);
+
+  private:
+  const std::string& _internal_comment() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_comment(
+      const std::string& value);
+  std::string* _internal_mutable_comment();
+
+  public:
+  // int32 pos_x = 8;
+  void clear_pos_x() ;
+  ::int32_t pos_x() const;
+  void set_pos_x(::int32_t value);
+
+  private:
+  ::int32_t _internal_pos_x() const;
+  void _internal_set_pos_x(::int32_t value);
+
+  public:
+  // int32 pos_y = 9;
+  void clear_pos_y() ;
+  ::int32_t pos_y() const;
+  void set_pos_y(::int32_t value);
+
+  private:
+  ::int32_t _internal_pos_y() const;
+  void _internal_set_pos_y(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.CreateBlueprintNodeRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      4, 9, 0,
+      142, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr blueprint_path_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr graph_name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr node_type_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr function_reference_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr event_name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr variable_name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr comment_;
+    ::int32_t pos_x_;
+    ::int32_t pos_y_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -9964,6 +11178,259 @@ class AGENTBRIDGESERVER_API ConsoleCommandInfo final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API ConnectBlueprintPinsRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.ConnectBlueprintPinsRequest) */ {
+ public:
+  inline ConnectBlueprintPinsRequest() : ConnectBlueprintPinsRequest(nullptr) {}
+  ~ConnectBlueprintPinsRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR ConnectBlueprintPinsRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline ConnectBlueprintPinsRequest(const ConnectBlueprintPinsRequest& from)
+      : ConnectBlueprintPinsRequest(nullptr, from) {}
+  ConnectBlueprintPinsRequest(ConnectBlueprintPinsRequest&& from) noexcept
+    : ConnectBlueprintPinsRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ConnectBlueprintPinsRequest& operator=(const ConnectBlueprintPinsRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ConnectBlueprintPinsRequest& operator=(ConnectBlueprintPinsRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ConnectBlueprintPinsRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ConnectBlueprintPinsRequest* internal_default_instance() {
+    return reinterpret_cast<const ConnectBlueprintPinsRequest*>(
+               &_ConnectBlueprintPinsRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    93;
+
+  friend void swap(ConnectBlueprintPinsRequest& a, ConnectBlueprintPinsRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ConnectBlueprintPinsRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ConnectBlueprintPinsRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ConnectBlueprintPinsRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ConnectBlueprintPinsRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const ConnectBlueprintPinsRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const ConnectBlueprintPinsRequest& from) {
+    ConnectBlueprintPinsRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(ConnectBlueprintPinsRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.ConnectBlueprintPinsRequest";
+  }
+  protected:
+  explicit ConnectBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena);
+  ConnectBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena, const ConnectBlueprintPinsRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kBlueprintPathFieldNumber = 1,
+    kSourceNodeFieldNumber = 2,
+    kSourcePinFieldNumber = 3,
+    kTargetNodeFieldNumber = 4,
+    kTargetPinFieldNumber = 5,
+  };
+  // string blueprint_path = 1;
+  void clear_blueprint_path() ;
+  const std::string& blueprint_path() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_blueprint_path(Arg_&& arg, Args_... args);
+  std::string* mutable_blueprint_path();
+  PROTOBUF_NODISCARD std::string* release_blueprint_path();
+  void set_allocated_blueprint_path(std::string* value);
+
+  private:
+  const std::string& _internal_blueprint_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_blueprint_path(
+      const std::string& value);
+  std::string* _internal_mutable_blueprint_path();
+
+  public:
+  // string source_node = 2;
+  void clear_source_node() ;
+  const std::string& source_node() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_source_node(Arg_&& arg, Args_... args);
+  std::string* mutable_source_node();
+  PROTOBUF_NODISCARD std::string* release_source_node();
+  void set_allocated_source_node(std::string* value);
+
+  private:
+  const std::string& _internal_source_node() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_source_node(
+      const std::string& value);
+  std::string* _internal_mutable_source_node();
+
+  public:
+  // string source_pin = 3;
+  void clear_source_pin() ;
+  const std::string& source_pin() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_source_pin(Arg_&& arg, Args_... args);
+  std::string* mutable_source_pin();
+  PROTOBUF_NODISCARD std::string* release_source_pin();
+  void set_allocated_source_pin(std::string* value);
+
+  private:
+  const std::string& _internal_source_pin() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_source_pin(
+      const std::string& value);
+  std::string* _internal_mutable_source_pin();
+
+  public:
+  // string target_node = 4;
+  void clear_target_node() ;
+  const std::string& target_node() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_target_node(Arg_&& arg, Args_... args);
+  std::string* mutable_target_node();
+  PROTOBUF_NODISCARD std::string* release_target_node();
+  void set_allocated_target_node(std::string* value);
+
+  private:
+  const std::string& _internal_target_node() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target_node(
+      const std::string& value);
+  std::string* _internal_mutable_target_node();
+
+  public:
+  // string target_pin = 5;
+  void clear_target_pin() ;
+  const std::string& target_pin() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_target_pin(Arg_&& arg, Args_... args);
+  std::string* mutable_target_pin();
+  PROTOBUF_NODISCARD std::string* release_target_pin();
+  void set_allocated_target_pin(std::string* value);
+
+  private:
+  const std::string& _internal_target_pin() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target_pin(
+      const std::string& value);
+  std::string* _internal_mutable_target_pin();
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.ConnectBlueprintPinsRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      3, 5, 0,
+      110, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr blueprint_path_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr source_node_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr source_pin_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr target_node_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr target_pin_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API Color final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.Color) */ {
  public:
@@ -10469,6 +11936,301 @@ class AGENTBRIDGESERVER_API ClassInfo final :
     bool is_blueprint_;
     bool is_abstract_;
     bool is_placeable_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API BlueprintPinInfo final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.BlueprintPinInfo) */ {
+ public:
+  inline BlueprintPinInfo() : BlueprintPinInfo(nullptr) {}
+  ~BlueprintPinInfo() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR BlueprintPinInfo(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline BlueprintPinInfo(const BlueprintPinInfo& from)
+      : BlueprintPinInfo(nullptr, from) {}
+  BlueprintPinInfo(BlueprintPinInfo&& from) noexcept
+    : BlueprintPinInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline BlueprintPinInfo& operator=(const BlueprintPinInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BlueprintPinInfo& operator=(BlueprintPinInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const BlueprintPinInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const BlueprintPinInfo* internal_default_instance() {
+    return reinterpret_cast<const BlueprintPinInfo*>(
+               &_BlueprintPinInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    89;
+
+  friend void swap(BlueprintPinInfo& a, BlueprintPinInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(BlueprintPinInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BlueprintPinInfo* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  BlueprintPinInfo* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<BlueprintPinInfo>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const BlueprintPinInfo& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const BlueprintPinInfo& from) {
+    BlueprintPinInfo::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(BlueprintPinInfo* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.BlueprintPinInfo";
+  }
+  protected:
+  explicit BlueprintPinInfo(::google::protobuf_tempo::Arena* arena);
+  BlueprintPinInfo(::google::protobuf_tempo::Arena* arena, const BlueprintPinInfo& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kConnectedToFieldNumber = 7,
+    kNameFieldNumber = 1,
+    kDirectionFieldNumber = 2,
+    kTypeFieldNumber = 3,
+    kTypeDisplayNameFieldNumber = 4,
+    kDefaultValueFieldNumber = 6,
+    kIsConnectedFieldNumber = 5,
+  };
+  // repeated string connected_to = 7;
+  int connected_to_size() const;
+  private:
+  int _internal_connected_to_size() const;
+
+  public:
+  void clear_connected_to() ;
+  const std::string& connected_to(int index) const;
+  std::string* mutable_connected_to(int index);
+  void set_connected_to(int index, const std::string& value);
+  void set_connected_to(int index, std::string&& value);
+  void set_connected_to(int index, const char* value);
+  void set_connected_to(int index, const char* value, std::size_t size);
+  void set_connected_to(int index, absl_tempo::string_view value);
+  std::string* add_connected_to();
+  void add_connected_to(const std::string& value);
+  void add_connected_to(std::string&& value);
+  void add_connected_to(const char* value);
+  void add_connected_to(const char* value, std::size_t size);
+  void add_connected_to(absl_tempo::string_view value);
+  const ::google::protobuf_tempo::RepeatedPtrField<std::string>& connected_to() const;
+  ::google::protobuf_tempo::RepeatedPtrField<std::string>* mutable_connected_to();
+
+  private:
+  const ::google::protobuf_tempo::RepeatedPtrField<std::string>& _internal_connected_to() const;
+  ::google::protobuf_tempo::RepeatedPtrField<std::string>* _internal_mutable_connected_to();
+
+  public:
+  // string name = 1;
+  void clear_name() ;
+  const std::string& name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_name(Arg_&& arg, Args_... args);
+  std::string* mutable_name();
+  PROTOBUF_NODISCARD std::string* release_name();
+  void set_allocated_name(std::string* value);
+
+  private:
+  const std::string& _internal_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_name(
+      const std::string& value);
+  std::string* _internal_mutable_name();
+
+  public:
+  // string direction = 2;
+  void clear_direction() ;
+  const std::string& direction() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_direction(Arg_&& arg, Args_... args);
+  std::string* mutable_direction();
+  PROTOBUF_NODISCARD std::string* release_direction();
+  void set_allocated_direction(std::string* value);
+
+  private:
+  const std::string& _internal_direction() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_direction(
+      const std::string& value);
+  std::string* _internal_mutable_direction();
+
+  public:
+  // string type = 3;
+  void clear_type() ;
+  const std::string& type() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_type(Arg_&& arg, Args_... args);
+  std::string* mutable_type();
+  PROTOBUF_NODISCARD std::string* release_type();
+  void set_allocated_type(std::string* value);
+
+  private:
+  const std::string& _internal_type() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_type(
+      const std::string& value);
+  std::string* _internal_mutable_type();
+
+  public:
+  // string type_display_name = 4;
+  void clear_type_display_name() ;
+  const std::string& type_display_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_type_display_name(Arg_&& arg, Args_... args);
+  std::string* mutable_type_display_name();
+  PROTOBUF_NODISCARD std::string* release_type_display_name();
+  void set_allocated_type_display_name(std::string* value);
+
+  private:
+  const std::string& _internal_type_display_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_type_display_name(
+      const std::string& value);
+  std::string* _internal_mutable_type_display_name();
+
+  public:
+  // string default_value = 6;
+  void clear_default_value() ;
+  const std::string& default_value() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_default_value(Arg_&& arg, Args_... args);
+  std::string* mutable_default_value();
+  PROTOBUF_NODISCARD std::string* release_default_value();
+  void set_allocated_default_value(std::string* value);
+
+  private:
+  const std::string& _internal_default_value() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_default_value(
+      const std::string& value);
+  std::string* _internal_mutable_default_value();
+
+  public:
+  // bool is_connected = 5;
+  void clear_is_connected() ;
+  bool is_connected() const;
+  void set_is_connected(bool value);
+
+  private:
+  bool _internal_is_connected() const;
+  void _internal_set_is_connected(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.BlueprintPinInfo)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      3, 7, 0,
+      102, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::RepeatedPtrField<std::string> connected_to_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr direction_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr type_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr type_display_name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr default_value_;
+    bool is_connected_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -11840,6 +13602,219 @@ class AGENTBRIDGESERVER_API ListClassesResponse final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API ListBlueprintPinsResponse final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.ListBlueprintPinsResponse) */ {
+ public:
+  inline ListBlueprintPinsResponse() : ListBlueprintPinsResponse(nullptr) {}
+  ~ListBlueprintPinsResponse() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR ListBlueprintPinsResponse(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline ListBlueprintPinsResponse(const ListBlueprintPinsResponse& from)
+      : ListBlueprintPinsResponse(nullptr, from) {}
+  ListBlueprintPinsResponse(ListBlueprintPinsResponse&& from) noexcept
+    : ListBlueprintPinsResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline ListBlueprintPinsResponse& operator=(const ListBlueprintPinsResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListBlueprintPinsResponse& operator=(ListBlueprintPinsResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListBlueprintPinsResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListBlueprintPinsResponse* internal_default_instance() {
+    return reinterpret_cast<const ListBlueprintPinsResponse*>(
+               &_ListBlueprintPinsResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    99;
+
+  friend void swap(ListBlueprintPinsResponse& a, ListBlueprintPinsResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListBlueprintPinsResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListBlueprintPinsResponse* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListBlueprintPinsResponse* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListBlueprintPinsResponse>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const ListBlueprintPinsResponse& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const ListBlueprintPinsResponse& from) {
+    ListBlueprintPinsResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(ListBlueprintPinsResponse* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.ListBlueprintPinsResponse";
+  }
+  protected:
+  explicit ListBlueprintPinsResponse(::google::protobuf_tempo::Arena* arena);
+  ListBlueprintPinsResponse(::google::protobuf_tempo::Arena* arena, const ListBlueprintPinsResponse& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPinsFieldNumber = 3,
+    kErrorMessageFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // repeated .AgentBridgeServer.BlueprintPinInfo pins = 3;
+  int pins_size() const;
+  private:
+  int _internal_pins_size() const;
+
+  public:
+  void clear_pins() ;
+  ::AgentBridgeServer::BlueprintPinInfo* mutable_pins(int index);
+  ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintPinInfo >*
+      mutable_pins();
+  private:
+  const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>& _internal_pins() const;
+  ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>* _internal_mutable_pins();
+  public:
+  const ::AgentBridgeServer::BlueprintPinInfo& pins(int index) const;
+  ::AgentBridgeServer::BlueprintPinInfo* add_pins();
+  const ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintPinInfo >&
+      pins() const;
+  // string error_message = 2;
+  void clear_error_message() ;
+  const std::string& error_message() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_error_message(Arg_&& arg, Args_... args);
+  std::string* mutable_error_message();
+  PROTOBUF_NODISCARD std::string* release_error_message();
+  void set_allocated_error_message(std::string* value);
+
+  private:
+  const std::string& _internal_error_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error_message(
+      const std::string& value);
+  std::string* _internal_mutable_error_message();
+
+  public:
+  // bool success = 1;
+  void clear_success() ;
+  bool success() const;
+  void set_success(bool value);
+
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.ListBlueprintPinsResponse)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      2, 3, 1,
+      65, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintPinInfo > pins_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr error_message_;
+    bool success_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API GetLandscapeBoundsResponse final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.GetLandscapeBoundsResponse) */ {
  public:
@@ -12772,6 +14747,339 @@ class AGENTBRIDGESERVER_API BoundingBox final :
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     ::TempoScripting::Vector* min_;
     ::TempoScripting::Vector* max_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API BlueprintNodeInfo final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.BlueprintNodeInfo) */ {
+ public:
+  inline BlueprintNodeInfo() : BlueprintNodeInfo(nullptr) {}
+  ~BlueprintNodeInfo() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR BlueprintNodeInfo(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline BlueprintNodeInfo(const BlueprintNodeInfo& from)
+      : BlueprintNodeInfo(nullptr, from) {}
+  BlueprintNodeInfo(BlueprintNodeInfo&& from) noexcept
+    : BlueprintNodeInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline BlueprintNodeInfo& operator=(const BlueprintNodeInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline BlueprintNodeInfo& operator=(BlueprintNodeInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const BlueprintNodeInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const BlueprintNodeInfo* internal_default_instance() {
+    return reinterpret_cast<const BlueprintNodeInfo*>(
+               &_BlueprintNodeInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    90;
+
+  friend void swap(BlueprintNodeInfo& a, BlueprintNodeInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(BlueprintNodeInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(BlueprintNodeInfo* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  BlueprintNodeInfo* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<BlueprintNodeInfo>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const BlueprintNodeInfo& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const BlueprintNodeInfo& from) {
+    BlueprintNodeInfo::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(BlueprintNodeInfo* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.BlueprintNodeInfo";
+  }
+  protected:
+  explicit BlueprintNodeInfo(::google::protobuf_tempo::Arena* arena);
+  BlueprintNodeInfo(::google::protobuf_tempo::Arena* arena, const BlueprintNodeInfo& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPinsFieldNumber = 10,
+    kGuidFieldNumber = 1,
+    kClassNameFieldNumber = 2,
+    kTitleFieldNumber = 3,
+    kCommentFieldNumber = 6,
+    kFunctionReferenceFieldNumber = 7,
+    kEventNameFieldNumber = 8,
+    kVariableNameFieldNumber = 9,
+    kPosXFieldNumber = 4,
+    kPosYFieldNumber = 5,
+  };
+  // repeated .AgentBridgeServer.BlueprintPinInfo pins = 10;
+  int pins_size() const;
+  private:
+  int _internal_pins_size() const;
+
+  public:
+  void clear_pins() ;
+  ::AgentBridgeServer::BlueprintPinInfo* mutable_pins(int index);
+  ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintPinInfo >*
+      mutable_pins();
+  private:
+  const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>& _internal_pins() const;
+  ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>* _internal_mutable_pins();
+  public:
+  const ::AgentBridgeServer::BlueprintPinInfo& pins(int index) const;
+  ::AgentBridgeServer::BlueprintPinInfo* add_pins();
+  const ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintPinInfo >&
+      pins() const;
+  // string guid = 1;
+  void clear_guid() ;
+  const std::string& guid() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_guid(Arg_&& arg, Args_... args);
+  std::string* mutable_guid();
+  PROTOBUF_NODISCARD std::string* release_guid();
+  void set_allocated_guid(std::string* value);
+
+  private:
+  const std::string& _internal_guid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_guid(
+      const std::string& value);
+  std::string* _internal_mutable_guid();
+
+  public:
+  // string class_name = 2;
+  void clear_class_name() ;
+  const std::string& class_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_class_name(Arg_&& arg, Args_... args);
+  std::string* mutable_class_name();
+  PROTOBUF_NODISCARD std::string* release_class_name();
+  void set_allocated_class_name(std::string* value);
+
+  private:
+  const std::string& _internal_class_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_class_name(
+      const std::string& value);
+  std::string* _internal_mutable_class_name();
+
+  public:
+  // string title = 3;
+  void clear_title() ;
+  const std::string& title() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_title(Arg_&& arg, Args_... args);
+  std::string* mutable_title();
+  PROTOBUF_NODISCARD std::string* release_title();
+  void set_allocated_title(std::string* value);
+
+  private:
+  const std::string& _internal_title() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_title(
+      const std::string& value);
+  std::string* _internal_mutable_title();
+
+  public:
+  // string comment = 6;
+  void clear_comment() ;
+  const std::string& comment() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_comment(Arg_&& arg, Args_... args);
+  std::string* mutable_comment();
+  PROTOBUF_NODISCARD std::string* release_comment();
+  void set_allocated_comment(std::string* value);
+
+  private:
+  const std::string& _internal_comment() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_comment(
+      const std::string& value);
+  std::string* _internal_mutable_comment();
+
+  public:
+  // string function_reference = 7;
+  void clear_function_reference() ;
+  const std::string& function_reference() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_function_reference(Arg_&& arg, Args_... args);
+  std::string* mutable_function_reference();
+  PROTOBUF_NODISCARD std::string* release_function_reference();
+  void set_allocated_function_reference(std::string* value);
+
+  private:
+  const std::string& _internal_function_reference() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_function_reference(
+      const std::string& value);
+  std::string* _internal_mutable_function_reference();
+
+  public:
+  // string event_name = 8;
+  void clear_event_name() ;
+  const std::string& event_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_event_name(Arg_&& arg, Args_... args);
+  std::string* mutable_event_name();
+  PROTOBUF_NODISCARD std::string* release_event_name();
+  void set_allocated_event_name(std::string* value);
+
+  private:
+  const std::string& _internal_event_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_event_name(
+      const std::string& value);
+  std::string* _internal_mutable_event_name();
+
+  public:
+  // string variable_name = 9;
+  void clear_variable_name() ;
+  const std::string& variable_name() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_variable_name(Arg_&& arg, Args_... args);
+  std::string* mutable_variable_name();
+  PROTOBUF_NODISCARD std::string* release_variable_name();
+  void set_allocated_variable_name(std::string* value);
+
+  private:
+  const std::string& _internal_variable_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_variable_name(
+      const std::string& value);
+  std::string* _internal_mutable_variable_name();
+
+  public:
+  // int32 pos_x = 4;
+  void clear_pos_x() ;
+  ::int32_t pos_x() const;
+  void set_pos_x(::int32_t value);
+
+  private:
+  ::int32_t _internal_pos_x() const;
+  void _internal_set_pos_x(::int32_t value);
+
+  public:
+  // int32 pos_y = 5;
+  void clear_pos_y() ;
+  ::int32_t pos_y() const;
+  void set_pos_y(::int32_t value);
+
+  private:
+  ::int32_t _internal_pos_y() const;
+  void _internal_set_pos_y(::int32_t value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.BlueprintNodeInfo)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      4, 10, 1,
+      119, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintPinInfo > pins_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr guid_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr class_name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr title_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr comment_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr function_reference_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr event_name_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr variable_name_;
+    ::int32_t pos_x_;
+    ::int32_t pos_y_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -14313,6 +16621,219 @@ class AGENTBRIDGESERVER_API PropertyValue final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API ListBlueprintNodesResponse final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.ListBlueprintNodesResponse) */ {
+ public:
+  inline ListBlueprintNodesResponse() : ListBlueprintNodesResponse(nullptr) {}
+  ~ListBlueprintNodesResponse() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR ListBlueprintNodesResponse(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline ListBlueprintNodesResponse(const ListBlueprintNodesResponse& from)
+      : ListBlueprintNodesResponse(nullptr, from) {}
+  ListBlueprintNodesResponse(ListBlueprintNodesResponse&& from) noexcept
+    : ListBlueprintNodesResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline ListBlueprintNodesResponse& operator=(const ListBlueprintNodesResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListBlueprintNodesResponse& operator=(ListBlueprintNodesResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListBlueprintNodesResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListBlueprintNodesResponse* internal_default_instance() {
+    return reinterpret_cast<const ListBlueprintNodesResponse*>(
+               &_ListBlueprintNodesResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    97;
+
+  friend void swap(ListBlueprintNodesResponse& a, ListBlueprintNodesResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListBlueprintNodesResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListBlueprintNodesResponse* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListBlueprintNodesResponse* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListBlueprintNodesResponse>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const ListBlueprintNodesResponse& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const ListBlueprintNodesResponse& from) {
+    ListBlueprintNodesResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(ListBlueprintNodesResponse* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.ListBlueprintNodesResponse";
+  }
+  protected:
+  explicit ListBlueprintNodesResponse(::google::protobuf_tempo::Arena* arena);
+  ListBlueprintNodesResponse(::google::protobuf_tempo::Arena* arena, const ListBlueprintNodesResponse& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNodesFieldNumber = 3,
+    kErrorMessageFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // repeated .AgentBridgeServer.BlueprintNodeInfo nodes = 3;
+  int nodes_size() const;
+  private:
+  int _internal_nodes_size() const;
+
+  public:
+  void clear_nodes() ;
+  ::AgentBridgeServer::BlueprintNodeInfo* mutable_nodes(int index);
+  ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintNodeInfo >*
+      mutable_nodes();
+  private:
+  const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintNodeInfo>& _internal_nodes() const;
+  ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintNodeInfo>* _internal_mutable_nodes();
+  public:
+  const ::AgentBridgeServer::BlueprintNodeInfo& nodes(int index) const;
+  ::AgentBridgeServer::BlueprintNodeInfo* add_nodes();
+  const ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintNodeInfo >&
+      nodes() const;
+  // string error_message = 2;
+  void clear_error_message() ;
+  const std::string& error_message() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_error_message(Arg_&& arg, Args_... args);
+  std::string* mutable_error_message();
+  PROTOBUF_NODISCARD std::string* release_error_message();
+  void set_allocated_error_message(std::string* value);
+
+  private:
+  const std::string& _internal_error_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error_message(
+      const std::string& value);
+  std::string* _internal_mutable_error_message();
+
+  public:
+  // bool success = 1;
+  void clear_success() ;
+  bool success() const;
+  void set_success(bool value);
+
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.ListBlueprintNodesResponse)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      2, 3, 1,
+      66, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::RepeatedPtrField< ::AgentBridgeServer::BlueprintNodeInfo > nodes_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr error_message_;
+    bool success_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API GetComponentTransformResponse final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.GetComponentTransformResponse) */ {
  public:
@@ -14735,6 +17256,217 @@ class AGENTBRIDGESERVER_API DuplicateActorRequest final :
     ::google::protobuf_tempo::internal::ArenaStringPtr actor_id_;
     ::google::protobuf_tempo::internal::ArenaStringPtr new_label_;
     ::AgentBridgeServer::ActorTransform* new_transform_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API CreateBlueprintNodeResponse final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.CreateBlueprintNodeResponse) */ {
+ public:
+  inline CreateBlueprintNodeResponse() : CreateBlueprintNodeResponse(nullptr) {}
+  ~CreateBlueprintNodeResponse() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR CreateBlueprintNodeResponse(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline CreateBlueprintNodeResponse(const CreateBlueprintNodeResponse& from)
+      : CreateBlueprintNodeResponse(nullptr, from) {}
+  CreateBlueprintNodeResponse(CreateBlueprintNodeResponse&& from) noexcept
+    : CreateBlueprintNodeResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline CreateBlueprintNodeResponse& operator=(const CreateBlueprintNodeResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CreateBlueprintNodeResponse& operator=(CreateBlueprintNodeResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CreateBlueprintNodeResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CreateBlueprintNodeResponse* internal_default_instance() {
+    return reinterpret_cast<const CreateBlueprintNodeResponse*>(
+               &_CreateBlueprintNodeResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    92;
+
+  friend void swap(CreateBlueprintNodeResponse& a, CreateBlueprintNodeResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CreateBlueprintNodeResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CreateBlueprintNodeResponse* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CreateBlueprintNodeResponse* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CreateBlueprintNodeResponse>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const CreateBlueprintNodeResponse& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const CreateBlueprintNodeResponse& from) {
+    CreateBlueprintNodeResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(CreateBlueprintNodeResponse* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.CreateBlueprintNodeResponse";
+  }
+  protected:
+  explicit CreateBlueprintNodeResponse(::google::protobuf_tempo::Arena* arena);
+  CreateBlueprintNodeResponse(::google::protobuf_tempo::Arena* arena, const CreateBlueprintNodeResponse& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kErrorMessageFieldNumber = 2,
+    kNodeFieldNumber = 3,
+    kSuccessFieldNumber = 1,
+  };
+  // string error_message = 2;
+  void clear_error_message() ;
+  const std::string& error_message() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_error_message(Arg_&& arg, Args_... args);
+  std::string* mutable_error_message();
+  PROTOBUF_NODISCARD std::string* release_error_message();
+  void set_allocated_error_message(std::string* value);
+
+  private:
+  const std::string& _internal_error_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error_message(
+      const std::string& value);
+  std::string* _internal_mutable_error_message();
+
+  public:
+  // .AgentBridgeServer.BlueprintNodeInfo node = 3;
+  bool has_node() const;
+  void clear_node() ;
+  const ::AgentBridgeServer::BlueprintNodeInfo& node() const;
+  PROTOBUF_NODISCARD ::AgentBridgeServer::BlueprintNodeInfo* release_node();
+  ::AgentBridgeServer::BlueprintNodeInfo* mutable_node();
+  void set_allocated_node(::AgentBridgeServer::BlueprintNodeInfo* value);
+  void unsafe_arena_set_allocated_node(::AgentBridgeServer::BlueprintNodeInfo* value);
+  ::AgentBridgeServer::BlueprintNodeInfo* unsafe_arena_release_node();
+
+  private:
+  const ::AgentBridgeServer::BlueprintNodeInfo& _internal_node() const;
+  ::AgentBridgeServer::BlueprintNodeInfo* _internal_mutable_node();
+
+  public:
+  // bool success = 1;
+  void clear_success() ;
+  bool success() const;
+  void set_success(bool value);
+
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.CreateBlueprintNodeResponse)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      2, 3, 1,
+      67, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::HasBits<1> _has_bits_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr error_message_;
+    ::AgentBridgeServer::BlueprintNodeInfo* node_;
+    bool success_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -34763,6 +37495,2645 @@ inline void DeleteProjectFileRequest::_internal_set_allow_directory_delete(bool 
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.allow_directory_delete_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// BlueprintPinInfo
+
+// string name = 1;
+inline void BlueprintPinInfo::clear_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.name_.ClearToEmpty();
+}
+inline const std::string& BlueprintPinInfo::name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintPinInfo.name)
+  return _internal_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintPinInfo::set_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintPinInfo.name)
+}
+inline std::string* BlueprintPinInfo::mutable_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintPinInfo.name)
+  return _s;
+}
+inline const std::string& BlueprintPinInfo::_internal_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.name_.Get();
+}
+inline void BlueprintPinInfo::_internal_set_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.name_.Set(value, GetArena());
+}
+inline std::string* BlueprintPinInfo::_internal_mutable_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.name_.Mutable( GetArena());
+}
+inline std::string* BlueprintPinInfo::release_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintPinInfo.name)
+  return _impl_.name_.Release();
+}
+inline void BlueprintPinInfo::set_allocated_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.name_.IsDefault()) {
+          _impl_.name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintPinInfo.name)
+}
+
+// string direction = 2;
+inline void BlueprintPinInfo::clear_direction() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.direction_.ClearToEmpty();
+}
+inline const std::string& BlueprintPinInfo::direction() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintPinInfo.direction)
+  return _internal_direction();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintPinInfo::set_direction(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.direction_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintPinInfo.direction)
+}
+inline std::string* BlueprintPinInfo::mutable_direction() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_direction();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintPinInfo.direction)
+  return _s;
+}
+inline const std::string& BlueprintPinInfo::_internal_direction() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.direction_.Get();
+}
+inline void BlueprintPinInfo::_internal_set_direction(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.direction_.Set(value, GetArena());
+}
+inline std::string* BlueprintPinInfo::_internal_mutable_direction() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.direction_.Mutable( GetArena());
+}
+inline std::string* BlueprintPinInfo::release_direction() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintPinInfo.direction)
+  return _impl_.direction_.Release();
+}
+inline void BlueprintPinInfo::set_allocated_direction(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.direction_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.direction_.IsDefault()) {
+          _impl_.direction_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintPinInfo.direction)
+}
+
+// string type = 3;
+inline void BlueprintPinInfo::clear_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.type_.ClearToEmpty();
+}
+inline const std::string& BlueprintPinInfo::type() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintPinInfo.type)
+  return _internal_type();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintPinInfo::set_type(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.type_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintPinInfo.type)
+}
+inline std::string* BlueprintPinInfo::mutable_type() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_type();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintPinInfo.type)
+  return _s;
+}
+inline const std::string& BlueprintPinInfo::_internal_type() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.type_.Get();
+}
+inline void BlueprintPinInfo::_internal_set_type(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.type_.Set(value, GetArena());
+}
+inline std::string* BlueprintPinInfo::_internal_mutable_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.type_.Mutable( GetArena());
+}
+inline std::string* BlueprintPinInfo::release_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintPinInfo.type)
+  return _impl_.type_.Release();
+}
+inline void BlueprintPinInfo::set_allocated_type(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.type_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.type_.IsDefault()) {
+          _impl_.type_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintPinInfo.type)
+}
+
+// string type_display_name = 4;
+inline void BlueprintPinInfo::clear_type_display_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.type_display_name_.ClearToEmpty();
+}
+inline const std::string& BlueprintPinInfo::type_display_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintPinInfo.type_display_name)
+  return _internal_type_display_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintPinInfo::set_type_display_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.type_display_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintPinInfo.type_display_name)
+}
+inline std::string* BlueprintPinInfo::mutable_type_display_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_type_display_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintPinInfo.type_display_name)
+  return _s;
+}
+inline const std::string& BlueprintPinInfo::_internal_type_display_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.type_display_name_.Get();
+}
+inline void BlueprintPinInfo::_internal_set_type_display_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.type_display_name_.Set(value, GetArena());
+}
+inline std::string* BlueprintPinInfo::_internal_mutable_type_display_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.type_display_name_.Mutable( GetArena());
+}
+inline std::string* BlueprintPinInfo::release_type_display_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintPinInfo.type_display_name)
+  return _impl_.type_display_name_.Release();
+}
+inline void BlueprintPinInfo::set_allocated_type_display_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.type_display_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.type_display_name_.IsDefault()) {
+          _impl_.type_display_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintPinInfo.type_display_name)
+}
+
+// bool is_connected = 5;
+inline void BlueprintPinInfo::clear_is_connected() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.is_connected_ = false;
+}
+inline bool BlueprintPinInfo::is_connected() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintPinInfo.is_connected)
+  return _internal_is_connected();
+}
+inline void BlueprintPinInfo::set_is_connected(bool value) {
+  _internal_set_is_connected(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintPinInfo.is_connected)
+}
+inline bool BlueprintPinInfo::_internal_is_connected() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.is_connected_;
+}
+inline void BlueprintPinInfo::_internal_set_is_connected(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.is_connected_ = value;
+}
+
+// string default_value = 6;
+inline void BlueprintPinInfo::clear_default_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.default_value_.ClearToEmpty();
+}
+inline const std::string& BlueprintPinInfo::default_value() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintPinInfo.default_value)
+  return _internal_default_value();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintPinInfo::set_default_value(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.default_value_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintPinInfo.default_value)
+}
+inline std::string* BlueprintPinInfo::mutable_default_value() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_default_value();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintPinInfo.default_value)
+  return _s;
+}
+inline const std::string& BlueprintPinInfo::_internal_default_value() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.default_value_.Get();
+}
+inline void BlueprintPinInfo::_internal_set_default_value(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.default_value_.Set(value, GetArena());
+}
+inline std::string* BlueprintPinInfo::_internal_mutable_default_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.default_value_.Mutable( GetArena());
+}
+inline std::string* BlueprintPinInfo::release_default_value() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintPinInfo.default_value)
+  return _impl_.default_value_.Release();
+}
+inline void BlueprintPinInfo::set_allocated_default_value(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.default_value_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.default_value_.IsDefault()) {
+          _impl_.default_value_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintPinInfo.default_value)
+}
+
+// repeated string connected_to = 7;
+inline int BlueprintPinInfo::_internal_connected_to_size() const {
+  return _internal_connected_to().size();
+}
+inline int BlueprintPinInfo::connected_to_size() const {
+  return _internal_connected_to_size();
+}
+inline void BlueprintPinInfo::clear_connected_to() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.connected_to_.Clear();
+}
+inline std::string* BlueprintPinInfo::add_connected_to()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  std::string* _s = _internal_mutable_connected_to()->Add();
+  // @@protoc_insertion_point(field_add_mutable:AgentBridgeServer.BlueprintPinInfo.connected_to)
+  return _s;
+}
+inline const std::string& BlueprintPinInfo::connected_to(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintPinInfo.connected_to)
+  return _internal_connected_to().Get(index);
+}
+inline std::string* BlueprintPinInfo::mutable_connected_to(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintPinInfo.connected_to)
+  return _internal_mutable_connected_to()->Mutable(index);
+}
+inline void BlueprintPinInfo::set_connected_to(int index, const std::string& value) {
+  _internal_mutable_connected_to()->Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::set_connected_to(int index, std::string&& value) {
+  _internal_mutable_connected_to()->Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::set_connected_to(int index, const char* value) {
+  ABSL_DCHECK(value != nullptr);
+  _internal_mutable_connected_to()->Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::set_connected_to(int index, const char* value,
+                              std::size_t size) {
+  _internal_mutable_connected_to()->Mutable(index)->assign(
+      reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::set_connected_to(int index, absl_tempo::string_view value) {
+  _internal_mutable_connected_to()->Mutable(index)->assign(value.data(),
+                                                     value.size());
+  // @@protoc_insertion_point(field_set_string_piece:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::add_connected_to(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _internal_mutable_connected_to()->Add()->assign(value);
+  // @@protoc_insertion_point(field_add:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::add_connected_to(std::string&& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _internal_mutable_connected_to()->Add(std::move(value));
+  // @@protoc_insertion_point(field_add:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::add_connected_to(const char* value) {
+  ABSL_DCHECK(value != nullptr);
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _internal_mutable_connected_to()->Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::add_connected_to(const char* value, std::size_t size) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _internal_mutable_connected_to()->Add()->assign(
+      reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline void BlueprintPinInfo::add_connected_to(absl_tempo::string_view value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _internal_mutable_connected_to()->Add()->assign(value.data(), value.size());
+  // @@protoc_insertion_point(field_add_string_piece:AgentBridgeServer.BlueprintPinInfo.connected_to)
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<std::string>&
+BlueprintPinInfo::connected_to() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:AgentBridgeServer.BlueprintPinInfo.connected_to)
+  return _internal_connected_to();
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<std::string>*
+BlueprintPinInfo::mutable_connected_to() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:AgentBridgeServer.BlueprintPinInfo.connected_to)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  return _internal_mutable_connected_to();
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<std::string>&
+BlueprintPinInfo::_internal_connected_to() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.connected_to_;
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<std::string>*
+BlueprintPinInfo::_internal_mutable_connected_to() {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return &_impl_.connected_to_;
+}
+
+// -------------------------------------------------------------------
+
+// BlueprintNodeInfo
+
+// string guid = 1;
+inline void BlueprintNodeInfo::clear_guid() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.guid_.ClearToEmpty();
+}
+inline const std::string& BlueprintNodeInfo::guid() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.guid)
+  return _internal_guid();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintNodeInfo::set_guid(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.guid_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.guid)
+}
+inline std::string* BlueprintNodeInfo::mutable_guid() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_guid();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintNodeInfo.guid)
+  return _s;
+}
+inline const std::string& BlueprintNodeInfo::_internal_guid() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.guid_.Get();
+}
+inline void BlueprintNodeInfo::_internal_set_guid(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.guid_.Set(value, GetArena());
+}
+inline std::string* BlueprintNodeInfo::_internal_mutable_guid() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.guid_.Mutable( GetArena());
+}
+inline std::string* BlueprintNodeInfo::release_guid() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintNodeInfo.guid)
+  return _impl_.guid_.Release();
+}
+inline void BlueprintNodeInfo::set_allocated_guid(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.guid_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.guid_.IsDefault()) {
+          _impl_.guid_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintNodeInfo.guid)
+}
+
+// string class_name = 2;
+inline void BlueprintNodeInfo::clear_class_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.class_name_.ClearToEmpty();
+}
+inline const std::string& BlueprintNodeInfo::class_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.class_name)
+  return _internal_class_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintNodeInfo::set_class_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.class_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.class_name)
+}
+inline std::string* BlueprintNodeInfo::mutable_class_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_class_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintNodeInfo.class_name)
+  return _s;
+}
+inline const std::string& BlueprintNodeInfo::_internal_class_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.class_name_.Get();
+}
+inline void BlueprintNodeInfo::_internal_set_class_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.class_name_.Set(value, GetArena());
+}
+inline std::string* BlueprintNodeInfo::_internal_mutable_class_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.class_name_.Mutable( GetArena());
+}
+inline std::string* BlueprintNodeInfo::release_class_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintNodeInfo.class_name)
+  return _impl_.class_name_.Release();
+}
+inline void BlueprintNodeInfo::set_allocated_class_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.class_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.class_name_.IsDefault()) {
+          _impl_.class_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintNodeInfo.class_name)
+}
+
+// string title = 3;
+inline void BlueprintNodeInfo::clear_title() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.title_.ClearToEmpty();
+}
+inline const std::string& BlueprintNodeInfo::title() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.title)
+  return _internal_title();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintNodeInfo::set_title(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.title_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.title)
+}
+inline std::string* BlueprintNodeInfo::mutable_title() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_title();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintNodeInfo.title)
+  return _s;
+}
+inline const std::string& BlueprintNodeInfo::_internal_title() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.title_.Get();
+}
+inline void BlueprintNodeInfo::_internal_set_title(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.title_.Set(value, GetArena());
+}
+inline std::string* BlueprintNodeInfo::_internal_mutable_title() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.title_.Mutable( GetArena());
+}
+inline std::string* BlueprintNodeInfo::release_title() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintNodeInfo.title)
+  return _impl_.title_.Release();
+}
+inline void BlueprintNodeInfo::set_allocated_title(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.title_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.title_.IsDefault()) {
+          _impl_.title_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintNodeInfo.title)
+}
+
+// int32 pos_x = 4;
+inline void BlueprintNodeInfo::clear_pos_x() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.pos_x_ = 0;
+}
+inline ::int32_t BlueprintNodeInfo::pos_x() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.pos_x)
+  return _internal_pos_x();
+}
+inline void BlueprintNodeInfo::set_pos_x(::int32_t value) {
+  _internal_set_pos_x(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.pos_x)
+}
+inline ::int32_t BlueprintNodeInfo::_internal_pos_x() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.pos_x_;
+}
+inline void BlueprintNodeInfo::_internal_set_pos_x(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.pos_x_ = value;
+}
+
+// int32 pos_y = 5;
+inline void BlueprintNodeInfo::clear_pos_y() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.pos_y_ = 0;
+}
+inline ::int32_t BlueprintNodeInfo::pos_y() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.pos_y)
+  return _internal_pos_y();
+}
+inline void BlueprintNodeInfo::set_pos_y(::int32_t value) {
+  _internal_set_pos_y(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.pos_y)
+}
+inline ::int32_t BlueprintNodeInfo::_internal_pos_y() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.pos_y_;
+}
+inline void BlueprintNodeInfo::_internal_set_pos_y(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.pos_y_ = value;
+}
+
+// string comment = 6;
+inline void BlueprintNodeInfo::clear_comment() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.comment_.ClearToEmpty();
+}
+inline const std::string& BlueprintNodeInfo::comment() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.comment)
+  return _internal_comment();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintNodeInfo::set_comment(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.comment_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.comment)
+}
+inline std::string* BlueprintNodeInfo::mutable_comment() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_comment();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintNodeInfo.comment)
+  return _s;
+}
+inline const std::string& BlueprintNodeInfo::_internal_comment() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.comment_.Get();
+}
+inline void BlueprintNodeInfo::_internal_set_comment(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.comment_.Set(value, GetArena());
+}
+inline std::string* BlueprintNodeInfo::_internal_mutable_comment() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.comment_.Mutable( GetArena());
+}
+inline std::string* BlueprintNodeInfo::release_comment() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintNodeInfo.comment)
+  return _impl_.comment_.Release();
+}
+inline void BlueprintNodeInfo::set_allocated_comment(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.comment_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.comment_.IsDefault()) {
+          _impl_.comment_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintNodeInfo.comment)
+}
+
+// string function_reference = 7;
+inline void BlueprintNodeInfo::clear_function_reference() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.function_reference_.ClearToEmpty();
+}
+inline const std::string& BlueprintNodeInfo::function_reference() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.function_reference)
+  return _internal_function_reference();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintNodeInfo::set_function_reference(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.function_reference_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.function_reference)
+}
+inline std::string* BlueprintNodeInfo::mutable_function_reference() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_function_reference();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintNodeInfo.function_reference)
+  return _s;
+}
+inline const std::string& BlueprintNodeInfo::_internal_function_reference() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.function_reference_.Get();
+}
+inline void BlueprintNodeInfo::_internal_set_function_reference(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.function_reference_.Set(value, GetArena());
+}
+inline std::string* BlueprintNodeInfo::_internal_mutable_function_reference() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.function_reference_.Mutable( GetArena());
+}
+inline std::string* BlueprintNodeInfo::release_function_reference() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintNodeInfo.function_reference)
+  return _impl_.function_reference_.Release();
+}
+inline void BlueprintNodeInfo::set_allocated_function_reference(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.function_reference_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.function_reference_.IsDefault()) {
+          _impl_.function_reference_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintNodeInfo.function_reference)
+}
+
+// string event_name = 8;
+inline void BlueprintNodeInfo::clear_event_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.event_name_.ClearToEmpty();
+}
+inline const std::string& BlueprintNodeInfo::event_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.event_name)
+  return _internal_event_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintNodeInfo::set_event_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.event_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.event_name)
+}
+inline std::string* BlueprintNodeInfo::mutable_event_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_event_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintNodeInfo.event_name)
+  return _s;
+}
+inline const std::string& BlueprintNodeInfo::_internal_event_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.event_name_.Get();
+}
+inline void BlueprintNodeInfo::_internal_set_event_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.event_name_.Set(value, GetArena());
+}
+inline std::string* BlueprintNodeInfo::_internal_mutable_event_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.event_name_.Mutable( GetArena());
+}
+inline std::string* BlueprintNodeInfo::release_event_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintNodeInfo.event_name)
+  return _impl_.event_name_.Release();
+}
+inline void BlueprintNodeInfo::set_allocated_event_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.event_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.event_name_.IsDefault()) {
+          _impl_.event_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintNodeInfo.event_name)
+}
+
+// string variable_name = 9;
+inline void BlueprintNodeInfo::clear_variable_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.variable_name_.ClearToEmpty();
+}
+inline const std::string& BlueprintNodeInfo::variable_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.variable_name)
+  return _internal_variable_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void BlueprintNodeInfo::set_variable_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.variable_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.BlueprintNodeInfo.variable_name)
+}
+inline std::string* BlueprintNodeInfo::mutable_variable_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_variable_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintNodeInfo.variable_name)
+  return _s;
+}
+inline const std::string& BlueprintNodeInfo::_internal_variable_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.variable_name_.Get();
+}
+inline void BlueprintNodeInfo::_internal_set_variable_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.variable_name_.Set(value, GetArena());
+}
+inline std::string* BlueprintNodeInfo::_internal_mutable_variable_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.variable_name_.Mutable( GetArena());
+}
+inline std::string* BlueprintNodeInfo::release_variable_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.BlueprintNodeInfo.variable_name)
+  return _impl_.variable_name_.Release();
+}
+inline void BlueprintNodeInfo::set_allocated_variable_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.variable_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.variable_name_.IsDefault()) {
+          _impl_.variable_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.BlueprintNodeInfo.variable_name)
+}
+
+// repeated .AgentBridgeServer.BlueprintPinInfo pins = 10;
+inline int BlueprintNodeInfo::_internal_pins_size() const {
+  return _internal_pins().size();
+}
+inline int BlueprintNodeInfo::pins_size() const {
+  return _internal_pins_size();
+}
+inline void BlueprintNodeInfo::clear_pins() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.pins_.Clear();
+}
+inline ::AgentBridgeServer::BlueprintPinInfo* BlueprintNodeInfo::mutable_pins(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.BlueprintNodeInfo.pins)
+  return _internal_mutable_pins()->Mutable(index);
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>* BlueprintNodeInfo::mutable_pins()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:AgentBridgeServer.BlueprintNodeInfo.pins)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  return _internal_mutable_pins();
+}
+inline const ::AgentBridgeServer::BlueprintPinInfo& BlueprintNodeInfo::pins(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.BlueprintNodeInfo.pins)
+  return _internal_pins().Get(index);
+}
+inline ::AgentBridgeServer::BlueprintPinInfo* BlueprintNodeInfo::add_pins() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::AgentBridgeServer::BlueprintPinInfo* _add = _internal_mutable_pins()->Add();
+  // @@protoc_insertion_point(field_add:AgentBridgeServer.BlueprintNodeInfo.pins)
+  return _add;
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>& BlueprintNodeInfo::pins() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:AgentBridgeServer.BlueprintNodeInfo.pins)
+  return _internal_pins();
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>&
+BlueprintNodeInfo::_internal_pins() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.pins_;
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>*
+BlueprintNodeInfo::_internal_mutable_pins() {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return &_impl_.pins_;
+}
+
+// -------------------------------------------------------------------
+
+// CreateBlueprintNodeRequest
+
+// string blueprint_path = 1;
+inline void CreateBlueprintNodeRequest::clear_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.ClearToEmpty();
+}
+inline const std::string& CreateBlueprintNodeRequest::blueprint_path() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.blueprint_path)
+  return _internal_blueprint_path();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CreateBlueprintNodeRequest::set_blueprint_path(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.blueprint_path)
+}
+inline std::string* CreateBlueprintNodeRequest::mutable_blueprint_path() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_blueprint_path();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeRequest.blueprint_path)
+  return _s;
+}
+inline const std::string& CreateBlueprintNodeRequest::_internal_blueprint_path() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.blueprint_path_.Get();
+}
+inline void CreateBlueprintNodeRequest::_internal_set_blueprint_path(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(value, GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::_internal_mutable_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.blueprint_path_.Mutable( GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::release_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeRequest.blueprint_path)
+  return _impl_.blueprint_path_.Release();
+}
+inline void CreateBlueprintNodeRequest::set_allocated_blueprint_path(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.blueprint_path_.IsDefault()) {
+          _impl_.blueprint_path_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeRequest.blueprint_path)
+}
+
+// string graph_name = 2;
+inline void CreateBlueprintNodeRequest::clear_graph_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.graph_name_.ClearToEmpty();
+}
+inline const std::string& CreateBlueprintNodeRequest::graph_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.graph_name)
+  return _internal_graph_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CreateBlueprintNodeRequest::set_graph_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.graph_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.graph_name)
+}
+inline std::string* CreateBlueprintNodeRequest::mutable_graph_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_graph_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeRequest.graph_name)
+  return _s;
+}
+inline const std::string& CreateBlueprintNodeRequest::_internal_graph_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.graph_name_.Get();
+}
+inline void CreateBlueprintNodeRequest::_internal_set_graph_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.graph_name_.Set(value, GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::_internal_mutable_graph_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.graph_name_.Mutable( GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::release_graph_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeRequest.graph_name)
+  return _impl_.graph_name_.Release();
+}
+inline void CreateBlueprintNodeRequest::set_allocated_graph_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.graph_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.graph_name_.IsDefault()) {
+          _impl_.graph_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeRequest.graph_name)
+}
+
+// string node_type = 3;
+inline void CreateBlueprintNodeRequest::clear_node_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.node_type_.ClearToEmpty();
+}
+inline const std::string& CreateBlueprintNodeRequest::node_type() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.node_type)
+  return _internal_node_type();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CreateBlueprintNodeRequest::set_node_type(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.node_type_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.node_type)
+}
+inline std::string* CreateBlueprintNodeRequest::mutable_node_type() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_node_type();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeRequest.node_type)
+  return _s;
+}
+inline const std::string& CreateBlueprintNodeRequest::_internal_node_type() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.node_type_.Get();
+}
+inline void CreateBlueprintNodeRequest::_internal_set_node_type(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.node_type_.Set(value, GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::_internal_mutable_node_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.node_type_.Mutable( GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::release_node_type() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeRequest.node_type)
+  return _impl_.node_type_.Release();
+}
+inline void CreateBlueprintNodeRequest::set_allocated_node_type(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.node_type_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.node_type_.IsDefault()) {
+          _impl_.node_type_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeRequest.node_type)
+}
+
+// string function_reference = 4;
+inline void CreateBlueprintNodeRequest::clear_function_reference() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.function_reference_.ClearToEmpty();
+}
+inline const std::string& CreateBlueprintNodeRequest::function_reference() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.function_reference)
+  return _internal_function_reference();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CreateBlueprintNodeRequest::set_function_reference(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.function_reference_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.function_reference)
+}
+inline std::string* CreateBlueprintNodeRequest::mutable_function_reference() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_function_reference();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeRequest.function_reference)
+  return _s;
+}
+inline const std::string& CreateBlueprintNodeRequest::_internal_function_reference() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.function_reference_.Get();
+}
+inline void CreateBlueprintNodeRequest::_internal_set_function_reference(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.function_reference_.Set(value, GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::_internal_mutable_function_reference() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.function_reference_.Mutable( GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::release_function_reference() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeRequest.function_reference)
+  return _impl_.function_reference_.Release();
+}
+inline void CreateBlueprintNodeRequest::set_allocated_function_reference(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.function_reference_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.function_reference_.IsDefault()) {
+          _impl_.function_reference_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeRequest.function_reference)
+}
+
+// string event_name = 5;
+inline void CreateBlueprintNodeRequest::clear_event_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.event_name_.ClearToEmpty();
+}
+inline const std::string& CreateBlueprintNodeRequest::event_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.event_name)
+  return _internal_event_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CreateBlueprintNodeRequest::set_event_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.event_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.event_name)
+}
+inline std::string* CreateBlueprintNodeRequest::mutable_event_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_event_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeRequest.event_name)
+  return _s;
+}
+inline const std::string& CreateBlueprintNodeRequest::_internal_event_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.event_name_.Get();
+}
+inline void CreateBlueprintNodeRequest::_internal_set_event_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.event_name_.Set(value, GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::_internal_mutable_event_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.event_name_.Mutable( GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::release_event_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeRequest.event_name)
+  return _impl_.event_name_.Release();
+}
+inline void CreateBlueprintNodeRequest::set_allocated_event_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.event_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.event_name_.IsDefault()) {
+          _impl_.event_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeRequest.event_name)
+}
+
+// string variable_name = 6;
+inline void CreateBlueprintNodeRequest::clear_variable_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.variable_name_.ClearToEmpty();
+}
+inline const std::string& CreateBlueprintNodeRequest::variable_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.variable_name)
+  return _internal_variable_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CreateBlueprintNodeRequest::set_variable_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.variable_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.variable_name)
+}
+inline std::string* CreateBlueprintNodeRequest::mutable_variable_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_variable_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeRequest.variable_name)
+  return _s;
+}
+inline const std::string& CreateBlueprintNodeRequest::_internal_variable_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.variable_name_.Get();
+}
+inline void CreateBlueprintNodeRequest::_internal_set_variable_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.variable_name_.Set(value, GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::_internal_mutable_variable_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.variable_name_.Mutable( GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::release_variable_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeRequest.variable_name)
+  return _impl_.variable_name_.Release();
+}
+inline void CreateBlueprintNodeRequest::set_allocated_variable_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.variable_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.variable_name_.IsDefault()) {
+          _impl_.variable_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeRequest.variable_name)
+}
+
+// string comment = 7;
+inline void CreateBlueprintNodeRequest::clear_comment() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.comment_.ClearToEmpty();
+}
+inline const std::string& CreateBlueprintNodeRequest::comment() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.comment)
+  return _internal_comment();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CreateBlueprintNodeRequest::set_comment(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.comment_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.comment)
+}
+inline std::string* CreateBlueprintNodeRequest::mutable_comment() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_comment();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeRequest.comment)
+  return _s;
+}
+inline const std::string& CreateBlueprintNodeRequest::_internal_comment() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.comment_.Get();
+}
+inline void CreateBlueprintNodeRequest::_internal_set_comment(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.comment_.Set(value, GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::_internal_mutable_comment() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.comment_.Mutable( GetArena());
+}
+inline std::string* CreateBlueprintNodeRequest::release_comment() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeRequest.comment)
+  return _impl_.comment_.Release();
+}
+inline void CreateBlueprintNodeRequest::set_allocated_comment(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.comment_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.comment_.IsDefault()) {
+          _impl_.comment_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeRequest.comment)
+}
+
+// int32 pos_x = 8;
+inline void CreateBlueprintNodeRequest::clear_pos_x() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.pos_x_ = 0;
+}
+inline ::int32_t CreateBlueprintNodeRequest::pos_x() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.pos_x)
+  return _internal_pos_x();
+}
+inline void CreateBlueprintNodeRequest::set_pos_x(::int32_t value) {
+  _internal_set_pos_x(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.pos_x)
+}
+inline ::int32_t CreateBlueprintNodeRequest::_internal_pos_x() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.pos_x_;
+}
+inline void CreateBlueprintNodeRequest::_internal_set_pos_x(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.pos_x_ = value;
+}
+
+// int32 pos_y = 9;
+inline void CreateBlueprintNodeRequest::clear_pos_y() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.pos_y_ = 0;
+}
+inline ::int32_t CreateBlueprintNodeRequest::pos_y() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeRequest.pos_y)
+  return _internal_pos_y();
+}
+inline void CreateBlueprintNodeRequest::set_pos_y(::int32_t value) {
+  _internal_set_pos_y(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeRequest.pos_y)
+}
+inline ::int32_t CreateBlueprintNodeRequest::_internal_pos_y() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.pos_y_;
+}
+inline void CreateBlueprintNodeRequest::_internal_set_pos_y(::int32_t value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.pos_y_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// CreateBlueprintNodeResponse
+
+// bool success = 1;
+inline void CreateBlueprintNodeResponse::clear_success() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.success_ = false;
+}
+inline bool CreateBlueprintNodeResponse::success() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeResponse.success)
+  return _internal_success();
+}
+inline void CreateBlueprintNodeResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeResponse.success)
+}
+inline bool CreateBlueprintNodeResponse::_internal_success() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.success_;
+}
+inline void CreateBlueprintNodeResponse::_internal_set_success(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.success_ = value;
+}
+
+// string error_message = 2;
+inline void CreateBlueprintNodeResponse::clear_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.error_message_.ClearToEmpty();
+}
+inline const std::string& CreateBlueprintNodeResponse::error_message() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeResponse.error_message)
+  return _internal_error_message();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void CreateBlueprintNodeResponse::set_error_message(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.error_message_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.CreateBlueprintNodeResponse.error_message)
+}
+inline std::string* CreateBlueprintNodeResponse::mutable_error_message() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_error_message();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeResponse.error_message)
+  return _s;
+}
+inline const std::string& CreateBlueprintNodeResponse::_internal_error_message() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.error_message_.Get();
+}
+inline void CreateBlueprintNodeResponse::_internal_set_error_message(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.error_message_.Set(value, GetArena());
+}
+inline std::string* CreateBlueprintNodeResponse::_internal_mutable_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.error_message_.Mutable( GetArena());
+}
+inline std::string* CreateBlueprintNodeResponse::release_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeResponse.error_message)
+  return _impl_.error_message_.Release();
+}
+inline void CreateBlueprintNodeResponse::set_allocated_error_message(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.error_message_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.error_message_.IsDefault()) {
+          _impl_.error_message_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeResponse.error_message)
+}
+
+// .AgentBridgeServer.BlueprintNodeInfo node = 3;
+inline bool CreateBlueprintNodeResponse::has_node() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.node_ != nullptr);
+  return value;
+}
+inline void CreateBlueprintNodeResponse::clear_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.node_ != nullptr) _impl_.node_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000001u;
+}
+inline const ::AgentBridgeServer::BlueprintNodeInfo& CreateBlueprintNodeResponse::_internal_node() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::AgentBridgeServer::BlueprintNodeInfo* p = _impl_.node_;
+  return p != nullptr ? *p : reinterpret_cast<const ::AgentBridgeServer::BlueprintNodeInfo&>(::AgentBridgeServer::_BlueprintNodeInfo_default_instance_);
+}
+inline const ::AgentBridgeServer::BlueprintNodeInfo& CreateBlueprintNodeResponse::node() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.CreateBlueprintNodeResponse.node)
+  return _internal_node();
+}
+inline void CreateBlueprintNodeResponse::unsafe_arena_set_allocated_node(::AgentBridgeServer::BlueprintNodeInfo* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.node_);
+  }
+  _impl_.node_ = reinterpret_cast<::AgentBridgeServer::BlueprintNodeInfo*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.CreateBlueprintNodeResponse.node)
+}
+inline ::AgentBridgeServer::BlueprintNodeInfo* CreateBlueprintNodeResponse::release_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::AgentBridgeServer::BlueprintNodeInfo* released = _impl_.node_;
+  _impl_.node_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::AgentBridgeServer::BlueprintNodeInfo* CreateBlueprintNodeResponse::unsafe_arena_release_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.CreateBlueprintNodeResponse.node)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::AgentBridgeServer::BlueprintNodeInfo* temp = _impl_.node_;
+  _impl_.node_ = nullptr;
+  return temp;
+}
+inline ::AgentBridgeServer::BlueprintNodeInfo* CreateBlueprintNodeResponse::_internal_mutable_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  if (_impl_.node_ == nullptr) {
+    auto* p = CreateMaybeMessage<::AgentBridgeServer::BlueprintNodeInfo>(GetArena());
+    _impl_.node_ = reinterpret_cast<::AgentBridgeServer::BlueprintNodeInfo*>(p);
+  }
+  return _impl_.node_;
+}
+inline ::AgentBridgeServer::BlueprintNodeInfo* CreateBlueprintNodeResponse::mutable_node() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::AgentBridgeServer::BlueprintNodeInfo* _msg = _internal_mutable_node();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.CreateBlueprintNodeResponse.node)
+  return _msg;
+}
+inline void CreateBlueprintNodeResponse::set_allocated_node(::AgentBridgeServer::BlueprintNodeInfo* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::AgentBridgeServer::BlueprintNodeInfo*>(_impl_.node_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::AgentBridgeServer::BlueprintNodeInfo*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.node_ = reinterpret_cast<::AgentBridgeServer::BlueprintNodeInfo*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.CreateBlueprintNodeResponse.node)
+}
+
+// -------------------------------------------------------------------
+
+// ConnectBlueprintPinsRequest
+
+// string blueprint_path = 1;
+inline void ConnectBlueprintPinsRequest::clear_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.ClearToEmpty();
+}
+inline const std::string& ConnectBlueprintPinsRequest::blueprint_path() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConnectBlueprintPinsRequest.blueprint_path)
+  return _internal_blueprint_path();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConnectBlueprintPinsRequest::set_blueprint_path(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConnectBlueprintPinsRequest.blueprint_path)
+}
+inline std::string* ConnectBlueprintPinsRequest::mutable_blueprint_path() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_blueprint_path();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConnectBlueprintPinsRequest.blueprint_path)
+  return _s;
+}
+inline const std::string& ConnectBlueprintPinsRequest::_internal_blueprint_path() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.blueprint_path_.Get();
+}
+inline void ConnectBlueprintPinsRequest::_internal_set_blueprint_path(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(value, GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::_internal_mutable_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.blueprint_path_.Mutable( GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::release_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConnectBlueprintPinsRequest.blueprint_path)
+  return _impl_.blueprint_path_.Release();
+}
+inline void ConnectBlueprintPinsRequest::set_allocated_blueprint_path(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.blueprint_path_.IsDefault()) {
+          _impl_.blueprint_path_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConnectBlueprintPinsRequest.blueprint_path)
+}
+
+// string source_node = 2;
+inline void ConnectBlueprintPinsRequest::clear_source_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.source_node_.ClearToEmpty();
+}
+inline const std::string& ConnectBlueprintPinsRequest::source_node() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConnectBlueprintPinsRequest.source_node)
+  return _internal_source_node();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConnectBlueprintPinsRequest::set_source_node(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.source_node_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConnectBlueprintPinsRequest.source_node)
+}
+inline std::string* ConnectBlueprintPinsRequest::mutable_source_node() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_source_node();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConnectBlueprintPinsRequest.source_node)
+  return _s;
+}
+inline const std::string& ConnectBlueprintPinsRequest::_internal_source_node() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.source_node_.Get();
+}
+inline void ConnectBlueprintPinsRequest::_internal_set_source_node(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.source_node_.Set(value, GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::_internal_mutable_source_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.source_node_.Mutable( GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::release_source_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConnectBlueprintPinsRequest.source_node)
+  return _impl_.source_node_.Release();
+}
+inline void ConnectBlueprintPinsRequest::set_allocated_source_node(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.source_node_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.source_node_.IsDefault()) {
+          _impl_.source_node_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConnectBlueprintPinsRequest.source_node)
+}
+
+// string source_pin = 3;
+inline void ConnectBlueprintPinsRequest::clear_source_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.source_pin_.ClearToEmpty();
+}
+inline const std::string& ConnectBlueprintPinsRequest::source_pin() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConnectBlueprintPinsRequest.source_pin)
+  return _internal_source_pin();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConnectBlueprintPinsRequest::set_source_pin(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.source_pin_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConnectBlueprintPinsRequest.source_pin)
+}
+inline std::string* ConnectBlueprintPinsRequest::mutable_source_pin() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_source_pin();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConnectBlueprintPinsRequest.source_pin)
+  return _s;
+}
+inline const std::string& ConnectBlueprintPinsRequest::_internal_source_pin() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.source_pin_.Get();
+}
+inline void ConnectBlueprintPinsRequest::_internal_set_source_pin(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.source_pin_.Set(value, GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::_internal_mutable_source_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.source_pin_.Mutable( GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::release_source_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConnectBlueprintPinsRequest.source_pin)
+  return _impl_.source_pin_.Release();
+}
+inline void ConnectBlueprintPinsRequest::set_allocated_source_pin(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.source_pin_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.source_pin_.IsDefault()) {
+          _impl_.source_pin_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConnectBlueprintPinsRequest.source_pin)
+}
+
+// string target_node = 4;
+inline void ConnectBlueprintPinsRequest::clear_target_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_node_.ClearToEmpty();
+}
+inline const std::string& ConnectBlueprintPinsRequest::target_node() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConnectBlueprintPinsRequest.target_node)
+  return _internal_target_node();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConnectBlueprintPinsRequest::set_target_node(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_node_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConnectBlueprintPinsRequest.target_node)
+}
+inline std::string* ConnectBlueprintPinsRequest::mutable_target_node() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_target_node();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConnectBlueprintPinsRequest.target_node)
+  return _s;
+}
+inline const std::string& ConnectBlueprintPinsRequest::_internal_target_node() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.target_node_.Get();
+}
+inline void ConnectBlueprintPinsRequest::_internal_set_target_node(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_node_.Set(value, GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::_internal_mutable_target_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.target_node_.Mutable( GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::release_target_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConnectBlueprintPinsRequest.target_node)
+  return _impl_.target_node_.Release();
+}
+inline void ConnectBlueprintPinsRequest::set_allocated_target_node(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_node_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.target_node_.IsDefault()) {
+          _impl_.target_node_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConnectBlueprintPinsRequest.target_node)
+}
+
+// string target_pin = 5;
+inline void ConnectBlueprintPinsRequest::clear_target_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_pin_.ClearToEmpty();
+}
+inline const std::string& ConnectBlueprintPinsRequest::target_pin() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ConnectBlueprintPinsRequest.target_pin)
+  return _internal_target_pin();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ConnectBlueprintPinsRequest::set_target_pin(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_pin_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ConnectBlueprintPinsRequest.target_pin)
+}
+inline std::string* ConnectBlueprintPinsRequest::mutable_target_pin() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_target_pin();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ConnectBlueprintPinsRequest.target_pin)
+  return _s;
+}
+inline const std::string& ConnectBlueprintPinsRequest::_internal_target_pin() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.target_pin_.Get();
+}
+inline void ConnectBlueprintPinsRequest::_internal_set_target_pin(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_pin_.Set(value, GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::_internal_mutable_target_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.target_pin_.Mutable( GetArena());
+}
+inline std::string* ConnectBlueprintPinsRequest::release_target_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ConnectBlueprintPinsRequest.target_pin)
+  return _impl_.target_pin_.Release();
+}
+inline void ConnectBlueprintPinsRequest::set_allocated_target_pin(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_pin_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.target_pin_.IsDefault()) {
+          _impl_.target_pin_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ConnectBlueprintPinsRequest.target_pin)
+}
+
+// -------------------------------------------------------------------
+
+// DisconnectBlueprintPinsRequest
+
+// string blueprint_path = 1;
+inline void DisconnectBlueprintPinsRequest::clear_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.ClearToEmpty();
+}
+inline const std::string& DisconnectBlueprintPinsRequest::blueprint_path() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DisconnectBlueprintPinsRequest.blueprint_path)
+  return _internal_blueprint_path();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DisconnectBlueprintPinsRequest::set_blueprint_path(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DisconnectBlueprintPinsRequest.blueprint_path)
+}
+inline std::string* DisconnectBlueprintPinsRequest::mutable_blueprint_path() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_blueprint_path();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DisconnectBlueprintPinsRequest.blueprint_path)
+  return _s;
+}
+inline const std::string& DisconnectBlueprintPinsRequest::_internal_blueprint_path() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.blueprint_path_.Get();
+}
+inline void DisconnectBlueprintPinsRequest::_internal_set_blueprint_path(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(value, GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::_internal_mutable_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.blueprint_path_.Mutable( GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::release_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DisconnectBlueprintPinsRequest.blueprint_path)
+  return _impl_.blueprint_path_.Release();
+}
+inline void DisconnectBlueprintPinsRequest::set_allocated_blueprint_path(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.blueprint_path_.IsDefault()) {
+          _impl_.blueprint_path_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DisconnectBlueprintPinsRequest.blueprint_path)
+}
+
+// string source_node = 2;
+inline void DisconnectBlueprintPinsRequest::clear_source_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.source_node_.ClearToEmpty();
+}
+inline const std::string& DisconnectBlueprintPinsRequest::source_node() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_node)
+  return _internal_source_node();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DisconnectBlueprintPinsRequest::set_source_node(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.source_node_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_node)
+}
+inline std::string* DisconnectBlueprintPinsRequest::mutable_source_node() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_source_node();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_node)
+  return _s;
+}
+inline const std::string& DisconnectBlueprintPinsRequest::_internal_source_node() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.source_node_.Get();
+}
+inline void DisconnectBlueprintPinsRequest::_internal_set_source_node(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.source_node_.Set(value, GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::_internal_mutable_source_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.source_node_.Mutable( GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::release_source_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_node)
+  return _impl_.source_node_.Release();
+}
+inline void DisconnectBlueprintPinsRequest::set_allocated_source_node(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.source_node_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.source_node_.IsDefault()) {
+          _impl_.source_node_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_node)
+}
+
+// string source_pin = 3;
+inline void DisconnectBlueprintPinsRequest::clear_source_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.source_pin_.ClearToEmpty();
+}
+inline const std::string& DisconnectBlueprintPinsRequest::source_pin() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_pin)
+  return _internal_source_pin();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DisconnectBlueprintPinsRequest::set_source_pin(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.source_pin_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_pin)
+}
+inline std::string* DisconnectBlueprintPinsRequest::mutable_source_pin() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_source_pin();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_pin)
+  return _s;
+}
+inline const std::string& DisconnectBlueprintPinsRequest::_internal_source_pin() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.source_pin_.Get();
+}
+inline void DisconnectBlueprintPinsRequest::_internal_set_source_pin(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.source_pin_.Set(value, GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::_internal_mutable_source_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.source_pin_.Mutable( GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::release_source_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_pin)
+  return _impl_.source_pin_.Release();
+}
+inline void DisconnectBlueprintPinsRequest::set_allocated_source_pin(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.source_pin_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.source_pin_.IsDefault()) {
+          _impl_.source_pin_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DisconnectBlueprintPinsRequest.source_pin)
+}
+
+// string target_node = 4;
+inline void DisconnectBlueprintPinsRequest::clear_target_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_node_.ClearToEmpty();
+}
+inline const std::string& DisconnectBlueprintPinsRequest::target_node() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_node)
+  return _internal_target_node();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DisconnectBlueprintPinsRequest::set_target_node(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_node_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_node)
+}
+inline std::string* DisconnectBlueprintPinsRequest::mutable_target_node() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_target_node();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_node)
+  return _s;
+}
+inline const std::string& DisconnectBlueprintPinsRequest::_internal_target_node() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.target_node_.Get();
+}
+inline void DisconnectBlueprintPinsRequest::_internal_set_target_node(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_node_.Set(value, GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::_internal_mutable_target_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.target_node_.Mutable( GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::release_target_node() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_node)
+  return _impl_.target_node_.Release();
+}
+inline void DisconnectBlueprintPinsRequest::set_allocated_target_node(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_node_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.target_node_.IsDefault()) {
+          _impl_.target_node_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_node)
+}
+
+// string target_pin = 5;
+inline void DisconnectBlueprintPinsRequest::clear_target_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_pin_.ClearToEmpty();
+}
+inline const std::string& DisconnectBlueprintPinsRequest::target_pin() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_pin)
+  return _internal_target_pin();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DisconnectBlueprintPinsRequest::set_target_pin(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_pin_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_pin)
+}
+inline std::string* DisconnectBlueprintPinsRequest::mutable_target_pin() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_target_pin();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_pin)
+  return _s;
+}
+inline const std::string& DisconnectBlueprintPinsRequest::_internal_target_pin() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.target_pin_.Get();
+}
+inline void DisconnectBlueprintPinsRequest::_internal_set_target_pin(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_pin_.Set(value, GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::_internal_mutable_target_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.target_pin_.Mutable( GetArena());
+}
+inline std::string* DisconnectBlueprintPinsRequest::release_target_pin() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_pin)
+  return _impl_.target_pin_.Release();
+}
+inline void DisconnectBlueprintPinsRequest::set_allocated_target_pin(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_pin_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.target_pin_.IsDefault()) {
+          _impl_.target_pin_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DisconnectBlueprintPinsRequest.target_pin)
+}
+
+// -------------------------------------------------------------------
+
+// DeleteBlueprintNodeRequest
+
+// string blueprint_path = 1;
+inline void DeleteBlueprintNodeRequest::clear_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.ClearToEmpty();
+}
+inline const std::string& DeleteBlueprintNodeRequest::blueprint_path() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DeleteBlueprintNodeRequest.blueprint_path)
+  return _internal_blueprint_path();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DeleteBlueprintNodeRequest::set_blueprint_path(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DeleteBlueprintNodeRequest.blueprint_path)
+}
+inline std::string* DeleteBlueprintNodeRequest::mutable_blueprint_path() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_blueprint_path();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DeleteBlueprintNodeRequest.blueprint_path)
+  return _s;
+}
+inline const std::string& DeleteBlueprintNodeRequest::_internal_blueprint_path() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.blueprint_path_.Get();
+}
+inline void DeleteBlueprintNodeRequest::_internal_set_blueprint_path(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(value, GetArena());
+}
+inline std::string* DeleteBlueprintNodeRequest::_internal_mutable_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.blueprint_path_.Mutable( GetArena());
+}
+inline std::string* DeleteBlueprintNodeRequest::release_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DeleteBlueprintNodeRequest.blueprint_path)
+  return _impl_.blueprint_path_.Release();
+}
+inline void DeleteBlueprintNodeRequest::set_allocated_blueprint_path(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.blueprint_path_.IsDefault()) {
+          _impl_.blueprint_path_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DeleteBlueprintNodeRequest.blueprint_path)
+}
+
+// string node_id = 2;
+inline void DeleteBlueprintNodeRequest::clear_node_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.node_id_.ClearToEmpty();
+}
+inline const std::string& DeleteBlueprintNodeRequest::node_id() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DeleteBlueprintNodeRequest.node_id)
+  return _internal_node_id();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DeleteBlueprintNodeRequest::set_node_id(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.node_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DeleteBlueprintNodeRequest.node_id)
+}
+inline std::string* DeleteBlueprintNodeRequest::mutable_node_id() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_node_id();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DeleteBlueprintNodeRequest.node_id)
+  return _s;
+}
+inline const std::string& DeleteBlueprintNodeRequest::_internal_node_id() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.node_id_.Get();
+}
+inline void DeleteBlueprintNodeRequest::_internal_set_node_id(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.node_id_.Set(value, GetArena());
+}
+inline std::string* DeleteBlueprintNodeRequest::_internal_mutable_node_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.node_id_.Mutable( GetArena());
+}
+inline std::string* DeleteBlueprintNodeRequest::release_node_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DeleteBlueprintNodeRequest.node_id)
+  return _impl_.node_id_.Release();
+}
+inline void DeleteBlueprintNodeRequest::set_allocated_node_id(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.node_id_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.node_id_.IsDefault()) {
+          _impl_.node_id_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DeleteBlueprintNodeRequest.node_id)
+}
+
+// -------------------------------------------------------------------
+
+// ListBlueprintNodesRequest
+
+// string blueprint_path = 1;
+inline void ListBlueprintNodesRequest::clear_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.ClearToEmpty();
+}
+inline const std::string& ListBlueprintNodesRequest::blueprint_path() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintNodesRequest.blueprint_path)
+  return _internal_blueprint_path();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ListBlueprintNodesRequest::set_blueprint_path(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintNodesRequest.blueprint_path)
+}
+inline std::string* ListBlueprintNodesRequest::mutable_blueprint_path() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_blueprint_path();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintNodesRequest.blueprint_path)
+  return _s;
+}
+inline const std::string& ListBlueprintNodesRequest::_internal_blueprint_path() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.blueprint_path_.Get();
+}
+inline void ListBlueprintNodesRequest::_internal_set_blueprint_path(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(value, GetArena());
+}
+inline std::string* ListBlueprintNodesRequest::_internal_mutable_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.blueprint_path_.Mutable( GetArena());
+}
+inline std::string* ListBlueprintNodesRequest::release_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ListBlueprintNodesRequest.blueprint_path)
+  return _impl_.blueprint_path_.Release();
+}
+inline void ListBlueprintNodesRequest::set_allocated_blueprint_path(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.blueprint_path_.IsDefault()) {
+          _impl_.blueprint_path_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ListBlueprintNodesRequest.blueprint_path)
+}
+
+// string graph_name = 2;
+inline void ListBlueprintNodesRequest::clear_graph_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.graph_name_.ClearToEmpty();
+}
+inline const std::string& ListBlueprintNodesRequest::graph_name() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintNodesRequest.graph_name)
+  return _internal_graph_name();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ListBlueprintNodesRequest::set_graph_name(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.graph_name_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintNodesRequest.graph_name)
+}
+inline std::string* ListBlueprintNodesRequest::mutable_graph_name() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_graph_name();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintNodesRequest.graph_name)
+  return _s;
+}
+inline const std::string& ListBlueprintNodesRequest::_internal_graph_name() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.graph_name_.Get();
+}
+inline void ListBlueprintNodesRequest::_internal_set_graph_name(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.graph_name_.Set(value, GetArena());
+}
+inline std::string* ListBlueprintNodesRequest::_internal_mutable_graph_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.graph_name_.Mutable( GetArena());
+}
+inline std::string* ListBlueprintNodesRequest::release_graph_name() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ListBlueprintNodesRequest.graph_name)
+  return _impl_.graph_name_.Release();
+}
+inline void ListBlueprintNodesRequest::set_allocated_graph_name(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.graph_name_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.graph_name_.IsDefault()) {
+          _impl_.graph_name_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ListBlueprintNodesRequest.graph_name)
+}
+
+// string node_class_filter = 3;
+inline void ListBlueprintNodesRequest::clear_node_class_filter() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.node_class_filter_.ClearToEmpty();
+}
+inline const std::string& ListBlueprintNodesRequest::node_class_filter() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintNodesRequest.node_class_filter)
+  return _internal_node_class_filter();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ListBlueprintNodesRequest::set_node_class_filter(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.node_class_filter_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintNodesRequest.node_class_filter)
+}
+inline std::string* ListBlueprintNodesRequest::mutable_node_class_filter() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_node_class_filter();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintNodesRequest.node_class_filter)
+  return _s;
+}
+inline const std::string& ListBlueprintNodesRequest::_internal_node_class_filter() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.node_class_filter_.Get();
+}
+inline void ListBlueprintNodesRequest::_internal_set_node_class_filter(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.node_class_filter_.Set(value, GetArena());
+}
+inline std::string* ListBlueprintNodesRequest::_internal_mutable_node_class_filter() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.node_class_filter_.Mutable( GetArena());
+}
+inline std::string* ListBlueprintNodesRequest::release_node_class_filter() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ListBlueprintNodesRequest.node_class_filter)
+  return _impl_.node_class_filter_.Release();
+}
+inline void ListBlueprintNodesRequest::set_allocated_node_class_filter(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.node_class_filter_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.node_class_filter_.IsDefault()) {
+          _impl_.node_class_filter_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ListBlueprintNodesRequest.node_class_filter)
+}
+
+// -------------------------------------------------------------------
+
+// ListBlueprintNodesResponse
+
+// bool success = 1;
+inline void ListBlueprintNodesResponse::clear_success() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.success_ = false;
+}
+inline bool ListBlueprintNodesResponse::success() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintNodesResponse.success)
+  return _internal_success();
+}
+inline void ListBlueprintNodesResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintNodesResponse.success)
+}
+inline bool ListBlueprintNodesResponse::_internal_success() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.success_;
+}
+inline void ListBlueprintNodesResponse::_internal_set_success(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.success_ = value;
+}
+
+// string error_message = 2;
+inline void ListBlueprintNodesResponse::clear_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.error_message_.ClearToEmpty();
+}
+inline const std::string& ListBlueprintNodesResponse::error_message() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintNodesResponse.error_message)
+  return _internal_error_message();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ListBlueprintNodesResponse::set_error_message(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.error_message_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintNodesResponse.error_message)
+}
+inline std::string* ListBlueprintNodesResponse::mutable_error_message() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_error_message();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintNodesResponse.error_message)
+  return _s;
+}
+inline const std::string& ListBlueprintNodesResponse::_internal_error_message() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.error_message_.Get();
+}
+inline void ListBlueprintNodesResponse::_internal_set_error_message(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.error_message_.Set(value, GetArena());
+}
+inline std::string* ListBlueprintNodesResponse::_internal_mutable_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.error_message_.Mutable( GetArena());
+}
+inline std::string* ListBlueprintNodesResponse::release_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ListBlueprintNodesResponse.error_message)
+  return _impl_.error_message_.Release();
+}
+inline void ListBlueprintNodesResponse::set_allocated_error_message(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.error_message_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.error_message_.IsDefault()) {
+          _impl_.error_message_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ListBlueprintNodesResponse.error_message)
+}
+
+// repeated .AgentBridgeServer.BlueprintNodeInfo nodes = 3;
+inline int ListBlueprintNodesResponse::_internal_nodes_size() const {
+  return _internal_nodes().size();
+}
+inline int ListBlueprintNodesResponse::nodes_size() const {
+  return _internal_nodes_size();
+}
+inline void ListBlueprintNodesResponse::clear_nodes() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.nodes_.Clear();
+}
+inline ::AgentBridgeServer::BlueprintNodeInfo* ListBlueprintNodesResponse::mutable_nodes(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintNodesResponse.nodes)
+  return _internal_mutable_nodes()->Mutable(index);
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintNodeInfo>* ListBlueprintNodesResponse::mutable_nodes()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:AgentBridgeServer.ListBlueprintNodesResponse.nodes)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  return _internal_mutable_nodes();
+}
+inline const ::AgentBridgeServer::BlueprintNodeInfo& ListBlueprintNodesResponse::nodes(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintNodesResponse.nodes)
+  return _internal_nodes().Get(index);
+}
+inline ::AgentBridgeServer::BlueprintNodeInfo* ListBlueprintNodesResponse::add_nodes() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::AgentBridgeServer::BlueprintNodeInfo* _add = _internal_mutable_nodes()->Add();
+  // @@protoc_insertion_point(field_add:AgentBridgeServer.ListBlueprintNodesResponse.nodes)
+  return _add;
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintNodeInfo>& ListBlueprintNodesResponse::nodes() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:AgentBridgeServer.ListBlueprintNodesResponse.nodes)
+  return _internal_nodes();
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintNodeInfo>&
+ListBlueprintNodesResponse::_internal_nodes() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.nodes_;
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintNodeInfo>*
+ListBlueprintNodesResponse::_internal_mutable_nodes() {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return &_impl_.nodes_;
+}
+
+// -------------------------------------------------------------------
+
+// ListBlueprintPinsRequest
+
+// string blueprint_path = 1;
+inline void ListBlueprintPinsRequest::clear_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.ClearToEmpty();
+}
+inline const std::string& ListBlueprintPinsRequest::blueprint_path() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintPinsRequest.blueprint_path)
+  return _internal_blueprint_path();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ListBlueprintPinsRequest::set_blueprint_path(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintPinsRequest.blueprint_path)
+}
+inline std::string* ListBlueprintPinsRequest::mutable_blueprint_path() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_blueprint_path();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintPinsRequest.blueprint_path)
+  return _s;
+}
+inline const std::string& ListBlueprintPinsRequest::_internal_blueprint_path() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.blueprint_path_.Get();
+}
+inline void ListBlueprintPinsRequest::_internal_set_blueprint_path(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.blueprint_path_.Set(value, GetArena());
+}
+inline std::string* ListBlueprintPinsRequest::_internal_mutable_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.blueprint_path_.Mutable( GetArena());
+}
+inline std::string* ListBlueprintPinsRequest::release_blueprint_path() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ListBlueprintPinsRequest.blueprint_path)
+  return _impl_.blueprint_path_.Release();
+}
+inline void ListBlueprintPinsRequest::set_allocated_blueprint_path(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.blueprint_path_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.blueprint_path_.IsDefault()) {
+          _impl_.blueprint_path_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ListBlueprintPinsRequest.blueprint_path)
+}
+
+// string node_id = 2;
+inline void ListBlueprintPinsRequest::clear_node_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.node_id_.ClearToEmpty();
+}
+inline const std::string& ListBlueprintPinsRequest::node_id() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintPinsRequest.node_id)
+  return _internal_node_id();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ListBlueprintPinsRequest::set_node_id(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.node_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintPinsRequest.node_id)
+}
+inline std::string* ListBlueprintPinsRequest::mutable_node_id() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_node_id();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintPinsRequest.node_id)
+  return _s;
+}
+inline const std::string& ListBlueprintPinsRequest::_internal_node_id() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.node_id_.Get();
+}
+inline void ListBlueprintPinsRequest::_internal_set_node_id(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.node_id_.Set(value, GetArena());
+}
+inline std::string* ListBlueprintPinsRequest::_internal_mutable_node_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.node_id_.Mutable( GetArena());
+}
+inline std::string* ListBlueprintPinsRequest::release_node_id() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ListBlueprintPinsRequest.node_id)
+  return _impl_.node_id_.Release();
+}
+inline void ListBlueprintPinsRequest::set_allocated_node_id(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.node_id_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.node_id_.IsDefault()) {
+          _impl_.node_id_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ListBlueprintPinsRequest.node_id)
+}
+
+// -------------------------------------------------------------------
+
+// ListBlueprintPinsResponse
+
+// bool success = 1;
+inline void ListBlueprintPinsResponse::clear_success() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.success_ = false;
+}
+inline bool ListBlueprintPinsResponse::success() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintPinsResponse.success)
+  return _internal_success();
+}
+inline void ListBlueprintPinsResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintPinsResponse.success)
+}
+inline bool ListBlueprintPinsResponse::_internal_success() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.success_;
+}
+inline void ListBlueprintPinsResponse::_internal_set_success(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.success_ = value;
+}
+
+// string error_message = 2;
+inline void ListBlueprintPinsResponse::clear_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.error_message_.ClearToEmpty();
+}
+inline const std::string& ListBlueprintPinsResponse::error_message() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintPinsResponse.error_message)
+  return _internal_error_message();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void ListBlueprintPinsResponse::set_error_message(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.error_message_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.ListBlueprintPinsResponse.error_message)
+}
+inline std::string* ListBlueprintPinsResponse::mutable_error_message() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_error_message();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintPinsResponse.error_message)
+  return _s;
+}
+inline const std::string& ListBlueprintPinsResponse::_internal_error_message() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.error_message_.Get();
+}
+inline void ListBlueprintPinsResponse::_internal_set_error_message(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.error_message_.Set(value, GetArena());
+}
+inline std::string* ListBlueprintPinsResponse::_internal_mutable_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.error_message_.Mutable( GetArena());
+}
+inline std::string* ListBlueprintPinsResponse::release_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.ListBlueprintPinsResponse.error_message)
+  return _impl_.error_message_.Release();
+}
+inline void ListBlueprintPinsResponse::set_allocated_error_message(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.error_message_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.error_message_.IsDefault()) {
+          _impl_.error_message_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.ListBlueprintPinsResponse.error_message)
+}
+
+// repeated .AgentBridgeServer.BlueprintPinInfo pins = 3;
+inline int ListBlueprintPinsResponse::_internal_pins_size() const {
+  return _internal_pins().size();
+}
+inline int ListBlueprintPinsResponse::pins_size() const {
+  return _internal_pins_size();
+}
+inline void ListBlueprintPinsResponse::clear_pins() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.pins_.Clear();
+}
+inline ::AgentBridgeServer::BlueprintPinInfo* ListBlueprintPinsResponse::mutable_pins(int index)
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.ListBlueprintPinsResponse.pins)
+  return _internal_mutable_pins()->Mutable(index);
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>* ListBlueprintPinsResponse::mutable_pins()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_mutable_list:AgentBridgeServer.ListBlueprintPinsResponse.pins)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  return _internal_mutable_pins();
+}
+inline const ::AgentBridgeServer::BlueprintPinInfo& ListBlueprintPinsResponse::pins(int index) const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.ListBlueprintPinsResponse.pins)
+  return _internal_pins().Get(index);
+}
+inline ::AgentBridgeServer::BlueprintPinInfo* ListBlueprintPinsResponse::add_pins() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::AgentBridgeServer::BlueprintPinInfo* _add = _internal_mutable_pins()->Add();
+  // @@protoc_insertion_point(field_add:AgentBridgeServer.ListBlueprintPinsResponse.pins)
+  return _add;
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>& ListBlueprintPinsResponse::pins() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_list:AgentBridgeServer.ListBlueprintPinsResponse.pins)
+  return _internal_pins();
+}
+inline const ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>&
+ListBlueprintPinsResponse::_internal_pins() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.pins_;
+}
+inline ::google::protobuf_tempo::RepeatedPtrField<::AgentBridgeServer::BlueprintPinInfo>*
+ListBlueprintPinsResponse::_internal_mutable_pins() {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return &_impl_.pins_;
 }
 
 #ifdef __GNUC__

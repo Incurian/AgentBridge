@@ -91,6 +91,17 @@ namespace AgentBridgeServer
 	class CopyProjectFileRequest;
 	class CopyProjectFileResponse;
 	class DeleteProjectFileRequest;
+
+	// Blueprint node operation types (P2)
+	class CreateBlueprintNodeRequest;
+	class CreateBlueprintNodeResponse;
+	class ConnectBlueprintPinsRequest;
+	class DisconnectBlueprintPinsRequest;
+	class DeleteBlueprintNodeRequest;
+	class ListBlueprintNodesRequest;
+	class ListBlueprintNodesResponse;
+	class ListBlueprintPinsRequest;
+	class ListBlueprintPinsResponse;
 }
 
 namespace TempoScripting
@@ -338,4 +349,32 @@ public:
 	void DeleteProjectFile(
 		const AgentBridgeServer::DeleteProjectFileRequest& Request,
 		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	//~==============================================================================
+	// gRPC Service Handlers - Blueprint Node Operations (P2)
+	//~==============================================================================
+
+	void CreateBlueprintNode(
+		const AgentBridgeServer::CreateBlueprintNodeRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::CreateBlueprintNodeResponse>& ResponseContinuation);
+
+	void ConnectBlueprintPins(
+		const AgentBridgeServer::ConnectBlueprintPinsRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void DisconnectBlueprintPins(
+		const AgentBridgeServer::DisconnectBlueprintPinsRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void DeleteBlueprintNode(
+		const AgentBridgeServer::DeleteBlueprintNodeRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void ListBlueprintNodes(
+		const AgentBridgeServer::ListBlueprintNodesRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::ListBlueprintNodesResponse>& ResponseContinuation);
+
+	void ListBlueprintPins(
+		const AgentBridgeServer::ListBlueprintPinsRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::ListBlueprintPinsResponse>& ResponseContinuation);
 };

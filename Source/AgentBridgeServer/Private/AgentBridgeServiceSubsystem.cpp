@@ -172,7 +172,21 @@ void UAgentBridgeServiceSubsystem::RegisterScriptingServices(FTempoScriptingServ
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestCopyProjectFile,
 			&UAgentBridgeServiceSubsystem::CopyProjectFile),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDeleteProjectFile,
-			&UAgentBridgeServiceSubsystem::DeleteProjectFile)
+			&UAgentBridgeServiceSubsystem::DeleteProjectFile),
+
+		// Blueprint Node Operations (P2)
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestCreateBlueprintNode,
+			&UAgentBridgeServiceSubsystem::CreateBlueprintNode),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestConnectBlueprintPins,
+			&UAgentBridgeServiceSubsystem::ConnectBlueprintPins),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDisconnectBlueprintPins,
+			&UAgentBridgeServiceSubsystem::DisconnectBlueprintPins),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDeleteBlueprintNode,
+			&UAgentBridgeServiceSubsystem::DeleteBlueprintNode),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestListBlueprintNodes,
+			&UAgentBridgeServiceSubsystem::ListBlueprintNodes),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestListBlueprintPins,
+			&UAgentBridgeServiceSubsystem::ListBlueprintPins)
 	);
 }
 
@@ -2156,4 +2170,190 @@ void UAgentBridgeServiceSubsystem::DeleteProjectFile(
 	{
 		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 	}
+}
+
+//~==============================================================================
+// Blueprint Node Operations (P2)
+//~==============================================================================
+
+namespace
+{
+	// Helper to convert FBlueprintPinInfo to proto
+	void SetProtoBlueprintPinInfo(BlueprintPinInfo* Proto, const FBlueprintPinInfo& Info)
+	{
+		Proto->set_name(TCHAR_TO_UTF8(*Info.Name));
+		Proto->set_direction(TCHAR_TO_UTF8(*Info.Direction));
+		Proto->set_type(TCHAR_TO_UTF8(*Info.Type));
+		Proto->set_type_display_name(TCHAR_TO_UTF8(*Info.TypeDisplayName));
+		Proto->set_is_connected(Info.bIsConnected);
+		Proto->set_default_value(TCHAR_TO_UTF8(*Info.DefaultValue));
+		for (const FString& ConnectedPin : Info.ConnectedTo)
+		{
+			Proto->add_connected_to(TCHAR_TO_UTF8(*ConnectedPin));
+		}
+	}
+
+	// Helper to convert FBlueprintNodeInfo to proto
+	void SetProtoBlueprintNodeInfo(BlueprintNodeInfo* Proto, const FBlueprintNodeInfo& Info)
+	{
+		Proto->set_guid(TCHAR_TO_UTF8(*Info.Guid));
+		Proto->set_class_name(TCHAR_TO_UTF8(*Info.ClassName));
+		Proto->set_title(TCHAR_TO_UTF8(*Info.Title));
+		Proto->set_pos_x(Info.PosX);
+		Proto->set_pos_y(Info.PosY);
+		Proto->set_comment(TCHAR_TO_UTF8(*Info.Comment));
+		Proto->set_function_reference(TCHAR_TO_UTF8(*Info.FunctionReference));
+		Proto->set_event_name(TCHAR_TO_UTF8(*Info.EventName));
+		Proto->set_variable_name(TCHAR_TO_UTF8(*Info.VariableName));
+		for (const FBlueprintPinInfo& PinInfo : Info.Pins)
+		{
+			SetProtoBlueprintPinInfo(Proto->add_pins(), PinInfo);
+		}
+	}
+}
+
+void UAgentBridgeServiceSubsystem::CreateBlueprintNode(
+	const CreateBlueprintNodeRequest& Request,
+	const TResponseDelegate<CreateBlueprintNodeResponse>& ResponseContinuation)
+{
+	FCreateBlueprintNodeCommand Cmd;
+	Cmd.BlueprintPath = UTF8_TO_TCHAR(Request.blueprint_path().c_str());
+	Cmd.GraphName = UTF8_TO_TCHAR(Request.graph_name().c_str());
+	Cmd.NodeType = UTF8_TO_TCHAR(Request.node_type().c_str());
+	Cmd.FunctionReference = UTF8_TO_TCHAR(Request.function_reference().c_str());
+	Cmd.EventName = UTF8_TO_TCHAR(Request.event_name().c_str());
+	Cmd.VariableName = UTF8_TO_TCHAR(Request.variable_name().c_str());
+	Cmd.Comment = UTF8_TO_TCHAR(Request.comment().c_str());
+	Cmd.PosX = Request.pos_x();
+	Cmd.PosY = Request.pos_y();
+
+	FCreateBlueprintNodeResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	CreateBlueprintNodeResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	if (CmdResponse.bSuccess)
+	{
+		SetProtoBlueprintNodeInfo(Response.mutable_node(), CmdResponse.Node);
+	}
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::ConnectBlueprintPins(
+	const ConnectBlueprintPinsRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FConnectBlueprintPinsCommand Cmd;
+	Cmd.BlueprintPath = UTF8_TO_TCHAR(Request.blueprint_path().c_str());
+	Cmd.SourceNode = UTF8_TO_TCHAR(Request.source_node().c_str());
+	Cmd.SourcePin = UTF8_TO_TCHAR(Request.source_pin().c_str());
+	Cmd.TargetNode = UTF8_TO_TCHAR(Request.target_node().c_str());
+	Cmd.TargetPin = UTF8_TO_TCHAR(Request.target_pin().c_str());
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+void UAgentBridgeServiceSubsystem::DisconnectBlueprintPins(
+	const DisconnectBlueprintPinsRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FDisconnectBlueprintPinsCommand Cmd;
+	Cmd.BlueprintPath = UTF8_TO_TCHAR(Request.blueprint_path().c_str());
+	Cmd.SourceNode = UTF8_TO_TCHAR(Request.source_node().c_str());
+	Cmd.SourcePin = UTF8_TO_TCHAR(Request.source_pin().c_str());
+	Cmd.TargetNode = UTF8_TO_TCHAR(Request.target_node().c_str());
+	Cmd.TargetPin = UTF8_TO_TCHAR(Request.target_pin().c_str());
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+void UAgentBridgeServiceSubsystem::DeleteBlueprintNode(
+	const DeleteBlueprintNodeRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FDeleteBlueprintNodeCommand Cmd;
+	Cmd.BlueprintPath = UTF8_TO_TCHAR(Request.blueprint_path().c_str());
+	Cmd.NodeId = UTF8_TO_TCHAR(Request.node_id().c_str());
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+void UAgentBridgeServiceSubsystem::ListBlueprintNodes(
+	const ListBlueprintNodesRequest& Request,
+	const TResponseDelegate<ListBlueprintNodesResponse>& ResponseContinuation)
+{
+	FListBlueprintNodesCommand Cmd;
+	Cmd.BlueprintPath = UTF8_TO_TCHAR(Request.blueprint_path().c_str());
+	Cmd.GraphName = UTF8_TO_TCHAR(Request.graph_name().c_str());
+	Cmd.NodeClassFilter = UTF8_TO_TCHAR(Request.node_class_filter().c_str());
+
+	FListBlueprintNodesResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	ListBlueprintNodesResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	for (const FBlueprintNodeInfo& NodeInfo : CmdResponse.Nodes)
+	{
+		SetProtoBlueprintNodeInfo(Response.add_nodes(), NodeInfo);
+	}
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::ListBlueprintPins(
+	const ListBlueprintPinsRequest& Request,
+	const TResponseDelegate<ListBlueprintPinsResponse>& ResponseContinuation)
+{
+	FListBlueprintPinsCommand Cmd;
+	Cmd.BlueprintPath = UTF8_TO_TCHAR(Request.blueprint_path().c_str());
+	Cmd.NodeId = UTF8_TO_TCHAR(Request.node_id().c_str());
+
+	FListBlueprintPinsResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	ListBlueprintPinsResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+	for (const FBlueprintPinInfo& PinInfo : CmdResponse.Pins)
+	{
+		SetProtoBlueprintPinInfo(Response.add_pins(), PinInfo);
+	}
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
 }

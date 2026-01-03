@@ -495,6 +495,57 @@ struct ListClassesRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListClassesRequestDefaultTypeInternal _ListClassesRequest_default_instance_;
 
+inline constexpr ListBlueprintPinsRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : blueprint_path_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        node_id_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ListBlueprintPinsRequest::ListBlueprintPinsRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ListBlueprintPinsRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListBlueprintPinsRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListBlueprintPinsRequestDefaultTypeInternal() {}
+  union {
+    ListBlueprintPinsRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListBlueprintPinsRequestDefaultTypeInternal _ListBlueprintPinsRequest_default_instance_;
+
+inline constexpr ListBlueprintNodesRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : blueprint_path_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        graph_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        node_class_filter_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ListBlueprintNodesRequest::ListBlueprintNodesRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ListBlueprintNodesRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListBlueprintNodesRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListBlueprintNodesRequestDefaultTypeInternal() {}
+  union {
+    ListBlueprintNodesRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListBlueprintNodesRequestDefaultTypeInternal _ListBlueprintNodesRequest_default_instance_;
+
 inline constexpr IsWorldPartitionedResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : world_name_(
@@ -907,6 +958,39 @@ struct DuplicateAssetRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DuplicateAssetRequestDefaultTypeInternal _DuplicateAssetRequest_default_instance_;
 
+inline constexpr DisconnectBlueprintPinsRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : blueprint_path_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        source_node_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        source_pin_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        target_node_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        target_pin_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DisconnectBlueprintPinsRequest::DisconnectBlueprintPinsRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DisconnectBlueprintPinsRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DisconnectBlueprintPinsRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DisconnectBlueprintPinsRequestDefaultTypeInternal() {}
+  union {
+    DisconnectBlueprintPinsRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DisconnectBlueprintPinsRequestDefaultTypeInternal _DisconnectBlueprintPinsRequest_default_instance_;
+
 inline constexpr DetachComponentRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : actor_id_(
@@ -976,6 +1060,30 @@ struct DeleteProjectFileRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteProjectFileRequestDefaultTypeInternal _DeleteProjectFileRequest_default_instance_;
 
+inline constexpr DeleteBlueprintNodeRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : blueprint_path_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        node_id_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR DeleteBlueprintNodeRequest::DeleteBlueprintNodeRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct DeleteBlueprintNodeRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DeleteBlueprintNodeRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DeleteBlueprintNodeRequestDefaultTypeInternal() {}
+  union {
+    DeleteBlueprintNodeRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteBlueprintNodeRequestDefaultTypeInternal _DeleteBlueprintNodeRequest_default_instance_;
+
 inline constexpr DeleteActorRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : actor_id_(
@@ -996,6 +1104,47 @@ struct DeleteActorRequestDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteActorRequestDefaultTypeInternal _DeleteActorRequest_default_instance_;
+
+inline constexpr CreateBlueprintNodeRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : blueprint_path_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        graph_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        node_type_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        function_reference_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        event_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        variable_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        comment_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        pos_x_{0},
+        pos_y_{0},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR CreateBlueprintNodeRequest::CreateBlueprintNodeRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct CreateBlueprintNodeRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CreateBlueprintNodeRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CreateBlueprintNodeRequestDefaultTypeInternal() {}
+  union {
+    CreateBlueprintNodeRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CreateBlueprintNodeRequestDefaultTypeInternal _CreateBlueprintNodeRequest_default_instance_;
 
 inline constexpr CreateAssetResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -1106,6 +1255,39 @@ struct ConsoleCommandInfoDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ConsoleCommandInfoDefaultTypeInternal _ConsoleCommandInfo_default_instance_;
 
+inline constexpr ConnectBlueprintPinsRequest::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : blueprint_path_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        source_node_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        source_pin_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        target_node_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        target_pin_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ConnectBlueprintPinsRequest::ConnectBlueprintPinsRequest(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ConnectBlueprintPinsRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ConnectBlueprintPinsRequestDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ConnectBlueprintPinsRequestDefaultTypeInternal() {}
+  union {
+    ConnectBlueprintPinsRequest _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ConnectBlueprintPinsRequestDefaultTypeInternal _ConnectBlueprintPinsRequest_default_instance_;
+
 inline constexpr Color::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : r_{0},
@@ -1161,6 +1343,41 @@ struct ClassInfoDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ClassInfoDefaultTypeInternal _ClassInfo_default_instance_;
+
+inline constexpr BlueprintPinInfo::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : connected_to_{},
+        name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        direction_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        type_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        type_display_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        default_value_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        is_connected_{false},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR BlueprintPinInfo::BlueprintPinInfo(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct BlueprintPinInfoDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR BlueprintPinInfoDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~BlueprintPinInfoDefaultTypeInternal() {}
+  union {
+    BlueprintPinInfo _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BlueprintPinInfoDefaultTypeInternal _BlueprintPinInfo_default_instance_;
 
 inline constexpr AttachComponentRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -1313,6 +1530,29 @@ struct ListClassesResponseDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListClassesResponseDefaultTypeInternal _ListClassesResponse_default_instance_;
 
+inline constexpr ListBlueprintPinsResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : pins_{},
+        error_message_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        success_{false},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ListBlueprintPinsResponse::ListBlueprintPinsResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ListBlueprintPinsResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListBlueprintPinsResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListBlueprintPinsResponseDefaultTypeInternal() {}
+  union {
+    ListBlueprintPinsResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListBlueprintPinsResponseDefaultTypeInternal _ListBlueprintPinsResponse_default_instance_;
+
 inline constexpr GetLandscapeBoundsResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -1408,6 +1648,48 @@ struct BoundingBoxDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BoundingBoxDefaultTypeInternal _BoundingBox_default_instance_;
+
+inline constexpr BlueprintNodeInfo::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : pins_{},
+        guid_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        class_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        title_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        comment_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        function_reference_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        event_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        variable_name_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        pos_x_{0},
+        pos_y_{0},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR BlueprintNodeInfo::BlueprintNodeInfo(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct BlueprintNodeInfoDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR BlueprintNodeInfoDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~BlueprintNodeInfoDefaultTypeInternal() {}
+  union {
+    BlueprintNodeInfo _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BlueprintNodeInfoDefaultTypeInternal _BlueprintNodeInfo_default_instance_;
 
 inline constexpr ActorTransform::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -1572,6 +1854,29 @@ struct PropertyValueDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PropertyValueDefaultTypeInternal _PropertyValue_default_instance_;
 
+inline constexpr ListBlueprintNodesResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : nodes_{},
+        error_message_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        success_{false},
+        _cached_size_{0} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR ListBlueprintNodesResponse::ListBlueprintNodesResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct ListBlueprintNodesResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListBlueprintNodesResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListBlueprintNodesResponseDefaultTypeInternal() {}
+  union {
+    ListBlueprintNodesResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListBlueprintNodesResponseDefaultTypeInternal _ListBlueprintNodesResponse_default_instance_;
+
 inline constexpr GetComponentTransformResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -1619,6 +1924,29 @@ struct DuplicateActorRequestDefaultTypeInternal {
 
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DuplicateActorRequestDefaultTypeInternal _DuplicateActorRequest_default_instance_;
+
+inline constexpr CreateBlueprintNodeResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        error_message_(
+            &::google::protobuf_tempo::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        node_{nullptr},
+        success_{false} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR CreateBlueprintNodeResponse::CreateBlueprintNodeResponse(::_pbi::ConstantInitialized)
+    : _impl_(::_pbi::ConstantInitialized()) {}
+struct CreateBlueprintNodeResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CreateBlueprintNodeResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CreateBlueprintNodeResponseDefaultTypeInternal() {}
+  union {
+    CreateBlueprintNodeResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CreateBlueprintNodeResponseDefaultTypeInternal _CreateBlueprintNodeResponse_default_instance_;
 
 inline constexpr ComponentDescriptor::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
@@ -2165,7 +2493,7 @@ struct GetActorResponseDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AGENTBRIDGESERVER_API
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetActorResponseDefaultTypeInternal _GetActorResponse_default_instance_;
 }  // namespace AgentBridgeServer
-static ::_pb::Metadata file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[89];
+static ::_pb::Metadata file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[100];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_AgentBridgeServer_2fAgentBridge_2eproto[3];
 static constexpr const ::_pb::ServiceDescriptor**
     file_level_service_descriptors_AgentBridgeServer_2fAgentBridge_2eproto = nullptr;
@@ -3296,6 +3624,149 @@ const ::uint32_t TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets[] 
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DeleteProjectFileRequest, _impl_.relative_path_),
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DeleteProjectFileRequest, _impl_.allow_directory_delete_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintPinInfo, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintPinInfo, _impl_.name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintPinInfo, _impl_.direction_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintPinInfo, _impl_.type_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintPinInfo, _impl_.type_display_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintPinInfo, _impl_.is_connected_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintPinInfo, _impl_.default_value_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintPinInfo, _impl_.connected_to_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.guid_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.class_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.title_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.pos_x_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.pos_y_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.comment_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.function_reference_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.event_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.variable_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::BlueprintNodeInfo, _impl_.pins_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.blueprint_path_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.graph_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.node_type_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.function_reference_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.event_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.variable_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.comment_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.pos_x_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeRequest, _impl_.pos_y_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeResponse, _impl_._has_bits_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeResponse, _impl_.success_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeResponse, _impl_.error_message_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::CreateBlueprintNodeResponse, _impl_.node_),
+    ~0u,
+    ~0u,
+    0,
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ConnectBlueprintPinsRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ConnectBlueprintPinsRequest, _impl_.blueprint_path_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ConnectBlueprintPinsRequest, _impl_.source_node_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ConnectBlueprintPinsRequest, _impl_.source_pin_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ConnectBlueprintPinsRequest, _impl_.target_node_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ConnectBlueprintPinsRequest, _impl_.target_pin_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DisconnectBlueprintPinsRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DisconnectBlueprintPinsRequest, _impl_.blueprint_path_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DisconnectBlueprintPinsRequest, _impl_.source_node_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DisconnectBlueprintPinsRequest, _impl_.source_pin_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DisconnectBlueprintPinsRequest, _impl_.target_node_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DisconnectBlueprintPinsRequest, _impl_.target_pin_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DeleteBlueprintNodeRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DeleteBlueprintNodeRequest, _impl_.blueprint_path_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::DeleteBlueprintNodeRequest, _impl_.node_id_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintNodesRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintNodesRequest, _impl_.blueprint_path_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintNodesRequest, _impl_.graph_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintNodesRequest, _impl_.node_class_filter_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintNodesResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintNodesResponse, _impl_.success_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintNodesResponse, _impl_.error_message_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintNodesResponse, _impl_.nodes_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintPinsRequest, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintPinsRequest, _impl_.blueprint_path_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintPinsRequest, _impl_.node_id_),
+    ~0u,  // no _has_bits_
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintPinsResponse, _internal_metadata_),
+    ~0u,  // no _extensions_
+    ~0u,  // no _oneof_case_
+    ~0u,  // no _weak_field_map_
+    ~0u,  // no _inlined_string_donated_
+    ~0u,  // no _split_
+    ~0u,  // no sizeof(Split)
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintPinsResponse, _impl_.success_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintPinsResponse, _impl_.error_message_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::ListBlueprintPinsResponse, _impl_.pins_),
 };
 
 static const ::_pbi::MigrationSchema
@@ -3389,6 +3860,17 @@ static const ::_pbi::MigrationSchema
         {1093, -1, -1, sizeof(::AgentBridgeServer::CopyProjectFileRequest)},
         {1104, -1, -1, sizeof(::AgentBridgeServer::CopyProjectFileResponse)},
         {1115, -1, -1, sizeof(::AgentBridgeServer::DeleteProjectFileRequest)},
+        {1125, -1, -1, sizeof(::AgentBridgeServer::BlueprintPinInfo)},
+        {1140, -1, -1, sizeof(::AgentBridgeServer::BlueprintNodeInfo)},
+        {1158, -1, -1, sizeof(::AgentBridgeServer::CreateBlueprintNodeRequest)},
+        {1175, 1186, -1, sizeof(::AgentBridgeServer::CreateBlueprintNodeResponse)},
+        {1189, -1, -1, sizeof(::AgentBridgeServer::ConnectBlueprintPinsRequest)},
+        {1202, -1, -1, sizeof(::AgentBridgeServer::DisconnectBlueprintPinsRequest)},
+        {1215, -1, -1, sizeof(::AgentBridgeServer::DeleteBlueprintNodeRequest)},
+        {1225, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintNodesRequest)},
+        {1236, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintNodesResponse)},
+        {1247, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintPinsRequest)},
+        {1257, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintPinsResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -3481,6 +3963,17 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::AgentBridgeServer::_CopyProjectFileRequest_default_instance_._instance,
     &::AgentBridgeServer::_CopyProjectFileResponse_default_instance_._instance,
     &::AgentBridgeServer::_DeleteProjectFileRequest_default_instance_._instance,
+    &::AgentBridgeServer::_BlueprintPinInfo_default_instance_._instance,
+    &::AgentBridgeServer::_BlueprintNodeInfo_default_instance_._instance,
+    &::AgentBridgeServer::_CreateBlueprintNodeRequest_default_instance_._instance,
+    &::AgentBridgeServer::_CreateBlueprintNodeResponse_default_instance_._instance,
+    &::AgentBridgeServer::_ConnectBlueprintPinsRequest_default_instance_._instance,
+    &::AgentBridgeServer::_DisconnectBlueprintPinsRequest_default_instance_._instance,
+    &::AgentBridgeServer::_DeleteBlueprintNodeRequest_default_instance_._instance,
+    &::AgentBridgeServer::_ListBlueprintNodesRequest_default_instance_._instance,
+    &::AgentBridgeServer::_ListBlueprintNodesResponse_default_instance_._instance,
+    &::AgentBridgeServer::_ListBlueprintPinsRequest_default_instance_._instance,
+    &::AgentBridgeServer::_ListBlueprintPinsResponse_default_instance_._instance,
 };
 const char descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n#AgentBridgeServer/AgentBridge.proto\022\021A"
@@ -3753,128 +4246,181 @@ const char descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto[] P
     "\007success\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\022\026\n"
     "\016dest_full_path\030\003 \001(\t\"Q\n\030DeleteProjectFi"
     "leRequest\022\025\n\rrelative_path\030\001 \001(\t\022\036\n\026allo"
-    "w_directory_delete\030\002 \001(\010*\240\003\n\014PropertyTyp"
-    "e\022\026\n\022PROPERTY_TYPE_NONE\020\000\022\026\n\022PROPERTY_TY"
-    "PE_BOOL\020\001\022\025\n\021PROPERTY_TYPE_INT\020\002\022\027\n\023PROP"
-    "ERTY_TYPE_FLOAT\020\003\022\030\n\024PROPERTY_TYPE_STRIN"
-    "G\020\004\022\026\n\022PROPERTY_TYPE_NAME\020\005\022\030\n\024PROPERTY_"
-    "TYPE_VECTOR\020\006\022\031\n\025PROPERTY_TYPE_ROTATOR\020\007"
-    "\022\033\n\027PROPERTY_TYPE_TRANSFORM\020\010\022\027\n\023PROPERT"
-    "Y_TYPE_COLOR\020\t\022\030\n\024PROPERTY_TYPE_OBJECT\020\n"
-    "\022\027\n\023PROPERTY_TYPE_CLASS\020\013\022\030\n\024PROPERTY_TY"
-    "PE_STRUCT\020\014\022\027\n\023PROPERTY_TYPE_ARRAY\020\r\022\025\n\021"
-    "PROPERTY_TYPE_MAP\020\016\022\026\n\022PROPERTY_TYPE_ENU"
-    "M\020\017*\213\001\n\016StreamingState\022\"\n\036STREAMING_STAT"
-    "E_NOT_APPLICABLE\020\000\022\032\n\026STREAMING_STATE_LO"
-    "ADED\020\001\022\034\n\030STREAMING_STATE_UNLOADED\020\002\022\033\n\027"
-    "STREAMING_STATE_INVALID\020\003*w\n\016AttachmentR"
-    "ule\022!\n\035ATTACHMENT_RULE_KEEP_RELATIVE\020\000\022\036"
-    "\n\032ATTACHMENT_RULE_KEEP_WORLD\020\001\022\"\n\036ATTACH"
-    "MENT_RULE_SNAP_TO_TARGET\020\0022\260 \n\022AgentBrid"
-    "geService\022Y\n\nListWorlds\022$.AgentBridgeSer"
-    "ver.ListWorldsRequest\032%.AgentBridgeServe"
-    "r.ListWorldsResponse\022Q\n\016SetTargetWorld\022("
-    ".AgentBridgeServer.SetTargetWorldRequest"
-    "\032\025.TempoScripting.Empty\022\\\n\013QueryActors\022%"
-    ".AgentBridgeServer.QueryActorsRequest\032&."
-    "AgentBridgeServer.QueryActorsResponse\022S\n"
-    "\010GetActor\022\".AgentBridgeServer.GetActorRe"
-    "quest\032#.AgentBridgeServer.GetActorRespon"
-    "se\022Y\n\nSpawnActor\022$.AgentBridgeServer.Spa"
-    "wnActorRequest\032%.AgentBridgeServer.Spawn"
-    "ActorResponse\022K\n\013DeleteActor\022%.AgentBrid"
-    "geServer.DeleteActorRequest\032\025.TempoScrip"
-    "ting.Empty\022e\n\016DuplicateActor\022(.AgentBrid"
-    "geServer.DuplicateActorRequest\032).AgentBr"
-    "idgeServer.DuplicateActorResponse\022W\n\021Set"
-    "ActorTransform\022+.AgentBridgeServer.SetAc"
-    "torTransformRequest\032\025.TempoScripting.Emp"
-    "ty\022q\n\022SetActorProperties\022,.AgentBridgeSe"
-    "rver.SetActorPropertiesRequest\032-.AgentBr"
-    "idgeServer.SetActorPropertiesResponse\022h\n"
-    "\017GetPropertyPath\022).AgentBridgeServer.Get"
-    "PropertyPathRequest\032*.AgentBridgeServer."
-    "GetPropertyPathResponse\022S\n\017SetPropertyPa"
-    "th\022).AgentBridgeServer.SetPropertyPathRe"
-    "quest\032\025.TempoScripting.Empty\022_\n\014CallFunc"
-    "tion\022&.AgentBridgeServer.CallFunctionReq"
-    "uest\032\'.AgentBridgeServer.CallFunctionRes"
-    "ponse\022n\n\021CallAssetFunction\022+.AgentBridge"
-    "Server.CallAssetFunctionRequest\032,.AgentB"
-    "ridgeServer.CallAssetFunctionResponse\022V\n"
-    "\tFindClass\022#.AgentBridgeServer.FindClass"
-    "Request\032$.AgentBridgeServer.FindClassRes"
-    "ponse\022e\n\016GetClassSchema\022(.AgentBridgeSer"
-    "ver.GetClassSchemaRequest\032).AgentBridgeS"
-    "erver.GetClassSchemaResponse\022\\\n\013ListClas"
-    "ses\022%.AgentBridgeServer.ListClassesReque"
-    "st\032&.AgentBridgeServer.ListClassesRespon"
-    "se\022q\n\022IsWorldPartitioned\022,.AgentBridgeSe"
-    "rver.IsWorldPartitionedRequest\032-.AgentBr"
-    "idgeServer.IsWorldPartitionedResponse\022e\n"
-    "\016QueryAllActors\022(.AgentBridgeServer.Quer"
-    "yAllActorsRequest\032).AgentBridgeServer.Qu"
-    "eryAllActorsResponse\022n\n\021GetStreamingStat"
-    "e\022+.AgentBridgeServer.GetStreamingStateR"
-    "equest\032,.AgentBridgeServer.GetStreamingS"
-    "tateResponse\022e\n\016QueryLandscape\022(.AgentBr"
-    "idgeServer.QueryLandscapeRequest\032).Agent"
-    "BridgeServer.QueryLandscapeResponse\022q\n\022G"
-    "etLandscapeBounds\022,.AgentBridgeServer.Ge"
-    "tLandscapeBoundsRequest\032-.AgentBridgeSer"
-    "ver.GetLandscapeBoundsResponse\022b\n\rGetDat"
-    "aLayers\022\'.AgentBridgeServer.GetDataLayer"
-    "sRequest\032(.AgentBridgeServer.GetDataLaye"
-    "rsResponse\022w\n\024GetActorsInDataLayer\022..Age"
-    "ntBridgeServer.GetActorsInDataLayerReque"
-    "st\032/.AgentBridgeServer.GetActorsInDataLa"
-    "yerResponse\022z\n\025ExecuteConsoleCommand\022/.A"
-    "gentBridgeServer.ExecuteConsoleCommandRe"
-    "quest\0320.AgentBridgeServer.ExecuteConsole"
-    "CommandResponse\022z\n\025SearchConsoleCommands"
-    "\022/.AgentBridgeServer.SearchConsoleComman"
-    "dsRequest\0320.AgentBridgeServer.SearchCons"
-    "oleCommandsResponse\022\\\n\013CreateAsset\022%.Age"
-    "ntBridgeServer.CreateAssetRequest\032&.Agen"
-    "tBridgeServer.CreateAssetResponse\022V\n\tSav"
-    "eAsset\022#.AgentBridgeServer.SaveAssetRequ"
-    "est\032$.AgentBridgeServer.SaveAssetRespons"
-    "e\022w\n\024SaveActorAsBlueprint\022..AgentBridgeS"
-    "erver.SaveActorAsBlueprintRequest\032/.Agen"
-    "tBridgeServer.SaveActorAsBlueprintRespon"
-    "se\022e\n\016DuplicateAsset\022(.AgentBridgeServer"
-    ".DuplicateAssetRequest\032).AgentBridgeServ"
-    "er.DuplicateAssetResponse\022n\n\021GetAssetThu"
-    "mbnail\022+.AgentBridgeServer.GetAssetThumb"
-    "nailRequest\032,.AgentBridgeServer.GetAsset"
-    "ThumbnailResponse\022z\n\025GetComponentTransfo"
-    "rm\022/.AgentBridgeServer.GetComponentTrans"
-    "formRequest\0320.AgentBridgeServer.GetCompo"
-    "nentTransformResponse\022_\n\025SetComponentTra"
-    "nsform\022/.AgentBridgeServer.SetComponentT"
-    "ransformRequest\032\025.TempoScripting.Empty\022S"
-    "\n\017AttachComponent\022).AgentBridgeServer.At"
-    "tachComponentRequest\032\025.TempoScripting.Em"
-    "pty\022K\n\013AttachActor\022%.AgentBridgeServer.A"
-    "ttachActorRequest\032\025.TempoScripting.Empty"
-    "\022S\n\017DetachComponent\022).AgentBridgeServer."
-    "DetachComponentRequest\032\025.TempoScripting."
-    "Empty\022K\n\013DetachActor\022%.AgentBridgeServer"
-    ".DetachActorRequest\032\025.TempoScripting.Emp"
-    "ty\022h\n\017ReadProjectFile\022).AgentBridgeServe"
-    "r.ReadProjectFileRequest\032*.AgentBridgeSe"
-    "rver.ReadProjectFileResponse\022k\n\020WritePro"
-    "jectFile\022*.AgentBridgeServer.WriteProjec"
-    "tFileRequest\032+.AgentBridgeServer.WritePr"
-    "ojectFileResponse\022w\n\024ListProjectDirector"
-    "y\022..AgentBridgeServer.ListProjectDirecto"
-    "ryRequest\032/.AgentBridgeServer.ListProjec"
-    "tDirectoryResponse\022h\n\017CopyProjectFile\022)."
-    "AgentBridgeServer.CopyProjectFileRequest"
-    "\032*.AgentBridgeServer.CopyProjectFileResp"
-    "onse\022W\n\021DeleteProjectFile\022+.AgentBridgeS"
-    "erver.DeleteProjectFileRequest\032\025.TempoSc"
-    "ripting.Emptyb\006proto3"
+    "w_directory_delete\030\002 \001(\010\"\237\001\n\020BlueprintPi"
+    "nInfo\022\014\n\004name\030\001 \001(\t\022\021\n\tdirection\030\002 \001(\t\022\014"
+    "\n\004type\030\003 \001(\t\022\031\n\021type_display_name\030\004 \001(\t\022"
+    "\024\n\014is_connected\030\005 \001(\010\022\025\n\rdefault_value\030\006"
+    " \001(\t\022\024\n\014connected_to\030\007 \003(\t\"\355\001\n\021Blueprint"
+    "NodeInfo\022\014\n\004guid\030\001 \001(\t\022\022\n\nclass_name\030\002 \001"
+    "(\t\022\r\n\005title\030\003 \001(\t\022\r\n\005pos_x\030\004 \001(\005\022\r\n\005pos_"
+    "y\030\005 \001(\005\022\017\n\007comment\030\006 \001(\t\022\032\n\022function_ref"
+    "erence\030\007 \001(\t\022\022\n\nevent_name\030\010 \001(\t\022\025\n\rvari"
+    "able_name\030\t \001(\t\0221\n\004pins\030\n \003(\0132#.AgentBri"
+    "dgeServer.BlueprintPinInfo\"\321\001\n\032CreateBlu"
+    "eprintNodeRequest\022\026\n\016blueprint_path\030\001 \001("
+    "\t\022\022\n\ngraph_name\030\002 \001(\t\022\021\n\tnode_type\030\003 \001(\t"
+    "\022\032\n\022function_reference\030\004 \001(\t\022\022\n\nevent_na"
+    "me\030\005 \001(\t\022\025\n\rvariable_name\030\006 \001(\t\022\017\n\007comme"
+    "nt\030\007 \001(\t\022\r\n\005pos_x\030\010 \001(\005\022\r\n\005pos_y\030\t \001(\005\"y"
+    "\n\033CreateBlueprintNodeResponse\022\017\n\007success"
+    "\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\0222\n\004node\030\003 "
+    "\001(\0132$.AgentBridgeServer.BlueprintNodeInf"
+    "o\"\207\001\n\033ConnectBlueprintPinsRequest\022\026\n\016blu"
+    "eprint_path\030\001 \001(\t\022\023\n\013source_node\030\002 \001(\t\022\022"
+    "\n\nsource_pin\030\003 \001(\t\022\023\n\013target_node\030\004 \001(\t\022"
+    "\022\n\ntarget_pin\030\005 \001(\t\"\212\001\n\036DisconnectBluepr"
+    "intPinsRequest\022\026\n\016blueprint_path\030\001 \001(\t\022\023"
+    "\n\013source_node\030\002 \001(\t\022\022\n\nsource_pin\030\003 \001(\t\022"
+    "\023\n\013target_node\030\004 \001(\t\022\022\n\ntarget_pin\030\005 \001(\t"
+    "\"E\n\032DeleteBlueprintNodeRequest\022\026\n\016bluepr"
+    "int_path\030\001 \001(\t\022\017\n\007node_id\030\002 \001(\t\"b\n\031ListB"
+    "lueprintNodesRequest\022\026\n\016blueprint_path\030\001"
+    " \001(\t\022\022\n\ngraph_name\030\002 \001(\t\022\031\n\021node_class_f"
+    "ilter\030\003 \001(\t\"y\n\032ListBlueprintNodesRespons"
+    "e\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_message\030\002 \001("
+    "\t\0223\n\005nodes\030\003 \003(\0132$.AgentBridgeServer.Blu"
+    "eprintNodeInfo\"C\n\030ListBlueprintPinsReque"
+    "st\022\026\n\016blueprint_path\030\001 \001(\t\022\017\n\007node_id\030\002 "
+    "\001(\t\"v\n\031ListBlueprintPinsResponse\022\017\n\007succ"
+    "ess\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\0221\n\004pins"
+    "\030\003 \003(\0132#.AgentBridgeServer.BlueprintPinI"
+    "nfo*\240\003\n\014PropertyType\022\026\n\022PROPERTY_TYPE_NO"
+    "NE\020\000\022\026\n\022PROPERTY_TYPE_BOOL\020\001\022\025\n\021PROPERTY"
+    "_TYPE_INT\020\002\022\027\n\023PROPERTY_TYPE_FLOAT\020\003\022\030\n\024"
+    "PROPERTY_TYPE_STRING\020\004\022\026\n\022PROPERTY_TYPE_"
+    "NAME\020\005\022\030\n\024PROPERTY_TYPE_VECTOR\020\006\022\031\n\025PROP"
+    "ERTY_TYPE_ROTATOR\020\007\022\033\n\027PROPERTY_TYPE_TRA"
+    "NSFORM\020\010\022\027\n\023PROPERTY_TYPE_COLOR\020\t\022\030\n\024PRO"
+    "PERTY_TYPE_OBJECT\020\n\022\027\n\023PROPERTY_TYPE_CLA"
+    "SS\020\013\022\030\n\024PROPERTY_TYPE_STRUCT\020\014\022\027\n\023PROPER"
+    "TY_TYPE_ARRAY\020\r\022\025\n\021PROPERTY_TYPE_MAP\020\016\022\026"
+    "\n\022PROPERTY_TYPE_ENUM\020\017*\213\001\n\016StreamingStat"
+    "e\022\"\n\036STREAMING_STATE_NOT_APPLICABLE\020\000\022\032\n"
+    "\026STREAMING_STATE_LOADED\020\001\022\034\n\030STREAMING_S"
+    "TATE_UNLOADED\020\002\022\033\n\027STREAMING_STATE_INVAL"
+    "ID\020\003*w\n\016AttachmentRule\022!\n\035ATTACHMENT_RUL"
+    "E_KEEP_RELATIVE\020\000\022\036\n\032ATTACHMENT_RULE_KEE"
+    "P_WORLD\020\001\022\"\n\036ATTACHMENT_RULE_SNAP_TO_TAR"
+    "GET\020\0022\252%\n\022AgentBridgeService\022Y\n\nListWorl"
+    "ds\022$.AgentBridgeServer.ListWorldsRequest"
+    "\032%.AgentBridgeServer.ListWorldsResponse\022"
+    "Q\n\016SetTargetWorld\022(.AgentBridgeServer.Se"
+    "tTargetWorldRequest\032\025.TempoScripting.Emp"
+    "ty\022\\\n\013QueryActors\022%.AgentBridgeServer.Qu"
+    "eryActorsRequest\032&.AgentBridgeServer.Que"
+    "ryActorsResponse\022S\n\010GetActor\022\".AgentBrid"
+    "geServer.GetActorRequest\032#.AgentBridgeSe"
+    "rver.GetActorResponse\022Y\n\nSpawnActor\022$.Ag"
+    "entBridgeServer.SpawnActorRequest\032%.Agen"
+    "tBridgeServer.SpawnActorResponse\022K\n\013Dele"
+    "teActor\022%.AgentBridgeServer.DeleteActorR"
+    "equest\032\025.TempoScripting.Empty\022e\n\016Duplica"
+    "teActor\022(.AgentBridgeServer.DuplicateAct"
+    "orRequest\032).AgentBridgeServer.DuplicateA"
+    "ctorResponse\022W\n\021SetActorTransform\022+.Agen"
+    "tBridgeServer.SetActorTransformRequest\032\025"
+    ".TempoScripting.Empty\022q\n\022SetActorPropert"
+    "ies\022,.AgentBridgeServer.SetActorProperti"
+    "esRequest\032-.AgentBridgeServer.SetActorPr"
+    "opertiesResponse\022h\n\017GetPropertyPath\022).Ag"
+    "entBridgeServer.GetPropertyPathRequest\032*"
+    ".AgentBridgeServer.GetPropertyPathRespon"
+    "se\022S\n\017SetPropertyPath\022).AgentBridgeServe"
+    "r.SetPropertyPathRequest\032\025.TempoScriptin"
+    "g.Empty\022_\n\014CallFunction\022&.AgentBridgeSer"
+    "ver.CallFunctionRequest\032\'.AgentBridgeSer"
+    "ver.CallFunctionResponse\022n\n\021CallAssetFun"
+    "ction\022+.AgentBridgeServer.CallAssetFunct"
+    "ionRequest\032,.AgentBridgeServer.CallAsset"
+    "FunctionResponse\022V\n\tFindClass\022#.AgentBri"
+    "dgeServer.FindClassRequest\032$.AgentBridge"
+    "Server.FindClassResponse\022e\n\016GetClassSche"
+    "ma\022(.AgentBridgeServer.GetClassSchemaReq"
+    "uest\032).AgentBridgeServer.GetClassSchemaR"
+    "esponse\022\\\n\013ListClasses\022%.AgentBridgeServ"
+    "er.ListClassesRequest\032&.AgentBridgeServe"
+    "r.ListClassesResponse\022q\n\022IsWorldPartitio"
+    "ned\022,.AgentBridgeServer.IsWorldPartition"
+    "edRequest\032-.AgentBridgeServer.IsWorldPar"
+    "titionedResponse\022e\n\016QueryAllActors\022(.Age"
+    "ntBridgeServer.QueryAllActorsRequest\032).A"
+    "gentBridgeServer.QueryAllActorsResponse\022"
+    "n\n\021GetStreamingState\022+.AgentBridgeServer"
+    ".GetStreamingStateRequest\032,.AgentBridgeS"
+    "erver.GetStreamingStateResponse\022e\n\016Query"
+    "Landscape\022(.AgentBridgeServer.QueryLands"
+    "capeRequest\032).AgentBridgeServer.QueryLan"
+    "dscapeResponse\022q\n\022GetLandscapeBounds\022,.A"
+    "gentBridgeServer.GetLandscapeBoundsReque"
+    "st\032-.AgentBridgeServer.GetLandscapeBound"
+    "sResponse\022b\n\rGetDataLayers\022\'.AgentBridge"
+    "Server.GetDataLayersRequest\032(.AgentBridg"
+    "eServer.GetDataLayersResponse\022w\n\024GetActo"
+    "rsInDataLayer\022..AgentBridgeServer.GetAct"
+    "orsInDataLayerRequest\032/.AgentBridgeServe"
+    "r.GetActorsInDataLayerResponse\022z\n\025Execut"
+    "eConsoleCommand\022/.AgentBridgeServer.Exec"
+    "uteConsoleCommandRequest\0320.AgentBridgeSe"
+    "rver.ExecuteConsoleCommandResponse\022z\n\025Se"
+    "archConsoleCommands\022/.AgentBridgeServer."
+    "SearchConsoleCommandsRequest\0320.AgentBrid"
+    "geServer.SearchConsoleCommandsResponse\022\\"
+    "\n\013CreateAsset\022%.AgentBridgeServer.Create"
+    "AssetRequest\032&.AgentBridgeServer.CreateA"
+    "ssetResponse\022V\n\tSaveAsset\022#.AgentBridgeS"
+    "erver.SaveAssetRequest\032$.AgentBridgeServ"
+    "er.SaveAssetResponse\022w\n\024SaveActorAsBluep"
+    "rint\022..AgentBridgeServer.SaveActorAsBlue"
+    "printRequest\032/.AgentBridgeServer.SaveAct"
+    "orAsBlueprintResponse\022e\n\016DuplicateAsset\022"
+    "(.AgentBridgeServer.DuplicateAssetReques"
+    "t\032).AgentBridgeServer.DuplicateAssetResp"
+    "onse\022n\n\021GetAssetThumbnail\022+.AgentBridgeS"
+    "erver.GetAssetThumbnailRequest\032,.AgentBr"
+    "idgeServer.GetAssetThumbnailResponse\022z\n\025"
+    "GetComponentTransform\022/.AgentBridgeServe"
+    "r.GetComponentTransformRequest\0320.AgentBr"
+    "idgeServer.GetComponentTransformResponse"
+    "\022_\n\025SetComponentTransform\022/.AgentBridgeS"
+    "erver.SetComponentTransformRequest\032\025.Tem"
+    "poScripting.Empty\022S\n\017AttachComponent\022).A"
+    "gentBridgeServer.AttachComponentRequest\032"
+    "\025.TempoScripting.Empty\022K\n\013AttachActor\022%."
+    "AgentBridgeServer.AttachActorRequest\032\025.T"
+    "empoScripting.Empty\022S\n\017DetachComponent\022)"
+    ".AgentBridgeServer.DetachComponentReques"
+    "t\032\025.TempoScripting.Empty\022K\n\013DetachActor\022"
+    "%.AgentBridgeServer.DetachActorRequest\032\025"
+    ".TempoScripting.Empty\022h\n\017ReadProjectFile"
+    "\022).AgentBridgeServer.ReadProjectFileRequ"
+    "est\032*.AgentBridgeServer.ReadProjectFileR"
+    "esponse\022k\n\020WriteProjectFile\022*.AgentBridg"
+    "eServer.WriteProjectFileRequest\032+.AgentB"
+    "ridgeServer.WriteProjectFileResponse\022w\n\024"
+    "ListProjectDirectory\022..AgentBridgeServer"
+    ".ListProjectDirectoryRequest\032/.AgentBrid"
+    "geServer.ListProjectDirectoryResponse\022h\n"
+    "\017CopyProjectFile\022).AgentBridgeServer.Cop"
+    "yProjectFileRequest\032*.AgentBridgeServer."
+    "CopyProjectFileResponse\022W\n\021DeleteProject"
+    "File\022+.AgentBridgeServer.DeleteProjectFi"
+    "leRequest\032\025.TempoScripting.Empty\022t\n\023Crea"
+    "teBlueprintNode\022-.AgentBridgeServer.Crea"
+    "teBlueprintNodeRequest\032..AgentBridgeServ"
+    "er.CreateBlueprintNodeResponse\022]\n\024Connec"
+    "tBlueprintPins\022..AgentBridgeServer.Conne"
+    "ctBlueprintPinsRequest\032\025.TempoScripting."
+    "Empty\022c\n\027DisconnectBlueprintPins\0221.Agent"
+    "BridgeServer.DisconnectBlueprintPinsRequ"
+    "est\032\025.TempoScripting.Empty\022[\n\023DeleteBlue"
+    "printNode\022-.AgentBridgeServer.DeleteBlue"
+    "printNodeRequest\032\025.TempoScripting.Empty\022"
+    "q\n\022ListBlueprintNodes\022,.AgentBridgeServe"
+    "r.ListBlueprintNodesRequest\032-.AgentBridg"
+    "eServer.ListBlueprintNodesResponse\022n\n\021Li"
+    "stBlueprintPins\022+.AgentBridgeServer.List"
+    "BlueprintPinsRequest\032,.AgentBridgeServer"
+    ".ListBlueprintPinsResponseb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_deps[2] =
     {
@@ -3885,13 +4431,13 @@ static ::absl_tempo::once_flag descriptor_table_AgentBridgeServer_2fAgentBridge_
 const ::_pbi::DescriptorTable descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto = {
     false,
     false,
-    15661,
+    17794,
     descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto,
     "AgentBridgeServer/AgentBridge.proto",
     &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
     descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_deps,
     2,
-    89,
+    100,
     schemas,
     file_default_instances,
     TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets,
@@ -27289,6 +27835,3326 @@ void DeleteProjectFileRequest::InternalSwap(DeleteProjectFileRequest* PROTOBUF_R
   return ::_pbi::AssignDescriptors(
       &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
       file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[88]);
+}
+// ===================================================================
+
+class BlueprintPinInfo::_Internal {
+ public:
+};
+
+BlueprintPinInfo::BlueprintPinInfo(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.BlueprintPinInfo)
+}
+inline PROTOBUF_NDEBUG_INLINE BlueprintPinInfo::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : connected_to_{visibility, arena, from.connected_to_},
+        name_(arena, from.name_),
+        direction_(arena, from.direction_),
+        type_(arena, from.type_),
+        type_display_name_(arena, from.type_display_name_),
+        default_value_(arena, from.default_value_),
+        _cached_size_{0} {}
+
+BlueprintPinInfo::BlueprintPinInfo(
+    ::google::protobuf_tempo::Arena* arena,
+    const BlueprintPinInfo& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  BlueprintPinInfo* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.is_connected_ = from._impl_.is_connected_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.BlueprintPinInfo)
+}
+inline PROTOBUF_NDEBUG_INLINE BlueprintPinInfo::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : connected_to_{visibility, arena},
+        name_(arena),
+        direction_(arena),
+        type_(arena),
+        type_display_name_(arena),
+        default_value_(arena),
+        _cached_size_{0} {}
+
+inline void BlueprintPinInfo::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.is_connected_ = {};
+}
+BlueprintPinInfo::~BlueprintPinInfo() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.BlueprintPinInfo)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void BlueprintPinInfo::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.name_.Destroy();
+  _impl_.direction_.Destroy();
+  _impl_.type_.Destroy();
+  _impl_.type_display_name_.Destroy();
+  _impl_.default_value_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void BlueprintPinInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.BlueprintPinInfo)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.connected_to_.Clear();
+  _impl_.name_.ClearToEmpty();
+  _impl_.direction_.ClearToEmpty();
+  _impl_.type_.ClearToEmpty();
+  _impl_.type_display_name_.ClearToEmpty();
+  _impl_.default_value_.ClearToEmpty();
+  _impl_.is_connected_ = false;
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* BlueprintPinInfo::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 7, 0, 102, 2> BlueprintPinInfo::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    7, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967168,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    7,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_BlueprintPinInfo_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string name = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.name_)}},
+    // string direction = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.direction_)}},
+    // string type = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.type_)}},
+    // string type_display_name = 4;
+    {::_pbi::TcParser::FastUS1,
+     {34, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.type_display_name_)}},
+    // bool is_connected = 5;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(BlueprintPinInfo, _impl_.is_connected_), 63>(),
+     {40, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.is_connected_)}},
+    // string default_value = 6;
+    {::_pbi::TcParser::FastUS1,
+     {50, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.default_value_)}},
+    // repeated string connected_to = 7;
+    {::_pbi::TcParser::FastUR1,
+     {58, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.connected_to_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string name = 1;
+    {PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string direction = 2;
+    {PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.direction_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string type = 3;
+    {PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.type_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string type_display_name = 4;
+    {PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.type_display_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // bool is_connected = 5;
+    {PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.is_connected_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // string default_value = 6;
+    {PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.default_value_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // repeated string connected_to = 7;
+    {PROTOBUF_FIELD_OFFSET(BlueprintPinInfo, _impl_.connected_to_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kUtf8String | ::_fl::kRepSString)},
+  }},
+  // no aux_entries
+  {{
+    "\42\4\11\4\21\0\15\14"
+    "AgentBridgeServer.BlueprintPinInfo"
+    "name"
+    "direction"
+    "type"
+    "type_display_name"
+    "default_value"
+    "connected_to"
+  }},
+};
+
+::uint8_t* BlueprintPinInfo::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.BlueprintPinInfo)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string name = 1;
+  if (!this->_internal_name().empty()) {
+    const std::string& _s = this->_internal_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintPinInfo.name");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string direction = 2;
+  if (!this->_internal_direction().empty()) {
+    const std::string& _s = this->_internal_direction();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintPinInfo.direction");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // string type = 3;
+  if (!this->_internal_type().empty()) {
+    const std::string& _s = this->_internal_type();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintPinInfo.type");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
+  }
+
+  // string type_display_name = 4;
+  if (!this->_internal_type_display_name().empty()) {
+    const std::string& _s = this->_internal_type_display_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintPinInfo.type_display_name");
+    target = stream->WriteStringMaybeAliased(4, _s, target);
+  }
+
+  // bool is_connected = 5;
+  if (this->_internal_is_connected() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        5, this->_internal_is_connected(), target);
+  }
+
+  // string default_value = 6;
+  if (!this->_internal_default_value().empty()) {
+    const std::string& _s = this->_internal_default_value();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintPinInfo.default_value");
+    target = stream->WriteStringMaybeAliased(6, _s, target);
+  }
+
+  // repeated string connected_to = 7;
+  for (int i = 0, n = this->_internal_connected_to_size(); i < n; ++i) {
+    const auto& s = this->_internal_connected_to().Get(i);
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        s.data(), static_cast<int>(s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintPinInfo.connected_to");
+    target = stream->WriteString(7, s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.BlueprintPinInfo)
+  return target;
+}
+
+::size_t BlueprintPinInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.BlueprintPinInfo)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string connected_to = 7;
+  total_size += 1 * ::google::protobuf_tempo::internal::FromIntSize(_internal_connected_to().size());
+  for (int i = 0, n = _internal_connected_to().size(); i < n; ++i) {
+    total_size += ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+        _internal_connected_to().Get(i));
+  }
+  // string name = 1;
+  if (!this->_internal_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_name());
+  }
+
+  // string direction = 2;
+  if (!this->_internal_direction().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_direction());
+  }
+
+  // string type = 3;
+  if (!this->_internal_type().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_type());
+  }
+
+  // string type_display_name = 4;
+  if (!this->_internal_type_display_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_type_display_name());
+  }
+
+  // string default_value = 6;
+  if (!this->_internal_default_value().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_default_value());
+  }
+
+  // bool is_connected = 5;
+  if (this->_internal_is_connected() != 0) {
+    total_size += 2;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData BlueprintPinInfo::_class_data_ = {
+    BlueprintPinInfo::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* BlueprintPinInfo::GetClassData() const {
+  return &_class_data_;
+}
+
+void BlueprintPinInfo::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<BlueprintPinInfo*>(&to_msg);
+  auto& from = static_cast<const BlueprintPinInfo&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.BlueprintPinInfo)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_connected_to()->MergeFrom(from._internal_connected_to());
+  if (!from._internal_name().empty()) {
+    _this->_internal_set_name(from._internal_name());
+  }
+  if (!from._internal_direction().empty()) {
+    _this->_internal_set_direction(from._internal_direction());
+  }
+  if (!from._internal_type().empty()) {
+    _this->_internal_set_type(from._internal_type());
+  }
+  if (!from._internal_type_display_name().empty()) {
+    _this->_internal_set_type_display_name(from._internal_type_display_name());
+  }
+  if (!from._internal_default_value().empty()) {
+    _this->_internal_set_default_value(from._internal_default_value());
+  }
+  if (from._internal_is_connected() != 0) {
+    _this->_internal_set_is_connected(from._internal_is_connected());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void BlueprintPinInfo::CopyFrom(const BlueprintPinInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.BlueprintPinInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool BlueprintPinInfo::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* BlueprintPinInfo::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void BlueprintPinInfo::InternalSwap(BlueprintPinInfo* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.connected_to_.InternalSwap(&other->_impl_.connected_to_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.name_, &other->_impl_.name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.direction_, &other->_impl_.direction_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.type_, &other->_impl_.type_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.type_display_name_, &other->_impl_.type_display_name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.default_value_, &other->_impl_.default_value_, arena);
+        swap(_impl_.is_connected_, other->_impl_.is_connected_);
+}
+
+::google::protobuf_tempo::Metadata BlueprintPinInfo::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[89]);
+}
+// ===================================================================
+
+class BlueprintNodeInfo::_Internal {
+ public:
+};
+
+BlueprintNodeInfo::BlueprintNodeInfo(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.BlueprintNodeInfo)
+}
+inline PROTOBUF_NDEBUG_INLINE BlueprintNodeInfo::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : pins_{visibility, arena, from.pins_},
+        guid_(arena, from.guid_),
+        class_name_(arena, from.class_name_),
+        title_(arena, from.title_),
+        comment_(arena, from.comment_),
+        function_reference_(arena, from.function_reference_),
+        event_name_(arena, from.event_name_),
+        variable_name_(arena, from.variable_name_),
+        _cached_size_{0} {}
+
+BlueprintNodeInfo::BlueprintNodeInfo(
+    ::google::protobuf_tempo::Arena* arena,
+    const BlueprintNodeInfo& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  BlueprintNodeInfo* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, pos_x_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, pos_x_),
+           offsetof(Impl_, pos_y_) -
+               offsetof(Impl_, pos_x_) +
+               sizeof(Impl_::pos_y_));
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.BlueprintNodeInfo)
+}
+inline PROTOBUF_NDEBUG_INLINE BlueprintNodeInfo::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : pins_{visibility, arena},
+        guid_(arena),
+        class_name_(arena),
+        title_(arena),
+        comment_(arena),
+        function_reference_(arena),
+        event_name_(arena),
+        variable_name_(arena),
+        _cached_size_{0} {}
+
+inline void BlueprintNodeInfo::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, pos_x_),
+           0,
+           offsetof(Impl_, pos_y_) -
+               offsetof(Impl_, pos_x_) +
+               sizeof(Impl_::pos_y_));
+}
+BlueprintNodeInfo::~BlueprintNodeInfo() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.BlueprintNodeInfo)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void BlueprintNodeInfo::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.guid_.Destroy();
+  _impl_.class_name_.Destroy();
+  _impl_.title_.Destroy();
+  _impl_.comment_.Destroy();
+  _impl_.function_reference_.Destroy();
+  _impl_.event_name_.Destroy();
+  _impl_.variable_name_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void BlueprintNodeInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.BlueprintNodeInfo)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.pins_.Clear();
+  _impl_.guid_.ClearToEmpty();
+  _impl_.class_name_.ClearToEmpty();
+  _impl_.title_.ClearToEmpty();
+  _impl_.comment_.ClearToEmpty();
+  _impl_.function_reference_.ClearToEmpty();
+  _impl_.event_name_.ClearToEmpty();
+  _impl_.variable_name_.ClearToEmpty();
+  ::memset(&_impl_.pos_x_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.pos_y_) -
+      reinterpret_cast<char*>(&_impl_.pos_x_)) + sizeof(_impl_.pos_y_));
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* BlueprintNodeInfo::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<4, 10, 1, 119, 2> BlueprintNodeInfo::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    10, 120,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294966272,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    10,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_BlueprintNodeInfo_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string guid = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.guid_)}},
+    // string class_name = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.class_name_)}},
+    // string title = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.title_)}},
+    // int32 pos_x = 4;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(BlueprintNodeInfo, _impl_.pos_x_), 63>(),
+     {32, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.pos_x_)}},
+    // int32 pos_y = 5;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(BlueprintNodeInfo, _impl_.pos_y_), 63>(),
+     {40, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.pos_y_)}},
+    // string comment = 6;
+    {::_pbi::TcParser::FastUS1,
+     {50, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.comment_)}},
+    // string function_reference = 7;
+    {::_pbi::TcParser::FastUS1,
+     {58, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.function_reference_)}},
+    // string event_name = 8;
+    {::_pbi::TcParser::FastUS1,
+     {66, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.event_name_)}},
+    // string variable_name = 9;
+    {::_pbi::TcParser::FastUS1,
+     {74, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.variable_name_)}},
+    // repeated .AgentBridgeServer.BlueprintPinInfo pins = 10;
+    {::_pbi::TcParser::FastMtR1,
+     {82, 63, 0, PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.pins_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string guid = 1;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.guid_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string class_name = 2;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.class_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string title = 3;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.title_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // int32 pos_x = 4;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.pos_x_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+    // int32 pos_y = 5;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.pos_y_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+    // string comment = 6;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.comment_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string function_reference = 7;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.function_reference_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string event_name = 8;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.event_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string variable_name = 9;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.variable_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // repeated .AgentBridgeServer.BlueprintPinInfo pins = 10;
+    {PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.pins_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::BlueprintPinInfo>()},
+  }}, {{
+    "\43\4\12\5\0\0\7\22\12\15\0\0\0\0\0\0"
+    "AgentBridgeServer.BlueprintNodeInfo"
+    "guid"
+    "class_name"
+    "title"
+    "comment"
+    "function_reference"
+    "event_name"
+    "variable_name"
+  }},
+};
+
+::uint8_t* BlueprintNodeInfo::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.BlueprintNodeInfo)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string guid = 1;
+  if (!this->_internal_guid().empty()) {
+    const std::string& _s = this->_internal_guid();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintNodeInfo.guid");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string class_name = 2;
+  if (!this->_internal_class_name().empty()) {
+    const std::string& _s = this->_internal_class_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintNodeInfo.class_name");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // string title = 3;
+  if (!this->_internal_title().empty()) {
+    const std::string& _s = this->_internal_title();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintNodeInfo.title");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
+  }
+
+  // int32 pos_x = 4;
+  if (this->_internal_pos_x() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<4>(
+            stream, this->_internal_pos_x(), target);
+  }
+
+  // int32 pos_y = 5;
+  if (this->_internal_pos_y() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<5>(
+            stream, this->_internal_pos_y(), target);
+  }
+
+  // string comment = 6;
+  if (!this->_internal_comment().empty()) {
+    const std::string& _s = this->_internal_comment();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintNodeInfo.comment");
+    target = stream->WriteStringMaybeAliased(6, _s, target);
+  }
+
+  // string function_reference = 7;
+  if (!this->_internal_function_reference().empty()) {
+    const std::string& _s = this->_internal_function_reference();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintNodeInfo.function_reference");
+    target = stream->WriteStringMaybeAliased(7, _s, target);
+  }
+
+  // string event_name = 8;
+  if (!this->_internal_event_name().empty()) {
+    const std::string& _s = this->_internal_event_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintNodeInfo.event_name");
+    target = stream->WriteStringMaybeAliased(8, _s, target);
+  }
+
+  // string variable_name = 9;
+  if (!this->_internal_variable_name().empty()) {
+    const std::string& _s = this->_internal_variable_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.BlueprintNodeInfo.variable_name");
+    target = stream->WriteStringMaybeAliased(9, _s, target);
+  }
+
+  // repeated .AgentBridgeServer.BlueprintPinInfo pins = 10;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_pins_size()); i < n; i++) {
+    const auto& repfield = this->_internal_pins().Get(i);
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        InternalWriteMessage(10, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.BlueprintNodeInfo)
+  return target;
+}
+
+::size_t BlueprintNodeInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.BlueprintNodeInfo)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .AgentBridgeServer.BlueprintPinInfo pins = 10;
+  total_size += 1UL * this->_internal_pins_size();
+  for (const auto& msg : this->_internal_pins()) {
+    total_size +=
+      ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(msg);
+  }
+  // string guid = 1;
+  if (!this->_internal_guid().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_guid());
+  }
+
+  // string class_name = 2;
+  if (!this->_internal_class_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_class_name());
+  }
+
+  // string title = 3;
+  if (!this->_internal_title().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_title());
+  }
+
+  // string comment = 6;
+  if (!this->_internal_comment().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_comment());
+  }
+
+  // string function_reference = 7;
+  if (!this->_internal_function_reference().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_function_reference());
+  }
+
+  // string event_name = 8;
+  if (!this->_internal_event_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_event_name());
+  }
+
+  // string variable_name = 9;
+  if (!this->_internal_variable_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_variable_name());
+  }
+
+  // int32 pos_x = 4;
+  if (this->_internal_pos_x() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_pos_x());
+  }
+
+  // int32 pos_y = 5;
+  if (this->_internal_pos_y() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_pos_y());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData BlueprintNodeInfo::_class_data_ = {
+    BlueprintNodeInfo::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* BlueprintNodeInfo::GetClassData() const {
+  return &_class_data_;
+}
+
+void BlueprintNodeInfo::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<BlueprintNodeInfo*>(&to_msg);
+  auto& from = static_cast<const BlueprintNodeInfo&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.BlueprintNodeInfo)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_pins()->MergeFrom(
+      from._internal_pins());
+  if (!from._internal_guid().empty()) {
+    _this->_internal_set_guid(from._internal_guid());
+  }
+  if (!from._internal_class_name().empty()) {
+    _this->_internal_set_class_name(from._internal_class_name());
+  }
+  if (!from._internal_title().empty()) {
+    _this->_internal_set_title(from._internal_title());
+  }
+  if (!from._internal_comment().empty()) {
+    _this->_internal_set_comment(from._internal_comment());
+  }
+  if (!from._internal_function_reference().empty()) {
+    _this->_internal_set_function_reference(from._internal_function_reference());
+  }
+  if (!from._internal_event_name().empty()) {
+    _this->_internal_set_event_name(from._internal_event_name());
+  }
+  if (!from._internal_variable_name().empty()) {
+    _this->_internal_set_variable_name(from._internal_variable_name());
+  }
+  if (from._internal_pos_x() != 0) {
+    _this->_internal_set_pos_x(from._internal_pos_x());
+  }
+  if (from._internal_pos_y() != 0) {
+    _this->_internal_set_pos_y(from._internal_pos_y());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void BlueprintNodeInfo::CopyFrom(const BlueprintNodeInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.BlueprintNodeInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool BlueprintNodeInfo::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* BlueprintNodeInfo::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void BlueprintNodeInfo::InternalSwap(BlueprintNodeInfo* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.pins_.InternalSwap(&other->_impl_.pins_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.guid_, &other->_impl_.guid_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.class_name_, &other->_impl_.class_name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.title_, &other->_impl_.title_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.comment_, &other->_impl_.comment_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.function_reference_, &other->_impl_.function_reference_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.event_name_, &other->_impl_.event_name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.variable_name_, &other->_impl_.variable_name_, arena);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.pos_y_)
+      + sizeof(BlueprintNodeInfo::_impl_.pos_y_)
+      - PROTOBUF_FIELD_OFFSET(BlueprintNodeInfo, _impl_.pos_x_)>(
+          reinterpret_cast<char*>(&_impl_.pos_x_),
+          reinterpret_cast<char*>(&other->_impl_.pos_x_));
+}
+
+::google::protobuf_tempo::Metadata BlueprintNodeInfo::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[90]);
+}
+// ===================================================================
+
+class CreateBlueprintNodeRequest::_Internal {
+ public:
+};
+
+CreateBlueprintNodeRequest::CreateBlueprintNodeRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.CreateBlueprintNodeRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE CreateBlueprintNodeRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : blueprint_path_(arena, from.blueprint_path_),
+        graph_name_(arena, from.graph_name_),
+        node_type_(arena, from.node_type_),
+        function_reference_(arena, from.function_reference_),
+        event_name_(arena, from.event_name_),
+        variable_name_(arena, from.variable_name_),
+        comment_(arena, from.comment_),
+        _cached_size_{0} {}
+
+CreateBlueprintNodeRequest::CreateBlueprintNodeRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const CreateBlueprintNodeRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  CreateBlueprintNodeRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::memcpy(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, pos_x_),
+           reinterpret_cast<const char *>(&from._impl_) +
+               offsetof(Impl_, pos_x_),
+           offsetof(Impl_, pos_y_) -
+               offsetof(Impl_, pos_x_) +
+               sizeof(Impl_::pos_y_));
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.CreateBlueprintNodeRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE CreateBlueprintNodeRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : blueprint_path_(arena),
+        graph_name_(arena),
+        node_type_(arena),
+        function_reference_(arena),
+        event_name_(arena),
+        variable_name_(arena),
+        comment_(arena),
+        _cached_size_{0} {}
+
+inline void CreateBlueprintNodeRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, pos_x_),
+           0,
+           offsetof(Impl_, pos_y_) -
+               offsetof(Impl_, pos_x_) +
+               sizeof(Impl_::pos_y_));
+}
+CreateBlueprintNodeRequest::~CreateBlueprintNodeRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.CreateBlueprintNodeRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void CreateBlueprintNodeRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.blueprint_path_.Destroy();
+  _impl_.graph_name_.Destroy();
+  _impl_.node_type_.Destroy();
+  _impl_.function_reference_.Destroy();
+  _impl_.event_name_.Destroy();
+  _impl_.variable_name_.Destroy();
+  _impl_.comment_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void CreateBlueprintNodeRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.CreateBlueprintNodeRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.blueprint_path_.ClearToEmpty();
+  _impl_.graph_name_.ClearToEmpty();
+  _impl_.node_type_.ClearToEmpty();
+  _impl_.function_reference_.ClearToEmpty();
+  _impl_.event_name_.ClearToEmpty();
+  _impl_.variable_name_.ClearToEmpty();
+  _impl_.comment_.ClearToEmpty();
+  ::memset(&_impl_.pos_x_, 0, static_cast<::size_t>(
+      reinterpret_cast<char*>(&_impl_.pos_y_) -
+      reinterpret_cast<char*>(&_impl_.pos_x_)) + sizeof(_impl_.pos_y_));
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* CreateBlueprintNodeRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<4, 9, 0, 142, 2> CreateBlueprintNodeRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    9, 120,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294966784,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    9,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_CreateBlueprintNodeRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string blueprint_path = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.blueprint_path_)}},
+    // string graph_name = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.graph_name_)}},
+    // string node_type = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.node_type_)}},
+    // string function_reference = 4;
+    {::_pbi::TcParser::FastUS1,
+     {34, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.function_reference_)}},
+    // string event_name = 5;
+    {::_pbi::TcParser::FastUS1,
+     {42, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.event_name_)}},
+    // string variable_name = 6;
+    {::_pbi::TcParser::FastUS1,
+     {50, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.variable_name_)}},
+    // string comment = 7;
+    {::_pbi::TcParser::FastUS1,
+     {58, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.comment_)}},
+    // int32 pos_x = 8;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(CreateBlueprintNodeRequest, _impl_.pos_x_), 63>(),
+     {64, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.pos_x_)}},
+    // int32 pos_y = 9;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(CreateBlueprintNodeRequest, _impl_.pos_y_), 63>(),
+     {72, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.pos_y_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string blueprint_path = 1;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.blueprint_path_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string graph_name = 2;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.graph_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string node_type = 3;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.node_type_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string function_reference = 4;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.function_reference_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string event_name = 5;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.event_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string variable_name = 6;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.variable_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string comment = 7;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.comment_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // int32 pos_x = 8;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.pos_x_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+    // int32 pos_y = 9;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.pos_y_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kInt32)},
+  }},
+  // no aux_entries
+  {{
+    "\54\16\12\11\22\12\15\7\0\0\0\0\0\0\0\0"
+    "AgentBridgeServer.CreateBlueprintNodeRequest"
+    "blueprint_path"
+    "graph_name"
+    "node_type"
+    "function_reference"
+    "event_name"
+    "variable_name"
+    "comment"
+  }},
+};
+
+::uint8_t* CreateBlueprintNodeRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.CreateBlueprintNodeRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    const std::string& _s = this->_internal_blueprint_path();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.CreateBlueprintNodeRequest.blueprint_path");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string graph_name = 2;
+  if (!this->_internal_graph_name().empty()) {
+    const std::string& _s = this->_internal_graph_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.CreateBlueprintNodeRequest.graph_name");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // string node_type = 3;
+  if (!this->_internal_node_type().empty()) {
+    const std::string& _s = this->_internal_node_type();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.CreateBlueprintNodeRequest.node_type");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
+  }
+
+  // string function_reference = 4;
+  if (!this->_internal_function_reference().empty()) {
+    const std::string& _s = this->_internal_function_reference();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.CreateBlueprintNodeRequest.function_reference");
+    target = stream->WriteStringMaybeAliased(4, _s, target);
+  }
+
+  // string event_name = 5;
+  if (!this->_internal_event_name().empty()) {
+    const std::string& _s = this->_internal_event_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.CreateBlueprintNodeRequest.event_name");
+    target = stream->WriteStringMaybeAliased(5, _s, target);
+  }
+
+  // string variable_name = 6;
+  if (!this->_internal_variable_name().empty()) {
+    const std::string& _s = this->_internal_variable_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.CreateBlueprintNodeRequest.variable_name");
+    target = stream->WriteStringMaybeAliased(6, _s, target);
+  }
+
+  // string comment = 7;
+  if (!this->_internal_comment().empty()) {
+    const std::string& _s = this->_internal_comment();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.CreateBlueprintNodeRequest.comment");
+    target = stream->WriteStringMaybeAliased(7, _s, target);
+  }
+
+  // int32 pos_x = 8;
+  if (this->_internal_pos_x() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<8>(
+            stream, this->_internal_pos_x(), target);
+  }
+
+  // int32 pos_y = 9;
+  if (this->_internal_pos_y() != 0) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        WriteInt32ToArrayWithField<9>(
+            stream, this->_internal_pos_y(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.CreateBlueprintNodeRequest)
+  return target;
+}
+
+::size_t CreateBlueprintNodeRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.CreateBlueprintNodeRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_blueprint_path());
+  }
+
+  // string graph_name = 2;
+  if (!this->_internal_graph_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_graph_name());
+  }
+
+  // string node_type = 3;
+  if (!this->_internal_node_type().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_node_type());
+  }
+
+  // string function_reference = 4;
+  if (!this->_internal_function_reference().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_function_reference());
+  }
+
+  // string event_name = 5;
+  if (!this->_internal_event_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_event_name());
+  }
+
+  // string variable_name = 6;
+  if (!this->_internal_variable_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_variable_name());
+  }
+
+  // string comment = 7;
+  if (!this->_internal_comment().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_comment());
+  }
+
+  // int32 pos_x = 8;
+  if (this->_internal_pos_x() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_pos_x());
+  }
+
+  // int32 pos_y = 9;
+  if (this->_internal_pos_y() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+        this->_internal_pos_y());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData CreateBlueprintNodeRequest::_class_data_ = {
+    CreateBlueprintNodeRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* CreateBlueprintNodeRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void CreateBlueprintNodeRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<CreateBlueprintNodeRequest*>(&to_msg);
+  auto& from = static_cast<const CreateBlueprintNodeRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.CreateBlueprintNodeRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_blueprint_path().empty()) {
+    _this->_internal_set_blueprint_path(from._internal_blueprint_path());
+  }
+  if (!from._internal_graph_name().empty()) {
+    _this->_internal_set_graph_name(from._internal_graph_name());
+  }
+  if (!from._internal_node_type().empty()) {
+    _this->_internal_set_node_type(from._internal_node_type());
+  }
+  if (!from._internal_function_reference().empty()) {
+    _this->_internal_set_function_reference(from._internal_function_reference());
+  }
+  if (!from._internal_event_name().empty()) {
+    _this->_internal_set_event_name(from._internal_event_name());
+  }
+  if (!from._internal_variable_name().empty()) {
+    _this->_internal_set_variable_name(from._internal_variable_name());
+  }
+  if (!from._internal_comment().empty()) {
+    _this->_internal_set_comment(from._internal_comment());
+  }
+  if (from._internal_pos_x() != 0) {
+    _this->_internal_set_pos_x(from._internal_pos_x());
+  }
+  if (from._internal_pos_y() != 0) {
+    _this->_internal_set_pos_y(from._internal_pos_y());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CreateBlueprintNodeRequest::CopyFrom(const CreateBlueprintNodeRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.CreateBlueprintNodeRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool CreateBlueprintNodeRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* CreateBlueprintNodeRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void CreateBlueprintNodeRequest::InternalSwap(CreateBlueprintNodeRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.blueprint_path_, &other->_impl_.blueprint_path_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.graph_name_, &other->_impl_.graph_name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.node_type_, &other->_impl_.node_type_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.function_reference_, &other->_impl_.function_reference_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.event_name_, &other->_impl_.event_name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.variable_name_, &other->_impl_.variable_name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.comment_, &other->_impl_.comment_, arena);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.pos_y_)
+      + sizeof(CreateBlueprintNodeRequest::_impl_.pos_y_)
+      - PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeRequest, _impl_.pos_x_)>(
+          reinterpret_cast<char*>(&_impl_.pos_x_),
+          reinterpret_cast<char*>(&other->_impl_.pos_x_));
+}
+
+::google::protobuf_tempo::Metadata CreateBlueprintNodeRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[91]);
+}
+// ===================================================================
+
+class CreateBlueprintNodeResponse::_Internal {
+ public:
+  using HasBits = decltype(std::declval<CreateBlueprintNodeResponse>()._impl_._has_bits_);
+  static constexpr ::int32_t kHasBitsOffset =
+    8 * PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_._has_bits_);
+  static const ::AgentBridgeServer::BlueprintNodeInfo& node(const CreateBlueprintNodeResponse* msg);
+  static void set_has_node(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
+};
+
+const ::AgentBridgeServer::BlueprintNodeInfo& CreateBlueprintNodeResponse::_Internal::node(const CreateBlueprintNodeResponse* msg) {
+  return *msg->_impl_.node_;
+}
+CreateBlueprintNodeResponse::CreateBlueprintNodeResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.CreateBlueprintNodeResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE CreateBlueprintNodeResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        error_message_(arena, from.error_message_) {}
+
+CreateBlueprintNodeResponse::CreateBlueprintNodeResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const CreateBlueprintNodeResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  CreateBlueprintNodeResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.node_ = (cached_has_bits & 0x00000001u)
+                ? CreateMaybeMessage<::AgentBridgeServer::BlueprintNodeInfo>(arena, *from._impl_.node_)
+                : nullptr;
+  _impl_.success_ = from._impl_.success_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.CreateBlueprintNodeResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE CreateBlueprintNodeResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : _cached_size_{0},
+        error_message_(arena) {}
+
+inline void CreateBlueprintNodeResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  ::memset(reinterpret_cast<char *>(&_impl_) +
+               offsetof(Impl_, node_),
+           0,
+           offsetof(Impl_, success_) -
+               offsetof(Impl_, node_) +
+               sizeof(Impl_::success_));
+}
+CreateBlueprintNodeResponse::~CreateBlueprintNodeResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.CreateBlueprintNodeResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void CreateBlueprintNodeResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.error_message_.Destroy();
+  delete _impl_.node_;
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void CreateBlueprintNodeResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.CreateBlueprintNodeResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.error_message_.ClearToEmpty();
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    ABSL_DCHECK(_impl_.node_ != nullptr);
+    _impl_.node_->Clear();
+  }
+  _impl_.success_ = false;
+  _impl_._has_bits_.Clear();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* CreateBlueprintNodeResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 67, 2> CreateBlueprintNodeResponse::_table_ = {
+  {
+    PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_._has_bits_),
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_CreateBlueprintNodeResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // bool success = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(CreateBlueprintNodeResponse, _impl_.success_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_.success_)}},
+    // string error_message = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_.error_message_)}},
+    // .AgentBridgeServer.BlueprintNodeInfo node = 3;
+    {::_pbi::TcParser::FastMtS1,
+     {26, 0, 0, PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_.node_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // bool success = 1;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_.success_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // string error_message = 2;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_.error_message_), -1, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .AgentBridgeServer.BlueprintNodeInfo node = 3;
+    {PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_.node_), _Internal::kHasBitsOffset + 0, 0,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::BlueprintNodeInfo>()},
+  }}, {{
+    "\55\0\15\0\0\0\0\0"
+    "AgentBridgeServer.CreateBlueprintNodeResponse"
+    "error_message"
+  }},
+};
+
+::uint8_t* CreateBlueprintNodeResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.CreateBlueprintNodeResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        1, this->_internal_success(), target);
+  }
+
+  // string error_message = 2;
+  if (!this->_internal_error_message().empty()) {
+    const std::string& _s = this->_internal_error_message();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.CreateBlueprintNodeResponse.error_message");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  cached_has_bits = _impl_._has_bits_[0];
+  // .AgentBridgeServer.BlueprintNodeInfo node = 3;
+  if (cached_has_bits & 0x00000001u) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::InternalWriteMessage(
+        3, _Internal::node(this),
+        _Internal::node(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.CreateBlueprintNodeResponse)
+  return target;
+}
+
+::size_t CreateBlueprintNodeResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.CreateBlueprintNodeResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string error_message = 2;
+  if (!this->_internal_error_message().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_error_message());
+  }
+
+  // .AgentBridgeServer.BlueprintNodeInfo node = 3;
+  cached_has_bits = _impl_._has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size +=
+        1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.node_);
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 2;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData CreateBlueprintNodeResponse::_class_data_ = {
+    CreateBlueprintNodeResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* CreateBlueprintNodeResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void CreateBlueprintNodeResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<CreateBlueprintNodeResponse*>(&to_msg);
+  auto& from = static_cast<const CreateBlueprintNodeResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.CreateBlueprintNodeResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_error_message().empty()) {
+    _this->_internal_set_error_message(from._internal_error_message());
+  }
+  if ((from._impl_._has_bits_[0] & 0x00000001u) != 0) {
+    _this->_internal_mutable_node()->::AgentBridgeServer::BlueprintNodeInfo::MergeFrom(
+        from._internal_node());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CreateBlueprintNodeResponse::CopyFrom(const CreateBlueprintNodeResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.CreateBlueprintNodeResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool CreateBlueprintNodeResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* CreateBlueprintNodeResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void CreateBlueprintNodeResponse::InternalSwap(CreateBlueprintNodeResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.error_message_, &other->_impl_.error_message_, arena);
+  ::google::protobuf_tempo::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_.success_)
+      + sizeof(CreateBlueprintNodeResponse::_impl_.success_)
+      - PROTOBUF_FIELD_OFFSET(CreateBlueprintNodeResponse, _impl_.node_)>(
+          reinterpret_cast<char*>(&_impl_.node_),
+          reinterpret_cast<char*>(&other->_impl_.node_));
+}
+
+::google::protobuf_tempo::Metadata CreateBlueprintNodeResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[92]);
+}
+// ===================================================================
+
+class ConnectBlueprintPinsRequest::_Internal {
+ public:
+};
+
+ConnectBlueprintPinsRequest::ConnectBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.ConnectBlueprintPinsRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE ConnectBlueprintPinsRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : blueprint_path_(arena, from.blueprint_path_),
+        source_node_(arena, from.source_node_),
+        source_pin_(arena, from.source_pin_),
+        target_node_(arena, from.target_node_),
+        target_pin_(arena, from.target_pin_),
+        _cached_size_{0} {}
+
+ConnectBlueprintPinsRequest::ConnectBlueprintPinsRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const ConnectBlueprintPinsRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  ConnectBlueprintPinsRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.ConnectBlueprintPinsRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE ConnectBlueprintPinsRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : blueprint_path_(arena),
+        source_node_(arena),
+        source_pin_(arena),
+        target_node_(arena),
+        target_pin_(arena),
+        _cached_size_{0} {}
+
+inline void ConnectBlueprintPinsRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+ConnectBlueprintPinsRequest::~ConnectBlueprintPinsRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.ConnectBlueprintPinsRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void ConnectBlueprintPinsRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.blueprint_path_.Destroy();
+  _impl_.source_node_.Destroy();
+  _impl_.source_pin_.Destroy();
+  _impl_.target_node_.Destroy();
+  _impl_.target_pin_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void ConnectBlueprintPinsRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.ConnectBlueprintPinsRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.blueprint_path_.ClearToEmpty();
+  _impl_.source_node_.ClearToEmpty();
+  _impl_.source_pin_.ClearToEmpty();
+  _impl_.target_node_.ClearToEmpty();
+  _impl_.target_pin_.ClearToEmpty();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* ConnectBlueprintPinsRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 5, 0, 110, 2> ConnectBlueprintPinsRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    5, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967264,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    5,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_ConnectBlueprintPinsRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string blueprint_path = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.blueprint_path_)}},
+    // string source_node = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.source_node_)}},
+    // string source_pin = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.source_pin_)}},
+    // string target_node = 4;
+    {::_pbi::TcParser::FastUS1,
+     {34, 63, 0, PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.target_node_)}},
+    // string target_pin = 5;
+    {::_pbi::TcParser::FastUS1,
+     {42, 63, 0, PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.target_pin_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string blueprint_path = 1;
+    {PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.blueprint_path_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string source_node = 2;
+    {PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.source_node_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string source_pin = 3;
+    {PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.source_pin_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string target_node = 4;
+    {PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.target_node_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string target_pin = 5;
+    {PROTOBUF_FIELD_OFFSET(ConnectBlueprintPinsRequest, _impl_.target_pin_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\55\16\13\12\13\12\0\0"
+    "AgentBridgeServer.ConnectBlueprintPinsRequest"
+    "blueprint_path"
+    "source_node"
+    "source_pin"
+    "target_node"
+    "target_pin"
+  }},
+};
+
+::uint8_t* ConnectBlueprintPinsRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.ConnectBlueprintPinsRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    const std::string& _s = this->_internal_blueprint_path();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ConnectBlueprintPinsRequest.blueprint_path");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string source_node = 2;
+  if (!this->_internal_source_node().empty()) {
+    const std::string& _s = this->_internal_source_node();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ConnectBlueprintPinsRequest.source_node");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // string source_pin = 3;
+  if (!this->_internal_source_pin().empty()) {
+    const std::string& _s = this->_internal_source_pin();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ConnectBlueprintPinsRequest.source_pin");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
+  }
+
+  // string target_node = 4;
+  if (!this->_internal_target_node().empty()) {
+    const std::string& _s = this->_internal_target_node();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ConnectBlueprintPinsRequest.target_node");
+    target = stream->WriteStringMaybeAliased(4, _s, target);
+  }
+
+  // string target_pin = 5;
+  if (!this->_internal_target_pin().empty()) {
+    const std::string& _s = this->_internal_target_pin();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ConnectBlueprintPinsRequest.target_pin");
+    target = stream->WriteStringMaybeAliased(5, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.ConnectBlueprintPinsRequest)
+  return target;
+}
+
+::size_t ConnectBlueprintPinsRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.ConnectBlueprintPinsRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_blueprint_path());
+  }
+
+  // string source_node = 2;
+  if (!this->_internal_source_node().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_source_node());
+  }
+
+  // string source_pin = 3;
+  if (!this->_internal_source_pin().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_source_pin());
+  }
+
+  // string target_node = 4;
+  if (!this->_internal_target_node().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_target_node());
+  }
+
+  // string target_pin = 5;
+  if (!this->_internal_target_pin().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_target_pin());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData ConnectBlueprintPinsRequest::_class_data_ = {
+    ConnectBlueprintPinsRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* ConnectBlueprintPinsRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void ConnectBlueprintPinsRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<ConnectBlueprintPinsRequest*>(&to_msg);
+  auto& from = static_cast<const ConnectBlueprintPinsRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.ConnectBlueprintPinsRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_blueprint_path().empty()) {
+    _this->_internal_set_blueprint_path(from._internal_blueprint_path());
+  }
+  if (!from._internal_source_node().empty()) {
+    _this->_internal_set_source_node(from._internal_source_node());
+  }
+  if (!from._internal_source_pin().empty()) {
+    _this->_internal_set_source_pin(from._internal_source_pin());
+  }
+  if (!from._internal_target_node().empty()) {
+    _this->_internal_set_target_node(from._internal_target_node());
+  }
+  if (!from._internal_target_pin().empty()) {
+    _this->_internal_set_target_pin(from._internal_target_pin());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ConnectBlueprintPinsRequest::CopyFrom(const ConnectBlueprintPinsRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.ConnectBlueprintPinsRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool ConnectBlueprintPinsRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* ConnectBlueprintPinsRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ConnectBlueprintPinsRequest::InternalSwap(ConnectBlueprintPinsRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.blueprint_path_, &other->_impl_.blueprint_path_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.source_node_, &other->_impl_.source_node_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.source_pin_, &other->_impl_.source_pin_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.target_node_, &other->_impl_.target_node_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.target_pin_, &other->_impl_.target_pin_, arena);
+}
+
+::google::protobuf_tempo::Metadata ConnectBlueprintPinsRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[93]);
+}
+// ===================================================================
+
+class DisconnectBlueprintPinsRequest::_Internal {
+ public:
+};
+
+DisconnectBlueprintPinsRequest::DisconnectBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE DisconnectBlueprintPinsRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : blueprint_path_(arena, from.blueprint_path_),
+        source_node_(arena, from.source_node_),
+        source_pin_(arena, from.source_pin_),
+        target_node_(arena, from.target_node_),
+        target_pin_(arena, from.target_pin_),
+        _cached_size_{0} {}
+
+DisconnectBlueprintPinsRequest::DisconnectBlueprintPinsRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const DisconnectBlueprintPinsRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  DisconnectBlueprintPinsRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE DisconnectBlueprintPinsRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : blueprint_path_(arena),
+        source_node_(arena),
+        source_pin_(arena),
+        target_node_(arena),
+        target_pin_(arena),
+        _cached_size_{0} {}
+
+inline void DisconnectBlueprintPinsRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+DisconnectBlueprintPinsRequest::~DisconnectBlueprintPinsRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void DisconnectBlueprintPinsRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.blueprint_path_.Destroy();
+  _impl_.source_node_.Destroy();
+  _impl_.source_pin_.Destroy();
+  _impl_.target_node_.Destroy();
+  _impl_.target_pin_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void DisconnectBlueprintPinsRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.blueprint_path_.ClearToEmpty();
+  _impl_.source_node_.ClearToEmpty();
+  _impl_.source_pin_.ClearToEmpty();
+  _impl_.target_node_.ClearToEmpty();
+  _impl_.target_pin_.ClearToEmpty();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* DisconnectBlueprintPinsRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<3, 5, 0, 113, 2> DisconnectBlueprintPinsRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    5, 56,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967264,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    5,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_DisconnectBlueprintPinsRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string blueprint_path = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.blueprint_path_)}},
+    // string source_node = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.source_node_)}},
+    // string source_pin = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.source_pin_)}},
+    // string target_node = 4;
+    {::_pbi::TcParser::FastUS1,
+     {34, 63, 0, PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.target_node_)}},
+    // string target_pin = 5;
+    {::_pbi::TcParser::FastUS1,
+     {42, 63, 0, PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.target_pin_)}},
+    {::_pbi::TcParser::MiniParse, {}},
+    {::_pbi::TcParser::MiniParse, {}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string blueprint_path = 1;
+    {PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.blueprint_path_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string source_node = 2;
+    {PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.source_node_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string source_pin = 3;
+    {PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.source_pin_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string target_node = 4;
+    {PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.target_node_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string target_pin = 5;
+    {PROTOBUF_FIELD_OFFSET(DisconnectBlueprintPinsRequest, _impl_.target_pin_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\60\16\13\12\13\12\0\0"
+    "AgentBridgeServer.DisconnectBlueprintPinsRequest"
+    "blueprint_path"
+    "source_node"
+    "source_pin"
+    "target_node"
+    "target_pin"
+  }},
+};
+
+::uint8_t* DisconnectBlueprintPinsRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    const std::string& _s = this->_internal_blueprint_path();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.DisconnectBlueprintPinsRequest.blueprint_path");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string source_node = 2;
+  if (!this->_internal_source_node().empty()) {
+    const std::string& _s = this->_internal_source_node();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.DisconnectBlueprintPinsRequest.source_node");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // string source_pin = 3;
+  if (!this->_internal_source_pin().empty()) {
+    const std::string& _s = this->_internal_source_pin();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.DisconnectBlueprintPinsRequest.source_pin");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
+  }
+
+  // string target_node = 4;
+  if (!this->_internal_target_node().empty()) {
+    const std::string& _s = this->_internal_target_node();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.DisconnectBlueprintPinsRequest.target_node");
+    target = stream->WriteStringMaybeAliased(4, _s, target);
+  }
+
+  // string target_pin = 5;
+  if (!this->_internal_target_pin().empty()) {
+    const std::string& _s = this->_internal_target_pin();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.DisconnectBlueprintPinsRequest.target_pin");
+    target = stream->WriteStringMaybeAliased(5, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+  return target;
+}
+
+::size_t DisconnectBlueprintPinsRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_blueprint_path());
+  }
+
+  // string source_node = 2;
+  if (!this->_internal_source_node().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_source_node());
+  }
+
+  // string source_pin = 3;
+  if (!this->_internal_source_pin().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_source_pin());
+  }
+
+  // string target_node = 4;
+  if (!this->_internal_target_node().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_target_node());
+  }
+
+  // string target_pin = 5;
+  if (!this->_internal_target_pin().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_target_pin());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData DisconnectBlueprintPinsRequest::_class_data_ = {
+    DisconnectBlueprintPinsRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* DisconnectBlueprintPinsRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void DisconnectBlueprintPinsRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<DisconnectBlueprintPinsRequest*>(&to_msg);
+  auto& from = static_cast<const DisconnectBlueprintPinsRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_blueprint_path().empty()) {
+    _this->_internal_set_blueprint_path(from._internal_blueprint_path());
+  }
+  if (!from._internal_source_node().empty()) {
+    _this->_internal_set_source_node(from._internal_source_node());
+  }
+  if (!from._internal_source_pin().empty()) {
+    _this->_internal_set_source_pin(from._internal_source_pin());
+  }
+  if (!from._internal_target_node().empty()) {
+    _this->_internal_set_target_node(from._internal_target_node());
+  }
+  if (!from._internal_target_pin().empty()) {
+    _this->_internal_set_target_pin(from._internal_target_pin());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void DisconnectBlueprintPinsRequest::CopyFrom(const DisconnectBlueprintPinsRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.DisconnectBlueprintPinsRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool DisconnectBlueprintPinsRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* DisconnectBlueprintPinsRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DisconnectBlueprintPinsRequest::InternalSwap(DisconnectBlueprintPinsRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.blueprint_path_, &other->_impl_.blueprint_path_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.source_node_, &other->_impl_.source_node_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.source_pin_, &other->_impl_.source_pin_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.target_node_, &other->_impl_.target_node_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.target_pin_, &other->_impl_.target_pin_, arena);
+}
+
+::google::protobuf_tempo::Metadata DisconnectBlueprintPinsRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[94]);
+}
+// ===================================================================
+
+class DeleteBlueprintNodeRequest::_Internal {
+ public:
+};
+
+DeleteBlueprintNodeRequest::DeleteBlueprintNodeRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.DeleteBlueprintNodeRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE DeleteBlueprintNodeRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : blueprint_path_(arena, from.blueprint_path_),
+        node_id_(arena, from.node_id_),
+        _cached_size_{0} {}
+
+DeleteBlueprintNodeRequest::DeleteBlueprintNodeRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const DeleteBlueprintNodeRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  DeleteBlueprintNodeRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.DeleteBlueprintNodeRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE DeleteBlueprintNodeRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : blueprint_path_(arena),
+        node_id_(arena),
+        _cached_size_{0} {}
+
+inline void DeleteBlueprintNodeRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+DeleteBlueprintNodeRequest::~DeleteBlueprintNodeRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.DeleteBlueprintNodeRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void DeleteBlueprintNodeRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.blueprint_path_.Destroy();
+  _impl_.node_id_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void DeleteBlueprintNodeRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.DeleteBlueprintNodeRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.blueprint_path_.ClearToEmpty();
+  _impl_.node_id_.ClearToEmpty();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* DeleteBlueprintNodeRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 74, 2> DeleteBlueprintNodeRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_DeleteBlueprintNodeRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string node_id = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(DeleteBlueprintNodeRequest, _impl_.node_id_)}},
+    // string blueprint_path = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(DeleteBlueprintNodeRequest, _impl_.blueprint_path_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string blueprint_path = 1;
+    {PROTOBUF_FIELD_OFFSET(DeleteBlueprintNodeRequest, _impl_.blueprint_path_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string node_id = 2;
+    {PROTOBUF_FIELD_OFFSET(DeleteBlueprintNodeRequest, _impl_.node_id_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\54\16\7\0\0\0\0\0"
+    "AgentBridgeServer.DeleteBlueprintNodeRequest"
+    "blueprint_path"
+    "node_id"
+  }},
+};
+
+::uint8_t* DeleteBlueprintNodeRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.DeleteBlueprintNodeRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    const std::string& _s = this->_internal_blueprint_path();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.DeleteBlueprintNodeRequest.blueprint_path");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string node_id = 2;
+  if (!this->_internal_node_id().empty()) {
+    const std::string& _s = this->_internal_node_id();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.DeleteBlueprintNodeRequest.node_id");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.DeleteBlueprintNodeRequest)
+  return target;
+}
+
+::size_t DeleteBlueprintNodeRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.DeleteBlueprintNodeRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_blueprint_path());
+  }
+
+  // string node_id = 2;
+  if (!this->_internal_node_id().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_node_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData DeleteBlueprintNodeRequest::_class_data_ = {
+    DeleteBlueprintNodeRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* DeleteBlueprintNodeRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void DeleteBlueprintNodeRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<DeleteBlueprintNodeRequest*>(&to_msg);
+  auto& from = static_cast<const DeleteBlueprintNodeRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.DeleteBlueprintNodeRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_blueprint_path().empty()) {
+    _this->_internal_set_blueprint_path(from._internal_blueprint_path());
+  }
+  if (!from._internal_node_id().empty()) {
+    _this->_internal_set_node_id(from._internal_node_id());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void DeleteBlueprintNodeRequest::CopyFrom(const DeleteBlueprintNodeRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.DeleteBlueprintNodeRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool DeleteBlueprintNodeRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* DeleteBlueprintNodeRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void DeleteBlueprintNodeRequest::InternalSwap(DeleteBlueprintNodeRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.blueprint_path_, &other->_impl_.blueprint_path_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.node_id_, &other->_impl_.node_id_, arena);
+}
+
+::google::protobuf_tempo::Metadata DeleteBlueprintNodeRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[95]);
+}
+// ===================================================================
+
+class ListBlueprintNodesRequest::_Internal {
+ public:
+};
+
+ListBlueprintNodesRequest::ListBlueprintNodesRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.ListBlueprintNodesRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE ListBlueprintNodesRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : blueprint_path_(arena, from.blueprint_path_),
+        graph_name_(arena, from.graph_name_),
+        node_class_filter_(arena, from.node_class_filter_),
+        _cached_size_{0} {}
+
+ListBlueprintNodesRequest::ListBlueprintNodesRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const ListBlueprintNodesRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  ListBlueprintNodesRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.ListBlueprintNodesRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE ListBlueprintNodesRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : blueprint_path_(arena),
+        graph_name_(arena),
+        node_class_filter_(arena),
+        _cached_size_{0} {}
+
+inline void ListBlueprintNodesRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+ListBlueprintNodesRequest::~ListBlueprintNodesRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.ListBlueprintNodesRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void ListBlueprintNodesRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.blueprint_path_.Destroy();
+  _impl_.graph_name_.Destroy();
+  _impl_.node_class_filter_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void ListBlueprintNodesRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.ListBlueprintNodesRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.blueprint_path_.ClearToEmpty();
+  _impl_.graph_name_.ClearToEmpty();
+  _impl_.node_class_filter_.ClearToEmpty();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* ListBlueprintNodesRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 0, 93, 2> ListBlueprintNodesRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_ListBlueprintNodesRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // string blueprint_path = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintNodesRequest, _impl_.blueprint_path_)}},
+    // string graph_name = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintNodesRequest, _impl_.graph_name_)}},
+    // string node_class_filter = 3;
+    {::_pbi::TcParser::FastUS1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintNodesRequest, _impl_.node_class_filter_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string blueprint_path = 1;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintNodesRequest, _impl_.blueprint_path_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string graph_name = 2;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintNodesRequest, _impl_.graph_name_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string node_class_filter = 3;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintNodesRequest, _impl_.node_class_filter_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\53\16\12\21\0\0\0\0"
+    "AgentBridgeServer.ListBlueprintNodesRequest"
+    "blueprint_path"
+    "graph_name"
+    "node_class_filter"
+  }},
+};
+
+::uint8_t* ListBlueprintNodesRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.ListBlueprintNodesRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    const std::string& _s = this->_internal_blueprint_path();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ListBlueprintNodesRequest.blueprint_path");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string graph_name = 2;
+  if (!this->_internal_graph_name().empty()) {
+    const std::string& _s = this->_internal_graph_name();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ListBlueprintNodesRequest.graph_name");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // string node_class_filter = 3;
+  if (!this->_internal_node_class_filter().empty()) {
+    const std::string& _s = this->_internal_node_class_filter();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ListBlueprintNodesRequest.node_class_filter");
+    target = stream->WriteStringMaybeAliased(3, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.ListBlueprintNodesRequest)
+  return target;
+}
+
+::size_t ListBlueprintNodesRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.ListBlueprintNodesRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_blueprint_path());
+  }
+
+  // string graph_name = 2;
+  if (!this->_internal_graph_name().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_graph_name());
+  }
+
+  // string node_class_filter = 3;
+  if (!this->_internal_node_class_filter().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_node_class_filter());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData ListBlueprintNodesRequest::_class_data_ = {
+    ListBlueprintNodesRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* ListBlueprintNodesRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void ListBlueprintNodesRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<ListBlueprintNodesRequest*>(&to_msg);
+  auto& from = static_cast<const ListBlueprintNodesRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.ListBlueprintNodesRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_blueprint_path().empty()) {
+    _this->_internal_set_blueprint_path(from._internal_blueprint_path());
+  }
+  if (!from._internal_graph_name().empty()) {
+    _this->_internal_set_graph_name(from._internal_graph_name());
+  }
+  if (!from._internal_node_class_filter().empty()) {
+    _this->_internal_set_node_class_filter(from._internal_node_class_filter());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListBlueprintNodesRequest::CopyFrom(const ListBlueprintNodesRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.ListBlueprintNodesRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool ListBlueprintNodesRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* ListBlueprintNodesRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ListBlueprintNodesRequest::InternalSwap(ListBlueprintNodesRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.blueprint_path_, &other->_impl_.blueprint_path_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.graph_name_, &other->_impl_.graph_name_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.node_class_filter_, &other->_impl_.node_class_filter_, arena);
+}
+
+::google::protobuf_tempo::Metadata ListBlueprintNodesRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[96]);
+}
+// ===================================================================
+
+class ListBlueprintNodesResponse::_Internal {
+ public:
+};
+
+ListBlueprintNodesResponse::ListBlueprintNodesResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.ListBlueprintNodesResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE ListBlueprintNodesResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : nodes_{visibility, arena, from.nodes_},
+        error_message_(arena, from.error_message_),
+        _cached_size_{0} {}
+
+ListBlueprintNodesResponse::ListBlueprintNodesResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const ListBlueprintNodesResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  ListBlueprintNodesResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.success_ = from._impl_.success_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.ListBlueprintNodesResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE ListBlueprintNodesResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : nodes_{visibility, arena},
+        error_message_(arena),
+        _cached_size_{0} {}
+
+inline void ListBlueprintNodesResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.success_ = {};
+}
+ListBlueprintNodesResponse::~ListBlueprintNodesResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.ListBlueprintNodesResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void ListBlueprintNodesResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.error_message_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void ListBlueprintNodesResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.ListBlueprintNodesResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.nodes_.Clear();
+  _impl_.error_message_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* ListBlueprintNodesResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 66, 2> ListBlueprintNodesResponse::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ListBlueprintNodesResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // bool success = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ListBlueprintNodesResponse, _impl_.success_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintNodesResponse, _impl_.success_)}},
+    // string error_message = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintNodesResponse, _impl_.error_message_)}},
+    // repeated .AgentBridgeServer.BlueprintNodeInfo nodes = 3;
+    {::_pbi::TcParser::FastMtR1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintNodesResponse, _impl_.nodes_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // bool success = 1;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintNodesResponse, _impl_.success_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // string error_message = 2;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintNodesResponse, _impl_.error_message_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // repeated .AgentBridgeServer.BlueprintNodeInfo nodes = 3;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintNodesResponse, _impl_.nodes_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::BlueprintNodeInfo>()},
+  }}, {{
+    "\54\0\15\0\0\0\0\0"
+    "AgentBridgeServer.ListBlueprintNodesResponse"
+    "error_message"
+  }},
+};
+
+::uint8_t* ListBlueprintNodesResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.ListBlueprintNodesResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        1, this->_internal_success(), target);
+  }
+
+  // string error_message = 2;
+  if (!this->_internal_error_message().empty()) {
+    const std::string& _s = this->_internal_error_message();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ListBlueprintNodesResponse.error_message");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // repeated .AgentBridgeServer.BlueprintNodeInfo nodes = 3;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_nodes_size()); i < n; i++) {
+    const auto& repfield = this->_internal_nodes().Get(i);
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        InternalWriteMessage(3, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.ListBlueprintNodesResponse)
+  return target;
+}
+
+::size_t ListBlueprintNodesResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.ListBlueprintNodesResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .AgentBridgeServer.BlueprintNodeInfo nodes = 3;
+  total_size += 1UL * this->_internal_nodes_size();
+  for (const auto& msg : this->_internal_nodes()) {
+    total_size +=
+      ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(msg);
+  }
+  // string error_message = 2;
+  if (!this->_internal_error_message().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_error_message());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 2;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData ListBlueprintNodesResponse::_class_data_ = {
+    ListBlueprintNodesResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* ListBlueprintNodesResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void ListBlueprintNodesResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<ListBlueprintNodesResponse*>(&to_msg);
+  auto& from = static_cast<const ListBlueprintNodesResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.ListBlueprintNodesResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_nodes()->MergeFrom(
+      from._internal_nodes());
+  if (!from._internal_error_message().empty()) {
+    _this->_internal_set_error_message(from._internal_error_message());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListBlueprintNodesResponse::CopyFrom(const ListBlueprintNodesResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.ListBlueprintNodesResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool ListBlueprintNodesResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* ListBlueprintNodesResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ListBlueprintNodesResponse::InternalSwap(ListBlueprintNodesResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.nodes_.InternalSwap(&other->_impl_.nodes_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.error_message_, &other->_impl_.error_message_, arena);
+        swap(_impl_.success_, other->_impl_.success_);
+}
+
+::google::protobuf_tempo::Metadata ListBlueprintNodesResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[97]);
+}
+// ===================================================================
+
+class ListBlueprintPinsRequest::_Internal {
+ public:
+};
+
+ListBlueprintPinsRequest::ListBlueprintPinsRequest(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.ListBlueprintPinsRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE ListBlueprintPinsRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : blueprint_path_(arena, from.blueprint_path_),
+        node_id_(arena, from.node_id_),
+        _cached_size_{0} {}
+
+ListBlueprintPinsRequest::ListBlueprintPinsRequest(
+    ::google::protobuf_tempo::Arena* arena,
+    const ListBlueprintPinsRequest& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  ListBlueprintPinsRequest* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.ListBlueprintPinsRequest)
+}
+inline PROTOBUF_NDEBUG_INLINE ListBlueprintPinsRequest::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : blueprint_path_(arena),
+        node_id_(arena),
+        _cached_size_{0} {}
+
+inline void ListBlueprintPinsRequest::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+}
+ListBlueprintPinsRequest::~ListBlueprintPinsRequest() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.ListBlueprintPinsRequest)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void ListBlueprintPinsRequest::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.blueprint_path_.Destroy();
+  _impl_.node_id_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void ListBlueprintPinsRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.ListBlueprintPinsRequest)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.blueprint_path_.ClearToEmpty();
+  _impl_.node_id_.ClearToEmpty();
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* ListBlueprintPinsRequest::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<1, 2, 0, 72, 2> ListBlueprintPinsRequest::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    2, 8,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967292,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    2,  // num_field_entries
+    0,  // num_aux_entries
+    offsetof(decltype(_table_), field_names),  // no aux_entries
+    &_ListBlueprintPinsRequest_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    // string node_id = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintPinsRequest, _impl_.node_id_)}},
+    // string blueprint_path = 1;
+    {::_pbi::TcParser::FastUS1,
+     {10, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintPinsRequest, _impl_.blueprint_path_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // string blueprint_path = 1;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintPinsRequest, _impl_.blueprint_path_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string node_id = 2;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintPinsRequest, _impl_.node_id_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+  }},
+  // no aux_entries
+  {{
+    "\52\16\7\0\0\0\0\0"
+    "AgentBridgeServer.ListBlueprintPinsRequest"
+    "blueprint_path"
+    "node_id"
+  }},
+};
+
+::uint8_t* ListBlueprintPinsRequest::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.ListBlueprintPinsRequest)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    const std::string& _s = this->_internal_blueprint_path();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ListBlueprintPinsRequest.blueprint_path");
+    target = stream->WriteStringMaybeAliased(1, _s, target);
+  }
+
+  // string node_id = 2;
+  if (!this->_internal_node_id().empty()) {
+    const std::string& _s = this->_internal_node_id();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ListBlueprintPinsRequest.node_id");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.ListBlueprintPinsRequest)
+  return target;
+}
+
+::size_t ListBlueprintPinsRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.ListBlueprintPinsRequest)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string blueprint_path = 1;
+  if (!this->_internal_blueprint_path().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_blueprint_path());
+  }
+
+  // string node_id = 2;
+  if (!this->_internal_node_id().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_node_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData ListBlueprintPinsRequest::_class_data_ = {
+    ListBlueprintPinsRequest::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* ListBlueprintPinsRequest::GetClassData() const {
+  return &_class_data_;
+}
+
+void ListBlueprintPinsRequest::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<ListBlueprintPinsRequest*>(&to_msg);
+  auto& from = static_cast<const ListBlueprintPinsRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.ListBlueprintPinsRequest)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_blueprint_path().empty()) {
+    _this->_internal_set_blueprint_path(from._internal_blueprint_path());
+  }
+  if (!from._internal_node_id().empty()) {
+    _this->_internal_set_node_id(from._internal_node_id());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListBlueprintPinsRequest::CopyFrom(const ListBlueprintPinsRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.ListBlueprintPinsRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool ListBlueprintPinsRequest::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* ListBlueprintPinsRequest::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ListBlueprintPinsRequest::InternalSwap(ListBlueprintPinsRequest* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.blueprint_path_, &other->_impl_.blueprint_path_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.node_id_, &other->_impl_.node_id_, arena);
+}
+
+::google::protobuf_tempo::Metadata ListBlueprintPinsRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[98]);
+}
+// ===================================================================
+
+class ListBlueprintPinsResponse::_Internal {
+ public:
+};
+
+ListBlueprintPinsResponse::ListBlueprintPinsResponse(::google::protobuf_tempo::Arena* arena)
+    : ::google::protobuf_tempo::Message(arena) {
+  SharedCtor(arena);
+  // @@protoc_insertion_point(arena_constructor:AgentBridgeServer.ListBlueprintPinsResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE ListBlueprintPinsResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility, ::google::protobuf_tempo::Arena* arena,
+    const Impl_& from)
+      : pins_{visibility, arena, from.pins_},
+        error_message_(arena, from.error_message_),
+        _cached_size_{0} {}
+
+ListBlueprintPinsResponse::ListBlueprintPinsResponse(
+    ::google::protobuf_tempo::Arena* arena,
+    const ListBlueprintPinsResponse& from)
+    : ::google::protobuf_tempo::Message(arena) {
+  ListBlueprintPinsResponse* const _this = this;
+  (void)_this;
+  _internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(
+      from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_);
+  _impl_.success_ = from._impl_.success_;
+
+  // @@protoc_insertion_point(copy_constructor:AgentBridgeServer.ListBlueprintPinsResponse)
+}
+inline PROTOBUF_NDEBUG_INLINE ListBlueprintPinsResponse::Impl_::Impl_(
+    ::google::protobuf_tempo::internal::InternalVisibility visibility,
+    ::google::protobuf_tempo::Arena* arena)
+      : pins_{visibility, arena},
+        error_message_(arena),
+        _cached_size_{0} {}
+
+inline void ListBlueprintPinsResponse::SharedCtor(::_pb::Arena* arena) {
+  new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.success_ = {};
+}
+ListBlueprintPinsResponse::~ListBlueprintPinsResponse() {
+  // @@protoc_insertion_point(destructor:AgentBridgeServer.ListBlueprintPinsResponse)
+  _internal_metadata_.Delete<::google::protobuf_tempo::UnknownFieldSet>();
+  SharedDtor();
+}
+inline void ListBlueprintPinsResponse::SharedDtor() {
+  ABSL_DCHECK(GetArena() == nullptr);
+  _impl_.error_message_.Destroy();
+  _impl_.~Impl_();
+}
+
+PROTOBUF_NOINLINE void ListBlueprintPinsResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:AgentBridgeServer.ListBlueprintPinsResponse)
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.pins_.Clear();
+  _impl_.error_message_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::google::protobuf_tempo::UnknownFieldSet>();
+}
+
+const char* ListBlueprintPinsResponse::_InternalParse(
+    const char* ptr, ::_pbi::ParseContext* ctx) {
+  ptr = ::_pbi::TcParser::ParseLoop(this, ptr, ctx, &_table_.header);
+  return ptr;
+}
+
+
+PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
+const ::_pbi::TcParseTable<2, 3, 1, 65, 2> ListBlueprintPinsResponse::_table_ = {
+  {
+    0,  // no _has_bits_
+    0, // no _extensions_
+    3, 24,  // max_field_number, fast_idx_mask
+    offsetof(decltype(_table_), field_lookup_table),
+    4294967288,  // skipmap
+    offsetof(decltype(_table_), field_entries),
+    3,  // num_field_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
+    &_ListBlueprintPinsResponse_default_instance_._instance,
+    ::_pbi::TcParser::GenericFallback,  // fallback
+  }, {{
+    {::_pbi::TcParser::MiniParse, {}},
+    // bool success = 1;
+    {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(ListBlueprintPinsResponse, _impl_.success_), 63>(),
+     {8, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintPinsResponse, _impl_.success_)}},
+    // string error_message = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintPinsResponse, _impl_.error_message_)}},
+    // repeated .AgentBridgeServer.BlueprintPinInfo pins = 3;
+    {::_pbi::TcParser::FastMtR1,
+     {26, 63, 0, PROTOBUF_FIELD_OFFSET(ListBlueprintPinsResponse, _impl_.pins_)}},
+  }}, {{
+    65535, 65535
+  }}, {{
+    // bool success = 1;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintPinsResponse, _impl_.success_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kBool)},
+    // string error_message = 2;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintPinsResponse, _impl_.error_message_), 0, 0,
+    (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // repeated .AgentBridgeServer.BlueprintPinInfo pins = 3;
+    {PROTOBUF_FIELD_OFFSET(ListBlueprintPinsResponse, _impl_.pins_), 0, 0,
+    (0 | ::_fl::kFcRepeated | ::_fl::kMessage | ::_fl::kTvTable)},
+  }}, {{
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::BlueprintPinInfo>()},
+  }}, {{
+    "\53\0\15\0\0\0\0\0"
+    "AgentBridgeServer.ListBlueprintPinsResponse"
+    "error_message"
+  }},
+};
+
+::uint8_t* ListBlueprintPinsResponse::_InternalSerialize(
+    ::uint8_t* target,
+    ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:AgentBridgeServer.ListBlueprintPinsResponse)
+  ::uint32_t cached_has_bits = 0;
+  (void)cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(
+        1, this->_internal_success(), target);
+  }
+
+  // string error_message = 2;
+  if (!this->_internal_error_message().empty()) {
+    const std::string& _s = this->_internal_error_message();
+    ::google::protobuf_tempo::internal::WireFormatLite::VerifyUtf8String(
+        _s.data(), static_cast<int>(_s.length()), ::google::protobuf_tempo::internal::WireFormatLite::SERIALIZE, "AgentBridgeServer.ListBlueprintPinsResponse.error_message");
+    target = stream->WriteStringMaybeAliased(2, _s, target);
+  }
+
+  // repeated .AgentBridgeServer.BlueprintPinInfo pins = 3;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_pins_size()); i < n; i++) {
+    const auto& repfield = this->_internal_pins().Get(i);
+    target = ::google::protobuf_tempo::internal::WireFormatLite::
+        InternalWriteMessage(3, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target =
+        ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+            _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:AgentBridgeServer.ListBlueprintPinsResponse)
+  return target;
+}
+
+::size_t ListBlueprintPinsResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:AgentBridgeServer.ListBlueprintPinsResponse)
+  ::size_t total_size = 0;
+
+  ::uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .AgentBridgeServer.BlueprintPinInfo pins = 3;
+  total_size += 1UL * this->_internal_pins_size();
+  for (const auto& msg : this->_internal_pins()) {
+    total_size +=
+      ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(msg);
+  }
+  // string error_message = 2;
+  if (!this->_internal_error_message().empty()) {
+    total_size += 1 + ::google::protobuf_tempo::internal::WireFormatLite::StringSize(
+                                    this->_internal_error_message());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 2;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::google::protobuf_tempo::Message::ClassData ListBlueprintPinsResponse::_class_data_ = {
+    ListBlueprintPinsResponse::MergeImpl,
+    nullptr,  // OnDemandRegisterArenaDtor
+};
+const ::google::protobuf_tempo::Message::ClassData* ListBlueprintPinsResponse::GetClassData() const {
+  return &_class_data_;
+}
+
+void ListBlueprintPinsResponse::MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg) {
+  auto* const _this = static_cast<ListBlueprintPinsResponse*>(&to_msg);
+  auto& from = static_cast<const ListBlueprintPinsResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:AgentBridgeServer.ListBlueprintPinsResponse)
+  ABSL_DCHECK_NE(&from, _this);
+  ::uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_internal_mutable_pins()->MergeFrom(
+      from._internal_pins());
+  if (!from._internal_error_message().empty()) {
+    _this->_internal_set_error_message(from._internal_error_message());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::google::protobuf_tempo::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListBlueprintPinsResponse::CopyFrom(const ListBlueprintPinsResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:AgentBridgeServer.ListBlueprintPinsResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+PROTOBUF_NOINLINE bool ListBlueprintPinsResponse::IsInitialized() const {
+  return true;
+}
+
+::_pbi::CachedSize* ListBlueprintPinsResponse::AccessCachedSize() const {
+  return &_impl_._cached_size_;
+}
+void ListBlueprintPinsResponse::InternalSwap(ListBlueprintPinsResponse* PROTOBUF_RESTRICT other) {
+  using std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.pins_.InternalSwap(&other->_impl_.pins_);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.error_message_, &other->_impl_.error_message_, arena);
+        swap(_impl_.success_, other->_impl_.success_);
+}
+
+::google::protobuf_tempo::Metadata ListBlueprintPinsResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_getter, &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
+      file_level_metadata_AgentBridgeServer_2fAgentBridge_2eproto[99]);
 }
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace AgentBridgeServer
