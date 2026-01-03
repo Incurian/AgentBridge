@@ -758,3 +758,48 @@ save_asset('/Game/MyPCG')
 - **Full programmatic PCG graph creation** - No more "duplicate and modify"
 - **Dynamic level generation** - Agents can create custom PCG pipelines
 - **Biome system creation** - Combine with DataAsset property setting for complete biome setup
+
+---
+
+## PCG Pin Label Discovery (2026-01-02)
+
+**Problem:** Initial AddEdge attempts failed silently because we guessed wrong pin labels.
+
+**Finding:** Pin labels are NOT what you'd expect:
+
+| Node Type | Pin Direction | Expected Label | Actual Label |
+|-----------|---------------|----------------|--------------|
+| InputNode | Output | "Out" | **"In"** |
+| OutputNode | Input | "In" | **"Out"** |
+| SurfaceSampler | First Input | "In" | **"Surface"** |
+| StaticMeshSpawner | Input | "Surface" | **"In"** |
+
+**How to query pin labels:**
+```python
+# Get pin object paths
+pins = get_property(node_path, 'OutputPins')  # or InputPins
+
+# For each pin, get its label
+for pin in pins:
+    label = get_property(pin_path, 'Properties.Label')
+```
+
+**Correct edge syntax:**
+```python
+# Input -> SurfaceSampler
+AddEdge(From=InputNode, FromPinLabel="In", To=Sampler, ToPinLabel="Surface")
+
+# SurfaceSampler -> StaticMeshSpawner  
+AddEdge(From=Sampler, FromPinLabel="Out", To=Spawner, ToPinLabel="In")
+
+# StaticMeshSpawner -> OutputNode
+AddEdge(From=Spawner, FromPinLabel="Out", To=OutputNode, ToPinLabel="Out")
+```
+
+**Node Positioning:**
+```python
+# Use SetNodePosition to spread nodes apart
+call_asset_function(node_path, 'SetNodePosition', {'InPositionX': 400, 'InPositionY': 0})
+```
+
+**Key takeaway:** Always query actual pin labels rather than guessing. Different node types use different naming conventions.
