@@ -15,15 +15,7 @@ from TempoScripting import Empty_pb2
 
 
 TOOLS = [
-    {
-        "name": "tempo_run_zone_graph_builder",
-        "description": "Run the Tempo Zone Graph Builder pipeline to generate navigation zones for AI agents.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "tempo_run_zone_graph_builder", "description": "Run the Tempo Zone Graph Builder pipeline to generate navigation zones for AI agents.", "inputSchema": {"type": "object"}},
 ]
 
 

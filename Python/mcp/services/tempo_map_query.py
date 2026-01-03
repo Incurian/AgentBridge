@@ -33,96 +33,9 @@ LANE_ACCESSIBILITY_NAMES = {
 
 
 TOOLS = [
-    {
-        "name": "tempo_get_lanes",
-        "description": "Get lane data (center points, width, connections) within a radius of a point.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "center": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Center point [X, Y] for search",
-                    "minItems": 2,
-                    "maxItems": 2,
-                },
-                "radius": {
-                    "type": "number",
-                    "description": "Search radius in Unreal units (cm)",
-                },
-                "any_tags": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "Include lanes with any of these tags",
-                },
-                "all_tags": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "Include only lanes with all of these tags",
-                },
-                "none_tags": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "Exclude lanes with any of these tags",
-                },
-            },
-            "required": ["center", "radius"],
-        },
-    },
-    {
-        "name": "tempo_get_lane_accessibility",
-        "description": "Check accessibility between two lanes (traffic light status, signs).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "from_id": {
-                    "type": "integer",
-                    "description": "Source lane ID",
-                },
-                "to_id": {
-                    "type": "integer",
-                    "description": "Destination lane ID",
-                },
-            },
-            "required": ["from_id", "to_id"],
-        },
-    },
-    {
-        "name": "tempo_get_zones",
-        "description": "Get zone data (boundaries, connections) within a radius of a point.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "center": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Center point [X, Y, Z] for search",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "radius": {
-                    "type": "number",
-                    "description": "Search radius in Unreal units (cm)",
-                },
-                "any_tags": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "Include zones with any of these tags",
-                },
-                "all_tags": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "Include only zones with all of these tags",
-                },
-                "none_tags": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "Exclude zones with any of these tags",
-                },
-            },
-            "required": ["center", "radius"],
-        },
-    },
+    {"name": "tempo_get_lanes", "description": "Get lane data (center points, width, connections) within a radius of a point.", "inputSchema": {"type": "object", "properties": {"center": {"type": "array"}, "radius": {"type": "number"}, "any_tags": {"type": "array"}, "all_tags": {"type": "array"}, "none_tags": {"type": "array"}}, "required": ["center", "radius"]}},
+    {"name": "tempo_get_lane_accessibility", "description": "Check accessibility between two lanes (traffic light status, signs).", "inputSchema": {"type": "object", "properties": {"from_id": {"type": "integer"}, "to_id": {"type": "integer"}}, "required": ["from_id", "to_id"]}},
+    {"name": "tempo_get_zones", "description": "Get zone data (boundaries, connections) within a radius of a point.", "inputSchema": {"type": "object", "properties": {"center": {"type": "array"}, "radius": {"type": "number"}, "any_tags": {"type": "array"}, "all_tags": {"type": "array"}, "none_tags": {"type": "array"}}, "required": ["center", "radius"]}},
 ]
 
 

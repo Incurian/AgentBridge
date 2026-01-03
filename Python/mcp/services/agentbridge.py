@@ -16,6 +16,7 @@ from AgentBridgeServer import AgentBridge_pb2_grpc as pb_grpc
 from TempoScripting import Geometry_pb2
 
 
+
 TOOLS = [
     # =========================================================================
     # Help & Discovery
@@ -38,28 +39,15 @@ TOOLS = [
     # =========================================================================
     # World Operations
     # =========================================================================
-    {
-        "name": "list_worlds",
-        "description": "List all available Unreal world contexts (Editor, PIE, Game). Use this to see what worlds are available and their current state.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "list_worlds", "description": "List available world contexts.", "inputSchema": {"type": "object"}},
     {
         "name": "set_target_world",
-        "description": "Set the target world for subsequent operations. Use 'editor' for the editor world or 'pie' for Play-In-Editor.",
+        "description": "Switch target world for operations.",
         "inputSchema": {
             "type": "object",
-            "properties": {
-                "world_identifier": {
-                    "type": "string",
-                    "description": "World identifier: 'editor', 'pie', world name, or numeric index",
-                },
-            },
-            "required": ["world_identifier"],
-        },
+            "properties": {"world_identifier": {"type": "string"}},
+            "required": ["world_identifier"]
+        }
     },
 
     # =========================================================================
@@ -67,63 +55,31 @@ TOOLS = [
     # =========================================================================
     {
         "name": "query_actors",
-        "description": "Search for actors in the current world. You can filter by class, name pattern, label pattern, or tag. Returns a list of matching actors with their transforms.",
+        "description": "Find actors by class, name, label, or tag.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "class_name": {
-                    "type": "string",
-                    "description": "Filter by class name (e.g., 'PointLight', 'StaticMeshActor', 'BP_MyActor')",
-                },
-                "name_pattern": {
-                    "type": "string",
-                    "description": "Substring pattern for internal actor name (e.g., 'Light', 'Door'). Matches GetName() - the internal unique identifier.",
-                },
-                "label_pattern": {
-                    "type": "string",
-                    "description": "Substring pattern for display label (e.g., 'MyLight', 'MainDoor'). Matches GetActorLabel() - the human-readable name shown in the editor.",
-                },
-                "tag": {
-                    "type": "string",
-                    "description": "Filter by actor tag",
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Maximum number of results (default: 100)",
-                    "default": 100,
-                },
-                "include_hidden": {
-                    "type": "boolean",
-                    "description": "Include hidden actors in results",
-                    "default": False,
-                },
-            },
-            "required": [],
-        },
+                "class_name": {"type": "string"},
+                "name_pattern": {"type": "string"},
+                "label_pattern": {"type": "string"},
+                "tag": {"type": "string"},
+                "limit": {"type": "integer", "default": 100},
+                "include_hidden": {"type": "boolean", "default": False}
+            }
+        }
     },
     {
         "name": "get_actor",
-        "description": "Get detailed information about a specific actor, including properties and components. Accepts friendly labels (e.g., 'PlayerStart') which resolve to the full internal name.",
+        "description": "Get actor details, optionally with properties/components.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor identifier: name, label, path, or GUID",
-                },
-                "include_properties": {
-                    "type": "boolean",
-                    "description": "Include property values in response",
-                    "default": False,
-                },
-                "include_components": {
-                    "type": "boolean",
-                    "description": "Include component list in response",
-                    "default": False,
-                },
+                "actor_id": {"type": "string"},
+                "include_properties": {"type": "boolean", "default": False},
+                "include_components": {"type": "boolean", "default": False}
             },
-            "required": ["actor_id"],
-        },
+            "required": ["actor_id"]
+        }
     },
 
     # =========================================================================
@@ -135,56 +91,24 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "class_name": {
-                    "type": "string",
-                    "description": "Class to spawn (e.g., 'PointLight', 'StaticMeshActor', '/Game/BP_MyActor.BP_MyActor_C')",
-                },
-                "location": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "World location [X, Y, Z] in Unreal units (cm)",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "rotation": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Rotation [Pitch, Yaw, Roll] in degrees",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "scale": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Scale [X, Y, Z] (default: [1, 1, 1])",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "label": {
-                    "type": "string",
-                    "description": "Editor display name for the actor",
-                },
-                "folder_path": {
-                    "type": "string",
-                    "description": "World Outliner folder path (e.g., 'Lights/Dynamic')",
-                },
+                "class_name": {"type": "string"},
+                "location": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "rotation": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "scale": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "label": {"type": "string"},
+                "folder_path": {"type": "string"}
             },
-            "required": ["class_name"],
-        },
+            "required": ["class_name"]
+        }
     },
     {
         "name": "delete_actor",
         "description": "Delete an actor from the world.",
         "inputSchema": {
             "type": "object",
-            "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor identifier: name, label, path, or GUID",
-                },
-            },
-            "required": ["actor_id"],
-        },
+            "properties": {"actor_id": {"type": "string"}},
+            "required": ["actor_id"]
+        }
     },
     {
         "name": "duplicate_actor",
@@ -192,38 +116,14 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Source actor identifier: name, label, path, or GUID",
-                },
-                "location": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "New location [X, Y, Z] (default: same as source)",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "rotation": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "New rotation [Pitch, Yaw, Roll] in degrees (default: same as source)",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "scale": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "New scale [X, Y, Z] (default: same as source)",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "new_label": {
-                    "type": "string",
-                    "description": "Label for the duplicate (default: auto-generated)",
-                },
+                "actor_id": {"type": "string"},
+                "location": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "rotation": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "scale": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "new_label": {"type": "string"}
             },
-            "required": ["actor_id"],
-        },
+            "required": ["actor_id"]
+        }
     },
     {
         "name": "set_actor_transform",
@@ -231,34 +131,13 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor identifier: name, label, path, or GUID",
-                },
-                "location": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "New location [X, Y, Z] in Unreal units (cm)",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "rotation": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "New rotation [Pitch, Yaw, Roll] in degrees",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "scale": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "New scale [X, Y, Z]",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
+                "actor_id": {"type": "string"},
+                "location": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "rotation": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "scale": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3}
             },
-            "required": ["actor_id"],
-        },
+            "required": ["actor_id"]
+        }
     },
 
     # =========================================================================
@@ -270,17 +149,11 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor identifier: name, label, path, or GUID",
-                },
-                "path": {
-                    "type": "string",
-                    "description": "Property path (e.g., 'LightComponent.Intensity', 'RootComponent.RelativeLocation')",
-                },
+                "actor_id": {"type": "string"},
+                "path": {"type": "string"}
             },
-            "required": ["actor_id", "path"],
-        },
+            "required": ["actor_id", "path"]
+        }
     },
     {
         "name": "set_property",
@@ -288,20 +161,12 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor identifier: name, label, path, or GUID",
-                },
-                "path": {
-                    "type": "string",
-                    "description": "Property path (e.g., 'LightComponent.Intensity', 'RootComponent.RelativeLocation')",
-                },
-                "value": {
-                    "description": "New value as string (will be parsed according to property type)",
-                },
+                "actor_id": {"type": "string"},
+                "path": {"type": "string"},
+                "value": {}
             },
-            "required": ["actor_id", "path", "value"],
-        },
+            "required": ["actor_id", "path", "value"]
+        }
     },
 
     # =========================================================================
@@ -309,59 +174,29 @@ TOOLS = [
     # =========================================================================
     {
         "name": "list_classes",
-        "description": "List available classes (actors, components, or any UObject type). "
-                       "Use base_class_name='ActorComponent' for component classes, "
-                       "'Object' for all types, or any specific class name.",
+        "description": "List available classes (actors, components, or any UObject type). Use base_class_name='ActorComponent' for component classes, 'Object' for all types, or any specific class name.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "base_class_name": {
-                    "type": "string",
-                    "description": "Base class filter: 'Actor' (default), 'ActorComponent', 'Object', or specific class",
-                    "default": "Actor",
-                },
-                "name_pattern": {
-                    "type": "string",
-                    "description": "Wildcard pattern for class name (e.g., '*Light*')",
-                },
-                "include_blueprint": {
-                    "type": "boolean",
-                    "description": "Include Blueprint classes",
-                    "default": True,
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Maximum number of results",
-                    "default": 50,
-                },
-            },
-            "required": [],
-        },
+                "base_class_name": {"type": "string", "default": "Actor"},
+                "name_pattern": {"type": "string"},
+                "include_blueprint": {"type": "boolean", "default": True},
+                "limit": {"type": "integer", "default": 50}
+            }
+        }
     },
     {
         "name": "get_class_schema",
-        "description": "Get the schema (properties and functions) for ANY class - actors, components, or UObjects. "
-                       "Works with 'PointLight', 'SceneCaptureComponent2D', 'TextureRenderTarget2D', etc.",
+        "description": "Get the schema (properties and functions) for ANY class - actors, components, or UObjects. Works with 'PointLight', 'SceneCaptureComponent2D', 'TextureRenderTarget2D', etc.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "class_name": {
-                    "type": "string",
-                    "description": "Class name or path",
-                },
-                "include_inherited": {
-                    "type": "boolean",
-                    "description": "Include inherited properties/functions",
-                    "default": True,
-                },
-                "include_functions": {
-                    "type": "boolean",
-                    "description": "Include function signatures",
-                    "default": False,
-                },
+                "class_name": {"type": "string"},
+                "include_inherited": {"type": "boolean", "default": True},
+                "include_functions": {"type": "boolean", "default": False}
             },
-            "required": ["class_name"],
-        },
+            "required": ["class_name"]
+        }
     },
 
     # =========================================================================
@@ -369,178 +204,82 @@ TOOLS = [
     # =========================================================================
     {
         "name": "call_static_function",
-        "description": "Call a static Blueprint library function. "
-                       "Examples: KismetRenderingLibrary::CreateRenderTarget2D, "
-                       "KismetSystemLibrary::PrintString, KismetMathLibrary::Abs.",
+        "description": "Call a static Blueprint library function. Examples: KismetRenderingLibrary::CreateRenderTarget2D, KismetSystemLibrary::PrintString, KismetMathLibrary::Abs.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "class_name": {
-                    "type": "string",
-                    "description": "Blueprint library class (e.g., 'KismetRenderingLibrary', 'KismetSystemLibrary')",
-                },
-                "function_name": {
-                    "type": "string",
-                    "description": "Static function name (e.g., 'CreateRenderTarget2D', 'PrintString')",
-                },
-                "parameters": {
-                    "type": "object",
-                    "description": "Function parameters as key-value pairs",
-                    "additionalProperties": True,
-                },
+                "class_name": {"type": "string"},
+                "function_name": {"type": "string"},
+                "parameters": {"type": "object", "additionalProperties": True}
             },
-            "required": ["class_name", "function_name"],
-        },
+            "required": ["class_name", "function_name"]
+        }
     },
     {
         "name": "call_asset_function",
-        "description": "Call a function on a loaded UObject asset. "
-                       "Works with PCGGraph, Blueprint CDO, DataAsset, etc. "
-                       "Use subobject_path for nested objects (e.g., 'Graph' in PCG assets).",
+        "description": "Call a function on a loaded UObject asset. Works with PCGGraph, Blueprint CDO, DataAsset, etc. Use subobject_path for nested objects (e.g., 'Graph' in PCG assets).",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "asset_path": {
-                    "type": "string",
-                    "description": "Full asset path (e.g., '/Game/PCG/MyGraph.MyGraph')",
-                },
-                "function_name": {
-                    "type": "string",
-                    "description": "Function name to call (e.g., 'AddNodeOfType', 'GetNodes')",
-                },
-                "subobject_path": {
-                    "type": "string",
-                    "description": "Optional path to subobject (e.g., 'Graph' for PCG assets)",
-                },
-                "parameters": {
-                    "type": "object",
-                    "description": "Function parameters as key-value pairs",
-                    "additionalProperties": True,
-                },
+                "asset_path": {"type": "string"},
+                "function_name": {"type": "string"},
+                "subobject_path": {"type": "string"},
+                "parameters": {"type": "object", "additionalProperties": True}
             },
-            "required": ["asset_path", "function_name"],
-        },
+            "required": ["asset_path", "function_name"]
+        }
     },
 
     # =========================================================================
     # World Partition & Streaming
     # =========================================================================
-    {
-        "name": "is_world_partitioned",
-        "description": "Check if the current world uses World Partition (UE5's streaming system for large worlds).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "is_world_partitioned", "description": "Check if the current world uses World Partition (UE5's streaming system for large worlds).", "inputSchema": {"type": "object"}},
     {
         "name": "query_all_actors",
         "description": "Query actors including those in unloaded streaming cells. Unlike query_actors, this can find actors that aren't currently loaded in memory.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "class_name": {
-                    "type": "string",
-                    "description": "Filter by class name (e.g., 'StaticMeshActor')",
-                },
-                "name_pattern": {
-                    "type": "string",
-                    "description": "Wildcard pattern for actor name/label",
-                },
-                "include_loaded": {
-                    "type": "boolean",
-                    "description": "Include loaded actors",
-                    "default": True,
-                },
-                "include_unloaded": {
-                    "type": "boolean",
-                    "description": "Include unloaded actors (metadata only)",
-                    "default": True,
-                },
-                "data_layer": {
-                    "type": "string",
-                    "description": "Filter by data layer name",
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Maximum number of results",
-                    "default": 100,
-                },
-            },
-            "required": [],
-        },
+                "class_name": {"type": "string"},
+                "name_pattern": {"type": "string"},
+                "include_loaded": {"type": "boolean", "default": True},
+                "include_unloaded": {"type": "boolean", "default": True},
+                "data_layer": {"type": "string"},
+                "limit": {"type": "integer", "default": 100}
+            }
+        }
     },
     {
         "name": "get_streaming_state",
         "description": "Get the streaming state of an actor by GUID. Returns whether the actor is Loaded, Unloaded, or Invalid.",
         "inputSchema": {
             "type": "object",
-            "properties": {
-                "actor_guid": {
-                    "type": "string",
-                    "description": "Actor GUID (from query_all_actors results)",
-                },
-            },
-            "required": ["actor_guid"],
-        },
+            "properties": {"actor_guid": {"type": "string"}},
+            "required": ["actor_guid"]
+        }
     },
     {
         "name": "query_landscape",
         "description": "Query all landscape proxies in the world, including streaming landscape chunks.",
         "inputSchema": {
             "type": "object",
-            "properties": {
-                "include_unloaded": {
-                    "type": "boolean",
-                    "description": "Include unloaded landscape proxies",
-                    "default": True,
-                },
-            },
-            "required": [],
-        },
+            "properties": {"include_unloaded": {"type": "boolean", "default": True}}
+        }
     },
-    {
-        "name": "get_landscape_bounds",
-        "description": "Get complete landscape bounds in world space. Returns min/max corners, center point, and half-extents. Use this to size PCG volumes or other actors to cover the entire landscape.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "get_data_layers",
-        "description": "Get all data layers defined in the world. Data layers are used to group actors for streaming.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "get_landscape_bounds", "description": "Get complete landscape bounds in world space. Returns min/max corners, center point, and half-extents. Use this to size PCG volumes or other actors to cover the entire landscape.", "inputSchema": {"type": "object"}},
+    {"name": "get_data_layers", "description": "Get all data layers defined in the world. Data layers are used to group actors for streaming.", "inputSchema": {"type": "object"}},
     {
         "name": "get_actors_in_data_layer",
         "description": "Get all actors in a specific data layer.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "data_layer": {
-                    "type": "string",
-                    "description": "Data layer name",
-                },
-                "include_unloaded": {
-                    "type": "boolean",
-                    "description": "Include unloaded actors",
-                    "default": True,
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Maximum number of results",
-                    "default": 100,
-                },
+                "data_layer": {"type": "string"},
+                "include_unloaded": {"type": "boolean", "default": True},
+                "limit": {"type": "integer", "default": 100}
             },
-            "required": ["data_layer"],
-        },
+            "required": ["data_layer"]
+        }
     },
 
     # =========================================================================
@@ -551,14 +290,9 @@ TOOLS = [
         "description": "Execute an arbitrary Unreal console command. Use this for operations not covered by other tools.",
         "inputSchema": {
             "type": "object",
-            "properties": {
-                "command": {
-                    "type": "string",
-                    "description": "Console command to execute (e.g., 'stat fps', 'AgentBridge.ListWorlds')",
-                },
-            },
-            "required": ["command"],
-        },
+            "properties": {"command": {"type": "string"}},
+            "required": ["command"]
+        }
     },
     {
         "name": "search_console_commands",
@@ -566,32 +300,17 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "keyword": {
-                    "type": "string",
-                    "description": "Search term (e.g., 'fps', 'shadow', 'light', 'vsync')",
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Maximum results to return (default: 50)",
-                    "default": 50,
-                },
-                "offset": {
-                    "type": "integer",
-                    "description": "Skip first N matches for pagination (default: 0)",
-                    "default": 0,
-                },
-                "search_help": {
-                    "type": "boolean",
-                    "description": "Also search in help/description text (default: false)",
-                    "default": False,
-                },
+                "keyword": {"type": "string"},
+                "limit": {"type": "integer", "default": 50},
+                "offset": {"type": "integer", "default": 0},
+                "search_help": {"type": "boolean", "default": False}
             },
-            "required": ["keyword"],
-        },
+            "required": ["keyword"]
+        }
     },
 
     # =========================================================================
-    # Asset Operations (P0)
+    # Asset Operations
     # =========================================================================
     {
         "name": "create_asset",
@@ -599,29 +318,14 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "asset_class": {
-                    "type": "string",
-                    "description": "Asset class name (e.g., 'DataAsset', 'MaterialInstanceConstant')",
-                },
-                "package_path": {
-                    "type": "string",
-                    "description": "Content folder path (e.g., '/Game/MyAssets')",
-                },
-                "asset_name": {
-                    "type": "string",
-                    "description": "Name for the new asset",
-                },
-                "parent_asset_path": {
-                    "type": "string",
-                    "description": "For instances (e.g., parent material path)",
-                },
-                "properties": {
-                    "type": "object",
-                    "description": "Initial property values to set",
-                },
+                "asset_class": {"type": "string"},
+                "package_path": {"type": "string"},
+                "asset_name": {"type": "string"},
+                "parent_asset_path": {"type": "string"},
+                "properties": {"type": "object"}
             },
-            "required": ["asset_class", "package_path", "asset_name"],
-        },
+            "required": ["asset_class", "package_path", "asset_name"]
+        }
     },
     {
         "name": "save_asset",
@@ -629,18 +333,11 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "asset_path": {
-                    "type": "string",
-                    "description": "Asset path to save (e.g., '/Game/MyAssets/MyAsset')",
-                },
-                "prompt_for_checkout": {
-                    "type": "boolean",
-                    "description": "Prompt for source control checkout",
-                    "default": False,
-                },
+                "asset_path": {"type": "string"},
+                "prompt_for_checkout": {"type": "boolean", "default": False}
             },
-            "required": ["asset_path"],
-        },
+            "required": ["asset_path"]
+        }
     },
     {
         "name": "save_actor_as_blueprint",
@@ -648,26 +345,13 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor to convert",
-                },
-                "package_path": {
-                    "type": "string",
-                    "description": "Content folder path for the blueprint",
-                },
-                "blueprint_name": {
-                    "type": "string",
-                    "description": "Name for the blueprint",
-                },
-                "replace_existing": {
-                    "type": "boolean",
-                    "description": "Overwrite if exists",
-                    "default": False,
-                },
+                "actor_id": {"type": "string"},
+                "package_path": {"type": "string"},
+                "blueprint_name": {"type": "string"},
+                "replace_existing": {"type": "boolean", "default": False}
             },
-            "required": ["actor_id", "package_path", "blueprint_name"],
-        },
+            "required": ["actor_id", "package_path", "blueprint_name"]
+        }
     },
     {
         "name": "duplicate_asset",
@@ -675,25 +359,16 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "source_path": {
-                    "type": "string",
-                    "description": "Source asset path",
-                },
-                "dest_package_path": {
-                    "type": "string",
-                    "description": "Destination folder",
-                },
-                "dest_asset_name": {
-                    "type": "string",
-                    "description": "Name for the copy",
-                },
+                "source_path": {"type": "string"},
+                "dest_package_path": {"type": "string"},
+                "dest_asset_name": {"type": "string"}
             },
-            "required": ["source_path", "dest_package_path", "dest_asset_name"],
-        },
+            "required": ["source_path", "dest_package_path", "dest_asset_name"]
+        }
     },
 
     # =========================================================================
-    # Component Operations (P1)
+    # Component Operations
     # =========================================================================
     {
         "name": "get_component_transform",
@@ -701,22 +376,12 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor identifier",
-                },
-                "component_name": {
-                    "type": "string",
-                    "description": "Component instance name (e.g., 'LightComponent0')",
-                },
-                "world_space": {
-                    "type": "boolean",
-                    "description": "True for world coordinates, false for relative",
-                    "default": True,
-                },
+                "actor_id": {"type": "string"},
+                "component_name": {"type": "string"},
+                "world_space": {"type": "boolean", "default": True}
             },
-            "required": ["actor_id", "component_name"],
-        },
+            "required": ["actor_id", "component_name"]
+        }
     },
     {
         "name": "set_component_transform",
@@ -724,37 +389,15 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor identifier",
-                },
-                "component_name": {
-                    "type": "string",
-                    "description": "Component instance name",
-                },
-                "location": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Location [X, Y, Z]",
-                },
-                "rotation": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Rotation [Pitch, Yaw, Roll]",
-                },
-                "scale": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Scale [X, Y, Z]",
-                },
-                "world_space": {
-                    "type": "boolean",
-                    "description": "True for world coordinates",
-                    "default": True,
-                },
+                "actor_id": {"type": "string"},
+                "component_name": {"type": "string"},
+                "location": {"type": "array"},
+                "rotation": {"type": "array"},
+                "scale": {"type": "array"},
+                "world_space": {"type": "boolean", "default": True}
             },
-            "required": ["actor_id", "component_name"],
-        },
+            "required": ["actor_id", "component_name"]
+        }
     },
     {
         "name": "attach_actor",
@@ -762,31 +405,14 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "child_actor_id": {
-                    "type": "string",
-                    "description": "Actor to attach",
-                },
-                "parent_actor_id": {
-                    "type": "string",
-                    "description": "Actor to attach to",
-                },
-                "parent_component_name": {
-                    "type": "string",
-                    "description": "Specific component (default: root)",
-                },
-                "socket_name": {
-                    "type": "string",
-                    "description": "Optional socket name",
-                },
-                "location_rule": {
-                    "type": "string",
-                    "enum": ["KeepRelative", "KeepWorld", "SnapToTarget"],
-                    "description": "How to handle location",
-                    "default": "KeepWorld",
-                },
+                "child_actor_id": {"type": "string"},
+                "parent_actor_id": {"type": "string"},
+                "parent_component_name": {"type": "string"},
+                "socket_name": {"type": "string"},
+                "location_rule": {"type": "string", "enum": ["KeepRelative", "KeepWorld", "SnapToTarget"], "default": "KeepWorld"}
             },
-            "required": ["child_actor_id", "parent_actor_id"],
-        },
+            "required": ["child_actor_id", "parent_actor_id"]
+        }
     },
     {
         "name": "detach_actor",
@@ -794,216 +420,28 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor to detach",
-                },
-                "maintain_world_position": {
-                    "type": "boolean",
-                    "description": "Keep current world position",
-                    "default": True,
-                },
+                "actor_id": {"type": "string"},
+                "maintain_world_position": {"type": "boolean", "default": True}
             },
-            "required": ["actor_id"],
-        },
+            "required": ["actor_id"]
+        }
     },
-
-    # =========================================================================
-    # File Operations (P1)
-    # =========================================================================
-    {
-        "name": "read_project_file",
-        "description": "Read a file from the project directory. Constrained to safe paths.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "relative_path": {
-                    "type": "string",
-                    "description": "Path relative to project root",
-                },
-                "as_base64": {
-                    "type": "boolean",
-                    "description": "Return binary content as base64",
-                    "default": False,
-                },
-            },
-            "required": ["relative_path"],
-        },
-    },
-    {
-        "name": "write_project_file",
-        "description": "Write a file to the project directory. Constrained to safe paths.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "relative_path": {
-                    "type": "string",
-                    "description": "Path relative to project root",
-                },
-                "content": {
-                    "type": "string",
-                    "description": "Content to write",
-                },
-                "is_base64": {
-                    "type": "boolean",
-                    "description": "Content is base64 encoded",
-                    "default": False,
-                },
-                "create_directories": {
-                    "type": "boolean",
-                    "description": "Create parent directories",
-                    "default": True,
-                },
-                "append": {
-                    "type": "boolean",
-                    "description": "Append instead of overwrite",
-                    "default": False,
-                },
-            },
-            "required": ["relative_path", "content"],
-        },
-    },
-    {
-        "name": "list_project_directory",
-        "description": "List files in a project directory. Constrained to safe paths.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "relative_path": {
-                    "type": "string",
-                    "description": "Path relative to project root",
-                },
-                "pattern": {
-                    "type": "string",
-                    "description": "Glob pattern (e.g., '*.uasset')",
-                },
-                "recursive": {
-                    "type": "boolean",
-                    "description": "Include subdirectories",
-                    "default": False,
-                },
-                "limit": {
-                    "type": "integer",
-                    "description": "Maximum files to return",
-                    "default": 100,
-                },
-            },
-            "required": [],
-        },
-    },
-    {
-        "name": "copy_project_file",
-        "description": "Copy a file within the project directory. Constrained to safe paths.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "source_path": {
-                    "type": "string",
-                    "description": "Source path relative to project root",
-                },
-                "dest_path": {
-                    "type": "string",
-                    "description": "Destination path relative to project root",
-                },
-                "overwrite": {
-                    "type": "boolean",
-                    "description": "Overwrite if destination exists",
-                    "default": False,
-                },
-            },
-            "required": ["source_path", "dest_path"],
-        },
-    },
-    # =========================================================================
-    # Component Operations (P1)
-    # =========================================================================
     {
         "name": "attach_component",
         "description": "Attach a component to another component within the same actor.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor containing the components",
-                },
-                "component_name": {
-                    "type": "string",
-                    "description": "Component to attach",
-                },
-                "parent_component_name": {
-                    "type": "string",
-                    "description": "Parent component to attach to",
-                },
-                "socket_name": {
-                    "type": "string",
-                    "description": "Socket on parent to attach to (optional)",
-                },
-                "location_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
-                    "description": "How to handle location",
-                    "default": "keep_relative",
-                },
-                "rotation_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
-                    "description": "How to handle rotation",
-                    "default": "keep_relative",
-                },
-                "scale_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
-                    "description": "How to handle scale",
-                    "default": "keep_relative",
-                },
+                "actor_id": {"type": "string"},
+                "component_name": {"type": "string"},
+                "parent_component_name": {"type": "string"},
+                "socket_name": {"type": "string"},
+                "location_rule": {"type": "string", "enum": ["keep_relative", "keep_world", "snap_to_target"], "default": "keep_relative"},
+                "rotation_rule": {"type": "string", "enum": ["keep_relative", "keep_world", "snap_to_target"], "default": "keep_relative"},
+                "scale_rule": {"type": "string", "enum": ["keep_relative", "keep_world", "snap_to_target"], "default": "keep_relative"}
             },
-            "required": ["actor_id", "component_name", "parent_component_name"],
-        },
-    },
-    {
-        "name": "attach_actor",
-        "description": "Attach an actor to another actor (child becomes component of parent).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "child_actor_id": {
-                    "type": "string",
-                    "description": "Actor to attach",
-                },
-                "parent_actor_id": {
-                    "type": "string",
-                    "description": "Actor to attach to",
-                },
-                "parent_component_name": {
-                    "type": "string",
-                    "description": "Component on parent to attach to (optional, defaults to root)",
-                },
-                "socket_name": {
-                    "type": "string",
-                    "description": "Socket on parent component (optional)",
-                },
-                "location_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
-                    "description": "How to handle location",
-                    "default": "keep_world",
-                },
-                "rotation_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
-                    "description": "How to handle rotation",
-                    "default": "keep_world",
-                },
-                "scale_rule": {
-                    "type": "string",
-                    "enum": ["keep_relative", "keep_world", "snap_to_target"],
-                    "description": "How to handle scale",
-                    "default": "keep_world",
-                },
-            },
-            "required": ["child_actor_id", "parent_actor_id"],
-        },
+            "required": ["actor_id", "component_name", "parent_component_name"]
+        }
     },
     {
         "name": "detach_component",
@@ -1011,26 +449,73 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {
-                    "type": "string",
-                    "description": "Actor containing the component",
-                },
-                "component_name": {
-                    "type": "string",
-                    "description": "Component to detach",
-                },
-                "maintain_world_transform": {
-                    "type": "boolean",
-                    "description": "Keep world position after detach",
-                    "default": True,
-                },
+                "actor_id": {"type": "string"},
+                "component_name": {"type": "string"},
+                "maintain_world_transform": {"type": "boolean", "default": True}
             },
-            "required": ["actor_id", "component_name"],
-        },
+            "required": ["actor_id", "component_name"]
+        }
     },
 
     # =========================================================================
-    # Blueprint Node Operations (P2)
+    # File Operations
+    # =========================================================================
+    {
+        "name": "read_project_file",
+        "description": "Read a file from the project directory. Constrained to safe paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "relative_path": {"type": "string"},
+                "as_base64": {"type": "boolean", "default": False}
+            },
+            "required": ["relative_path"]
+        }
+    },
+    {
+        "name": "write_project_file",
+        "description": "Write a file to the project directory. Constrained to safe paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "relative_path": {"type": "string"},
+                "content": {"type": "string"},
+                "is_base64": {"type": "boolean", "default": False},
+                "create_directories": {"type": "boolean", "default": True},
+                "append": {"type": "boolean", "default": False}
+            },
+            "required": ["relative_path", "content"]
+        }
+    },
+    {
+        "name": "list_project_directory",
+        "description": "List files in a project directory. Constrained to safe paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "relative_path": {"type": "string"},
+                "pattern": {"type": "string"},
+                "recursive": {"type": "boolean", "default": False},
+                "limit": {"type": "integer", "default": 100}
+            }
+        }
+    },
+    {
+        "name": "copy_project_file",
+        "description": "Copy a file within the project directory. Constrained to safe paths.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "source_path": {"type": "string"},
+                "dest_path": {"type": "string"},
+                "overwrite": {"type": "boolean", "default": False}
+            },
+            "required": ["source_path", "dest_path"]
+        }
+    },
+
+    # =========================================================================
+    # Blueprint Node Operations
     # =========================================================================
     {
         "name": "bp_create_node",
@@ -1038,49 +523,18 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "blueprint_path": {
-                    "type": "string",
-                    "description": "Blueprint asset path (e.g., '/Game/Blueprints/BP_MyActor.BP_MyActor')",
-                },
-                "graph_name": {
-                    "type": "string",
-                    "description": "Target graph name (default: 'EventGraph')",
-                    "default": "EventGraph",
-                },
-                "node_type": {
-                    "type": "string",
-                    "enum": ["CallFunction", "Event", "VariableGet", "VariableSet", "Branch", "Sequence", "Comment"],
-                    "description": "Type of node to create",
-                },
-                "function_reference": {
-                    "type": "string",
-                    "description": "For CallFunction: 'Class.Function' or '/Script/Module.Class:Function' (e.g., 'KismetSystemLibrary.PrintString')",
-                },
-                "event_name": {
-                    "type": "string",
-                    "description": "For Event: 'ReceiveBeginPlay', 'ReceiveTick', etc.",
-                },
-                "variable_name": {
-                    "type": "string",
-                    "description": "For VariableGet/VariableSet: Blueprint variable name",
-                },
-                "comment": {
-                    "type": "string",
-                    "description": "For Comment: The comment text",
-                },
-                "pos_x": {
-                    "type": "integer",
-                    "description": "X position in graph",
-                    "default": 0,
-                },
-                "pos_y": {
-                    "type": "integer",
-                    "description": "Y position in graph",
-                    "default": 0,
-                },
+                "blueprint_path": {"type": "string"},
+                "graph_name": {"type": "string", "default": "EventGraph"},
+                "node_type": {"type": "string", "enum": ["CallFunction", "Event", "VariableGet", "VariableSet", "Branch", "Sequence", "Comment"]},
+                "function_reference": {"type": "string"},
+                "event_name": {"type": "string"},
+                "variable_name": {"type": "string"},
+                "comment": {"type": "string"},
+                "pos_x": {"type": "integer", "default": 0},
+                "pos_y": {"type": "integer", "default": 0}
             },
-            "required": ["blueprint_path", "node_type"],
-        },
+            "required": ["blueprint_path", "node_type"]
+        }
     },
     {
         "name": "bp_connect_pins",
@@ -1088,29 +542,14 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "blueprint_path": {
-                    "type": "string",
-                    "description": "Blueprint asset path",
-                },
-                "source_node": {
-                    "type": "string",
-                    "description": "Source node GUID or name",
-                },
-                "source_pin": {
-                    "type": "string",
-                    "description": "Source pin name (e.g., 'then', 'execute', 'ReturnValue')",
-                },
-                "target_node": {
-                    "type": "string",
-                    "description": "Target node GUID or name",
-                },
-                "target_pin": {
-                    "type": "string",
-                    "description": "Target pin name (e.g., 'execute', 'InString')",
-                },
+                "blueprint_path": {"type": "string"},
+                "source_node": {"type": "string"},
+                "source_pin": {"type": "string"},
+                "target_node": {"type": "string"},
+                "target_pin": {"type": "string"}
             },
-            "required": ["blueprint_path", "source_node", "source_pin", "target_node", "target_pin"],
-        },
+            "required": ["blueprint_path", "source_node", "source_pin", "target_node", "target_pin"]
+        }
     },
     {
         "name": "bp_disconnect_pins",
@@ -1118,29 +557,14 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "blueprint_path": {
-                    "type": "string",
-                    "description": "Blueprint asset path",
-                },
-                "source_node": {
-                    "type": "string",
-                    "description": "Source node GUID or name",
-                },
-                "source_pin": {
-                    "type": "string",
-                    "description": "Source pin name",
-                },
-                "target_node": {
-                    "type": "string",
-                    "description": "Target node GUID or name",
-                },
-                "target_pin": {
-                    "type": "string",
-                    "description": "Target pin name",
-                },
+                "blueprint_path": {"type": "string"},
+                "source_node": {"type": "string"},
+                "source_pin": {"type": "string"},
+                "target_node": {"type": "string"},
+                "target_pin": {"type": "string"}
             },
-            "required": ["blueprint_path", "source_node", "source_pin", "target_node", "target_pin"],
-        },
+            "required": ["blueprint_path", "source_node", "source_pin", "target_node", "target_pin"]
+        }
     },
     {
         "name": "bp_delete_node",
@@ -1148,17 +572,11 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "blueprint_path": {
-                    "type": "string",
-                    "description": "Blueprint asset path",
-                },
-                "node_id": {
-                    "type": "string",
-                    "description": "Node GUID or name to delete",
-                },
+                "blueprint_path": {"type": "string"},
+                "node_id": {"type": "string"}
             },
-            "required": ["blueprint_path", "node_id"],
-        },
+            "required": ["blueprint_path", "node_id"]
+        }
     },
     {
         "name": "bp_list_nodes",
@@ -1166,21 +584,12 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "blueprint_path": {
-                    "type": "string",
-                    "description": "Blueprint asset path",
-                },
-                "graph_name": {
-                    "type": "string",
-                    "description": "Target graph (empty = all graphs)",
-                },
-                "node_class_filter": {
-                    "type": "string",
-                    "description": "Optional filter by node class (e.g., 'K2Node_CallFunction')",
-                },
+                "blueprint_path": {"type": "string"},
+                "graph_name": {"type": "string"},
+                "node_class_filter": {"type": "string"}
             },
-            "required": ["blueprint_path"],
-        },
+            "required": ["blueprint_path"]
+        }
     },
     {
         "name": "bp_list_pins",
@@ -1188,17 +597,11 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "blueprint_path": {
-                    "type": "string",
-                    "description": "Blueprint asset path",
-                },
-                "node_id": {
-                    "type": "string",
-                    "description": "Node GUID or name",
-                },
+                "blueprint_path": {"type": "string"},
+                "node_id": {"type": "string"}
             },
-            "required": ["blueprint_path", "node_id"],
-        },
+            "required": ["blueprint_path", "node_id"]
+        }
     },
 
     # =========================================================================
@@ -1210,27 +613,13 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "graph_path": {
-                    "type": "string",
-                    "description": "PCG graph asset path (e.g., '/Game/PCG/MyGraph.MyGraph')",
-                },
-                "node_type": {
-                    "type": "string",
-                    "description": "PCG settings class name (e.g., 'PCGSurfaceSamplerSettings', 'PCGStaticMeshSpawnerSettings'). Can use short name or full path.",
-                },
-                "pos_x": {
-                    "type": "integer",
-                    "description": "X position in graph (default: 0)",
-                    "default": 0,
-                },
-                "pos_y": {
-                    "type": "integer",
-                    "description": "Y position in graph (default: 0)",
-                    "default": 0,
-                },
+                "graph_path": {"type": "string"},
+                "node_type": {"type": "string"},
+                "pos_x": {"type": "integer", "default": 0},
+                "pos_y": {"type": "integer", "default": 0}
             },
-            "required": ["graph_path", "node_type"],
-        },
+            "required": ["graph_path", "node_type"]
+        }
     },
     {
         "name": "pcg_connect",
@@ -1238,29 +627,14 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "graph_path": {
-                    "type": "string",
-                    "description": "PCG graph asset path",
-                },
-                "from_node": {
-                    "type": "string",
-                    "description": "Source node path (returned from pcg_add_node or pcg_list_nodes)",
-                },
-                "from_pin": {
-                    "type": "string",
-                    "description": "Source pin label (e.g., 'Out', 'In' for InputNode)",
-                },
-                "to_node": {
-                    "type": "string",
-                    "description": "Target node path",
-                },
-                "to_pin": {
-                    "type": "string",
-                    "description": "Target pin label (e.g., 'In', 'Surface', 'Out' for OutputNode)",
-                },
+                "graph_path": {"type": "string"},
+                "from_node": {"type": "string"},
+                "from_pin": {"type": "string"},
+                "to_node": {"type": "string"},
+                "to_pin": {"type": "string"}
             },
-            "required": ["graph_path", "from_node", "from_pin", "to_node", "to_pin"],
-        },
+            "required": ["graph_path", "from_node", "from_pin", "to_node", "to_pin"]
+        }
     },
     {
         "name": "pcg_disconnect",
@@ -1268,29 +642,14 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "graph_path": {
-                    "type": "string",
-                    "description": "PCG graph asset path",
-                },
-                "from_node": {
-                    "type": "string",
-                    "description": "Source node path",
-                },
-                "from_pin": {
-                    "type": "string",
-                    "description": "Source pin label",
-                },
-                "to_node": {
-                    "type": "string",
-                    "description": "Target node path",
-                },
-                "to_pin": {
-                    "type": "string",
-                    "description": "Target pin label",
-                },
+                "graph_path": {"type": "string"},
+                "from_node": {"type": "string"},
+                "from_pin": {"type": "string"},
+                "to_node": {"type": "string"},
+                "to_pin": {"type": "string"}
             },
-            "required": ["graph_path", "from_node", "from_pin", "to_node", "to_pin"],
-        },
+            "required": ["graph_path", "from_node", "from_pin", "to_node", "to_pin"]
+        }
     },
     {
         "name": "pcg_delete_node",
@@ -1298,48 +657,32 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "graph_path": {
-                    "type": "string",
-                    "description": "PCG graph asset path",
-                },
-                "node_path": {
-                    "type": "string",
-                    "description": "Node path to delete (from pcg_list_nodes)",
-                },
+                "graph_path": {"type": "string"},
+                "node_path": {"type": "string"}
             },
-            "required": ["graph_path", "node_path"],
-        },
+            "required": ["graph_path", "node_path"]
+        }
     },
     {
         "name": "pcg_list_nodes",
         "description": "List all nodes in a PCG graph with their pins. Returns InputNode, OutputNode, and all user-created nodes.",
         "inputSchema": {
             "type": "object",
-            "properties": {
-                "graph_path": {
-                    "type": "string",
-                    "description": "PCG graph asset path",
-                },
-            },
-            "required": ["graph_path"],
-        },
+            "properties": {"graph_path": {"type": "string"}},
+            "required": ["graph_path"]
+        }
     },
     {
         "name": "pcg_get_input_output_nodes",
         "description": "Get the special InputNode and OutputNode of a PCG graph. These are the entry and exit points for the graph.",
         "inputSchema": {
             "type": "object",
-            "properties": {
-                "graph_path": {
-                    "type": "string",
-                    "description": "PCG graph asset path",
-                },
-            },
-            "required": ["graph_path"],
-        },
+            "properties": {"graph_path": {"type": "string"}},
+            "required": ["graph_path"]
+        }
     },
-
 ]
+
 
 
 @dataclass

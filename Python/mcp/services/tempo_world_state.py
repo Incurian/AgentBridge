@@ -15,58 +15,8 @@ from TempoWorld import WorldState_pb2_grpc as pb_grpc
 
 
 TOOLS = [
-    {
-        "name": "tempo_get_actor_state",
-        "description": "Get the current state (transform, velocity, bounds) of an actor.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor_name": {
-                    "type": "string",
-                    "description": "Name of the actor to query",
-                },
-                "include_hidden_components": {
-                    "type": "boolean",
-                    "description": "Include hidden components in bounds calculation",
-                    "default": False,
-                },
-            },
-            "required": ["actor_name"],
-        },
-    },
-    {
-        "name": "tempo_get_actors_near",
-        "description": "Get states of all actors near a reference actor within a radius.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "near_actor_name": {
-                    "type": "string",
-                    "description": "Name of the reference actor",
-                },
-                "search_radius": {
-                    "type": "number",
-                    "description": "Search radius in Unreal units (cm)",
-                },
-                "include_static": {
-                    "type": "boolean",
-                    "description": "Include static actors",
-                    "default": False,
-                },
-                "include_hidden_actors": {
-                    "type": "boolean",
-                    "description": "Include hidden actors",
-                    "default": False,
-                },
-                "include_hidden_components": {
-                    "type": "boolean",
-                    "description": "Include hidden components in bounds",
-                    "default": False,
-                },
-            },
-            "required": ["near_actor_name", "search_radius"],
-        },
-    },
+    {"name": "tempo_get_actor_state", "description": "Get the current state (transform, velocity, bounds) of an actor.", "inputSchema": {"type": "object", "properties": {"actor_name": {"type": "string"}, "include_hidden_components": {"type": "boolean", "default": False}}, "required": ["actor_name"]}},
+    {"name": "tempo_get_actors_near", "description": "Get states of all actors near a reference actor within a radius.", "inputSchema": {"type": "object", "properties": {"near_actor_name": {"type": "string"}, "search_radius": {"type": "number"}, "include_static": {"type": "boolean", "default": False}, "include_hidden_actors": {"type": "boolean", "default": False}, "include_hidden_components": {"type": "boolean", "default": False}}, "required": ["near_actor_name", "search_radius"]}},
 ]
 
 

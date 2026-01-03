@@ -16,78 +16,12 @@ from TempoScripting import Empty_pb2
 
 
 TOOLS = [
-    {
-        "name": "tempo_play",
-        "description": "Start or resume simulation playback in Unreal Engine.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_pause",
-        "description": "Pause simulation playback in Unreal Engine.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_step",
-        "description": "Advance simulation by one frame/step.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_advance_steps",
-        "description": "Advance simulation by a specific number of steps.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "steps": {
-                    "type": "integer",
-                    "description": "Number of simulation steps to advance",
-                    "minimum": 1,
-                },
-            },
-            "required": ["steps"],
-        },
-    },
-    {
-        "name": "tempo_set_time_mode",
-        "description": "Set the simulation time mode. WALL_CLOCK runs in real-time, FIXED_STEP runs at a fixed rate.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "mode": {
-                    "type": "string",
-                    "enum": ["WALL_CLOCK", "FIXED_STEP"],
-                    "description": "Time mode: WALL_CLOCK (real-time) or FIXED_STEP (deterministic)",
-                },
-            },
-            "required": ["mode"],
-        },
-    },
-    {
-        "name": "tempo_set_sim_rate",
-        "description": "Set the simulation steps per second when in FIXED_STEP mode.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "steps_per_second": {
-                    "type": "integer",
-                    "description": "Simulation steps per second (e.g., 30, 60, 120)",
-                    "minimum": 1,
-                },
-            },
-            "required": ["steps_per_second"],
-        },
-    },
+    {"name": "tempo_play", "description": "Start or resume simulation playback in Unreal Engine.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_pause", "description": "Pause simulation playback in Unreal Engine.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_step", "description": "Advance simulation by one frame/step.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_advance_steps", "description": "Advance simulation by a specific number of steps.", "inputSchema": {"type": "object", "properties": {"steps": {"type": "integer", "minimum": 1}}, "required": ["steps"]}},
+    {"name": "tempo_set_time_mode", "description": "Set the simulation time mode. WALL_CLOCK runs in real-time, FIXED_STEP runs at a fixed rate.", "inputSchema": {"type": "object", "properties": {"mode": {"type": "string", "enum": ["WALL_CLOCK", "FIXED_STEP"]}}, "required": ["mode"]}},
+    {"name": "tempo_set_sim_rate", "description": "Set the simulation steps per second when in FIXED_STEP mode.", "inputSchema": {"type": "object", "properties": {"steps_per_second": {"type": "integer", "minimum": 1}}, "required": ["steps_per_second"]}},
 ]
 
 

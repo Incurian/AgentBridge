@@ -15,86 +15,12 @@ from TempoScripting import Empty_pb2
 
 
 TOOLS = [
-    {
-        "name": "tempo_load_level",
-        "description": "Load a level/map in Unreal Engine. Can optionally defer loading and start paused.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "level": {
-                    "type": "string",
-                    "description": "Level path or name to load (e.g., '/Game/Maps/MyLevel')",
-                },
-                "deferred": {
-                    "type": "boolean",
-                    "description": "If true, defer loading until FinishLoadingLevel is called",
-                    "default": False,
-                },
-                "start_paused": {
-                    "type": "boolean",
-                    "description": "If true, start simulation paused after loading",
-                    "default": False,
-                },
-            },
-            "required": ["level"],
-        },
-    },
-    {
-        "name": "tempo_finish_loading_level",
-        "description": "Complete a deferred level load. Call after tempo_load_level with deferred=true.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_get_current_level",
-        "description": "Get the name of the currently loaded level.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_quit",
-        "description": "Quit the Unreal Engine application.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_set_viewport_render",
-        "description": "Enable or disable main viewport rendering. Disabling can improve performance for headless simulation.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Whether viewport rendering should be enabled",
-                },
-            },
-            "required": ["enabled"],
-        },
-    },
-    {
-        "name": "tempo_set_control_mode",
-        "description": "Set the simulation control mode: NONE (0), USER (1), OPEN_LOOP (2), CLOSED_LOOP (3).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "mode": {
-                    "type": "string",
-                    "enum": ["NONE", "USER", "OPEN_LOOP", "CLOSED_LOOP"],
-                    "description": "Control mode for simulation",
-                },
-            },
-            "required": ["mode"],
-        },
-    },
+    {"name": "tempo_load_level", "description": "Load a level/map in Unreal Engine. Can optionally defer loading and start paused.", "inputSchema": {"type": "object", "properties": {"level": {"type": "string"}, "deferred": {"type": "boolean", "default": False}, "start_paused": {"type": "boolean", "default": False}}, "required": ["level"]}},
+    {"name": "tempo_finish_loading_level", "description": "Complete a deferred level load. Call after tempo_load_level with deferred=true.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_get_current_level", "description": "Get the name of the currently loaded level.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_quit", "description": "Quit the Unreal Engine application.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_set_viewport_render", "description": "Enable or disable main viewport rendering. Disabling can improve performance for headless simulation.", "inputSchema": {"type": "object", "properties": {"enabled": {"type": "boolean"}}, "required": ["enabled"]}},
+    {"name": "tempo_set_control_mode", "description": "Set the simulation control mode: NONE (0), USER (1), OPEN_LOOP (2), CLOSED_LOOP (3).", "inputSchema": {"type": "object", "properties": {"mode": {"type": "string", "enum": ["NONE", "USER", "OPEN_LOOP", "CLOSED_LOOP"]}}, "required": ["mode"]}},
 ]
 
 

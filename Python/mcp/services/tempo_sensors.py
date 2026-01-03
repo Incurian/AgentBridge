@@ -21,15 +21,7 @@ MEASUREMENT_TYPE_NAMES = {
 
 
 TOOLS = [
-    {
-        "name": "tempo_get_available_sensors",
-        "description": "Get list of available sensors (cameras) with their capabilities.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "tempo_get_available_sensors", "description": "Get list of available sensors (cameras) with their capabilities.", "inputSchema": {"type": "object"}},
 ]
 
 

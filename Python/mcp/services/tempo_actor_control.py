@@ -18,305 +18,36 @@ from TempoScripting import Geometry_pb2
 
 
 TOOLS = [
-    # Actor Management
-    {
-        "name": "tempo_get_all_actors",
-        "description": "Get a list of all actors in the world. Fast native implementation.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "tempo_get_all_actors", "description": "Get a list of all actors in the world. Fast native implementation.", "inputSchema": {"type": "object"}},
     {
         "name": "tempo_spawn_actor",
         "description": "Spawn an actor using Tempo's native spawning. Supports relative transforms.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Actor class or Blueprint path to spawn",
-                },
-                "location": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Location [X, Y, Z]",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "rotation": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Rotation [Roll, Pitch, Yaw] in degrees",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "relative_to": {
-                    "type": "string",
-                    "description": "Actor name to spawn relative to (optional)",
-                },
+                "type": {"type": "string"},
+                "location": {"type": "array", "items": {"type": "number"}},
+                "rotation": {"type": "array", "items": {"type": "number"}},
+                "relative_to": {"type": "string"}
             },
-            "required": ["type"],
-        },
+            "required": ["type"]
+        }
     },
-    {
-        "name": "tempo_destroy_actor",
-        "description": "Destroy an actor using Tempo's native destruction.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {
-                    "type": "string",
-                    "description": "Actor name to destroy",
-                },
-            },
-            "required": ["actor"],
-        },
-    },
-
-    # Component Management
-    {
-        "name": "tempo_get_components",
-        "description": "Get all components on an actor.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {
-                    "type": "string",
-                    "description": "Actor name",
-                },
-            },
-            "required": ["actor"],
-        },
-    },
-    {
-        "name": "tempo_add_component",
-        "description": "Add a component to an actor.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {
-                    "type": "string",
-                    "description": "Actor name",
-                },
-                "type": {
-                    "type": "string",
-                    "description": "Component class (e.g., 'StaticMeshComponent', 'PointLightComponent')",
-                },
-                "name": {
-                    "type": "string",
-                    "description": "Name for the new component (optional)",
-                },
-            },
-            "required": ["actor", "type"],
-        },
-    },
-
-    # Property Getters
-    {
-        "name": "tempo_get_actor_properties",
-        "description": "Get all properties of an actor with their current values.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {
-                    "type": "string",
-                    "description": "Actor name",
-                },
-                "include_components": {
-                    "type": "boolean",
-                    "description": "Include component properties",
-                    "default": False,
-                },
-            },
-            "required": ["actor"],
-        },
-    },
-    {
-        "name": "tempo_get_component_properties",
-        "description": "Get all properties of a specific component.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {
-                    "type": "string",
-                    "description": "Actor name",
-                },
-                "component": {
-                    "type": "string",
-                    "description": "Component name",
-                },
-            },
-            "required": ["actor", "component"],
-        },
-    },
-
-    # Typed Property Setters
-    {
-        "name": "tempo_set_float_property",
-        "description": "Set a float property on an actor or component (e.g., Intensity, Radius).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "property": {"type": "string", "description": "Property name"},
-                "value": {"type": "number", "description": "Float value"},
-            },
-            "required": ["actor", "property", "value"],
-        },
-    },
-    {
-        "name": "tempo_set_int_property",
-        "description": "Set an integer property on an actor or component.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "property": {"type": "string", "description": "Property name"},
-                "value": {"type": "integer", "description": "Integer value"},
-            },
-            "required": ["actor", "property", "value"],
-        },
-    },
-    {
-        "name": "tempo_set_bool_property",
-        "description": "Set a boolean property on an actor or component.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "property": {"type": "string", "description": "Property name"},
-                "value": {"type": "boolean", "description": "Boolean value"},
-            },
-            "required": ["actor", "property", "value"],
-        },
-    },
-    {
-        "name": "tempo_set_string_property",
-        "description": "Set a string property on an actor or component.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "property": {"type": "string", "description": "Property name"},
-                "value": {"type": "string", "description": "String value"},
-            },
-            "required": ["actor", "property", "value"],
-        },
-    },
-    {
-        "name": "tempo_set_vector_property",
-        "description": "Set a vector property (e.g., RelativeLocation, RelativeScale3D).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "property": {"type": "string", "description": "Property name"},
-                "x": {"type": "number", "description": "X value"},
-                "y": {"type": "number", "description": "Y value"},
-                "z": {"type": "number", "description": "Z value"},
-            },
-            "required": ["actor", "property", "x", "y", "z"],
-        },
-    },
-    {
-        "name": "tempo_set_rotator_property",
-        "description": "Set a rotator property (e.g., RelativeRotation).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "property": {"type": "string", "description": "Property name"},
-                "roll": {"type": "number", "description": "Roll in degrees"},
-                "pitch": {"type": "number", "description": "Pitch in degrees"},
-                "yaw": {"type": "number", "description": "Yaw in degrees"},
-            },
-            "required": ["actor", "property", "roll", "pitch", "yaw"],
-        },
-    },
-    {
-        "name": "tempo_set_color_property",
-        "description": "Set a color property (e.g., LightColor).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "property": {"type": "string", "description": "Property name"},
-                "r": {"type": "integer", "description": "Red (0-255)", "minimum": 0, "maximum": 255},
-                "g": {"type": "integer", "description": "Green (0-255)", "minimum": 0, "maximum": 255},
-                "b": {"type": "integer", "description": "Blue (0-255)", "minimum": 0, "maximum": 255},
-            },
-            "required": ["actor", "property", "r", "g", "b"],
-        },
-    },
-    {
-        "name": "tempo_set_asset_property",
-        "description": "Set an asset reference property (e.g., StaticMesh, Material).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "property": {"type": "string", "description": "Property name"},
-                "value": {"type": "string", "description": "Asset path (e.g., '/Game/Meshes/Cube.Cube')"},
-            },
-            "required": ["actor", "property", "value"],
-        },
-    },
-
-    # Transform
-    {
-        "name": "tempo_set_actor_transform",
-        "description": "Set an actor's world transform using Tempo's native method.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "location": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Location [X, Y, Z]",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "rotation": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Rotation [Roll, Pitch, Yaw]",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "relative_to": {
-                    "type": "string",
-                    "description": "Actor to set transform relative to (optional)",
-                },
-            },
-            "required": ["actor"],
-        },
-    },
-
-    # Function Call
-    {
-        "name": "tempo_call_function",
-        "description": "Call a function on an actor or component.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor": {"type": "string", "description": "Actor name"},
-                "component": {"type": "string", "description": "Component name (optional)"},
-                "function": {"type": "string", "description": "Function name to call"},
-            },
-            "required": ["actor", "function"],
-        },
-    },
+    {"name": "tempo_destroy_actor", "description": "Destroy an actor using Tempo's native destruction.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}}, "required": ["actor"]}},
+    {"name": "tempo_get_components", "description": "Get all components on an actor.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}}, "required": ["actor"]}},
+    {"name": "tempo_add_component", "description": "Add a component to an actor.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "type": {"type": "string"}, "name": {"type": "string"}}, "required": ["actor", "type"]}},
+    {"name": "tempo_get_actor_properties", "description": "Get all properties of an actor with their current values.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "include_components": {"type": "boolean", "default": False}}, "required": ["actor"]}},
+    {"name": "tempo_get_component_properties", "description": "Get all properties of a specific component.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}}, "required": ["actor", "component"]}},
+    {"name": "tempo_set_float_property", "description": "Set a float property on an actor or component (e.g., Intensity, Radius).", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "property": {"type": "string"}, "value": {"type": "number"}}, "required": ["actor", "property", "value"]}},
+    {"name": "tempo_set_int_property", "description": "Set an integer property on an actor or component.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "property": {"type": "string"}, "value": {"type": "integer"}}, "required": ["actor", "property", "value"]}},
+    {"name": "tempo_set_bool_property", "description": "Set a boolean property on an actor or component.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "property": {"type": "string"}, "value": {"type": "boolean"}}, "required": ["actor", "property", "value"]}},
+    {"name": "tempo_set_string_property", "description": "Set a string property on an actor or component.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "property": {"type": "string"}, "value": {"type": "string"}}, "required": ["actor", "property", "value"]}},
+    {"name": "tempo_set_vector_property", "description": "Set a vector property (e.g., RelativeLocation, RelativeScale3D).", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "property": {"type": "string"}, "x": {"type": "number"}, "y": {"type": "number"}, "z": {"type": "number"}}, "required": ["actor", "property", "x", "y", "z"]}},
+    {"name": "tempo_set_rotator_property", "description": "Set a rotator property (e.g., RelativeRotation).", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "property": {"type": "string"}, "roll": {"type": "number"}, "pitch": {"type": "number"}, "yaw": {"type": "number"}}, "required": ["actor", "property", "roll", "pitch", "yaw"]}},
+    {"name": "tempo_set_color_property", "description": "Set a color property (e.g., LightColor).", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "property": {"type": "string"}, "r": {"type": "integer"}, "g": {"type": "integer"}, "b": {"type": "integer"}}, "required": ["actor", "property", "r", "g", "b"]}},
+    {"name": "tempo_set_asset_property", "description": "Set an asset reference property (e.g., StaticMesh, Material).", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "property": {"type": "string"}, "value": {"type": "string"}}, "required": ["actor", "property", "value"]}},
+    {"name": "tempo_set_actor_transform", "description": "Set an actor's world transform using Tempo's native method.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "location": {"type": "array"}, "rotation": {"type": "array"}, "relative_to": {"type": "string"}}, "required": ["actor"]}},
+    {"name": "tempo_call_function", "description": "Call a function on an actor or component.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "function": {"type": "string"}}, "required": ["actor", "function"]}},
 ]
 
 

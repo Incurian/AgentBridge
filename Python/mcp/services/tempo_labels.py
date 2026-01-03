@@ -15,15 +15,7 @@ from TempoScripting import Empty_pb2
 
 
 TOOLS = [
-    {
-        "name": "tempo_get_label_map",
-        "description": "Get the mapping from instance IDs to semantic label IDs. Useful for interpreting segmentation images.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "tempo_get_label_map", "description": "Get the mapping from instance IDs to semantic label IDs. Useful for interpreting segmentation images.", "inputSchema": {"type": "object"}},
 ]
 
 

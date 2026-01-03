@@ -16,81 +16,11 @@ from TempoScripting import Geometry_pb2
 
 
 TOOLS = [
-    {
-        "name": "tempo_get_commandable_vehicles",
-        "description": "Get list of vehicles that can be commanded.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_command_vehicle",
-        "description": "Send acceleration and steering commands to a vehicle.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "vehicle_name": {
-                    "type": "string",
-                    "description": "Name of the vehicle to command",
-                },
-                "acceleration": {
-                    "type": "number",
-                    "description": "Acceleration value (-1.0 to 1.0, negative = brake/reverse)",
-                },
-                "steering": {
-                    "type": "number",
-                    "description": "Steering value (-1.0 to 1.0, negative = left, positive = right)",
-                },
-            },
-            "required": ["vehicle_name", "acceleration", "steering"],
-        },
-    },
-    {
-        "name": "tempo_get_commandable_pawns",
-        "description": "Get list of pawns that can be commanded to move.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_pawn_move_to",
-        "description": "Command a pawn to move to a location using navigation.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "pawn_name": {
-                    "type": "string",
-                    "description": "Name of the pawn to move",
-                },
-                "location": {
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "description": "Target location [X, Y, Z]",
-                    "minItems": 3,
-                    "maxItems": 3,
-                },
-                "relative": {
-                    "type": "boolean",
-                    "description": "If true, location is relative to pawn's current position",
-                    "default": False,
-                },
-            },
-            "required": ["pawn_name", "location"],
-        },
-    },
-    {
-        "name": "tempo_rebuild_navigation",
-        "description": "Rebuild the navigation mesh. Useful after spawning obstacles.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "tempo_get_commandable_vehicles", "description": "Get list of vehicles that can be commanded.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_command_vehicle", "description": "Send acceleration and steering commands to a vehicle.", "inputSchema": {"type": "object", "properties": {"vehicle_name": {"type": "string"}, "acceleration": {"type": "number"}, "steering": {"type": "number"}}, "required": ["vehicle_name", "acceleration", "steering"]}},
+    {"name": "tempo_get_commandable_pawns", "description": "Get list of pawns that can be commanded to move.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_pawn_move_to", "description": "Command a pawn to move to a location using navigation.", "inputSchema": {"type": "object", "properties": {"pawn_name": {"type": "string"}, "location": {"type": "array"}, "relative": {"type": "boolean", "default": False}}, "required": ["pawn_name", "location"]}},
+    {"name": "tempo_rebuild_navigation", "description": "Rebuild the navigation mesh. Useful after spawning obstacles.", "inputSchema": {"type": "object"}},
 ]
 
 

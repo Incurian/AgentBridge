@@ -15,75 +15,12 @@ from TempoScripting import Empty_pb2
 
 
 TOOLS = [
-    {
-        "name": "tempo_play_in_editor",
-        "description": "Start Play-In-Editor (PIE) session.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_simulate",
-        "description": "Start Simulate mode in the editor.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_stop",
-        "description": "Stop the current PIE or Simulate session.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
-    {
-        "name": "tempo_save_level",
-        "description": "Save the current level to a file.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "path": {
-                    "type": "string",
-                    "description": "Path to save the level (e.g., '/Game/Maps/MyLevel')",
-                },
-                "overwrite": {
-                    "type": "boolean",
-                    "description": "Whether to overwrite existing file",
-                    "default": False,
-                },
-            },
-            "required": ["path"],
-        },
-    },
-    {
-        "name": "tempo_open_level",
-        "description": "Open a level in the editor.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "path": {
-                    "type": "string",
-                    "description": "Path to the level to open",
-                },
-            },
-            "required": ["path"],
-        },
-    },
-    {
-        "name": "tempo_new_level",
-        "description": "Create a new empty level in the editor.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
+    {"name": "tempo_play_in_editor", "description": "Start Play-In-Editor (PIE) session.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_simulate", "description": "Start Simulate mode in the editor.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_stop", "description": "Stop the current PIE or Simulate session.", "inputSchema": {"type": "object"}},
+    {"name": "tempo_save_level", "description": "Save the current level to a file.", "inputSchema": {"type": "object", "properties": {"path": {"type": "string"}, "overwrite": {"type": "boolean", "default": False}}, "required": ["path"]}},
+    {"name": "tempo_open_level", "description": "Open a level in the editor.", "inputSchema": {"type": "object", "properties": {"path": {"type": "string"}}, "required": ["path"]}},
+    {"name": "tempo_new_level", "description": "Create a new empty level in the editor.", "inputSchema": {"type": "object"}},
 ]
 
 
