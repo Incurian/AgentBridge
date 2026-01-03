@@ -113,13 +113,11 @@ MODULES = {
     },
     "tempo_actors": {
         "tools": [
-            "tempo_get_all_actors", "tempo_spawn_actor", "tempo_destroy_actor",
-            "tempo_get_components", "tempo_add_component",
-            "tempo_get_actor_properties", "tempo_get_component_properties",
-            "tempo_set_property",  # Unified setter (replaces 8 typed setters)
-            "tempo_set_actor_transform", "tempo_call_function",
+            "tempo_spawn_actor",   # Unique: spawn relative to another actor
+            "tempo_add_component", # Unique: no AgentBridge equivalent
+            "tempo_call_function", # Unique: call instance methods on actors
         ],
-        "description": "Tempo native actor operations",
+        "description": "Tempo-specific actor ops (spawn relative, add component, call function)",
     },
     "tempo_editor": {
         "tools": [

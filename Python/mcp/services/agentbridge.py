@@ -1383,7 +1383,7 @@ def _enhance_property_error(error_dict: Dict[str, Any], property_path: str, acto
 
     # Check if this looks like a read-only property issue
     if "Failed to set" in error_msg:
-        hints.append("This property may be read-only. For light colors, use tempo_set_color_property instead.")
+        hints.append("This property may be read-only. For colors, use format like \"(R=1,G=0,B=0)\" or \"#FF0000\".")
 
     if hints:
         error_dict["hints"] = hints
@@ -1728,8 +1728,8 @@ ASSET & FILE OPERATIONS:
 
 IMPORTANT - COMPONENT NAMES:
 - Components use INSTANCE names (LightComponent0), not class names (PointLightComponent)
-- Use tempo_get_components(actor) to find the correct component name
-- For colors, use tempo_set_color_property instead of set_property_path
+- Use get_actor(actor_id, include_components=True) to find the correct component name
+- set_property handles all types including colors (use [R,G,B] array format)
 
 Use help(topic='actors|properties|classes|console|workflows|pcg_volume|volume_sizing|bp_toolkit') for detailed help.
 """
@@ -1811,7 +1811,7 @@ Component names are INSTANCE names, not class names!
 
 To find component instance names:
 - get_actor(actor_id, include_components=True)
-- Or use: tempo_get_components(actor="MyLight")
+- Or use: get_actor(actor_id="MyLight", include_components=True)
 
 Common instance names:
 - PointLight -> LightComponent0
@@ -1996,12 +1996,11 @@ Building a simple scene:
 3. spawn_actor(class_name="StaticMeshActor", location=[0,0,0], label="Floor")
 4. set_property_path("MainLight", "LightComponent0.Intensity", 10000)
 
-Setting light colors (IMPORTANT - use typed tools!):
+Setting light colors:
 1. spawn_actor(class_name="PointLight", location=[0,0,500], label="MyLight")
-2. tempo_get_components(actor="MyLight")  # Returns: LightComponent0
-3. tempo_set_color_property(actor="MyLight", component="LightComponent0",
-                            property="LightColor", r=255, g=0, b=0)
-Note: Use tempo_set_color_property, NOT set_property_path for colors!
+2. get_actor(actor_id="MyLight", include_components=True)  # Find component names
+3. set_property(actor_id="MyLight", path="LightComponent0.LightColor", value="(R=1,G=0,B=0)")
+Note: Colors can use UE format "(R=1,G=0,B=0)" with 0-1 range or hex "#FF0000"
 
 Finding and modifying actors:
 1. query_actors(name_pattern="*Door*") - Find all doors
@@ -2054,16 +2053,14 @@ Setting up procedural content generation with biomes:
                location=bounds["center"], label="MyBiomeVolume")
 
 3. Size the volumes (ALWAYS verify component names first!):
-   tempo_get_components(actor="MyBiomeVolume")  # Returns "BiomeVolume"
+   get_actor(actor_id="MyBiomeVolume", include_components=True)  # Find components
 
-   tempo_set_vector_property(actor="MyBiomeVolume", component="BiomeVolume",
-       property="BoxExtent",
-       x=bounds["half_extents"][0],
-       y=bounds["half_extents"][1],
-       z=bounds["half_extents"][2] + 5000)  # Z margin for spawning
+   set_property(actor_id="MyBiomeVolume",
+       path="BiomeVolume.BoxExtent",
+       value=f"(X={bounds['half_extents'][0]},Y={bounds['half_extents'][1]},Z={bounds['half_extents'][2] + 5000})")
 
-   tempo_set_vector_property(actor="MyBiomeVolume", component="BiomeVolume",
-       property="RelativeScale3D", x=1, y=1, z=1)
+   set_property(actor_id="MyBiomeVolume",
+       path="BiomeVolume.RelativeScale3D", value="(X=1,Y=1,Z=1)")
 
 4. Create and configure BiomeDefinition DataAsset:
    create_asset(asset_class="BiomeDefinitionTemplate",
@@ -2121,19 +2118,19 @@ When you need to size a BoxComponent volume (PCGVolume, TriggerVolume, etc.):
    # max: [X, Y, Z] maximum corner
 
 2. Find the component name:
-   tempo_get_components(actor="MyVolume")
+   get_actor(actor_id="MyVolume", include_components=True)
    # Common names: "Volume", "BoxComponent0", "CollisionComponent"
    # WARNING: BP classes may use custom names! E.g., BP_PCGBiomeVolume uses "BiomeVolume"
-   # ALWAYS verify with tempo_get_components() first!
+   # ALWAYS verify component names first!
 
 3. Set BoxExtent (HALF-SIZE in Unreal units/cm):
-   tempo_set_vector_property(actor="MyVolume", component="Volume",
-       property="BoxExtent", x=1000, y=1000, z=500)
+   set_property(actor_id="MyVolume", path="Volume.BoxExtent",
+       value="(X=1000,Y=1000,Z=500)")
    # This creates a 2000x2000x1000 volume!
 
 4. Reset scale when using BoxExtent:
-   tempo_set_vector_property(actor="MyVolume", component="Volume",
-       property="RelativeScale3D", x=1, y=1, z=1)
+   set_property(actor_id="MyVolume", path="Volume.RelativeScale3D",
+       value="(X=1,Y=1,Z=1)")
 
 COMMON MISTAKES:
 - Using class name "BoxComponent" instead of instance name "Volume"
@@ -2181,23 +2178,20 @@ SIZING BP VOLUMES:
                label="MyBiomeVolume")
 
 3. ALWAYS VERIFY COMPONENT NAME FIRST:
-   tempo_get_components(actor="MyBiomeVolume")
+   get_actor(actor_id="MyBiomeVolume", include_components=True)
    # Returns: "BiomeVolume" for BP_PCGBiomeVolume
    # Returns: "Volume" for BP_PCGBiomeCore
 
 4. SET BOXEXTENT (CRITICAL - this is HALF-SIZE!):
-   tempo_set_vector_property(actor="MyBiomeVolume", component="BiomeVolume",
-       property="BoxExtent",
-       x=bounds["half_extents"][0],
-       y=bounds["half_extents"][1],
-       z=bounds["half_extents"][2] + 5000)  # Add Z margin!
+   set_property(actor_id="MyBiomeVolume", path="BiomeVolume.BoxExtent",
+       value=f"(X={bounds['half_extents'][0]},Y={bounds['half_extents'][1]},Z={bounds['half_extents'][2] + 5000})")
 
    # BoxExtent is HALF the actual volume size!
    # A BoxExtent of [1000, 1000, 500] creates a 2000x2000x1000 volume
 
 5. RESET SCALE (when using BoxExtent directly):
-   tempo_set_vector_property(actor="MyBiomeVolume", component="BiomeVolume",
-       property="RelativeScale3D", x=1, y=1, z=1)
+   set_property(actor_id="MyBiomeVolume", path="BiomeVolume.RelativeScale3D",
+       value="(X=1,Y=1,Z=1)")
 
 WHY ADD Z MARGIN?
 PCG spawns content within the volume. Add 5000+ units to Z so spawned
@@ -2224,27 +2218,24 @@ KEY PROPERTIES ON BOXCOMPONENT:
 SIZING STEPS:
 
 1. Find the component instance name:
-   tempo_get_components(actor="MyVolume")
+   get_actor(actor_id="MyVolume", include_components=True)
    # Common names: "Volume", "BoxComponent0", "CollisionComponent"
    # WARNING: BP classes may use custom names! E.g., BP_PCGBiomeVolume uses "BiomeVolume"
-   # ALWAYS verify with tempo_get_components() first!
+   # ALWAYS verify component names first!
 
 2. Set BoxExtent (HALF-SIZE):
-   tempo_set_vector_property(actor="MyVolume", component="Volume",
-       property="BoxExtent", x=1000, y=1000, z=500)
+   set_property(actor_id="MyVolume", path="Volume.BoxExtent",
+       value="(X=1000,Y=1000,Z=500)")
    # Creates a 2000x2000x1000 unit volume (double the extent!)
 
 3. Reset scale:
-   tempo_set_vector_property(actor="MyVolume", component="Volume",
-       property="RelativeScale3D", x=1, y=1, z=1)
+   set_property(actor_id="MyVolume", path="Volume.RelativeScale3D",
+       value="(X=1,Y=1,Z=1)")
 
 FOR LANDSCAPE COVERAGE:
    bounds = get_landscape_bounds()
-   tempo_set_vector_property(actor="MyVolume", component="Volume",
-       property="BoxExtent",
-       x=bounds["half_extents"][0],
-       y=bounds["half_extents"][1],
-       z=bounds["half_extents"][2])
+   set_property(actor_id="MyVolume", path="Volume.BoxExtent",
+       value=f"(X={bounds['half_extents'][0]},Y={bounds['half_extents'][1]},Z={bounds['half_extents'][2]})")
 
 RELATIONSHIP: BoxExtent × Scale = Actual half-size
 - If BoxExtent=[100,100,100] and Scale=[2,2,2], volume is 400x400x400

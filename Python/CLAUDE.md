@@ -210,7 +210,7 @@ Use INSTANCE names (like `LightComponent0`), not CLASS names. Both GET and SET w
 # Wrong - class name won't work
 get_property(actor="MyLight", path="PointLightComponent.Intensity")
 
-# Correct - use instance name (use tempo_get_components to find actual names)
+# Correct - use instance name (use get_actor with include_components=True to find names)
 get_property(actor="MyLight", path="LightComponent0.Intensity")
 set_property(actor="MyLight", path="LightComponent0.Intensity", value="10000")
 
