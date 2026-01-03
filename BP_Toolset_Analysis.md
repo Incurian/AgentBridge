@@ -33,7 +33,115 @@ We attempted to create PCG graphs and Blueprints "from scratch" using two approa
 ## Approach Comparison
 
 | Approach | Feasibility | Complexity | Editor Required | Best For |
-|----------|-------------|------------|-----------------|----------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|
 | **UAssetAPI JSON→uasset** | HIGH (UE ≤5.4) | HIGH | No | Batch modifications, templating |
 | **AgentBridge Reflection** | MEDIUM-HIGH | MEDIUM | Yes (running) | Live editor manipulation |
 | **ElgKismetEditorWidget** | HIGH | LOW | Yes (running) | Full graph manipulation |
@@ -42,7 +150,97 @@ We attempted to create PCG graphs and Blueprints "from scratch" using two approa
 ### Feature Matrix
 
 | Feature | UAssetAPI | AgentBridge | ElgKismet | Native Python |
-|---------|-----------|-------------|-----------|---------------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-------|
 | Create Blueprint | ✅ | 🔧 Add | ✅ | ✅ |
 | Add Variable | ✅ | 🔧 Add | ✅ | ⚠️ Limited |
 | Add Function | ✅ | 🔧 Add | ✅ | ❌ |
@@ -64,7 +262,25 @@ We attempted to create PCG graphs and Blueprints "from scratch" using two approa
 ### Tools Tested
 
 | Tool | Status | Notes |
-|------|--------|-------|
+|------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|-------|
 | `bp_export_asset` | ✅ Works | Exports .uasset to .json correctly |
 | `bp_import_asset` | ❌ Fails (UE 5.6) | Corrupts serialization (see below) |
 | `bp_detect_type` | ✅ Works | Correctly identifies Blueprint, PCGGraph, etc. |
@@ -96,7 +312,43 @@ LogAssetRegistry: Warning: Package is unloadable. Reason: SerializeAssetRegistry
 ### Round-Trip Validation Results (UE 5.4 and Earlier)
 
 | Asset Type | File | Result | Notes |
-|------------|------|--------|-------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|-------|
 | Behavior Tree | BT_BaseAIBehavior.uasset | ✅ **PASS** | Binary identical (MD5 match) |
 | PCG Graph | PCG_LevelGenerator.uasset | ✅ **PASS** | Binary identical (MD5 match) |
 | Blueprint (5.7) | BP_VRIncPawn.uasset | ❌ **FAIL** | MetaDataMap FName key issue |
@@ -129,7 +381,25 @@ to dictionary key type 'UAssetAPI.UnrealTypes.FName'
 ### Asset Creation
 
 | Tool | Status | Notes |
-|------|--------|-------|
+|------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|-------|
 | `create_asset` | ✅ Works | Creates empty asset shells |
 | `duplicate_asset` | ✅ Works | **Best approach** - copies all content |
 | `save_asset` | ✅ Works | Persists changes to disk |
@@ -139,7 +409,61 @@ to dictionary key type 'UAssetAPI.UnrealTypes.FName'
 ### Property Manipulation
 
 | Capability | Status | Example |
-|------------|--------|---------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|
 | Graph-level properties | ✅ Works | `Category`, `Description`, `bIsTemplate` |
 | Node properties | ✅ Works | `NodeTitle`, `NodeComment`, `PositionX/Y` |
 | Node settings | ✅ Works | `SettingsInterface.PointsPerSquaredMeter` |
@@ -162,7 +486,43 @@ to dictionary key type 'UAssetAPI.UnrealTypes.FName'
 ### Function Calling (Current Limitations)
 
 | Tool | Works On | Limitation |
-|------|----------|------------|
+|------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|
 | `call_static_function` | Blueprint libraries | Static functions only |
 | `tempo_call_function` | World actors | Actors only, not assets |
 
@@ -191,7 +551,61 @@ PCGGraph
 ### Available Functions (Not Yet Callable)
 
 | Function | Purpose | Parameters |
-|----------|---------|------------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|
 | `AddNodeOfType` | Create new node | `TSubclassOf<UPCGSettings>` |
 | `AddNodeCopy` | Clone node settings | `UPCGSettings*` |
 | `AddEdge` | Connect nodes | `From, FromPin, To, ToPin` |
@@ -203,7 +617,25 @@ PCGGraph
 Common PCG node types available:
 
 | Class | Purpose |
-|-------|---------|
+|-------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|
 | `PCGSurfaceSamplerSettings` | Surface point generation |
 | `PCGStaticMeshSpawnerSettings` | Mesh spawning |
 | `PCGFilterByTagSettings` | Tag-based filtering |
@@ -223,7 +655,61 @@ Common PCG node types available:
 Common pin names for PCG nodes:
 
 | Node Type | Input Pins | Output Pins |
-|-----------|------------|-------------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-----|
 | Input | - | `Out` |
 | Output | `In` | - |
 | SurfaceSampler | `Bounding Shape`, `Execution` | `Out` |
@@ -345,7 +831,61 @@ Each export has:
 ### File Size Expectations
 
 | Blueprint Type | JSON Size |
-|----------------|-----------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|
 | Simple actor | ~1-5 MB |
 | Complex pawn (VR template) | 47+ MB |
 | Character with animation | 100+ MB |
@@ -359,7 +899,79 @@ Each export has:
 ### Node Types
 
 | Node Type | Purpose | Key Properties |
-|-----------|---------|----------------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|
 | K2Node_Event | Event entry point (Tick, BeginPlay) | EventReference |
 | K2Node_CallFunction | Calls a function | FunctionReference |
 | K2Node_VariableGet | Reads a variable | VariableReference |
@@ -378,7 +990,61 @@ Each export has:
 ### Pin Types
 
 | Pin Category | Direction | Color | Purpose |
-|--------------|-----------|-------|---------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|-------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|
 | Exec | Input | White | Execution flow in |
 | Then | Output | White | Execution flow out |
 | Boolean | Both | Red | Bool values |
@@ -392,7 +1058,43 @@ Each export has:
 ### NameMap Patterns
 
 | Pattern | Indicates |
-|---------|-----------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|
 | `bIs*`, `bCan*`, `bHas*` | Boolean state flags |
 | `*Velocity`, `*Speed` | Physics/movement |
 | `*Component` | Component references |
@@ -473,7 +1175,61 @@ For each important function/graph:
 Use indices to link documentation to source:
 
 | Index | Format | Example | Lookup |
-|-------|--------|---------|--------|
+|-------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|
 | Export | `E###` | `E386: Floating_SearchFootClamp` | `--find "SearchFootClamp"` |
 | Comment | `C###` | `C182: "Clamp foot if normal acceptable"` | `--comments` |
 | NameMap | `[####]` | `[0782] FootMayClamp` | `--find "FootMayClamp"` |
@@ -590,7 +1346,43 @@ ElgBESGraphPin - pin representation
 ## Files Created This Session
 
 | File | Location | Description |
-|------|----------|-------------|
+|------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-----|
 | `Claude_PCG_Duplicated` | `/Game/AgentBridge/` | PCG with modified nodes |
 | `BP_Claude_Duplicated` | `/Game/AgentBridge/` | Blueprint copy |
 | `Claude_PCG_Runtime` | `/Game/AgentBridge/` | Empty PCG shell |
@@ -601,7 +1393,25 @@ ElgBESGraphPin - pin representation
 ## Key Paths
 
 | Purpose | Path |
-|---------|------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|------|
 | bp_toolkit root | `D:/tempo/TempoSample/Plugins/AgentBridge/bp_toolkit` |
 | Local bare repo | `D:/repos/bp_toolkit.git` |
 | UAssetGUI | `vendor/UAssetGUI/UAssetGUI/bin/Release/net8.0-windows/UAssetGUI.exe` |
@@ -615,7 +1425,43 @@ ElgBESGraphPin - pin representation
 Original research documents preserved in `.old.claude/`:
 
 | Document | Key Contents |
-|----------|--------------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.------|
 | `IMPROVEMENT_PLAN.md` | Property system fixes (TArray, GET/SET, struct schemas) - **IMPLEMENTED** |
 | `RESEARCH.md` | UAssetAPI validation, ElgKismetEditorWidget, AgentBridge extension research |
 | `HANDOVER.md` | Session history (Sessions 19-25), 104 MCP tools, GitHub repos |
@@ -650,7 +1496,61 @@ New `call_asset_function` tool for calling instance methods on UObject assets (P
 ### Test Results
 
 | Function | Parameters | Status | Notes |
-|----------|------------|--------|-------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|-------|
 | `GetInputNode()` | None | ✅ **WORKS** | Returns UPCGNode pointer |
 | `GetOutputNode()` | None | ✅ **WORKS** | Returns UPCGNode pointer |
 | `AddNodeOfType()` | `TSubclassOf<UPCGSettings>` | ❌ **CRASHES** | Complex parameter passing issue |
@@ -707,7 +1607,61 @@ if (FClassProperty* ClassProp = CastField<FClassProperty>(Property))
 ### Updated Test Results
 
 | Function | Parameters | Status | Notes |
-|----------|------------|--------|-------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|-------|
 | `GetInputNode()` | None | ✅ **WORKS** | Returns UPCGNode pointer |
 | `GetOutputNode()` | None | ✅ **WORKS** | Returns UPCGNode pointer |
 | `AddNodeOfType()` | `TSubclassOf<UPCGSettings>` | ✅ **WORKS** | Creates new PCG node |
@@ -747,7 +1701,61 @@ save_asset('/Game/MyPCG')
 ### Verified PCG Node Types
 
 | Settings Class | Created Node Name |
-|---------------|-------------------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|
 | `PCGSurfaceSamplerSettings` | SurfaceSampler_N |
 | `PCGStaticMeshSpawnerSettings` | StaticMeshSpawner_N |
 | `PCGFilterByTagSettings` | FilterDataByTag_N |
@@ -768,7 +1776,97 @@ save_asset('/Game/MyPCG')
 **Finding:** Pin labels are NOT what you'd expect:
 
 | Node Type | Pin Direction | Expected Label | Actual Label |
-|-----------|---------------|----------------|--------------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.---|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.------|
 | InputNode | Output | "Out" | **"In"** |
 | OutputNode | Input | "In" | **"Out"** |
 | SurfaceSampler | First Input | "In" | **"Surface"** |
@@ -833,7 +1931,43 @@ pos_y = get_property(node_path, 'PositionY')  # Returns int_value: 0
 Full programmatic PCG graph manipulation now works:
 
 | Capability | Status | Tool |
-|------------|--------|------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|------|
 | Create empty graph | ✅ | `create_asset("PCGGraph", ...)` |
 | Add nodes | ✅ | `call_asset_function(graph, "AddNodeOfType", {TSubclassOf})` |
 | Connect nodes | ✅ | `call_asset_function(graph, "AddEdge", {...})` |
@@ -887,7 +2021,61 @@ is done through C++ editor utilities (`FBlueprintEditorUtils`) that are **not** 
 The `BlueprintEditorLibrary` class provides static functions callable via `call_static_function`:
 
 | Function | Status | Purpose |
-|----------|--------|---------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.--|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-|
 | `CreateBlueprintAssetWithParent` | ✅ Works | Create Blueprint with parent class |
 | `AddFunctionGraph` | ✅ Works | Add custom function |
 | `RemoveFunctionGraph` | ✅ Works | Remove function |
@@ -907,7 +2095,61 @@ The `BlueprintEditorLibrary` class provides static functions callable via `call_
 ### NOT Available
 
 | Capability | Status | Reason |
-|------------|--------|--------|
+|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|
 | Add K2Node to graph | ❌ | `FBlueprintEditorUtils::AddNode` is C++ only |
 | Connect pins | ❌ | `UEdGraphPin::MakeLinkTo` is C++ only |
 | Create Event nodes | ❌ | Requires `UK2Node_Event` construction |
@@ -954,7 +2196,61 @@ save_asset("/Game/Test/BP_MyActor")
 Use `GetBasicTypeByName` or construct `FEdGraphPinType` directly:
 
 | Type | PinCategory | PinSubCategory |
-|------|-------------|----------------|
+|------|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.-----|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|
 | Boolean | `bool` | - |
 | Integer | `int` | - |
 | Float | `real` | `double` or `float` |
@@ -982,7 +2278,7 @@ For object/struct types, use `GetObjectReferenceType`, `GetClassReferenceType`, 
    - JSON-based node cloning
    - Limited by UAssetGUI version support
 
-### Phase 3 Summary
+### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
 
 | Capability | Status | Via |
 |------------|--------|-----|
@@ -990,8 +2286,50 @@ For object/struct types, use `GetObjectReferenceType`, `GetClassReferenceType`, 
 | Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
 | Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
 | Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
-| Add K2Nodes | ❌ | No exposed API |
-| Connect pins | ❌ | No exposed API |
-| Full logic graphs | ❌ | Requires plugin or custom code |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
 
-**Conclusion:** We can create Blueprint *scaffolding* (structure, variables, functions) but not *logic* (nodes, connections). For full programmatic Blueprint creation, either install ElgKismetEditorWidget or extend AgentBridge with custom node creation functions.
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.|### Phase 3 Summary - COMPLETE ✅ (Updated 2026-01-02)
+
+| Capability | Status | Via |
+|------------|--------|-----|
+| Create Blueprint | ✅ | `BlueprintEditorLibrary::CreateBlueprintAssetWithParent` |
+| Add functions | ✅ | `BlueprintEditorLibrary::AddFunctionGraph` |
+| Add variables | ✅ | `BlueprintEditorLibrary::AddMemberVariable` |
+| Compile | ✅ | `BlueprintEditorLibrary::CompileBlueprint` |
+| Add K2Nodes | ✅ | `bp_create_node` MCP tool |
+| Connect pins | ✅ | `bp_connect_pins` MCP tool |
+| Disconnect pins | ✅ | `bp_disconnect_pins` MCP tool |
+| List nodes | ✅ | `bp_list_nodes` MCP tool |
+| List pins | ✅ | `bp_list_pins` MCP tool |
+| Delete nodes | ✅ | `bp_delete_node` MCP tool |
+| Full logic graphs | ✅ | All 6 BP node tools working |
+
+**Conclusion:** Full Blueprint node manipulation is now available via 6 new MCP tools. All node types (CallFunction, Event, VariableGet, VariableSet, Branch, Sequence, Comment) can be created and connected programmatically.
+
+**IMPORTANT LIMITATION:** Blueprints created via `create_asset("Blueprint", ...)` are empty shells without an EventGraph. Use existing Blueprints created through the Unreal Editor, or use `duplicate_asset()` to copy one that has initialized graphs.

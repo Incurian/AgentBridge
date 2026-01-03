@@ -685,14 +685,25 @@ For full Blueprint node manipulation, options are:
 2. **Extend AgentBridge** - Add custom UFUNCTIONs wrapping FBlueprintEditorUtils
 3. **Accept limitation** - Use BlueprintEditorLibrary for structure, duplicate for logic
 
-### Phase 3 Status: RESEARCH COMPLETE ⚠️
+### Phase 3 Status: COMPLETE ✅ (Updated 2026-01-02)
 
-Structure manipulation works, but node/pin manipulation requires additional development or third-party plugin.
+Full Blueprint node manipulation now works via 6 new MCP tools: bp_create_node, bp_connect_pins, bp_disconnect_pins, bp_list_nodes, bp_list_pins, bp_delete_node. NOTE: Blueprints must have initialized graphs (use editor-created or duplicate_asset, not create_asset).
 
 ### Overall Project Status
 
 | Phase | Status | Capability |
 |-------|--------|------------|
 | Phase 1 | ✅ COMPLETE | `call_asset_function` with TSubclassOf |
-| Phase 2 | ✅ COMPLETE | Full PCG graph manipulation |
-| Phase 3 | ⚠️ PARTIAL | Blueprint structure only, no nodes |
+| Phase 2 | ✅ COMPLETE | Full PCG graph manipulation (6 MCP tools) |
+| Phase 3 | ✅ COMPLETE | Full Blueprint node manipulation (6 MCP tools) |
+
+### PCG MCP Tools (Phase 2)
+
+| Tool | Description |
+|------|-------------|
+| `pcg_add_node` | Add node to PCG graph |
+| `pcg_connect` | Connect two PCG nodes |
+| `pcg_disconnect` | Disconnect two PCG nodes |
+| `pcg_delete_node` | Delete a PCG node |
+| `pcg_list_nodes` | List all nodes with pins |
+| `pcg_get_input_output_nodes` | Get InputNode and OutputNode |

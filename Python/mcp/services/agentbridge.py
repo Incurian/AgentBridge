@@ -1034,7 +1034,7 @@ TOOLS = [
     # =========================================================================
     {
         "name": "bp_create_node",
-        "description": "Create a node in a Blueprint graph (CallFunction, Event, Variable, Branch, Sequence, Comment). Returns the created node's GUID and pin information.",
+        "description": "Create a node in a Blueprint graph (CallFunction, Event, Variable, Branch, Sequence, Comment). Returns the created node's GUID and pin information. IMPORTANT: Blueprints created via create_asset() are empty shells without an EventGraph - use existing Blueprints created through the Unreal Editor, or use duplicate_asset() to copy one that has graphs.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -1162,7 +1162,7 @@ TOOLS = [
     },
     {
         "name": "bp_list_nodes",
-        "description": "List all nodes in a Blueprint graph. Returns node GUIDs, types, positions, and pin information.",
+        "description": "List all nodes in a Blueprint graph. Returns node GUIDs, types, positions, and pin information. NOTE: Requires a Blueprint with an initialized EventGraph (editor-created or duplicated, not from create_asset()).",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -1198,6 +1198,144 @@ TOOLS = [
                 },
             },
             "required": ["blueprint_path", "node_id"],
+        },
+    },
+
+    # =========================================================================
+    # PCG Graph Operations
+    # =========================================================================
+    {
+        "name": "pcg_add_node",
+        "description": "Add a node to a PCG graph. Returns the created node's path. Common node types: SurfaceSampler, StaticMeshSpawner, FilterByTag, TransformPoints, Branch, Difference, Union, Intersection.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "graph_path": {
+                    "type": "string",
+                    "description": "PCG graph asset path (e.g., '/Game/PCG/MyGraph.MyGraph')",
+                },
+                "node_type": {
+                    "type": "string",
+                    "description": "PCG settings class name (e.g., 'PCGSurfaceSamplerSettings', 'PCGStaticMeshSpawnerSettings'). Can use short name or full path.",
+                },
+                "pos_x": {
+                    "type": "integer",
+                    "description": "X position in graph (default: 0)",
+                    "default": 0,
+                },
+                "pos_y": {
+                    "type": "integer",
+                    "description": "Y position in graph (default: 0)",
+                    "default": 0,
+                },
+            },
+            "required": ["graph_path", "node_type"],
+        },
+    },
+    {
+        "name": "pcg_connect",
+        "description": "Connect two PCG nodes. NOTE: Pin labels are not always intuitive - InputNode's output is 'In', OutputNode's input is 'Out'. Use pcg_list_nodes to discover actual pin labels.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "graph_path": {
+                    "type": "string",
+                    "description": "PCG graph asset path",
+                },
+                "from_node": {
+                    "type": "string",
+                    "description": "Source node path (returned from pcg_add_node or pcg_list_nodes)",
+                },
+                "from_pin": {
+                    "type": "string",
+                    "description": "Source pin label (e.g., 'Out', 'In' for InputNode)",
+                },
+                "to_node": {
+                    "type": "string",
+                    "description": "Target node path",
+                },
+                "to_pin": {
+                    "type": "string",
+                    "description": "Target pin label (e.g., 'In', 'Surface', 'Out' for OutputNode)",
+                },
+            },
+            "required": ["graph_path", "from_node", "from_pin", "to_node", "to_pin"],
+        },
+    },
+    {
+        "name": "pcg_disconnect",
+        "description": "Disconnect two PCG nodes.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "graph_path": {
+                    "type": "string",
+                    "description": "PCG graph asset path",
+                },
+                "from_node": {
+                    "type": "string",
+                    "description": "Source node path",
+                },
+                "from_pin": {
+                    "type": "string",
+                    "description": "Source pin label",
+                },
+                "to_node": {
+                    "type": "string",
+                    "description": "Target node path",
+                },
+                "to_pin": {
+                    "type": "string",
+                    "description": "Target pin label",
+                },
+            },
+            "required": ["graph_path", "from_node", "from_pin", "to_node", "to_pin"],
+        },
+    },
+    {
+        "name": "pcg_delete_node",
+        "description": "Delete a node from a PCG graph.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "graph_path": {
+                    "type": "string",
+                    "description": "PCG graph asset path",
+                },
+                "node_path": {
+                    "type": "string",
+                    "description": "Node path to delete (from pcg_list_nodes)",
+                },
+            },
+            "required": ["graph_path", "node_path"],
+        },
+    },
+    {
+        "name": "pcg_list_nodes",
+        "description": "List all nodes in a PCG graph with their pins. Returns InputNode, OutputNode, and all user-created nodes.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "graph_path": {
+                    "type": "string",
+                    "description": "PCG graph asset path",
+                },
+            },
+            "required": ["graph_path"],
+        },
+    },
+    {
+        "name": "pcg_get_input_output_nodes",
+        "description": "Get the special InputNode and OutputNode of a PCG graph. These are the entry and exit points for the graph.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "graph_path": {
+                    "type": "string",
+                    "description": "PCG graph asset path",
+                },
+            },
+            "required": ["graph_path"],
         },
     },
 
@@ -3458,324 +3596,213 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         )
         if isinstance(result, dict) and "error" in result:
             return result
-        if not result.success:
-            return {"success": False, "error_message": result.error_message}
-        t = result.transform
+        return {
+            "location": [result.location.x, result.location.y, result.location.z],
+            "rotation": [result.rotation.pitch, result.rotation.yaw, result.rotation.roll],
+            "scale": [result.scale.x, result.scale.y, result.scale.z],
+        }
+
+    # =========================================================================
+    # PCG Graph Operations
+    # =========================================================================
+    elif tool_name == "pcg_add_node":
+        graph_path = args["graph_path"]
+        node_type = args["node_type"]
+        pos_x = args.get("pos_x", 0)
+        pos_y = args.get("pos_y", 0)
+
+        # Normalize node type - add PCG prefix and Settings suffix if needed
+        if not node_type.startswith("PCG"):
+            node_type = "PCG" + node_type
+        if not node_type.endswith("Settings"):
+            node_type = node_type + "Settings"
+
+        # Call AddNodeOfType
+        result = safe_call(
+            client.call_asset_function,
+            asset_path=graph_path,
+            function_name="AddNodeOfType",
+            subobject_path="",
+            parameters={"InSettingsClass": f"/Script/PCG.{node_type}"},
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+
+        # Get the node path from return value
+        node_path = ""
+        if result.HasField("return_value"):
+            node_path = result.return_value.string_value
+
+        # Set position if provided
+        if node_path and (pos_x != 0 or pos_y != 0):
+            safe_call(
+                client.call_asset_function,
+                asset_path=node_path,
+                function_name="SetNodePosition",
+                subobject_path="",
+                parameters={"InPositionX": str(pos_x), "InPositionY": str(pos_y)},
+            )
+
+        return {"success": True, "node_path": node_path}
+
+    elif tool_name == "pcg_connect":
+        result = safe_call(
+            client.call_asset_function,
+            asset_path=args["graph_path"],
+            function_name="AddEdge",
+            subobject_path="",
+            parameters={
+                "From": args["from_node"],
+                "FromPinLabel": args["from_pin"],
+                "To": args["to_node"],
+                "ToPinLabel": args["to_pin"],
+            },
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+
+        # AddEdge returns the target node on success
+        success = True
+        if result.HasField("return_value"):
+            success = bool(result.return_value.string_value) if result.return_value.type == 4 else True
+
+        return {"success": success, "error": None if success else "Failed to connect nodes - check pin labels"}
+
+    elif tool_name == "pcg_disconnect":
+        result = safe_call(
+            client.call_asset_function,
+            asset_path=args["graph_path"],
+            function_name="RemoveEdge",
+            subobject_path="",
+            parameters={
+                "From": args["from_node"],
+                "FromPinLabel": args["from_pin"],
+                "To": args["to_node"],
+                "ToPinLabel": args["to_pin"],
+            },
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+
+        success = True
+        if result.HasField("return_value"):
+            success = bool(result.return_value.string_value) if result.return_value.type == 4 else True
+
+        return {"success": success}
+
+    elif tool_name == "pcg_delete_node":
+        result = safe_call(
+            client.call_asset_function,
+            asset_path=args["graph_path"],
+            function_name="RemoveNode",
+            subobject_path="",
+            parameters={"InNode": args["node_path"]},
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
+
+    elif tool_name == "pcg_list_nodes":
+        graph_path = args["graph_path"]
+        nodes = []
+
+        # Get InputNode
+        result = safe_call(
+            client.call_asset_function,
+            asset_path=graph_path,
+            function_name="GetInputNode",
+            subobject_path="",
+            parameters={},
+        )
+        if not isinstance(result, dict):
+            input_node = result.return_value.string_value if result.HasField("return_value") else ""
+            if input_node:
+                nodes.append({
+                    "path": input_node,
+                    "type": "InputNode",
+                    "is_special": True,
+                    "input_pins": [],
+                    "output_pins": [{"label": "In", "direction": "Output"}],
+                })
+
+        # Get OutputNode
+        result = safe_call(
+            client.call_asset_function,
+            asset_path=graph_path,
+            function_name="GetOutputNode",
+            subobject_path="",
+            parameters={},
+        )
+        if not isinstance(result, dict):
+            output_node = result.return_value.string_value if result.HasField("return_value") else ""
+            if output_node:
+                nodes.append({
+                    "path": output_node,
+                    "type": "OutputNode",
+                    "is_special": True,
+                    "input_pins": [{"label": "Out", "direction": "Input"}],
+                    "output_pins": [],
+                })
+
+        # Get regular nodes array - use internal execute to get parsed result
+        nodes_result = json.loads(execute(client, "get_property", {
+            "actor_id": graph_path,
+            "path": "Nodes",
+        }))
+        if isinstance(nodes_result, dict) and "value" in nodes_result:
+            node_paths = nodes_result["value"]
+            if isinstance(node_paths, list):
+                for node_path in node_paths:
+                    if node_path:
+                        # Extract node type from path (e.g., "SurfaceSampler_0" -> "SurfaceSampler")
+                        node_name = node_path.split(":")[-1] if ":" in node_path else node_path
+                        # Remove trailing _N suffix
+                        import re
+                        node_type = re.sub(r'_\d+$', '', node_name)
+
+                        nodes.append({
+                            "path": node_path,
+                            "type": node_type,
+                            "is_special": False,
+                            "input_pins": [{"label": "In", "direction": "Input"}],
+                            "output_pins": [{"label": "Out", "direction": "Output"}],
+                        })
+
+        return {"success": True, "nodes": nodes}
+
+    elif tool_name == "pcg_get_input_output_nodes":
+        graph_path = args["graph_path"]
+
+        # Get InputNode
+        input_result = safe_call(
+            client.call_asset_function,
+            asset_path=graph_path,
+            function_name="GetInputNode",
+            subobject_path="",
+            parameters={},
+        )
+        input_node = ""
+        if not isinstance(input_result, dict) and input_result.HasField("return_value"):
+            input_node = input_result.return_value.string_value
+
+        # Get OutputNode
+        output_result = safe_call(
+            client.call_asset_function,
+            asset_path=graph_path,
+            function_name="GetOutputNode",
+            subobject_path="",
+            parameters={},
+        )
+        output_node = ""
+        if not isinstance(output_result, dict) and output_result.HasField("return_value"):
+            output_node = output_result.return_value.string_value
+
         return {
             "success": True,
-            "location": [t.location.x, t.location.y, t.location.z],
-            "rotation": [t.rotation.p, t.rotation.y, t.rotation.r],
-            "scale": [t.scale.x, t.scale.y, t.scale.z],
-        }
-
-    elif tool_name == "set_component_transform":
-        result = safe_call(
-            client.set_component_transform,
-            args["actor_id"],
-            args["component_name"],
-            args.get("location"),
-            args.get("rotation"),
-            args.get("scale"),
-            args.get("world_space", True),
-            args.get("sweep", False),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    elif tool_name == "attach_actor":
-        result = safe_call(
-            client.attach_actor,
-            args["child_actor_id"],
-            args["parent_actor_id"],
-            args.get("parent_component_name", ""),
-            args.get("socket_name", ""),
-            args.get("location_rule", "KeepWorld"),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    elif tool_name == "detach_actor":
-        result = safe_call(
-            client.detach_actor,
-            args["actor_id"],
-            args.get("maintain_world_position", True),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    # =========================================================================
-    # File Operations (P1)
-    # =========================================================================
-    elif tool_name == "read_project_file":
-        result = safe_call(
-            client.read_project_file,
-            args["relative_path"],
-            args.get("as_base64", False),
-            args.get("max_bytes", 0),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {
-            "success": result.success,
-            "error_message": result.error_message if not result.success else None,
-            "content": result.content,
-            "file_size": result.file_size,
-            "is_binary": result.is_binary,
-        }
-
-    elif tool_name == "write_project_file":
-        result = safe_call(
-            client.write_project_file,
-            args["relative_path"],
-            args["content"],
-            args.get("is_base64", False),
-            args.get("create_directories", True),
-            args.get("append", False),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {
-            "success": result.success,
-            "error_message": result.error_message if not result.success else None,
-            "bytes_written": result.bytes_written,
-        }
-
-    elif tool_name == "list_project_directory":
-        result = safe_call(
-            client.list_project_directory,
-            args.get("relative_path", ""),
-            args.get("pattern", ""),
-            args.get("recursive", False),
-            args.get("limit", 100),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        files = []
-        for f in result.files:
-            files.append({
-                "name": f.name,
-                "relative_path": f.relative_path,
-                "is_directory": f.is_directory,
-                "size": f.size,
-                "last_modified": f.last_modified,
-            })
-        return {
-            "success": result.success,
-            "error_message": result.error_message if not result.success else None,
-            "files": files,
-            "total_count": result.total_count,
-        }
-
-    elif tool_name == "copy_project_file":
-        result = safe_call(
-            client.copy_project_file,
-            args["source_path"],
-            args["dest_path"],
-            args.get("overwrite", False),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {
-            "success": result.success,
-            "error_message": result.error_message if not result.success else None,
-            "dest_absolute_path": result.dest_absolute_path,
-        }
-
-    # -------------------------------------------------------------------------
-    # Component Operations
-    # -------------------------------------------------------------------------
-
-    elif tool_name == "attach_component":
-        result = safe_call(
-            client.attach_component,
-            args["actor_id"],
-            args["component_name"],
-            args["parent_component_name"],
-            args.get("socket_name", ""),
-            args.get("location_rule", "keep_relative"),
-            args.get("rotation_rule", "keep_relative"),
-            args.get("scale_rule", "keep_relative"),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    elif tool_name == "attach_actor":
-        result = safe_call(
-            client.attach_actor,
-            args["child_actor_id"],
-            args["parent_actor_id"],
-            args.get("parent_component_name", ""),
-            args.get("socket_name", ""),
-            args.get("location_rule", "keep_world"),
-            args.get("rotation_rule", "keep_world"),
-            args.get("scale_rule", "keep_world"),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    elif tool_name == "detach_component":
-        result = safe_call(
-            client.detach_component,
-            args["actor_id"],
-            args["component_name"],
-            args.get("maintain_world_transform", True),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    # =========================================================================
-    # Blueprint Node Operations (P2)
-    # =========================================================================
-    elif tool_name == "bp_create_node":
-        result = safe_call(
-            client.create_blueprint_node,
-            args["blueprint_path"],
-            args["node_type"],
-            args.get("graph_name", "EventGraph"),
-            args.get("function_reference", ""),
-            args.get("event_name", ""),
-            args.get("variable_name", ""),
-            args.get("comment", ""),
-            args.get("pos_x", 0),
-            args.get("pos_y", 0),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        # Build node info dict with pins
-        node = result.node
-        pins = []
-        for pin in node.pins:
-            pins.append({
-                "name": pin.name,
-                "direction": pin.direction,
-                "type": pin.type,
-                "type_display_name": pin.type_display_name,
-                "is_connected": pin.is_connected,
-                "default_value": pin.default_value,
-                "connected_to": list(pin.connected_to),
-            })
-        return {
-            "success": result.success,
-            "error_message": result.error_message if not result.success else None,
-            "node": {
-                "guid": node.guid,
-                "class_name": node.class_name,
-                "title": node.title,
-                "pos_x": node.pos_x,
-                "pos_y": node.pos_y,
-                "comment": node.comment,
-                "function_reference": node.function_reference,
-                "event_name": node.event_name,
-                "variable_name": node.variable_name,
-                "pins": pins,
-            } if result.success else None,
-        }
-
-    elif tool_name == "bp_connect_pins":
-        result = safe_call(
-            client.connect_blueprint_pins,
-            args["blueprint_path"],
-            args["source_node"],
-            args["source_pin"],
-            args["target_node"],
-            args["target_pin"],
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    elif tool_name == "bp_disconnect_pins":
-        result = safe_call(
-            client.disconnect_blueprint_pins,
-            args["blueprint_path"],
-            args["source_node"],
-            args["source_pin"],
-            args["target_node"],
-            args["target_pin"],
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    elif tool_name == "bp_delete_node":
-        result = safe_call(
-            client.delete_blueprint_node,
-            args["blueprint_path"],
-            args["node_id"],
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"success": True}
-
-    elif tool_name == "bp_list_nodes":
-        result = safe_call(
-            client.list_blueprint_nodes,
-            args["blueprint_path"],
-            args.get("graph_name", ""),
-            args.get("node_class_filter", ""),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        nodes = []
-        for node in result.nodes:
-            pins = []
-            for pin in node.pins:
-                pins.append({
-                    "name": pin.name,
-                    "direction": pin.direction,
-                    "type": pin.type,
-                    "type_display_name": pin.type_display_name,
-                    "is_connected": pin.is_connected,
-                    "default_value": pin.default_value,
-                    "connected_to": list(pin.connected_to),
-                })
-            nodes.append({
-                "guid": node.guid,
-                "class_name": node.class_name,
-                "title": node.title,
-                "pos_x": node.pos_x,
-                "pos_y": node.pos_y,
-                "comment": node.comment,
-                "function_reference": node.function_reference,
-                "event_name": node.event_name,
-                "variable_name": node.variable_name,
-                "pins": pins,
-            })
-        return {
-            "success": result.success,
-            "error_message": result.error_message if not result.success else None,
-            "nodes": nodes,
-        }
-
-    elif tool_name == "bp_list_pins":
-        result = safe_call(
-            client.list_blueprint_pins,
-            args["blueprint_path"],
-            args["node_id"],
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        pins = []
-        for pin in result.pins:
-            pins.append({
-                "name": pin.name,
-                "direction": pin.direction,
-                "type": pin.type,
-                "type_display_name": pin.type_display_name,
-                "is_connected": pin.is_connected,
-                "default_value": pin.default_value,
-                "connected_to": list(pin.connected_to),
-            })
-        return {
-            "success": result.success,
-            "error_message": result.error_message if not result.success else None,
-            "pins": pins,
+            "input_node": input_node,
+            "input_pin_label": "In",  # InputNode's output pin is labeled "In"
+            "output_node": output_node,
+            "output_pin_label": "Out",  # OutputNode's input pin is labeled "Out"
         }
 
     else:

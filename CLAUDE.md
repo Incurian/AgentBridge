@@ -116,8 +116,9 @@ be minimal and obvious. If something "should just work," make it work automatica
 | Console commands | **WORKING** | Execute and search 5000+ commands |
 | bp_toolkit (offline) | **WORKING** | 14 tools for JSON asset manipulation |
 | **Blueprint nodes** | **COMPLETE** | 6 MCP tools for BP graph manipulation |
+| **PCG graphs** | **COMPLETE** | 6 MCP tools for PCG graph manipulation |
 
-**Tool Count:** 110 MCP tools across 13 services (96 core + 14 bp_toolkit when present)
+**Tool Count:** 116 MCP tools across 13 services (102 core + 14 bp_toolkit when present)
 
 ---
 
@@ -173,12 +174,43 @@ bp_connect_pins(
 
 ---
 
-## TODO: PCG Manipulation MCP Tools
+## PCG Graph Manipulation - COMPLETE
 
-**REMINDER:** After Blueprint nodes are complete, discuss with user about exposing PCG graph manipulation as MCP tools. PCG already works via `call_asset_function` but may benefit from dedicated tools like:
-- `pcg_add_node` - Add node to PCG graph
-- `pcg_connect_nodes` - Connect PCG nodes
-- `pcg_set_node_settings` - Set node settings/parameters
+**Status:** Full implementation complete. 6 MCP tools for PCG graph manipulation.
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `pcg_add_node` | Add a node to a PCG graph (SurfaceSampler, StaticMeshSpawner, etc.) |
+| `pcg_connect` | Connect two PCG nodes via pins |
+| `pcg_disconnect` | Disconnect two PCG nodes |
+| `pcg_delete_node` | Delete a node from a PCG graph |
+| `pcg_list_nodes` | List all nodes in a PCG graph with their pins |
+| `pcg_get_input_output_nodes` | Get the InputNode and OutputNode of a PCG graph |
+
+### Example Usage
+
+```python
+# Create a PCG graph pipeline
+graph = "/Game/MyPCG.MyPCG"
+
+# Add nodes
+sampler = pcg_add_node(graph_path=graph, node_type="SurfaceSampler")
+spawner = pcg_add_node(graph_path=graph, node_type="StaticMeshSpawner", pos_x=300)
+
+# Get input/output nodes  
+io = pcg_get_input_output_nodes(graph_path=graph)
+
+# Connect: Input -> Sampler -> Spawner -> Output
+pcg_connect(graph, io["input_node"], "In", sampler["node_path"], "In")
+pcg_connect(graph, sampler["node_path"], "Out", spawner["node_path"], "In")
+pcg_connect(graph, spawner["node_path"], "Out", io["output_node"], "Out")
+
+save_asset(graph)
+```
+
+**NOTE:** Pin labels are not always intuitive - InputNode output is "In", OutputNode input is "Out". Use `pcg_list_nodes` to discover actual pin labels.
 
 ---
 
@@ -188,7 +220,7 @@ bp_connect_pins(
 External Agents (Claude, LLMs)
          |
          v
-MCP Server (Python) --- 104 tools across 13 services
+MCP Server (Python) --- 116 tools across 13 services
          |
          v
 gRPC (port 10001) / HTTP (port 8080)
@@ -466,7 +498,7 @@ Historical development notes are preserved in `.old.claude/` for reference:
 
 ---
 
-*39 RPCs, 105 MCP Tools (90 + 14 bp_toolkit), Self-Documenting Help System*
+*39 RPCs, 116 MCP Tools (102 + 14 bp_toolkit), Self-Documenting Help System*
 
 ---
 
@@ -489,4 +521,4 @@ call_asset_function(
 )
 ```
 
-**Status:** Parameterless works, complex parameters need FFunctionInvoker enhancement for `FClassProperty` handling.
+**Status:** COMPLETE - All parameter types now work including TSubclassOf<>. Used by PCG MCP tools.
