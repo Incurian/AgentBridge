@@ -107,22 +107,24 @@ Add to Claude Code settings (`~/.claude/settings.json`):
 {
   "mcpServers": {
     "agentbridge": {
-      "command": "D:/tempo/TempoSample/TempoEnv/Scripts/python.exe",
+      "command": "<YourProject>/TempoEnv/Scripts/python.exe",
       "args": ["-m", "mcp", "--host", "localhost", "--port", "10001"],
-      "cwd": "D:/tempo/TempoSample/Plugins/AgentBridge/Python",
+      "cwd": "<YourProject>/Plugins/AgentBridge/Python",
       "env": {
-        "PYTHONPATH": "D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo"
+        "PYTHONPATH": "<YourProject>/Plugins/Tempo/TempoCore/Content/Python/API/tempo"
       }
     }
   }
 }
 ```
 
+**Replace `<YourProject>` with your actual project path** (e.g., `D:/MyGame` or `/home/user/MyGame`).
+
 ### 3. Start the Editor
 
 ```bash
 # Using Tempo's run script
-cd D:/tempo/TempoSample
+cd <YourProject>
 ./Plugins/Tempo/Scripts/Run.sh
 
 # Wait ~30 seconds for gRPC server on port 10001
@@ -563,14 +565,14 @@ Switch contexts with `set_target_world("editor")` or `set_target_world("pie")`.
 ### Building
 
 ```bash
-# Full build
-cd D:/tempo/TempoSample/Scripts
+# Full build (from project root)
+cd <YourProject>/Scripts
 ./Build.sh
 
-# Or direct UnrealBuildTool
-"D:/EL_UE/UE_5.6/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe" \
-  TempoSampleEditor Win64 Development \
-  -Project="D:/tempo/TempoSample/TempoSample.uproject" -WaitMutex
+# Or direct UnrealBuildTool (Windows example)
+"<EngineDir>/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe" \
+  <YourProject>Editor Win64 Development \
+  -Project="<YourProject>/<YourProject>.uproject" -WaitMutex
 
 # Live Coding (editor running)
 Ctrl+Alt+F11
@@ -579,11 +581,11 @@ Ctrl+Alt+F11
 ### Testing
 
 ```bash
-cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
+cd <YourProject>/Plugins/AgentBridge/Python
 
 # Use TempoEnv Python (required for grpcio/protobuf)
-D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_grpc.py   # gRPC tests
-D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_client.py # HTTP tests
+<YourProject>/TempoEnv/Scripts/python.exe test_grpc.py   # gRPC tests
+<YourProject>/TempoEnv/Scripts/python.exe test_client.py # HTTP tests
 ```
 
 ### Console Commands
@@ -636,7 +638,7 @@ bp_toolkit enables offline asset manipulation via JSON - create and modify Bluep
 ### Setup
 
 ```bash
-cd D:/tempo/TempoSample/Plugins/AgentBridge
+cd <YourProject>/Plugins/AgentBridge
 git submodule update --init --recursive
 cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 ```
