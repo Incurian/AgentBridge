@@ -307,6 +307,35 @@ class AgentBridgeService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> PrepareAsyncDetachActor(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(PrepareAsyncDetachActorRaw(context, request, cq));
     }
+    // --- Unified Transform/Attachment (Phase 2) ---
+    virtual ::grpc::Status SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::TempoScripting::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> AsyncSetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(AsyncSetTransformRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> PrepareAsyncSetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(PrepareAsyncSetTransformRaw(context, request, cq));
+    }
+    virtual ::grpc::Status GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::AgentBridgeServer::TransformResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::TransformResponse>> AsyncGetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::TransformResponse>>(AsyncGetTransformRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::TransformResponse>> PrepareAsyncGetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::TransformResponse>>(PrepareAsyncGetTransformRaw(context, request, cq));
+    }
+    virtual ::grpc::Status Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::TempoScripting::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> AsyncAttach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(AsyncAttachRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> PrepareAsyncAttach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(PrepareAsyncAttachRaw(context, request, cq));
+    }
+    virtual ::grpc::Status Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::TempoScripting::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> AsyncDetach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(AsyncDetachRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>> PrepareAsyncDetach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>>(PrepareAsyncDetachRaw(context, request, cq));
+    }
     // --- File Operations (P1) ---
     virtual ::grpc::Status ReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::AgentBridgeServer::ReadProjectFileResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ReadProjectFileResponse>> AsyncReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::grpc::CompletionQueue* cq) {
@@ -471,6 +500,15 @@ class AgentBridgeService final {
       virtual void DetachComponent(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachComponentRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void DetachActor(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) = 0;
       virtual void DetachActor(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      // --- Unified Transform/Attachment (Phase 2) ---
+      virtual void SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       // --- File Operations (P1) ---
       virtual void ReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest* request, ::AgentBridgeServer::ReadProjectFileResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void ReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest* request, ::AgentBridgeServer::ReadProjectFileResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
@@ -572,6 +610,14 @@ class AgentBridgeService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncDetachComponentRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachComponentRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* AsyncDetachActorRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncDetachActorRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* AsyncSetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncSetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::TransformResponse>* AsyncGetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::TransformResponse>* PrepareAsyncGetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* AsyncAttachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncAttachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* AsyncDetachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::TempoScripting::Empty>* PrepareAsyncDetachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ReadProjectFileResponse>* AsyncReadProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::ReadProjectFileResponse>* PrepareAsyncReadProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::AgentBridgeServer::WriteProjectFileResponse>* AsyncWriteProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::WriteProjectFileRequest& request, ::grpc::CompletionQueue* cq) = 0;
@@ -850,6 +896,34 @@ class AgentBridgeService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> PrepareAsyncDetachActor(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(PrepareAsyncDetachActorRaw(context, request, cq));
     }
+    ::grpc::Status SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::TempoScripting::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> AsyncSetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(AsyncSetTransformRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> PrepareAsyncSetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(PrepareAsyncSetTransformRaw(context, request, cq));
+    }
+    ::grpc::Status GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::AgentBridgeServer::TransformResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::TransformResponse>> AsyncGetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::TransformResponse>>(AsyncGetTransformRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::TransformResponse>> PrepareAsyncGetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::TransformResponse>>(PrepareAsyncGetTransformRaw(context, request, cq));
+    }
+    ::grpc::Status Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::TempoScripting::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> AsyncAttach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(AsyncAttachRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> PrepareAsyncAttach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(PrepareAsyncAttachRaw(context, request, cq));
+    }
+    ::grpc::Status Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::TempoScripting::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> AsyncDetach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(AsyncDetachRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>> PrepareAsyncDetach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>>(PrepareAsyncDetachRaw(context, request, cq));
+    }
     ::grpc::Status ReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::AgentBridgeServer::ReadProjectFileResponse* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ReadProjectFileResponse>> AsyncReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ReadProjectFileResponse>>(AsyncReadProjectFileRaw(context, request, cq));
@@ -1002,6 +1076,14 @@ class AgentBridgeService final {
       void DetachComponent(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachComponentRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
       void DetachActor(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) override;
       void DetachActor(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) override;
+      void SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response, std::function<void(::grpc::Status)>) override;
+      void GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) override;
+      void Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)>) override;
+      void Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
       void ReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest* request, ::AgentBridgeServer::ReadProjectFileResponse* response, std::function<void(::grpc::Status)>) override;
       void ReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest* request, ::AgentBridgeServer::ReadProjectFileResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void WriteProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::WriteProjectFileRequest* request, ::AgentBridgeServer::WriteProjectFileResponse* response, std::function<void(::grpc::Status)>) override;
@@ -1107,6 +1189,14 @@ class AgentBridgeService final {
     ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncDetachComponentRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachComponentRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AsyncDetachActorRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncDetachActorRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachActorRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AsyncSetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncSetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::TransformResponse>* AsyncGetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::TransformResponse>* PrepareAsyncGetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AsyncAttachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncAttachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AsyncDetachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* PrepareAsyncDetachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ReadProjectFileResponse>* AsyncReadProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::ReadProjectFileResponse>* PrepareAsyncReadProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::WriteProjectFileResponse>* AsyncWriteProjectFileRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::WriteProjectFileRequest& request, ::grpc::CompletionQueue* cq) override;
@@ -1165,6 +1255,10 @@ class AgentBridgeService final {
     const ::grpc::internal::RpcMethod rpcmethod_AttachActor_;
     const ::grpc::internal::RpcMethod rpcmethod_DetachComponent_;
     const ::grpc::internal::RpcMethod rpcmethod_DetachActor_;
+    const ::grpc::internal::RpcMethod rpcmethod_SetTransform_;
+    const ::grpc::internal::RpcMethod rpcmethod_GetTransform_;
+    const ::grpc::internal::RpcMethod rpcmethod_Attach_;
+    const ::grpc::internal::RpcMethod rpcmethod_Detach_;
     const ::grpc::internal::RpcMethod rpcmethod_ReadProjectFile_;
     const ::grpc::internal::RpcMethod rpcmethod_WriteProjectFile_;
     const ::grpc::internal::RpcMethod rpcmethod_ListProjectDirectory_;
@@ -1229,6 +1323,11 @@ class AgentBridgeService final {
     virtual ::grpc::Status AttachActor(::grpc::ServerContext* context, const ::AgentBridgeServer::AttachActorRequest* request, ::TempoScripting::Empty* response);
     virtual ::grpc::Status DetachComponent(::grpc::ServerContext* context, const ::AgentBridgeServer::DetachComponentRequest* request, ::TempoScripting::Empty* response);
     virtual ::grpc::Status DetachActor(::grpc::ServerContext* context, const ::AgentBridgeServer::DetachActorRequest* request, ::TempoScripting::Empty* response);
+    // --- Unified Transform/Attachment (Phase 2) ---
+    virtual ::grpc::Status SetTransform(::grpc::ServerContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response);
+    virtual ::grpc::Status GetTransform(::grpc::ServerContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response);
+    virtual ::grpc::Status Attach(::grpc::ServerContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response);
+    virtual ::grpc::Status Detach(::grpc::ServerContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response);
     // --- File Operations (P1) ---
     virtual ::grpc::Status ReadProjectFile(::grpc::ServerContext* context, const ::AgentBridgeServer::ReadProjectFileRequest* request, ::AgentBridgeServer::ReadProjectFileResponse* response);
     virtual ::grpc::Status WriteProjectFile(::grpc::ServerContext* context, const ::AgentBridgeServer::WriteProjectFileRequest* request, ::AgentBridgeServer::WriteProjectFileResponse* response);
@@ -1964,12 +2063,92 @@ class AgentBridgeService final {
     }
   };
   template <class BaseClass>
+  class WithAsyncMethod_SetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_SetTransform() {
+      ::grpc::Service::MarkMethodAsync(36);
+    }
+    ~WithAsyncMethod_SetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SetTransformRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSetTransform(::grpc::ServerContext* context, ::AgentBridgeServer::SetTransformRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(36, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetTransform() {
+      ::grpc::Service::MarkMethodAsync(37);
+    }
+    ~WithAsyncMethod_GetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetTransformRequest* /*request*/, ::AgentBridgeServer::TransformResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetTransform(::grpc::ServerContext* context, ::AgentBridgeServer::GetTransformRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::TransformResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(37, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Attach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_Attach() {
+      ::grpc::Service::MarkMethodAsync(38);
+    }
+    ~WithAsyncMethod_Attach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Attach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::AttachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestAttach(::grpc::ServerContext* context, ::AgentBridgeServer::AttachRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(38, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Detach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_Detach() {
+      ::grpc::Service::MarkMethodAsync(39);
+    }
+    ~WithAsyncMethod_Detach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Detach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DetachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDetach(::grpc::ServerContext* context, ::AgentBridgeServer::DetachRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(39, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_ReadProjectFile : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ReadProjectFile() {
-      ::grpc::Service::MarkMethodAsync(36);
+      ::grpc::Service::MarkMethodAsync(40);
     }
     ~WithAsyncMethod_ReadProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1980,7 +2159,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReadProjectFile(::grpc::ServerContext* context, ::AgentBridgeServer::ReadProjectFileRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::ReadProjectFileResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(36, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(40, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1989,7 +2168,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_WriteProjectFile() {
-      ::grpc::Service::MarkMethodAsync(37);
+      ::grpc::Service::MarkMethodAsync(41);
     }
     ~WithAsyncMethod_WriteProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2000,7 +2179,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestWriteProjectFile(::grpc::ServerContext* context, ::AgentBridgeServer::WriteProjectFileRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::WriteProjectFileResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(37, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(41, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2009,7 +2188,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ListProjectDirectory() {
-      ::grpc::Service::MarkMethodAsync(38);
+      ::grpc::Service::MarkMethodAsync(42);
     }
     ~WithAsyncMethod_ListProjectDirectory() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2020,7 +2199,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestListProjectDirectory(::grpc::ServerContext* context, ::AgentBridgeServer::ListProjectDirectoryRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::ListProjectDirectoryResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(38, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(42, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2029,7 +2208,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_CopyProjectFile() {
-      ::grpc::Service::MarkMethodAsync(39);
+      ::grpc::Service::MarkMethodAsync(43);
     }
     ~WithAsyncMethod_CopyProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2040,7 +2219,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCopyProjectFile(::grpc::ServerContext* context, ::AgentBridgeServer::CopyProjectFileRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::CopyProjectFileResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(39, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(43, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2049,7 +2228,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_DeleteProjectFile() {
-      ::grpc::Service::MarkMethodAsync(40);
+      ::grpc::Service::MarkMethodAsync(44);
     }
     ~WithAsyncMethod_DeleteProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2060,7 +2239,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestDeleteProjectFile(::grpc::ServerContext* context, ::AgentBridgeServer::DeleteProjectFileRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(40, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(44, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2069,7 +2248,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_CreateBlueprintNode() {
-      ::grpc::Service::MarkMethodAsync(41);
+      ::grpc::Service::MarkMethodAsync(45);
     }
     ~WithAsyncMethod_CreateBlueprintNode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2080,7 +2259,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCreateBlueprintNode(::grpc::ServerContext* context, ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::CreateBlueprintNodeResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(41, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(45, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2089,7 +2268,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ConnectBlueprintPins() {
-      ::grpc::Service::MarkMethodAsync(42);
+      ::grpc::Service::MarkMethodAsync(46);
     }
     ~WithAsyncMethod_ConnectBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2100,7 +2279,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestConnectBlueprintPins(::grpc::ServerContext* context, ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(42, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(46, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2109,7 +2288,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_DisconnectBlueprintPins() {
-      ::grpc::Service::MarkMethodAsync(43);
+      ::grpc::Service::MarkMethodAsync(47);
     }
     ~WithAsyncMethod_DisconnectBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2120,7 +2299,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestDisconnectBlueprintPins(::grpc::ServerContext* context, ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(43, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(47, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2129,7 +2308,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_DeleteBlueprintNode() {
-      ::grpc::Service::MarkMethodAsync(44);
+      ::grpc::Service::MarkMethodAsync(48);
     }
     ~WithAsyncMethod_DeleteBlueprintNode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2140,7 +2319,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestDeleteBlueprintNode(::grpc::ServerContext* context, ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::grpc::ServerAsyncResponseWriter< ::TempoScripting::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(44, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(48, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2149,7 +2328,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ListBlueprintNodes() {
-      ::grpc::Service::MarkMethodAsync(45);
+      ::grpc::Service::MarkMethodAsync(49);
     }
     ~WithAsyncMethod_ListBlueprintNodes() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2160,7 +2339,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestListBlueprintNodes(::grpc::ServerContext* context, ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::ListBlueprintNodesResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(45, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(49, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2169,7 +2348,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ListBlueprintPins() {
-      ::grpc::Service::MarkMethodAsync(46);
+      ::grpc::Service::MarkMethodAsync(50);
     }
     ~WithAsyncMethod_ListBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2180,10 +2359,10 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestListBlueprintPins(::grpc::ServerContext* context, ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::grpc::ServerAsyncResponseWriter< ::AgentBridgeServer::ListBlueprintPinsResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(46, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(50, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_ListWorlds<WithAsyncMethod_SetTargetWorld<WithAsyncMethod_QueryActors<WithAsyncMethod_GetActor<WithAsyncMethod_SpawnActor<WithAsyncMethod_DeleteActor<WithAsyncMethod_DuplicateActor<WithAsyncMethod_SetActorTransform<WithAsyncMethod_SetActorProperties<WithAsyncMethod_GetPropertyPath<WithAsyncMethod_SetPropertyPath<WithAsyncMethod_CallFunction<WithAsyncMethod_CallAssetFunction<WithAsyncMethod_FindClass<WithAsyncMethod_GetClassSchema<WithAsyncMethod_ListClasses<WithAsyncMethod_IsWorldPartitioned<WithAsyncMethod_QueryAllActors<WithAsyncMethod_GetStreamingState<WithAsyncMethod_QueryLandscape<WithAsyncMethod_GetLandscapeBounds<WithAsyncMethod_GetDataLayers<WithAsyncMethod_GetActorsInDataLayer<WithAsyncMethod_ExecuteConsoleCommand<WithAsyncMethod_SearchConsoleCommands<WithAsyncMethod_CreateAsset<WithAsyncMethod_SaveAsset<WithAsyncMethod_SaveActorAsBlueprint<WithAsyncMethod_DuplicateAsset<WithAsyncMethod_GetAssetThumbnail<WithAsyncMethod_GetComponentTransform<WithAsyncMethod_SetComponentTransform<WithAsyncMethod_AttachComponent<WithAsyncMethod_AttachActor<WithAsyncMethod_DetachComponent<WithAsyncMethod_DetachActor<WithAsyncMethod_ReadProjectFile<WithAsyncMethod_WriteProjectFile<WithAsyncMethod_ListProjectDirectory<WithAsyncMethod_CopyProjectFile<WithAsyncMethod_DeleteProjectFile<WithAsyncMethod_CreateBlueprintNode<WithAsyncMethod_ConnectBlueprintPins<WithAsyncMethod_DisconnectBlueprintPins<WithAsyncMethod_DeleteBlueprintNode<WithAsyncMethod_ListBlueprintNodes<WithAsyncMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > AsyncService;
+  typedef WithAsyncMethod_ListWorlds<WithAsyncMethod_SetTargetWorld<WithAsyncMethod_QueryActors<WithAsyncMethod_GetActor<WithAsyncMethod_SpawnActor<WithAsyncMethod_DeleteActor<WithAsyncMethod_DuplicateActor<WithAsyncMethod_SetActorTransform<WithAsyncMethod_SetActorProperties<WithAsyncMethod_GetPropertyPath<WithAsyncMethod_SetPropertyPath<WithAsyncMethod_CallFunction<WithAsyncMethod_CallAssetFunction<WithAsyncMethod_FindClass<WithAsyncMethod_GetClassSchema<WithAsyncMethod_ListClasses<WithAsyncMethod_IsWorldPartitioned<WithAsyncMethod_QueryAllActors<WithAsyncMethod_GetStreamingState<WithAsyncMethod_QueryLandscape<WithAsyncMethod_GetLandscapeBounds<WithAsyncMethod_GetDataLayers<WithAsyncMethod_GetActorsInDataLayer<WithAsyncMethod_ExecuteConsoleCommand<WithAsyncMethod_SearchConsoleCommands<WithAsyncMethod_CreateAsset<WithAsyncMethod_SaveAsset<WithAsyncMethod_SaveActorAsBlueprint<WithAsyncMethod_DuplicateAsset<WithAsyncMethod_GetAssetThumbnail<WithAsyncMethod_GetComponentTransform<WithAsyncMethod_SetComponentTransform<WithAsyncMethod_AttachComponent<WithAsyncMethod_AttachActor<WithAsyncMethod_DetachComponent<WithAsyncMethod_DetachActor<WithAsyncMethod_SetTransform<WithAsyncMethod_GetTransform<WithAsyncMethod_Attach<WithAsyncMethod_Detach<WithAsyncMethod_ReadProjectFile<WithAsyncMethod_WriteProjectFile<WithAsyncMethod_ListProjectDirectory<WithAsyncMethod_CopyProjectFile<WithAsyncMethod_DeleteProjectFile<WithAsyncMethod_CreateBlueprintNode<WithAsyncMethod_ConnectBlueprintPins<WithAsyncMethod_DisconnectBlueprintPins<WithAsyncMethod_DeleteBlueprintNode<WithAsyncMethod_ListBlueprintNodes<WithAsyncMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_ListWorlds : public BaseClass {
    private:
@@ -3157,18 +3336,126 @@ class AgentBridgeService final {
       ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::DetachActorRequest* /*request*/, ::TempoScripting::Empty* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithCallbackMethod_SetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_SetTransform() {
+      ::grpc::Service::MarkMethodCallback(36,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::SetTransformRequest, ::TempoScripting::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response) { return this->SetTransform(context, request, response); }));}
+    void SetMessageAllocatorFor_SetTransform(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::SetTransformRequest, ::TempoScripting::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(36);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::SetTransformRequest, ::TempoScripting::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_SetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SetTransformRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SetTransform(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::SetTransformRequest* /*request*/, ::TempoScripting::Empty* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_GetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetTransform() {
+      ::grpc::Service::MarkMethodCallback(37,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::GetTransformRequest, ::AgentBridgeServer::TransformResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response) { return this->GetTransform(context, request, response); }));}
+    void SetMessageAllocatorFor_GetTransform(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::GetTransformRequest, ::AgentBridgeServer::TransformResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(37);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::GetTransformRequest, ::AgentBridgeServer::TransformResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetTransformRequest* /*request*/, ::AgentBridgeServer::TransformResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetTransform(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::GetTransformRequest* /*request*/, ::AgentBridgeServer::TransformResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_Attach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_Attach() {
+      ::grpc::Service::MarkMethodCallback(38,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::AttachRequest, ::TempoScripting::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response) { return this->Attach(context, request, response); }));}
+    void SetMessageAllocatorFor_Attach(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::AttachRequest, ::TempoScripting::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(38);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::AttachRequest, ::TempoScripting::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_Attach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Attach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::AttachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Attach(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::AttachRequest* /*request*/, ::TempoScripting::Empty* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_Detach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_Detach() {
+      ::grpc::Service::MarkMethodCallback(39,
+          new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DetachRequest, ::TempoScripting::Empty>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response) { return this->Detach(context, request, response); }));}
+    void SetMessageAllocatorFor_Detach(
+        ::grpc::MessageAllocator< ::AgentBridgeServer::DetachRequest, ::TempoScripting::Empty>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(39);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DetachRequest, ::TempoScripting::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_Detach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Detach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DetachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Detach(
+      ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::DetachRequest* /*request*/, ::TempoScripting::Empty* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithCallbackMethod_ReadProjectFile : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_ReadProjectFile() {
-      ::grpc::Service::MarkMethodCallback(36,
+      ::grpc::Service::MarkMethodCallback(40,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ReadProjectFileRequest, ::AgentBridgeServer::ReadProjectFileResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ReadProjectFileRequest* request, ::AgentBridgeServer::ReadProjectFileResponse* response) { return this->ReadProjectFile(context, request, response); }));}
     void SetMessageAllocatorFor_ReadProjectFile(
         ::grpc::MessageAllocator< ::AgentBridgeServer::ReadProjectFileRequest, ::AgentBridgeServer::ReadProjectFileResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(36);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(40);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ReadProjectFileRequest, ::AgentBridgeServer::ReadProjectFileResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3189,13 +3476,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_WriteProjectFile() {
-      ::grpc::Service::MarkMethodCallback(37,
+      ::grpc::Service::MarkMethodCallback(41,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::WriteProjectFileRequest, ::AgentBridgeServer::WriteProjectFileResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::WriteProjectFileRequest* request, ::AgentBridgeServer::WriteProjectFileResponse* response) { return this->WriteProjectFile(context, request, response); }));}
     void SetMessageAllocatorFor_WriteProjectFile(
         ::grpc::MessageAllocator< ::AgentBridgeServer::WriteProjectFileRequest, ::AgentBridgeServer::WriteProjectFileResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(37);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(41);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::WriteProjectFileRequest, ::AgentBridgeServer::WriteProjectFileResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3216,13 +3503,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_ListProjectDirectory() {
-      ::grpc::Service::MarkMethodCallback(38,
+      ::grpc::Service::MarkMethodCallback(42,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListProjectDirectoryRequest, ::AgentBridgeServer::ListProjectDirectoryResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ListProjectDirectoryRequest* request, ::AgentBridgeServer::ListProjectDirectoryResponse* response) { return this->ListProjectDirectory(context, request, response); }));}
     void SetMessageAllocatorFor_ListProjectDirectory(
         ::grpc::MessageAllocator< ::AgentBridgeServer::ListProjectDirectoryRequest, ::AgentBridgeServer::ListProjectDirectoryResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(38);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(42);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListProjectDirectoryRequest, ::AgentBridgeServer::ListProjectDirectoryResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3243,13 +3530,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_CopyProjectFile() {
-      ::grpc::Service::MarkMethodCallback(39,
+      ::grpc::Service::MarkMethodCallback(43,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::CopyProjectFileRequest, ::AgentBridgeServer::CopyProjectFileResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::CopyProjectFileRequest* request, ::AgentBridgeServer::CopyProjectFileResponse* response) { return this->CopyProjectFile(context, request, response); }));}
     void SetMessageAllocatorFor_CopyProjectFile(
         ::grpc::MessageAllocator< ::AgentBridgeServer::CopyProjectFileRequest, ::AgentBridgeServer::CopyProjectFileResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(39);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(43);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::CopyProjectFileRequest, ::AgentBridgeServer::CopyProjectFileResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3270,13 +3557,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_DeleteProjectFile() {
-      ::grpc::Service::MarkMethodCallback(40,
+      ::grpc::Service::MarkMethodCallback(44,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DeleteProjectFileRequest, ::TempoScripting::Empty>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::DeleteProjectFileRequest* request, ::TempoScripting::Empty* response) { return this->DeleteProjectFile(context, request, response); }));}
     void SetMessageAllocatorFor_DeleteProjectFile(
         ::grpc::MessageAllocator< ::AgentBridgeServer::DeleteProjectFileRequest, ::TempoScripting::Empty>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(40);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(44);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DeleteProjectFileRequest, ::TempoScripting::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3297,13 +3584,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_CreateBlueprintNode() {
-      ::grpc::Service::MarkMethodCallback(41,
+      ::grpc::Service::MarkMethodCallback(45,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::CreateBlueprintNodeRequest* request, ::AgentBridgeServer::CreateBlueprintNodeResponse* response) { return this->CreateBlueprintNode(context, request, response); }));}
     void SetMessageAllocatorFor_CreateBlueprintNode(
         ::grpc::MessageAllocator< ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(41);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(45);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3324,13 +3611,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_ConnectBlueprintPins() {
-      ::grpc::Service::MarkMethodCallback(42,
+      ::grpc::Service::MarkMethodCallback(46,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ConnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response) { return this->ConnectBlueprintPins(context, request, response); }));}
     void SetMessageAllocatorFor_ConnectBlueprintPins(
         ::grpc::MessageAllocator< ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(42);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(46);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3351,13 +3638,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_DisconnectBlueprintPins() {
-      ::grpc::Service::MarkMethodCallback(43,
+      ::grpc::Service::MarkMethodCallback(47,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::DisconnectBlueprintPinsRequest* request, ::TempoScripting::Empty* response) { return this->DisconnectBlueprintPins(context, request, response); }));}
     void SetMessageAllocatorFor_DisconnectBlueprintPins(
         ::grpc::MessageAllocator< ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(43);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(47);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3378,13 +3665,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_DeleteBlueprintNode() {
-      ::grpc::Service::MarkMethodCallback(44,
+      ::grpc::Service::MarkMethodCallback(48,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::DeleteBlueprintNodeRequest* request, ::TempoScripting::Empty* response) { return this->DeleteBlueprintNode(context, request, response); }));}
     void SetMessageAllocatorFor_DeleteBlueprintNode(
         ::grpc::MessageAllocator< ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(44);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(48);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3405,13 +3692,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_ListBlueprintNodes() {
-      ::grpc::Service::MarkMethodCallback(45,
+      ::grpc::Service::MarkMethodCallback(49,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ListBlueprintNodesRequest* request, ::AgentBridgeServer::ListBlueprintNodesResponse* response) { return this->ListBlueprintNodes(context, request, response); }));}
     void SetMessageAllocatorFor_ListBlueprintNodes(
         ::grpc::MessageAllocator< ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(45);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(49);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3432,13 +3719,13 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_ListBlueprintPins() {
-      ::grpc::Service::MarkMethodCallback(46,
+      ::grpc::Service::MarkMethodCallback(50,
           new ::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::AgentBridgeServer::ListBlueprintPinsRequest* request, ::AgentBridgeServer::ListBlueprintPinsResponse* response) { return this->ListBlueprintPins(context, request, response); }));}
     void SetMessageAllocatorFor_ListBlueprintPins(
         ::grpc::MessageAllocator< ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(46);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(50);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -3453,7 +3740,7 @@ class AgentBridgeService final {
     virtual ::grpc::ServerUnaryReactor* ListBlueprintPins(
       ::grpc::CallbackServerContext* /*context*/, const ::AgentBridgeServer::ListBlueprintPinsRequest* /*request*/, ::AgentBridgeServer::ListBlueprintPinsResponse* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_ListWorlds<WithCallbackMethod_SetTargetWorld<WithCallbackMethod_QueryActors<WithCallbackMethod_GetActor<WithCallbackMethod_SpawnActor<WithCallbackMethod_DeleteActor<WithCallbackMethod_DuplicateActor<WithCallbackMethod_SetActorTransform<WithCallbackMethod_SetActorProperties<WithCallbackMethod_GetPropertyPath<WithCallbackMethod_SetPropertyPath<WithCallbackMethod_CallFunction<WithCallbackMethod_CallAssetFunction<WithCallbackMethod_FindClass<WithCallbackMethod_GetClassSchema<WithCallbackMethod_ListClasses<WithCallbackMethod_IsWorldPartitioned<WithCallbackMethod_QueryAllActors<WithCallbackMethod_GetStreamingState<WithCallbackMethod_QueryLandscape<WithCallbackMethod_GetLandscapeBounds<WithCallbackMethod_GetDataLayers<WithCallbackMethod_GetActorsInDataLayer<WithCallbackMethod_ExecuteConsoleCommand<WithCallbackMethod_SearchConsoleCommands<WithCallbackMethod_CreateAsset<WithCallbackMethod_SaveAsset<WithCallbackMethod_SaveActorAsBlueprint<WithCallbackMethod_DuplicateAsset<WithCallbackMethod_GetAssetThumbnail<WithCallbackMethod_GetComponentTransform<WithCallbackMethod_SetComponentTransform<WithCallbackMethod_AttachComponent<WithCallbackMethod_AttachActor<WithCallbackMethod_DetachComponent<WithCallbackMethod_DetachActor<WithCallbackMethod_ReadProjectFile<WithCallbackMethod_WriteProjectFile<WithCallbackMethod_ListProjectDirectory<WithCallbackMethod_CopyProjectFile<WithCallbackMethod_DeleteProjectFile<WithCallbackMethod_CreateBlueprintNode<WithCallbackMethod_ConnectBlueprintPins<WithCallbackMethod_DisconnectBlueprintPins<WithCallbackMethod_DeleteBlueprintNode<WithCallbackMethod_ListBlueprintNodes<WithCallbackMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > CallbackService;
+  typedef WithCallbackMethod_ListWorlds<WithCallbackMethod_SetTargetWorld<WithCallbackMethod_QueryActors<WithCallbackMethod_GetActor<WithCallbackMethod_SpawnActor<WithCallbackMethod_DeleteActor<WithCallbackMethod_DuplicateActor<WithCallbackMethod_SetActorTransform<WithCallbackMethod_SetActorProperties<WithCallbackMethod_GetPropertyPath<WithCallbackMethod_SetPropertyPath<WithCallbackMethod_CallFunction<WithCallbackMethod_CallAssetFunction<WithCallbackMethod_FindClass<WithCallbackMethod_GetClassSchema<WithCallbackMethod_ListClasses<WithCallbackMethod_IsWorldPartitioned<WithCallbackMethod_QueryAllActors<WithCallbackMethod_GetStreamingState<WithCallbackMethod_QueryLandscape<WithCallbackMethod_GetLandscapeBounds<WithCallbackMethod_GetDataLayers<WithCallbackMethod_GetActorsInDataLayer<WithCallbackMethod_ExecuteConsoleCommand<WithCallbackMethod_SearchConsoleCommands<WithCallbackMethod_CreateAsset<WithCallbackMethod_SaveAsset<WithCallbackMethod_SaveActorAsBlueprint<WithCallbackMethod_DuplicateAsset<WithCallbackMethod_GetAssetThumbnail<WithCallbackMethod_GetComponentTransform<WithCallbackMethod_SetComponentTransform<WithCallbackMethod_AttachComponent<WithCallbackMethod_AttachActor<WithCallbackMethod_DetachComponent<WithCallbackMethod_DetachActor<WithCallbackMethod_SetTransform<WithCallbackMethod_GetTransform<WithCallbackMethod_Attach<WithCallbackMethod_Detach<WithCallbackMethod_ReadProjectFile<WithCallbackMethod_WriteProjectFile<WithCallbackMethod_ListProjectDirectory<WithCallbackMethod_CopyProjectFile<WithCallbackMethod_DeleteProjectFile<WithCallbackMethod_CreateBlueprintNode<WithCallbackMethod_ConnectBlueprintPins<WithCallbackMethod_DisconnectBlueprintPins<WithCallbackMethod_DeleteBlueprintNode<WithCallbackMethod_ListBlueprintNodes<WithCallbackMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_ListWorlds : public BaseClass {
@@ -4068,12 +4355,80 @@ class AgentBridgeService final {
     }
   };
   template <class BaseClass>
+  class WithGenericMethod_SetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_SetTransform() {
+      ::grpc::Service::MarkMethodGeneric(36);
+    }
+    ~WithGenericMethod_SetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SetTransformRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_GetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetTransform() {
+      ::grpc::Service::MarkMethodGeneric(37);
+    }
+    ~WithGenericMethod_GetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetTransformRequest* /*request*/, ::AgentBridgeServer::TransformResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_Attach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_Attach() {
+      ::grpc::Service::MarkMethodGeneric(38);
+    }
+    ~WithGenericMethod_Attach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Attach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::AttachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_Detach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_Detach() {
+      ::grpc::Service::MarkMethodGeneric(39);
+    }
+    ~WithGenericMethod_Detach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Detach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DetachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
   class WithGenericMethod_ReadProjectFile : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ReadProjectFile() {
-      ::grpc::Service::MarkMethodGeneric(36);
+      ::grpc::Service::MarkMethodGeneric(40);
     }
     ~WithGenericMethod_ReadProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4090,7 +4445,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_WriteProjectFile() {
-      ::grpc::Service::MarkMethodGeneric(37);
+      ::grpc::Service::MarkMethodGeneric(41);
     }
     ~WithGenericMethod_WriteProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4107,7 +4462,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ListProjectDirectory() {
-      ::grpc::Service::MarkMethodGeneric(38);
+      ::grpc::Service::MarkMethodGeneric(42);
     }
     ~WithGenericMethod_ListProjectDirectory() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4124,7 +4479,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_CopyProjectFile() {
-      ::grpc::Service::MarkMethodGeneric(39);
+      ::grpc::Service::MarkMethodGeneric(43);
     }
     ~WithGenericMethod_CopyProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4141,7 +4496,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_DeleteProjectFile() {
-      ::grpc::Service::MarkMethodGeneric(40);
+      ::grpc::Service::MarkMethodGeneric(44);
     }
     ~WithGenericMethod_DeleteProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4158,7 +4513,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_CreateBlueprintNode() {
-      ::grpc::Service::MarkMethodGeneric(41);
+      ::grpc::Service::MarkMethodGeneric(45);
     }
     ~WithGenericMethod_CreateBlueprintNode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4175,7 +4530,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ConnectBlueprintPins() {
-      ::grpc::Service::MarkMethodGeneric(42);
+      ::grpc::Service::MarkMethodGeneric(46);
     }
     ~WithGenericMethod_ConnectBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4192,7 +4547,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_DisconnectBlueprintPins() {
-      ::grpc::Service::MarkMethodGeneric(43);
+      ::grpc::Service::MarkMethodGeneric(47);
     }
     ~WithGenericMethod_DisconnectBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4209,7 +4564,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_DeleteBlueprintNode() {
-      ::grpc::Service::MarkMethodGeneric(44);
+      ::grpc::Service::MarkMethodGeneric(48);
     }
     ~WithGenericMethod_DeleteBlueprintNode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4226,7 +4581,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ListBlueprintNodes() {
-      ::grpc::Service::MarkMethodGeneric(45);
+      ::grpc::Service::MarkMethodGeneric(49);
     }
     ~WithGenericMethod_ListBlueprintNodes() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4243,7 +4598,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ListBlueprintPins() {
-      ::grpc::Service::MarkMethodGeneric(46);
+      ::grpc::Service::MarkMethodGeneric(50);
     }
     ~WithGenericMethod_ListBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4975,12 +5330,92 @@ class AgentBridgeService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_SetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_SetTransform() {
+      ::grpc::Service::MarkMethodRaw(36);
+    }
+    ~WithRawMethod_SetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SetTransformRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestSetTransform(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(36, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetTransform() {
+      ::grpc::Service::MarkMethodRaw(37);
+    }
+    ~WithRawMethod_GetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetTransformRequest* /*request*/, ::AgentBridgeServer::TransformResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetTransform(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(37, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_Attach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_Attach() {
+      ::grpc::Service::MarkMethodRaw(38);
+    }
+    ~WithRawMethod_Attach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Attach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::AttachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestAttach(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(38, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_Detach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_Detach() {
+      ::grpc::Service::MarkMethodRaw(39);
+    }
+    ~WithRawMethod_Detach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Detach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DetachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDetach(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(39, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_ReadProjectFile : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ReadProjectFile() {
-      ::grpc::Service::MarkMethodRaw(36);
+      ::grpc::Service::MarkMethodRaw(40);
     }
     ~WithRawMethod_ReadProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -4991,7 +5426,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReadProjectFile(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(36, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(40, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5000,7 +5435,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_WriteProjectFile() {
-      ::grpc::Service::MarkMethodRaw(37);
+      ::grpc::Service::MarkMethodRaw(41);
     }
     ~WithRawMethod_WriteProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5011,7 +5446,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestWriteProjectFile(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(37, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(41, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5020,7 +5455,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ListProjectDirectory() {
-      ::grpc::Service::MarkMethodRaw(38);
+      ::grpc::Service::MarkMethodRaw(42);
     }
     ~WithRawMethod_ListProjectDirectory() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5031,7 +5466,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestListProjectDirectory(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(38, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(42, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5040,7 +5475,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_CopyProjectFile() {
-      ::grpc::Service::MarkMethodRaw(39);
+      ::grpc::Service::MarkMethodRaw(43);
     }
     ~WithRawMethod_CopyProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5051,7 +5486,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCopyProjectFile(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(39, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(43, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5060,7 +5495,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_DeleteProjectFile() {
-      ::grpc::Service::MarkMethodRaw(40);
+      ::grpc::Service::MarkMethodRaw(44);
     }
     ~WithRawMethod_DeleteProjectFile() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5071,7 +5506,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestDeleteProjectFile(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(40, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(44, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5080,7 +5515,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_CreateBlueprintNode() {
-      ::grpc::Service::MarkMethodRaw(41);
+      ::grpc::Service::MarkMethodRaw(45);
     }
     ~WithRawMethod_CreateBlueprintNode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5091,7 +5526,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCreateBlueprintNode(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(41, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(45, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5100,7 +5535,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ConnectBlueprintPins() {
-      ::grpc::Service::MarkMethodRaw(42);
+      ::grpc::Service::MarkMethodRaw(46);
     }
     ~WithRawMethod_ConnectBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5111,7 +5546,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestConnectBlueprintPins(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(42, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(46, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5120,7 +5555,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_DisconnectBlueprintPins() {
-      ::grpc::Service::MarkMethodRaw(43);
+      ::grpc::Service::MarkMethodRaw(47);
     }
     ~WithRawMethod_DisconnectBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5131,7 +5566,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestDisconnectBlueprintPins(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(43, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(47, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5140,7 +5575,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_DeleteBlueprintNode() {
-      ::grpc::Service::MarkMethodRaw(44);
+      ::grpc::Service::MarkMethodRaw(48);
     }
     ~WithRawMethod_DeleteBlueprintNode() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5151,7 +5586,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestDeleteBlueprintNode(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(44, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(48, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5160,7 +5595,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ListBlueprintNodes() {
-      ::grpc::Service::MarkMethodRaw(45);
+      ::grpc::Service::MarkMethodRaw(49);
     }
     ~WithRawMethod_ListBlueprintNodes() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5171,7 +5606,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestListBlueprintNodes(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(45, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(49, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5180,7 +5615,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ListBlueprintPins() {
-      ::grpc::Service::MarkMethodRaw(46);
+      ::grpc::Service::MarkMethodRaw(50);
     }
     ~WithRawMethod_ListBlueprintPins() override {
       BaseClassMustBeDerivedFromService(this);
@@ -5191,7 +5626,7 @@ class AgentBridgeService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestListBlueprintPins(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(46, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(50, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5987,12 +6422,100 @@ class AgentBridgeService final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithRawCallbackMethod_SetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_SetTransform() {
+      ::grpc::Service::MarkMethodRawCallback(36,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SetTransform(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_SetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SetTransformRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* SetTransform(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetTransform() {
+      ::grpc::Service::MarkMethodRawCallback(37,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetTransform(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetTransformRequest* /*request*/, ::AgentBridgeServer::TransformResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetTransform(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_Attach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_Attach() {
+      ::grpc::Service::MarkMethodRawCallback(38,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Attach(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_Attach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Attach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::AttachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Attach(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_Detach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_Detach() {
+      ::grpc::Service::MarkMethodRawCallback(39,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Detach(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_Detach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Detach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DetachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Detach(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_ReadProjectFile : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_ReadProjectFile() {
-      ::grpc::Service::MarkMethodRawCallback(36,
+      ::grpc::Service::MarkMethodRawCallback(40,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ReadProjectFile(context, request, response); }));
@@ -6014,7 +6537,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_WriteProjectFile() {
-      ::grpc::Service::MarkMethodRawCallback(37,
+      ::grpc::Service::MarkMethodRawCallback(41,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->WriteProjectFile(context, request, response); }));
@@ -6036,7 +6559,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_ListProjectDirectory() {
-      ::grpc::Service::MarkMethodRawCallback(38,
+      ::grpc::Service::MarkMethodRawCallback(42,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListProjectDirectory(context, request, response); }));
@@ -6058,7 +6581,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_CopyProjectFile() {
-      ::grpc::Service::MarkMethodRawCallback(39,
+      ::grpc::Service::MarkMethodRawCallback(43,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->CopyProjectFile(context, request, response); }));
@@ -6080,7 +6603,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_DeleteProjectFile() {
-      ::grpc::Service::MarkMethodRawCallback(40,
+      ::grpc::Service::MarkMethodRawCallback(44,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->DeleteProjectFile(context, request, response); }));
@@ -6102,7 +6625,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_CreateBlueprintNode() {
-      ::grpc::Service::MarkMethodRawCallback(41,
+      ::grpc::Service::MarkMethodRawCallback(45,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->CreateBlueprintNode(context, request, response); }));
@@ -6124,7 +6647,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_ConnectBlueprintPins() {
-      ::grpc::Service::MarkMethodRawCallback(42,
+      ::grpc::Service::MarkMethodRawCallback(46,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ConnectBlueprintPins(context, request, response); }));
@@ -6146,7 +6669,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_DisconnectBlueprintPins() {
-      ::grpc::Service::MarkMethodRawCallback(43,
+      ::grpc::Service::MarkMethodRawCallback(47,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->DisconnectBlueprintPins(context, request, response); }));
@@ -6168,7 +6691,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_DeleteBlueprintNode() {
-      ::grpc::Service::MarkMethodRawCallback(44,
+      ::grpc::Service::MarkMethodRawCallback(48,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->DeleteBlueprintNode(context, request, response); }));
@@ -6190,7 +6713,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_ListBlueprintNodes() {
-      ::grpc::Service::MarkMethodRawCallback(45,
+      ::grpc::Service::MarkMethodRawCallback(49,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListBlueprintNodes(context, request, response); }));
@@ -6212,7 +6735,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_ListBlueprintPins() {
-      ::grpc::Service::MarkMethodRawCallback(46,
+      ::grpc::Service::MarkMethodRawCallback(50,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListBlueprintPins(context, request, response); }));
@@ -7201,12 +7724,120 @@ class AgentBridgeService final {
     virtual ::grpc::Status StreamedDetachActor(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::DetachActorRequest,::TempoScripting::Empty>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_SetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_SetTransform() {
+      ::grpc::Service::MarkMethodStreamed(36,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::SetTransformRequest, ::TempoScripting::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::SetTransformRequest, ::TempoScripting::Empty>* streamer) {
+                       return this->StreamedSetTransform(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_SetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status SetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::SetTransformRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedSetTransform(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::SetTransformRequest,::TempoScripting::Empty>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GetTransform : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetTransform() {
+      ::grpc::Service::MarkMethodStreamed(37,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::GetTransformRequest, ::AgentBridgeServer::TransformResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::GetTransformRequest, ::AgentBridgeServer::TransformResponse>* streamer) {
+                       return this->StreamedGetTransform(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetTransform() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetTransform(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::GetTransformRequest* /*request*/, ::AgentBridgeServer::TransformResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetTransform(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::GetTransformRequest,::AgentBridgeServer::TransformResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_Attach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_Attach() {
+      ::grpc::Service::MarkMethodStreamed(38,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::AttachRequest, ::TempoScripting::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::AttachRequest, ::TempoScripting::Empty>* streamer) {
+                       return this->StreamedAttach(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_Attach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Attach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::AttachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedAttach(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::AttachRequest,::TempoScripting::Empty>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_Detach : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_Detach() {
+      ::grpc::Service::MarkMethodStreamed(39,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::AgentBridgeServer::DetachRequest, ::TempoScripting::Empty>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::AgentBridgeServer::DetachRequest, ::TempoScripting::Empty>* streamer) {
+                       return this->StreamedDetach(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_Detach() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Detach(::grpc::ServerContext* /*context*/, const ::AgentBridgeServer::DetachRequest* /*request*/, ::TempoScripting::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedDetach(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::DetachRequest,::TempoScripting::Empty>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_ReadProjectFile : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ReadProjectFile() {
-      ::grpc::Service::MarkMethodStreamed(36,
+      ::grpc::Service::MarkMethodStreamed(40,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::ReadProjectFileRequest, ::AgentBridgeServer::ReadProjectFileResponse>(
             [this](::grpc::ServerContext* context,
@@ -7233,7 +7864,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_WriteProjectFile() {
-      ::grpc::Service::MarkMethodStreamed(37,
+      ::grpc::Service::MarkMethodStreamed(41,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::WriteProjectFileRequest, ::AgentBridgeServer::WriteProjectFileResponse>(
             [this](::grpc::ServerContext* context,
@@ -7260,7 +7891,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ListProjectDirectory() {
-      ::grpc::Service::MarkMethodStreamed(38,
+      ::grpc::Service::MarkMethodStreamed(42,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::ListProjectDirectoryRequest, ::AgentBridgeServer::ListProjectDirectoryResponse>(
             [this](::grpc::ServerContext* context,
@@ -7287,7 +7918,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_CopyProjectFile() {
-      ::grpc::Service::MarkMethodStreamed(39,
+      ::grpc::Service::MarkMethodStreamed(43,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::CopyProjectFileRequest, ::AgentBridgeServer::CopyProjectFileResponse>(
             [this](::grpc::ServerContext* context,
@@ -7314,7 +7945,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_DeleteProjectFile() {
-      ::grpc::Service::MarkMethodStreamed(40,
+      ::grpc::Service::MarkMethodStreamed(44,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::DeleteProjectFileRequest, ::TempoScripting::Empty>(
             [this](::grpc::ServerContext* context,
@@ -7341,7 +7972,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_CreateBlueprintNode() {
-      ::grpc::Service::MarkMethodStreamed(41,
+      ::grpc::Service::MarkMethodStreamed(45,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse>(
             [this](::grpc::ServerContext* context,
@@ -7368,7 +7999,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ConnectBlueprintPins() {
-      ::grpc::Service::MarkMethodStreamed(42,
+      ::grpc::Service::MarkMethodStreamed(46,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty>(
             [this](::grpc::ServerContext* context,
@@ -7395,7 +8026,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_DisconnectBlueprintPins() {
-      ::grpc::Service::MarkMethodStreamed(43,
+      ::grpc::Service::MarkMethodStreamed(47,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty>(
             [this](::grpc::ServerContext* context,
@@ -7422,7 +8053,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_DeleteBlueprintNode() {
-      ::grpc::Service::MarkMethodStreamed(44,
+      ::grpc::Service::MarkMethodStreamed(48,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty>(
             [this](::grpc::ServerContext* context,
@@ -7449,7 +8080,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ListBlueprintNodes() {
-      ::grpc::Service::MarkMethodStreamed(45,
+      ::grpc::Service::MarkMethodStreamed(49,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse>(
             [this](::grpc::ServerContext* context,
@@ -7476,7 +8107,7 @@ class AgentBridgeService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ListBlueprintPins() {
-      ::grpc::Service::MarkMethodStreamed(46,
+      ::grpc::Service::MarkMethodStreamed(50,
         new ::grpc::internal::StreamedUnaryHandler<
           ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse>(
             [this](::grpc::ServerContext* context,
@@ -7497,9 +8128,9 @@ class AgentBridgeService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedListBlueprintPins(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::AgentBridgeServer::ListBlueprintPinsRequest,::AgentBridgeServer::ListBlueprintPinsResponse>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_DuplicateActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_CallAssetFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetLandscapeBounds<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<WithStreamedUnaryMethod_CreateAsset<WithStreamedUnaryMethod_SaveAsset<WithStreamedUnaryMethod_SaveActorAsBlueprint<WithStreamedUnaryMethod_DuplicateAsset<WithStreamedUnaryMethod_GetAssetThumbnail<WithStreamedUnaryMethod_GetComponentTransform<WithStreamedUnaryMethod_SetComponentTransform<WithStreamedUnaryMethod_AttachComponent<WithStreamedUnaryMethod_AttachActor<WithStreamedUnaryMethod_DetachComponent<WithStreamedUnaryMethod_DetachActor<WithStreamedUnaryMethod_ReadProjectFile<WithStreamedUnaryMethod_WriteProjectFile<WithStreamedUnaryMethod_ListProjectDirectory<WithStreamedUnaryMethod_CopyProjectFile<WithStreamedUnaryMethod_DeleteProjectFile<WithStreamedUnaryMethod_CreateBlueprintNode<WithStreamedUnaryMethod_ConnectBlueprintPins<WithStreamedUnaryMethod_DisconnectBlueprintPins<WithStreamedUnaryMethod_DeleteBlueprintNode<WithStreamedUnaryMethod_ListBlueprintNodes<WithStreamedUnaryMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_DuplicateActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_CallAssetFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetLandscapeBounds<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<WithStreamedUnaryMethod_CreateAsset<WithStreamedUnaryMethod_SaveAsset<WithStreamedUnaryMethod_SaveActorAsBlueprint<WithStreamedUnaryMethod_DuplicateAsset<WithStreamedUnaryMethod_GetAssetThumbnail<WithStreamedUnaryMethod_GetComponentTransform<WithStreamedUnaryMethod_SetComponentTransform<WithStreamedUnaryMethod_AttachComponent<WithStreamedUnaryMethod_AttachActor<WithStreamedUnaryMethod_DetachComponent<WithStreamedUnaryMethod_DetachActor<WithStreamedUnaryMethod_SetTransform<WithStreamedUnaryMethod_GetTransform<WithStreamedUnaryMethod_Attach<WithStreamedUnaryMethod_Detach<WithStreamedUnaryMethod_ReadProjectFile<WithStreamedUnaryMethod_WriteProjectFile<WithStreamedUnaryMethod_ListProjectDirectory<WithStreamedUnaryMethod_CopyProjectFile<WithStreamedUnaryMethod_DeleteProjectFile<WithStreamedUnaryMethod_CreateBlueprintNode<WithStreamedUnaryMethod_ConnectBlueprintPins<WithStreamedUnaryMethod_DisconnectBlueprintPins<WithStreamedUnaryMethod_DeleteBlueprintNode<WithStreamedUnaryMethod_ListBlueprintNodes<WithStreamedUnaryMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_DuplicateActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_CallAssetFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetLandscapeBounds<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<WithStreamedUnaryMethod_CreateAsset<WithStreamedUnaryMethod_SaveAsset<WithStreamedUnaryMethod_SaveActorAsBlueprint<WithStreamedUnaryMethod_DuplicateAsset<WithStreamedUnaryMethod_GetAssetThumbnail<WithStreamedUnaryMethod_GetComponentTransform<WithStreamedUnaryMethod_SetComponentTransform<WithStreamedUnaryMethod_AttachComponent<WithStreamedUnaryMethod_AttachActor<WithStreamedUnaryMethod_DetachComponent<WithStreamedUnaryMethod_DetachActor<WithStreamedUnaryMethod_ReadProjectFile<WithStreamedUnaryMethod_WriteProjectFile<WithStreamedUnaryMethod_ListProjectDirectory<WithStreamedUnaryMethod_CopyProjectFile<WithStreamedUnaryMethod_DeleteProjectFile<WithStreamedUnaryMethod_CreateBlueprintNode<WithStreamedUnaryMethod_ConnectBlueprintPins<WithStreamedUnaryMethod_DisconnectBlueprintPins<WithStreamedUnaryMethod_DeleteBlueprintNode<WithStreamedUnaryMethod_ListBlueprintNodes<WithStreamedUnaryMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_ListWorlds<WithStreamedUnaryMethod_SetTargetWorld<WithStreamedUnaryMethod_QueryActors<WithStreamedUnaryMethod_GetActor<WithStreamedUnaryMethod_SpawnActor<WithStreamedUnaryMethod_DeleteActor<WithStreamedUnaryMethod_DuplicateActor<WithStreamedUnaryMethod_SetActorTransform<WithStreamedUnaryMethod_SetActorProperties<WithStreamedUnaryMethod_GetPropertyPath<WithStreamedUnaryMethod_SetPropertyPath<WithStreamedUnaryMethod_CallFunction<WithStreamedUnaryMethod_CallAssetFunction<WithStreamedUnaryMethod_FindClass<WithStreamedUnaryMethod_GetClassSchema<WithStreamedUnaryMethod_ListClasses<WithStreamedUnaryMethod_IsWorldPartitioned<WithStreamedUnaryMethod_QueryAllActors<WithStreamedUnaryMethod_GetStreamingState<WithStreamedUnaryMethod_QueryLandscape<WithStreamedUnaryMethod_GetLandscapeBounds<WithStreamedUnaryMethod_GetDataLayers<WithStreamedUnaryMethod_GetActorsInDataLayer<WithStreamedUnaryMethod_ExecuteConsoleCommand<WithStreamedUnaryMethod_SearchConsoleCommands<WithStreamedUnaryMethod_CreateAsset<WithStreamedUnaryMethod_SaveAsset<WithStreamedUnaryMethod_SaveActorAsBlueprint<WithStreamedUnaryMethod_DuplicateAsset<WithStreamedUnaryMethod_GetAssetThumbnail<WithStreamedUnaryMethod_GetComponentTransform<WithStreamedUnaryMethod_SetComponentTransform<WithStreamedUnaryMethod_AttachComponent<WithStreamedUnaryMethod_AttachActor<WithStreamedUnaryMethod_DetachComponent<WithStreamedUnaryMethod_DetachActor<WithStreamedUnaryMethod_SetTransform<WithStreamedUnaryMethod_GetTransform<WithStreamedUnaryMethod_Attach<WithStreamedUnaryMethod_Detach<WithStreamedUnaryMethod_ReadProjectFile<WithStreamedUnaryMethod_WriteProjectFile<WithStreamedUnaryMethod_ListProjectDirectory<WithStreamedUnaryMethod_CopyProjectFile<WithStreamedUnaryMethod_DeleteProjectFile<WithStreamedUnaryMethod_CreateBlueprintNode<WithStreamedUnaryMethod_ConnectBlueprintPins<WithStreamedUnaryMethod_DisconnectBlueprintPins<WithStreamedUnaryMethod_DeleteBlueprintNode<WithStreamedUnaryMethod_ListBlueprintNodes<WithStreamedUnaryMethod_ListBlueprintPins<Service > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace AgentBridgeServer

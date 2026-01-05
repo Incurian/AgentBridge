@@ -27,3 +27,12 @@ nul
 *.pdb
 *.lib
 *.exp
+
+# Archived AI development docs (local only)
+.old.claude/
+
+# Test/demo assets (large JSON exports)
+*.json
+pcg_parsed/
+BP_Claude_*.uasset
+Claude_PCG_*.uasset

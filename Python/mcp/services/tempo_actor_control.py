@@ -28,27 +28,13 @@ from TempoScripting import Geometry_pb2
 # TOOLS - Only Tempo-specific functionality (AgentBridge handles the rest)
 # =============================================================================
 
-TOOLS = [
-    # Unique: spawn relative to another actor
-    {
-        "name": "tempo_spawn_actor",
-        "description": "Spawn an actor using Tempo's native spawning. Supports relative transforms.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "type": {"type": "string"},
-                "location": {"type": "array", "items": {"type": "number"}},
-                "rotation": {"type": "array", "items": {"type": "number"}},
-                "relative_to": {"type": "string"}
-            },
-            "required": ["type"]
-        }
-    },
-    # Unique: add component dynamically (no AgentBridge equivalent yet)
-    {"name": "tempo_add_component", "description": "Add a component to an actor.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "type": {"type": "string"}, "name": {"type": "string"}}, "required": ["actor", "type"]}},
-    # Unique: call instance methods on actors (different from call_static_function)
-    {"name": "tempo_call_function", "description": "Call a function on an actor or component.", "inputSchema": {"type": "object", "properties": {"actor": {"type": "string"}, "component": {"type": "string"}, "function": {"type": "string"}}, "required": ["actor", "function"]}},
-]
+# All tools consolidated into agentbridge.py:
+# - tempo_spawn_actor -> spawn_actor(relative_to=...)
+# - tempo_add_component -> add_component()
+# - tempo_call_function -> call_function("Actor.Function") syntax
+#
+# The client methods below are still used by agentbridge.py for routing.
+TOOLS = []
 
 
 # =============================================================================
@@ -177,51 +163,20 @@ def execute(client: TempoActorControlClient, tool_name: str, args: Dict[str, Any
 def _execute_impl(client: TempoActorControlClient, tool_name: str, args: Dict[str, Any]) -> Any:
     """Implementation of tool execution.
 
-    Only handles the 3 Tempo-specific tools. All other actor operations
-    should use AgentBridge tools instead.
+    NOTE: All tempo_actor_control tools are now consolidated into agentbridge.py:
+    - spawn_actor(relative_to=...) for relative spawning
+    - add_component() for adding components
+    - call_function("Actor.Function") for instance methods
+
+    The client methods are still used by agentbridge.py for routing.
     """
-
-    if tool_name == "tempo_spawn_actor":
-        response = client.spawn_actor(
-            type=args["type"],
-            location=args.get("location"),
-            rotation=args.get("rotation"),
-            relative_to=args.get("relative_to", ""),
-        )
-        return {
-            "success": True,
-            "spawned_name": response.spawned_name,
-            "transform": {
-                "location": [response.spawned_transform.location.x,
-                            response.spawned_transform.location.y,
-                            response.spawned_transform.location.z],
-            },
-        }
-
-    elif tool_name == "tempo_add_component":
-        response = client.add_component(
-            actor=args["actor"],
-            type=args["type"],
-            name=args.get("name", ""),
-        )
-        return {"success": True, "component_name": response.name}
-
-    elif tool_name == "tempo_call_function":
-        client.call_function(
-            actor=args["actor"],
-            function=args["function"],
-            component=args.get("component", ""),
-        )
-        return {"success": True, "function": args["function"]}
-
-    else:
-        return {"error": f"Unknown tool: {tool_name}"}
+    return {"error": f"Unknown tool: {tool_name}. All tools consolidated into agentbridge.py."}
 
 
-# Register this service module
+# Register this service module (no tools exposed - all consolidated into agentbridge.py)
 register_service(ServiceModule(
     name="tempo_actor_control",
-    description="Tempo-specific actor ops: spawn with relative_to, add_component, call instance functions",
+    description="Internal: Tempo client for actor operations (tools consolidated into agentbridge.py)",
     tools=TOOLS,
     execute=execute,
     connect=connect,

@@ -81,6 +81,13 @@ namespace AgentBridgeServer
 	class DetachComponentRequest;
 	class DetachActorRequest;
 
+	// Unified transform/attachment types (Phase 2)
+	class SetTransformRequest;
+	class GetTransformRequest;
+	class TransformResponse;
+	class AttachRequest;
+	class DetachRequest;
+
 	// File operation types (P1)
 	class ReadProjectFileRequest;
 	class ReadProjectFileResponse;
@@ -324,6 +331,26 @@ public:
 
 	void DetachActor(
 		const AgentBridgeServer::DetachActorRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	//~==============================================================================
+	// gRPC Service Handlers - Unified Transform/Attachment (Phase 2)
+	//~==============================================================================
+
+	void SetTransform(
+		const AgentBridgeServer::SetTransformRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void GetTransform(
+		const AgentBridgeServer::GetTransformRequest& Request,
+		const TResponseDelegate<AgentBridgeServer::TransformResponse>& ResponseContinuation);
+
+	void Attach(
+		const AgentBridgeServer::AttachRequest& Request,
+		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
+
+	void Detach(
+		const AgentBridgeServer::DetachRequest& Request,
 		const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation);
 
 	//~==============================================================================

@@ -75,6 +75,9 @@ AGENTBRIDGESERVER_API extern AttachActorRequestDefaultTypeInternal _AttachActorR
 class AttachComponentRequest;
 struct AttachComponentRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern AttachComponentRequestDefaultTypeInternal _AttachComponentRequest_default_instance_;
+class AttachRequest;
+struct AttachRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern AttachRequestDefaultTypeInternal _AttachRequest_default_instance_;
 class BlueprintNodeInfo;
 struct BlueprintNodeInfoDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern BlueprintNodeInfoDefaultTypeInternal _BlueprintNodeInfo_default_instance_;
@@ -147,6 +150,9 @@ AGENTBRIDGESERVER_API extern DetachActorRequestDefaultTypeInternal _DetachActorR
 class DetachComponentRequest;
 struct DetachComponentRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DetachComponentRequestDefaultTypeInternal _DetachComponentRequest_default_instance_;
+class DetachRequest;
+struct DetachRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern DetachRequestDefaultTypeInternal _DetachRequest_default_instance_;
 class DisconnectBlueprintPinsRequest;
 struct DisconnectBlueprintPinsRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern DisconnectBlueprintPinsRequestDefaultTypeInternal _DisconnectBlueprintPinsRequest_default_instance_;
@@ -234,6 +240,9 @@ AGENTBRIDGESERVER_API extern GetStreamingStateRequestDefaultTypeInternal _GetStr
 class GetStreamingStateResponse;
 struct GetStreamingStateResponseDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern GetStreamingStateResponseDefaultTypeInternal _GetStreamingStateResponse_default_instance_;
+class GetTransformRequest;
+struct GetTransformRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern GetTransformRequestDefaultTypeInternal _GetTransformRequest_default_instance_;
 class IsWorldPartitionedRequest;
 struct IsWorldPartitionedRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern IsWorldPartitionedRequestDefaultTypeInternal _IsWorldPartitionedRequest_default_instance_;
@@ -342,6 +351,9 @@ AGENTBRIDGESERVER_API extern SetPropertyPathRequestDefaultTypeInternal _SetPrope
 class SetTargetWorldRequest;
 struct SetTargetWorldRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern SetTargetWorldRequestDefaultTypeInternal _SetTargetWorldRequest_default_instance_;
+class SetTransformRequest;
+struct SetTransformRequestDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern SetTransformRequestDefaultTypeInternal _SetTransformRequest_default_instance_;
 class SpawnActorRequest;
 struct SpawnActorRequestDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern SpawnActorRequestDefaultTypeInternal _SpawnActorRequest_default_instance_;
@@ -351,6 +363,9 @@ AGENTBRIDGESERVER_API extern SpawnActorResponseDefaultTypeInternal _SpawnActorRe
 class StreamingActorInfo;
 struct StreamingActorInfoDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern StreamingActorInfoDefaultTypeInternal _StreamingActorInfo_default_instance_;
+class TransformResponse;
+struct TransformResponseDefaultTypeInternal;
+AGENTBRIDGESERVER_API extern TransformResponseDefaultTypeInternal _TransformResponse_default_instance_;
 class WorldInfo;
 struct WorldInfoDefaultTypeInternal;
 AGENTBRIDGESERVER_API extern WorldInfoDefaultTypeInternal _WorldInfo_default_instance_;
@@ -548,7 +563,7 @@ class AGENTBRIDGESERVER_API WriteProjectFileResponse final :
                &_WriteProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    82;
+    87;
 
   friend void swap(WriteProjectFileResponse& a, WriteProjectFileResponse& b) {
     a.Swap(&b);
@@ -753,7 +768,7 @@ class AGENTBRIDGESERVER_API WriteProjectFileRequest final :
                &_WriteProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    81;
+    86;
 
   friend void swap(WriteProjectFileRequest& a, WriteProjectFileRequest& b) {
     a.Swap(&b);
@@ -2911,7 +2926,7 @@ class AGENTBRIDGESERVER_API ReadProjectFileResponse final :
                &_ReadProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    80;
+    85;
 
   friend void swap(ReadProjectFileResponse& a, ReadProjectFileResponse& b) {
     a.Swap(&b);
@@ -3146,7 +3161,7 @@ class AGENTBRIDGESERVER_API ReadProjectFileRequest final :
                &_ReadProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    79;
+    84;
 
   friend void swap(ReadProjectFileRequest& a, ReadProjectFileRequest& b) {
     a.Swap(&b);
@@ -4246,7 +4261,7 @@ class AGENTBRIDGESERVER_API ListProjectDirectoryRequest final :
                &_ListProjectDirectoryRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    84;
+    89;
 
   friend void swap(ListProjectDirectoryRequest& a, ListProjectDirectoryRequest& b) {
     a.Swap(&b);
@@ -4704,7 +4719,7 @@ class AGENTBRIDGESERVER_API ListBlueprintPinsRequest final :
                &_ListBlueprintPinsRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    98;
+    103;
 
   friend void swap(ListBlueprintPinsRequest& a, ListBlueprintPinsRequest& b) {
     a.Swap(&b);
@@ -4903,7 +4918,7 @@ class AGENTBRIDGESERVER_API ListBlueprintNodesRequest final :
                &_ListBlueprintNodesRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    96;
+    101;
 
   friend void swap(ListBlueprintNodesRequest& a, ListBlueprintNodesRequest& b) {
     a.Swap(&b);
@@ -5387,6 +5402,199 @@ class AGENTBRIDGESERVER_API IsWorldPartitionedRequest final :
                               ::google::protobuf_tempo::Arena* arena, const Impl_& from);
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API GetTransformRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.GetTransformRequest) */ {
+ public:
+  inline GetTransformRequest() : GetTransformRequest(nullptr) {}
+  ~GetTransformRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR GetTransformRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline GetTransformRequest(const GetTransformRequest& from)
+      : GetTransformRequest(nullptr, from) {}
+  GetTransformRequest(GetTransformRequest&& from) noexcept
+    : GetTransformRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline GetTransformRequest& operator=(const GetTransformRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetTransformRequest& operator=(GetTransformRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetTransformRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetTransformRequest* internal_default_instance() {
+    return reinterpret_cast<const GetTransformRequest*>(
+               &_GetTransformRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    80;
+
+  friend void swap(GetTransformRequest& a, GetTransformRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetTransformRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetTransformRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetTransformRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetTransformRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const GetTransformRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const GetTransformRequest& from) {
+    GetTransformRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(GetTransformRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.GetTransformRequest";
+  }
+  protected:
+  explicit GetTransformRequest(::google::protobuf_tempo::Arena* arena);
+  GetTransformRequest(::google::protobuf_tempo::Arena* arena, const GetTransformRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTargetFieldNumber = 1,
+    kWorldSpaceFieldNumber = 2,
+  };
+  // string target = 1;
+  void clear_target() ;
+  const std::string& target() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_target(Arg_&& arg, Args_... args);
+  std::string* mutable_target();
+  PROTOBUF_NODISCARD std::string* release_target();
+  void set_allocated_target(std::string* value);
+
+  private:
+  const std::string& _internal_target() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target(
+      const std::string& value);
+  std::string* _internal_mutable_target();
+
+  public:
+  // bool world_space = 2;
+  void clear_world_space() ;
+  bool world_space() const;
+  void set_world_space(bool value);
+
+  private:
+  bool _internal_world_space() const;
+  void _internal_set_world_space(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.GetTransformRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      1, 2, 0,
+      52, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr target_;
+    bool world_space_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
@@ -7753,7 +7961,7 @@ class AGENTBRIDGESERVER_API FileInfo final :
                &_FileInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    83;
+    88;
 
   friend void swap(FileInfo& a, FileInfo& b) {
     a.Swap(&b);
@@ -8796,7 +9004,7 @@ class AGENTBRIDGESERVER_API DisconnectBlueprintPinsRequest final :
                &_DisconnectBlueprintPinsRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    94;
+    99;
 
   friend void swap(DisconnectBlueprintPinsRequest& a, DisconnectBlueprintPinsRequest& b) {
     a.Swap(&b);
@@ -8983,6 +9191,199 @@ class AGENTBRIDGESERVER_API DisconnectBlueprintPinsRequest final :
     ::google::protobuf_tempo::internal::ArenaStringPtr source_pin_;
     ::google::protobuf_tempo::internal::ArenaStringPtr target_node_;
     ::google::protobuf_tempo::internal::ArenaStringPtr target_pin_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API DetachRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.DetachRequest) */ {
+ public:
+  inline DetachRequest() : DetachRequest(nullptr) {}
+  ~DetachRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR DetachRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline DetachRequest(const DetachRequest& from)
+      : DetachRequest(nullptr, from) {}
+  DetachRequest(DetachRequest&& from) noexcept
+    : DetachRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline DetachRequest& operator=(const DetachRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DetachRequest& operator=(DetachRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DetachRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DetachRequest* internal_default_instance() {
+    return reinterpret_cast<const DetachRequest*>(
+               &_DetachRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    83;
+
+  friend void swap(DetachRequest& a, DetachRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DetachRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DetachRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  DetachRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DetachRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const DetachRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const DetachRequest& from) {
+    DetachRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(DetachRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.DetachRequest";
+  }
+  protected:
+  explicit DetachRequest(::google::protobuf_tempo::Arena* arena);
+  DetachRequest(::google::protobuf_tempo::Arena* arena, const DetachRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTargetFieldNumber = 1,
+    kMaintainWorldTransformFieldNumber = 2,
+  };
+  // string target = 1;
+  void clear_target() ;
+  const std::string& target() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_target(Arg_&& arg, Args_... args);
+  std::string* mutable_target();
+  PROTOBUF_NODISCARD std::string* release_target();
+  void set_allocated_target(std::string* value);
+
+  private:
+  const std::string& _internal_target() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target(
+      const std::string& value);
+  std::string* _internal_mutable_target();
+
+  public:
+  // bool maintain_world_transform = 2;
+  void clear_maintain_world_transform() ;
+  bool maintain_world_transform() const;
+  void set_maintain_world_transform(bool value);
+
+  private:
+  bool _internal_maintain_world_transform() const;
+  void _internal_set_maintain_world_transform(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.DetachRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      1, 2, 0,
+      46, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr target_;
+    bool maintain_world_transform_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -9453,7 +9854,7 @@ class AGENTBRIDGESERVER_API DeleteProjectFileRequest final :
                &_DeleteProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    88;
+    93;
 
   friend void swap(DeleteProjectFileRequest& a, DeleteProjectFileRequest& b) {
     a.Swap(&b);
@@ -9646,7 +10047,7 @@ class AGENTBRIDGESERVER_API DeleteBlueprintNodeRequest final :
                &_DeleteBlueprintNodeRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    95;
+    100;
 
   friend void swap(DeleteBlueprintNodeRequest& a, DeleteBlueprintNodeRequest& b) {
     a.Swap(&b);
@@ -10026,7 +10427,7 @@ class AGENTBRIDGESERVER_API CreateBlueprintNodeRequest final :
                &_CreateBlueprintNodeRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    91;
+    96;
 
   friend void swap(CreateBlueprintNodeRequest& a, CreateBlueprintNodeRequest& b) {
     a.Swap(&b);
@@ -10568,7 +10969,7 @@ class AGENTBRIDGESERVER_API CopyProjectFileResponse final :
                &_CopyProjectFileResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    87;
+    92;
 
   friend void swap(CopyProjectFileResponse& a, CopyProjectFileResponse& b) {
     a.Swap(&b);
@@ -10779,7 +11180,7 @@ class AGENTBRIDGESERVER_API CopyProjectFileRequest final :
                &_CopyProjectFileRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    86;
+    91;
 
   friend void swap(CopyProjectFileRequest& a, CopyProjectFileRequest& b) {
     a.Swap(&b);
@@ -11237,7 +11638,7 @@ class AGENTBRIDGESERVER_API ConnectBlueprintPinsRequest final :
                &_ConnectBlueprintPinsRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    93;
+    98;
 
   friend void swap(ConnectBlueprintPinsRequest& a, ConnectBlueprintPinsRequest& b) {
     a.Swap(&b);
@@ -12002,7 +12403,7 @@ class AGENTBRIDGESERVER_API BlueprintPinInfo final :
                &_BlueprintPinInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    89;
+    94;
 
   friend void swap(BlueprintPinInfo& a, BlueprintPinInfo& b) {
     a.Swap(&b);
@@ -12231,6 +12632,259 @@ class AGENTBRIDGESERVER_API BlueprintPinInfo final :
     ::google::protobuf_tempo::internal::ArenaStringPtr type_display_name_;
     ::google::protobuf_tempo::internal::ArenaStringPtr default_value_;
     bool is_connected_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API AttachRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.AttachRequest) */ {
+ public:
+  inline AttachRequest() : AttachRequest(nullptr) {}
+  ~AttachRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR AttachRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline AttachRequest(const AttachRequest& from)
+      : AttachRequest(nullptr, from) {}
+  AttachRequest(AttachRequest&& from) noexcept
+    : AttachRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline AttachRequest& operator=(const AttachRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline AttachRequest& operator=(AttachRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const AttachRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const AttachRequest* internal_default_instance() {
+    return reinterpret_cast<const AttachRequest*>(
+               &_AttachRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    82;
+
+  friend void swap(AttachRequest& a, AttachRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(AttachRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(AttachRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  AttachRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<AttachRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const AttachRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const AttachRequest& from) {
+    AttachRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(AttachRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.AttachRequest";
+  }
+  protected:
+  explicit AttachRequest(::google::protobuf_tempo::Arena* arena);
+  AttachRequest(::google::protobuf_tempo::Arena* arena, const AttachRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kChildFieldNumber = 1,
+    kParentFieldNumber = 2,
+    kSocketFieldNumber = 3,
+    kLocationRuleFieldNumber = 4,
+    kRotationRuleFieldNumber = 5,
+    kScaleRuleFieldNumber = 6,
+  };
+  // string child = 1;
+  void clear_child() ;
+  const std::string& child() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_child(Arg_&& arg, Args_... args);
+  std::string* mutable_child();
+  PROTOBUF_NODISCARD std::string* release_child();
+  void set_allocated_child(std::string* value);
+
+  private:
+  const std::string& _internal_child() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_child(
+      const std::string& value);
+  std::string* _internal_mutable_child();
+
+  public:
+  // string parent = 2;
+  void clear_parent() ;
+  const std::string& parent() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_parent(Arg_&& arg, Args_... args);
+  std::string* mutable_parent();
+  PROTOBUF_NODISCARD std::string* release_parent();
+  void set_allocated_parent(std::string* value);
+
+  private:
+  const std::string& _internal_parent() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_parent(
+      const std::string& value);
+  std::string* _internal_mutable_parent();
+
+  public:
+  // string socket = 3;
+  void clear_socket() ;
+  const std::string& socket() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_socket(Arg_&& arg, Args_... args);
+  std::string* mutable_socket();
+  PROTOBUF_NODISCARD std::string* release_socket();
+  void set_allocated_socket(std::string* value);
+
+  private:
+  const std::string& _internal_socket() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_socket(
+      const std::string& value);
+  std::string* _internal_mutable_socket();
+
+  public:
+  // .AgentBridgeServer.AttachmentRule location_rule = 4;
+  void clear_location_rule() ;
+  ::AgentBridgeServer::AttachmentRule location_rule() const;
+  void set_location_rule(::AgentBridgeServer::AttachmentRule value);
+
+  private:
+  ::AgentBridgeServer::AttachmentRule _internal_location_rule() const;
+  void _internal_set_location_rule(::AgentBridgeServer::AttachmentRule value);
+
+  public:
+  // .AgentBridgeServer.AttachmentRule rotation_rule = 5;
+  void clear_rotation_rule() ;
+  ::AgentBridgeServer::AttachmentRule rotation_rule() const;
+  void set_rotation_rule(::AgentBridgeServer::AttachmentRule value);
+
+  private:
+  ::AgentBridgeServer::AttachmentRule _internal_rotation_rule() const;
+  void _internal_set_rotation_rule(::AgentBridgeServer::AttachmentRule value);
+
+  public:
+  // .AgentBridgeServer.AttachmentRule scale_rule = 6;
+  void clear_scale_rule() ;
+  ::AgentBridgeServer::AttachmentRule scale_rule() const;
+  void set_scale_rule(::AgentBridgeServer::AttachmentRule value);
+
+  private:
+  ::AgentBridgeServer::AttachmentRule _internal_scale_rule() const;
+  void _internal_set_scale_rule(::AgentBridgeServer::AttachmentRule value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.AttachRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      3, 6, 0,
+      57, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::ArenaStringPtr child_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr parent_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr socket_;
+    int location_rule_;
+    int rotation_rule_;
+    int scale_rule_;
     mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
@@ -12780,6 +13434,544 @@ class AGENTBRIDGESERVER_API AttachActorRequest final :
   friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
 };// -------------------------------------------------------------------
 
+class AGENTBRIDGESERVER_API TransformResponse final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.TransformResponse) */ {
+ public:
+  inline TransformResponse() : TransformResponse(nullptr) {}
+  ~TransformResponse() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR TransformResponse(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline TransformResponse(const TransformResponse& from)
+      : TransformResponse(nullptr, from) {}
+  TransformResponse(TransformResponse&& from) noexcept
+    : TransformResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline TransformResponse& operator=(const TransformResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TransformResponse& operator=(TransformResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TransformResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TransformResponse* internal_default_instance() {
+    return reinterpret_cast<const TransformResponse*>(
+               &_TransformResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    81;
+
+  friend void swap(TransformResponse& a, TransformResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TransformResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TransformResponse* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TransformResponse* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TransformResponse>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const TransformResponse& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const TransformResponse& from) {
+    TransformResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(TransformResponse* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.TransformResponse";
+  }
+  protected:
+  explicit TransformResponse(::google::protobuf_tempo::Arena* arena);
+  TransformResponse(::google::protobuf_tempo::Arena* arena, const TransformResponse& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kErrorMessageFieldNumber = 2,
+    kLocationFieldNumber = 3,
+    kRotationFieldNumber = 4,
+    kScaleFieldNumber = 5,
+    kSuccessFieldNumber = 1,
+  };
+  // string error_message = 2;
+  void clear_error_message() ;
+  const std::string& error_message() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_error_message(Arg_&& arg, Args_... args);
+  std::string* mutable_error_message();
+  PROTOBUF_NODISCARD std::string* release_error_message();
+  void set_allocated_error_message(std::string* value);
+
+  private:
+  const std::string& _internal_error_message() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error_message(
+      const std::string& value);
+  std::string* _internal_mutable_error_message();
+
+  public:
+  // .TempoScripting.Vector location = 3;
+  bool has_location() const;
+  void clear_location() ;
+  const ::TempoScripting::Vector& location() const;
+  PROTOBUF_NODISCARD ::TempoScripting::Vector* release_location();
+  ::TempoScripting::Vector* mutable_location();
+  void set_allocated_location(::TempoScripting::Vector* value);
+  void unsafe_arena_set_allocated_location(::TempoScripting::Vector* value);
+  ::TempoScripting::Vector* unsafe_arena_release_location();
+
+  private:
+  const ::TempoScripting::Vector& _internal_location() const;
+  ::TempoScripting::Vector* _internal_mutable_location();
+
+  public:
+  // .TempoScripting.Rotation rotation = 4;
+  bool has_rotation() const;
+  void clear_rotation() ;
+  const ::TempoScripting::Rotation& rotation() const;
+  PROTOBUF_NODISCARD ::TempoScripting::Rotation* release_rotation();
+  ::TempoScripting::Rotation* mutable_rotation();
+  void set_allocated_rotation(::TempoScripting::Rotation* value);
+  void unsafe_arena_set_allocated_rotation(::TempoScripting::Rotation* value);
+  ::TempoScripting::Rotation* unsafe_arena_release_rotation();
+
+  private:
+  const ::TempoScripting::Rotation& _internal_rotation() const;
+  ::TempoScripting::Rotation* _internal_mutable_rotation();
+
+  public:
+  // .AgentBridgeServer.Scale scale = 5;
+  bool has_scale() const;
+  void clear_scale() ;
+  const ::AgentBridgeServer::Scale& scale() const;
+  PROTOBUF_NODISCARD ::AgentBridgeServer::Scale* release_scale();
+  ::AgentBridgeServer::Scale* mutable_scale();
+  void set_allocated_scale(::AgentBridgeServer::Scale* value);
+  void unsafe_arena_set_allocated_scale(::AgentBridgeServer::Scale* value);
+  ::AgentBridgeServer::Scale* unsafe_arena_release_scale();
+
+  private:
+  const ::AgentBridgeServer::Scale& _internal_scale() const;
+  ::AgentBridgeServer::Scale* _internal_mutable_scale();
+
+  public:
+  // bool success = 1;
+  void clear_success() ;
+  bool success() const;
+  void set_success(bool value);
+
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.TransformResponse)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      3, 5, 3,
+      57, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::HasBits<1> _has_bits_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr error_message_;
+    ::TempoScripting::Vector* location_;
+    ::TempoScripting::Rotation* rotation_;
+    ::AgentBridgeServer::Scale* scale_;
+    bool success_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
+class AGENTBRIDGESERVER_API SetTransformRequest final :
+    public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.SetTransformRequest) */ {
+ public:
+  inline SetTransformRequest() : SetTransformRequest(nullptr) {}
+  ~SetTransformRequest() override;
+  template<typename = void>
+  explicit PROTOBUF_CONSTEXPR SetTransformRequest(::google::protobuf_tempo::internal::ConstantInitialized);
+
+  inline SetTransformRequest(const SetTransformRequest& from)
+      : SetTransformRequest(nullptr, from) {}
+  SetTransformRequest(SetTransformRequest&& from) noexcept
+    : SetTransformRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline SetTransformRequest& operator=(const SetTransformRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SetTransformRequest& operator=(SetTransformRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetArena() == from.GetArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf_tempo::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf_tempo::UnknownFieldSet>(::google::protobuf_tempo::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf_tempo::UnknownFieldSet* mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf_tempo::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf_tempo::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf_tempo::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf_tempo::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SetTransformRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SetTransformRequest* internal_default_instance() {
+    return reinterpret_cast<const SetTransformRequest*>(
+               &_SetTransformRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    79;
+
+  friend void swap(SetTransformRequest& a, SetTransformRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SetTransformRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() != nullptr &&
+        GetArena() == other->GetArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetArena() == other->GetArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::google::protobuf_tempo::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SetTransformRequest* other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SetTransformRequest* New(::google::protobuf_tempo::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SetTransformRequest>(arena);
+  }
+  using ::google::protobuf_tempo::Message::CopyFrom;
+  void CopyFrom(const SetTransformRequest& from);
+  using ::google::protobuf_tempo::Message::MergeFrom;
+  void MergeFrom( const SetTransformRequest& from) {
+    SetTransformRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::google::protobuf_tempo::Message& to_msg, const ::google::protobuf_tempo::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  ::size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::google::protobuf_tempo::internal::ParseContext* ctx) final;
+  ::uint8_t* _InternalSerialize(
+      ::uint8_t* target, ::google::protobuf_tempo::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  ::google::protobuf_tempo::internal::CachedSize* AccessCachedSize() const final;
+  void SharedCtor(::google::protobuf_tempo::Arena* arena);
+  void SharedDtor();
+  void InternalSwap(SetTransformRequest* other);
+
+  private:
+  friend class ::google::protobuf_tempo::internal::AnyMetadata;
+  static ::absl_tempo::string_view FullMessageName() {
+    return "AgentBridgeServer.SetTransformRequest";
+  }
+  protected:
+  explicit SetTransformRequest(::google::protobuf_tempo::Arena* arena);
+  SetTransformRequest(::google::protobuf_tempo::Arena* arena, const SetTransformRequest& from);
+  public:
+
+  static const ClassData _class_data_;
+  const ::google::protobuf_tempo::Message::ClassData*GetClassData() const final;
+
+  ::google::protobuf_tempo::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTargetFieldNumber = 1,
+    kLocationFieldNumber = 2,
+    kRotationFieldNumber = 3,
+    kScaleFieldNumber = 4,
+    kSetLocationFieldNumber = 5,
+    kSetRotationFieldNumber = 6,
+    kSetScaleFieldNumber = 7,
+    kWorldSpaceFieldNumber = 8,
+    kOffsetFieldNumber = 9,
+  };
+  // string target = 1;
+  void clear_target() ;
+  const std::string& target() const;
+  template <typename Arg_ = const std::string&, typename... Args_>
+  void set_target(Arg_&& arg, Args_... args);
+  std::string* mutable_target();
+  PROTOBUF_NODISCARD std::string* release_target();
+  void set_allocated_target(std::string* value);
+
+  private:
+  const std::string& _internal_target() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_target(
+      const std::string& value);
+  std::string* _internal_mutable_target();
+
+  public:
+  // .TempoScripting.Vector location = 2;
+  bool has_location() const;
+  void clear_location() ;
+  const ::TempoScripting::Vector& location() const;
+  PROTOBUF_NODISCARD ::TempoScripting::Vector* release_location();
+  ::TempoScripting::Vector* mutable_location();
+  void set_allocated_location(::TempoScripting::Vector* value);
+  void unsafe_arena_set_allocated_location(::TempoScripting::Vector* value);
+  ::TempoScripting::Vector* unsafe_arena_release_location();
+
+  private:
+  const ::TempoScripting::Vector& _internal_location() const;
+  ::TempoScripting::Vector* _internal_mutable_location();
+
+  public:
+  // .TempoScripting.Rotation rotation = 3;
+  bool has_rotation() const;
+  void clear_rotation() ;
+  const ::TempoScripting::Rotation& rotation() const;
+  PROTOBUF_NODISCARD ::TempoScripting::Rotation* release_rotation();
+  ::TempoScripting::Rotation* mutable_rotation();
+  void set_allocated_rotation(::TempoScripting::Rotation* value);
+  void unsafe_arena_set_allocated_rotation(::TempoScripting::Rotation* value);
+  ::TempoScripting::Rotation* unsafe_arena_release_rotation();
+
+  private:
+  const ::TempoScripting::Rotation& _internal_rotation() const;
+  ::TempoScripting::Rotation* _internal_mutable_rotation();
+
+  public:
+  // .AgentBridgeServer.Scale scale = 4;
+  bool has_scale() const;
+  void clear_scale() ;
+  const ::AgentBridgeServer::Scale& scale() const;
+  PROTOBUF_NODISCARD ::AgentBridgeServer::Scale* release_scale();
+  ::AgentBridgeServer::Scale* mutable_scale();
+  void set_allocated_scale(::AgentBridgeServer::Scale* value);
+  void unsafe_arena_set_allocated_scale(::AgentBridgeServer::Scale* value);
+  ::AgentBridgeServer::Scale* unsafe_arena_release_scale();
+
+  private:
+  const ::AgentBridgeServer::Scale& _internal_scale() const;
+  ::AgentBridgeServer::Scale* _internal_mutable_scale();
+
+  public:
+  // bool set_location = 5;
+  void clear_set_location() ;
+  bool set_location() const;
+  void set_set_location(bool value);
+
+  private:
+  bool _internal_set_location() const;
+  void _internal_set_set_location(bool value);
+
+  public:
+  // bool set_rotation = 6;
+  void clear_set_rotation() ;
+  bool set_rotation() const;
+  void set_set_rotation(bool value);
+
+  private:
+  bool _internal_set_rotation() const;
+  void _internal_set_set_rotation(bool value);
+
+  public:
+  // bool set_scale = 7;
+  void clear_set_scale() ;
+  bool set_scale() const;
+  void set_set_scale(bool value);
+
+  private:
+  bool _internal_set_scale() const;
+  void _internal_set_set_scale(bool value);
+
+  public:
+  // bool world_space = 8;
+  void clear_world_space() ;
+  bool world_space() const;
+  void set_world_space(bool value);
+
+  private:
+  bool _internal_world_space() const;
+  void _internal_set_world_space(bool value);
+
+  public:
+  // bool offset = 9;
+  void clear_offset() ;
+  bool offset() const;
+  void set_offset(bool value);
+
+  private:
+  bool _internal_offset() const;
+  void _internal_set_offset(bool value);
+
+  public:
+  // @@protoc_insertion_point(class_scope:AgentBridgeServer.SetTransformRequest)
+ private:
+  class _Internal;
+
+  friend class ::google::protobuf_tempo::internal::TcParser;
+  static const ::google::protobuf_tempo::internal::TcParseTable<
+      4, 9, 3,
+      60, 2>
+      _table_;
+  friend class ::google::protobuf_tempo::MessageLite;
+  friend class ::google::protobuf_tempo::Arena;
+  template <typename T>
+  friend class ::google::protobuf_tempo::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct AGENTBRIDGESERVER_API Impl_ {
+
+        inline explicit constexpr Impl_(
+            ::google::protobuf_tempo::internal::ConstantInitialized) noexcept;
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena);
+        inline explicit Impl_(::google::protobuf_tempo::internal::InternalVisibility visibility,
+                              ::google::protobuf_tempo::Arena* arena, const Impl_& from);
+    ::google::protobuf_tempo::internal::HasBits<1> _has_bits_;
+    mutable ::google::protobuf_tempo::internal::CachedSize _cached_size_;
+    ::google::protobuf_tempo::internal::ArenaStringPtr target_;
+    ::TempoScripting::Vector* location_;
+    ::TempoScripting::Rotation* rotation_;
+    ::AgentBridgeServer::Scale* scale_;
+    bool set_location_;
+    bool set_rotation_;
+    bool set_scale_;
+    bool world_space_;
+    bool offset_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_AgentBridgeServer_2fAgentBridge_2eproto;
+};// -------------------------------------------------------------------
+
 class AGENTBRIDGESERVER_API SearchConsoleCommandsResponse final :
     public ::google::protobuf_tempo::Message /* @@protoc_insertion_point(class_definition:AgentBridgeServer.SearchConsoleCommandsResponse) */ {
  public:
@@ -13241,7 +14433,7 @@ class AGENTBRIDGESERVER_API ListProjectDirectoryResponse final :
                &_ListProjectDirectoryResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    85;
+    90;
 
   friend void swap(ListProjectDirectoryResponse& a, ListProjectDirectoryResponse& b) {
     a.Swap(&b);
@@ -13661,7 +14853,7 @@ class AGENTBRIDGESERVER_API ListBlueprintPinsResponse final :
                &_ListBlueprintPinsResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    99;
+    104;
 
   friend void swap(ListBlueprintPinsResponse& a, ListBlueprintPinsResponse& b) {
     a.Swap(&b);
@@ -14812,7 +16004,7 @@ class AGENTBRIDGESERVER_API BlueprintNodeInfo final :
                &_BlueprintNodeInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    90;
+    95;
 
   friend void swap(BlueprintNodeInfo& a, BlueprintNodeInfo& b) {
     a.Swap(&b);
@@ -16680,7 +17872,7 @@ class AGENTBRIDGESERVER_API ListBlueprintNodesResponse final :
                &_ListBlueprintNodesResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    97;
+    102;
 
   friend void swap(ListBlueprintNodesResponse& a, ListBlueprintNodesResponse& b) {
     a.Swap(&b);
@@ -17321,7 +18513,7 @@ class AGENTBRIDGESERVER_API CreateBlueprintNodeResponse final :
                &_CreateBlueprintNodeResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    92;
+    97;
 
   friend void swap(CreateBlueprintNodeResponse& a, CreateBlueprintNodeResponse& b) {
     a.Swap(&b);
@@ -36068,6 +37260,1206 @@ inline void DetachActorRequest::_internal_set_maintain_world_position(bool value
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
   ;
   _impl_.maintain_world_position_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// SetTransformRequest
+
+// string target = 1;
+inline void SetTransformRequest::clear_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_.ClearToEmpty();
+}
+inline const std::string& SetTransformRequest::target() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.target)
+  return _internal_target();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void SetTransformRequest::set_target(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SetTransformRequest.target)
+}
+inline std::string* SetTransformRequest::mutable_target() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_target();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.SetTransformRequest.target)
+  return _s;
+}
+inline const std::string& SetTransformRequest::_internal_target() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.target_.Get();
+}
+inline void SetTransformRequest::_internal_set_target(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_.Set(value, GetArena());
+}
+inline std::string* SetTransformRequest::_internal_mutable_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.target_.Mutable( GetArena());
+}
+inline std::string* SetTransformRequest::release_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.SetTransformRequest.target)
+  return _impl_.target_.Release();
+}
+inline void SetTransformRequest::set_allocated_target(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.target_.IsDefault()) {
+          _impl_.target_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.SetTransformRequest.target)
+}
+
+// .TempoScripting.Vector location = 2;
+inline bool SetTransformRequest::has_location() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.location_ != nullptr);
+  return value;
+}
+inline const ::TempoScripting::Vector& SetTransformRequest::_internal_location() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::TempoScripting::Vector* p = _impl_.location_;
+  return p != nullptr ? *p : reinterpret_cast<const ::TempoScripting::Vector&>(::TempoScripting::_Vector_default_instance_);
+}
+inline const ::TempoScripting::Vector& SetTransformRequest::location() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.location)
+  return _internal_location();
+}
+inline void SetTransformRequest::unsafe_arena_set_allocated_location(::TempoScripting::Vector* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.location_);
+  }
+  _impl_.location_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.SetTransformRequest.location)
+}
+inline ::TempoScripting::Vector* SetTransformRequest::release_location() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::TempoScripting::Vector* released = _impl_.location_;
+  _impl_.location_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::TempoScripting::Vector* SetTransformRequest::unsafe_arena_release_location() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.SetTransformRequest.location)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::TempoScripting::Vector* temp = _impl_.location_;
+  _impl_.location_ = nullptr;
+  return temp;
+}
+inline ::TempoScripting::Vector* SetTransformRequest::_internal_mutable_location() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  if (_impl_.location_ == nullptr) {
+    auto* p = CreateMaybeMessage<::TempoScripting::Vector>(GetArena());
+    _impl_.location_ = reinterpret_cast<::TempoScripting::Vector*>(p);
+  }
+  return _impl_.location_;
+}
+inline ::TempoScripting::Vector* SetTransformRequest::mutable_location() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::TempoScripting::Vector* _msg = _internal_mutable_location();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.SetTransformRequest.location)
+  return _msg;
+}
+inline void SetTransformRequest::set_allocated_location(::TempoScripting::Vector* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.location_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.location_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.SetTransformRequest.location)
+}
+
+// .TempoScripting.Rotation rotation = 3;
+inline bool SetTransformRequest::has_rotation() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.rotation_ != nullptr);
+  return value;
+}
+inline const ::TempoScripting::Rotation& SetTransformRequest::_internal_rotation() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::TempoScripting::Rotation* p = _impl_.rotation_;
+  return p != nullptr ? *p : reinterpret_cast<const ::TempoScripting::Rotation&>(::TempoScripting::_Rotation_default_instance_);
+}
+inline const ::TempoScripting::Rotation& SetTransformRequest::rotation() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.rotation)
+  return _internal_rotation();
+}
+inline void SetTransformRequest::unsafe_arena_set_allocated_rotation(::TempoScripting::Rotation* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.rotation_);
+  }
+  _impl_.rotation_ = reinterpret_cast<::TempoScripting::Rotation*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.SetTransformRequest.rotation)
+}
+inline ::TempoScripting::Rotation* SetTransformRequest::release_rotation() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::TempoScripting::Rotation* released = _impl_.rotation_;
+  _impl_.rotation_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::TempoScripting::Rotation* SetTransformRequest::unsafe_arena_release_rotation() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.SetTransformRequest.rotation)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::TempoScripting::Rotation* temp = _impl_.rotation_;
+  _impl_.rotation_ = nullptr;
+  return temp;
+}
+inline ::TempoScripting::Rotation* SetTransformRequest::_internal_mutable_rotation() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  if (_impl_.rotation_ == nullptr) {
+    auto* p = CreateMaybeMessage<::TempoScripting::Rotation>(GetArena());
+    _impl_.rotation_ = reinterpret_cast<::TempoScripting::Rotation*>(p);
+  }
+  return _impl_.rotation_;
+}
+inline ::TempoScripting::Rotation* SetTransformRequest::mutable_rotation() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::TempoScripting::Rotation* _msg = _internal_mutable_rotation();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.SetTransformRequest.rotation)
+  return _msg;
+}
+inline void SetTransformRequest::set_allocated_rotation(::TempoScripting::Rotation* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.rotation_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.rotation_ = reinterpret_cast<::TempoScripting::Rotation*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.SetTransformRequest.rotation)
+}
+
+// .AgentBridgeServer.Scale scale = 4;
+inline bool SetTransformRequest::has_scale() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.scale_ != nullptr);
+  return value;
+}
+inline void SetTransformRequest::clear_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.scale_ != nullptr) _impl_.scale_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::AgentBridgeServer::Scale& SetTransformRequest::_internal_scale() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::AgentBridgeServer::Scale* p = _impl_.scale_;
+  return p != nullptr ? *p : reinterpret_cast<const ::AgentBridgeServer::Scale&>(::AgentBridgeServer::_Scale_default_instance_);
+}
+inline const ::AgentBridgeServer::Scale& SetTransformRequest::scale() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.scale)
+  return _internal_scale();
+}
+inline void SetTransformRequest::unsafe_arena_set_allocated_scale(::AgentBridgeServer::Scale* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.scale_);
+  }
+  _impl_.scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.SetTransformRequest.scale)
+}
+inline ::AgentBridgeServer::Scale* SetTransformRequest::release_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::AgentBridgeServer::Scale* released = _impl_.scale_;
+  _impl_.scale_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::AgentBridgeServer::Scale* SetTransformRequest::unsafe_arena_release_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.SetTransformRequest.scale)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::AgentBridgeServer::Scale* temp = _impl_.scale_;
+  _impl_.scale_ = nullptr;
+  return temp;
+}
+inline ::AgentBridgeServer::Scale* SetTransformRequest::_internal_mutable_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  if (_impl_.scale_ == nullptr) {
+    auto* p = CreateMaybeMessage<::AgentBridgeServer::Scale>(GetArena());
+    _impl_.scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(p);
+  }
+  return _impl_.scale_;
+}
+inline ::AgentBridgeServer::Scale* SetTransformRequest::mutable_scale() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::AgentBridgeServer::Scale* _msg = _internal_mutable_scale();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.SetTransformRequest.scale)
+  return _msg;
+}
+inline void SetTransformRequest::set_allocated_scale(::AgentBridgeServer::Scale* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::AgentBridgeServer::Scale*>(_impl_.scale_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::AgentBridgeServer::Scale*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.SetTransformRequest.scale)
+}
+
+// bool set_location = 5;
+inline void SetTransformRequest::clear_set_location() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.set_location_ = false;
+}
+inline bool SetTransformRequest::set_location() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.set_location)
+  return _internal_set_location();
+}
+inline void SetTransformRequest::set_set_location(bool value) {
+  _internal_set_set_location(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SetTransformRequest.set_location)
+}
+inline bool SetTransformRequest::_internal_set_location() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.set_location_;
+}
+inline void SetTransformRequest::_internal_set_set_location(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.set_location_ = value;
+}
+
+// bool set_rotation = 6;
+inline void SetTransformRequest::clear_set_rotation() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.set_rotation_ = false;
+}
+inline bool SetTransformRequest::set_rotation() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.set_rotation)
+  return _internal_set_rotation();
+}
+inline void SetTransformRequest::set_set_rotation(bool value) {
+  _internal_set_set_rotation(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SetTransformRequest.set_rotation)
+}
+inline bool SetTransformRequest::_internal_set_rotation() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.set_rotation_;
+}
+inline void SetTransformRequest::_internal_set_set_rotation(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.set_rotation_ = value;
+}
+
+// bool set_scale = 7;
+inline void SetTransformRequest::clear_set_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.set_scale_ = false;
+}
+inline bool SetTransformRequest::set_scale() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.set_scale)
+  return _internal_set_scale();
+}
+inline void SetTransformRequest::set_set_scale(bool value) {
+  _internal_set_set_scale(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SetTransformRequest.set_scale)
+}
+inline bool SetTransformRequest::_internal_set_scale() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.set_scale_;
+}
+inline void SetTransformRequest::_internal_set_set_scale(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.set_scale_ = value;
+}
+
+// bool world_space = 8;
+inline void SetTransformRequest::clear_world_space() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.world_space_ = false;
+}
+inline bool SetTransformRequest::world_space() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.world_space)
+  return _internal_world_space();
+}
+inline void SetTransformRequest::set_world_space(bool value) {
+  _internal_set_world_space(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SetTransformRequest.world_space)
+}
+inline bool SetTransformRequest::_internal_world_space() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.world_space_;
+}
+inline void SetTransformRequest::_internal_set_world_space(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.world_space_ = value;
+}
+
+// bool offset = 9;
+inline void SetTransformRequest::clear_offset() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.offset_ = false;
+}
+inline bool SetTransformRequest::offset() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.SetTransformRequest.offset)
+  return _internal_offset();
+}
+inline void SetTransformRequest::set_offset(bool value) {
+  _internal_set_offset(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.SetTransformRequest.offset)
+}
+inline bool SetTransformRequest::_internal_offset() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.offset_;
+}
+inline void SetTransformRequest::_internal_set_offset(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.offset_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// GetTransformRequest
+
+// string target = 1;
+inline void GetTransformRequest::clear_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_.ClearToEmpty();
+}
+inline const std::string& GetTransformRequest::target() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetTransformRequest.target)
+  return _internal_target();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void GetTransformRequest::set_target(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.GetTransformRequest.target)
+}
+inline std::string* GetTransformRequest::mutable_target() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_target();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.GetTransformRequest.target)
+  return _s;
+}
+inline const std::string& GetTransformRequest::_internal_target() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.target_.Get();
+}
+inline void GetTransformRequest::_internal_set_target(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_.Set(value, GetArena());
+}
+inline std::string* GetTransformRequest::_internal_mutable_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.target_.Mutable( GetArena());
+}
+inline std::string* GetTransformRequest::release_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.GetTransformRequest.target)
+  return _impl_.target_.Release();
+}
+inline void GetTransformRequest::set_allocated_target(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.target_.IsDefault()) {
+          _impl_.target_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.GetTransformRequest.target)
+}
+
+// bool world_space = 2;
+inline void GetTransformRequest::clear_world_space() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.world_space_ = false;
+}
+inline bool GetTransformRequest::world_space() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetTransformRequest.world_space)
+  return _internal_world_space();
+}
+inline void GetTransformRequest::set_world_space(bool value) {
+  _internal_set_world_space(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.GetTransformRequest.world_space)
+}
+inline bool GetTransformRequest::_internal_world_space() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.world_space_;
+}
+inline void GetTransformRequest::_internal_set_world_space(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.world_space_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// TransformResponse
+
+// bool success = 1;
+inline void TransformResponse::clear_success() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.success_ = false;
+}
+inline bool TransformResponse::success() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.TransformResponse.success)
+  return _internal_success();
+}
+inline void TransformResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.TransformResponse.success)
+}
+inline bool TransformResponse::_internal_success() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.success_;
+}
+inline void TransformResponse::_internal_set_success(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.success_ = value;
+}
+
+// string error_message = 2;
+inline void TransformResponse::clear_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.error_message_.ClearToEmpty();
+}
+inline const std::string& TransformResponse::error_message() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.TransformResponse.error_message)
+  return _internal_error_message();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void TransformResponse::set_error_message(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.error_message_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.TransformResponse.error_message)
+}
+inline std::string* TransformResponse::mutable_error_message() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_error_message();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.TransformResponse.error_message)
+  return _s;
+}
+inline const std::string& TransformResponse::_internal_error_message() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.error_message_.Get();
+}
+inline void TransformResponse::_internal_set_error_message(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.error_message_.Set(value, GetArena());
+}
+inline std::string* TransformResponse::_internal_mutable_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.error_message_.Mutable( GetArena());
+}
+inline std::string* TransformResponse::release_error_message() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.TransformResponse.error_message)
+  return _impl_.error_message_.Release();
+}
+inline void TransformResponse::set_allocated_error_message(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.error_message_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.error_message_.IsDefault()) {
+          _impl_.error_message_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.TransformResponse.error_message)
+}
+
+// .TempoScripting.Vector location = 3;
+inline bool TransformResponse::has_location() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000001u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.location_ != nullptr);
+  return value;
+}
+inline const ::TempoScripting::Vector& TransformResponse::_internal_location() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::TempoScripting::Vector* p = _impl_.location_;
+  return p != nullptr ? *p : reinterpret_cast<const ::TempoScripting::Vector&>(::TempoScripting::_Vector_default_instance_);
+}
+inline const ::TempoScripting::Vector& TransformResponse::location() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.TransformResponse.location)
+  return _internal_location();
+}
+inline void TransformResponse::unsafe_arena_set_allocated_location(::TempoScripting::Vector* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.location_);
+  }
+  _impl_.location_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.TransformResponse.location)
+}
+inline ::TempoScripting::Vector* TransformResponse::release_location() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::TempoScripting::Vector* released = _impl_.location_;
+  _impl_.location_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::TempoScripting::Vector* TransformResponse::unsafe_arena_release_location() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.TransformResponse.location)
+
+  _impl_._has_bits_[0] &= ~0x00000001u;
+  ::TempoScripting::Vector* temp = _impl_.location_;
+  _impl_.location_ = nullptr;
+  return temp;
+}
+inline ::TempoScripting::Vector* TransformResponse::_internal_mutable_location() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000001u;
+  if (_impl_.location_ == nullptr) {
+    auto* p = CreateMaybeMessage<::TempoScripting::Vector>(GetArena());
+    _impl_.location_ = reinterpret_cast<::TempoScripting::Vector*>(p);
+  }
+  return _impl_.location_;
+}
+inline ::TempoScripting::Vector* TransformResponse::mutable_location() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::TempoScripting::Vector* _msg = _internal_mutable_location();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.TransformResponse.location)
+  return _msg;
+}
+inline void TransformResponse::set_allocated_location(::TempoScripting::Vector* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.location_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000001u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000001u;
+  }
+
+  _impl_.location_ = reinterpret_cast<::TempoScripting::Vector*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.TransformResponse.location)
+}
+
+// .TempoScripting.Rotation rotation = 4;
+inline bool TransformResponse::has_rotation() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.rotation_ != nullptr);
+  return value;
+}
+inline const ::TempoScripting::Rotation& TransformResponse::_internal_rotation() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::TempoScripting::Rotation* p = _impl_.rotation_;
+  return p != nullptr ? *p : reinterpret_cast<const ::TempoScripting::Rotation&>(::TempoScripting::_Rotation_default_instance_);
+}
+inline const ::TempoScripting::Rotation& TransformResponse::rotation() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.TransformResponse.rotation)
+  return _internal_rotation();
+}
+inline void TransformResponse::unsafe_arena_set_allocated_rotation(::TempoScripting::Rotation* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.rotation_);
+  }
+  _impl_.rotation_ = reinterpret_cast<::TempoScripting::Rotation*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.TransformResponse.rotation)
+}
+inline ::TempoScripting::Rotation* TransformResponse::release_rotation() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::TempoScripting::Rotation* released = _impl_.rotation_;
+  _impl_.rotation_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::TempoScripting::Rotation* TransformResponse::unsafe_arena_release_rotation() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.TransformResponse.rotation)
+
+  _impl_._has_bits_[0] &= ~0x00000002u;
+  ::TempoScripting::Rotation* temp = _impl_.rotation_;
+  _impl_.rotation_ = nullptr;
+  return temp;
+}
+inline ::TempoScripting::Rotation* TransformResponse::_internal_mutable_rotation() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000002u;
+  if (_impl_.rotation_ == nullptr) {
+    auto* p = CreateMaybeMessage<::TempoScripting::Rotation>(GetArena());
+    _impl_.rotation_ = reinterpret_cast<::TempoScripting::Rotation*>(p);
+  }
+  return _impl_.rotation_;
+}
+inline ::TempoScripting::Rotation* TransformResponse::mutable_rotation() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::TempoScripting::Rotation* _msg = _internal_mutable_rotation();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.TransformResponse.rotation)
+  return _msg;
+}
+inline void TransformResponse::set_allocated_rotation(::TempoScripting::Rotation* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.rotation_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000002u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000002u;
+  }
+
+  _impl_.rotation_ = reinterpret_cast<::TempoScripting::Rotation*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.TransformResponse.rotation)
+}
+
+// .AgentBridgeServer.Scale scale = 5;
+inline bool TransformResponse::has_scale() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.scale_ != nullptr);
+  return value;
+}
+inline void TransformResponse::clear_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.scale_ != nullptr) _impl_.scale_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000004u;
+}
+inline const ::AgentBridgeServer::Scale& TransformResponse::_internal_scale() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::AgentBridgeServer::Scale* p = _impl_.scale_;
+  return p != nullptr ? *p : reinterpret_cast<const ::AgentBridgeServer::Scale&>(::AgentBridgeServer::_Scale_default_instance_);
+}
+inline const ::AgentBridgeServer::Scale& TransformResponse::scale() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.TransformResponse.scale)
+  return _internal_scale();
+}
+inline void TransformResponse::unsafe_arena_set_allocated_scale(::AgentBridgeServer::Scale* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.scale_);
+  }
+  _impl_.scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.TransformResponse.scale)
+}
+inline ::AgentBridgeServer::Scale* TransformResponse::release_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::AgentBridgeServer::Scale* released = _impl_.scale_;
+  _impl_.scale_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::AgentBridgeServer::Scale* TransformResponse::unsafe_arena_release_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.TransformResponse.scale)
+
+  _impl_._has_bits_[0] &= ~0x00000004u;
+  ::AgentBridgeServer::Scale* temp = _impl_.scale_;
+  _impl_.scale_ = nullptr;
+  return temp;
+}
+inline ::AgentBridgeServer::Scale* TransformResponse::_internal_mutable_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000004u;
+  if (_impl_.scale_ == nullptr) {
+    auto* p = CreateMaybeMessage<::AgentBridgeServer::Scale>(GetArena());
+    _impl_.scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(p);
+  }
+  return _impl_.scale_;
+}
+inline ::AgentBridgeServer::Scale* TransformResponse::mutable_scale() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::AgentBridgeServer::Scale* _msg = _internal_mutable_scale();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.TransformResponse.scale)
+  return _msg;
+}
+inline void TransformResponse::set_allocated_scale(::AgentBridgeServer::Scale* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::AgentBridgeServer::Scale*>(_impl_.scale_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::AgentBridgeServer::Scale*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000004u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000004u;
+  }
+
+  _impl_.scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.TransformResponse.scale)
+}
+
+// -------------------------------------------------------------------
+
+// AttachRequest
+
+// string child = 1;
+inline void AttachRequest::clear_child() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.child_.ClearToEmpty();
+}
+inline const std::string& AttachRequest::child() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.AttachRequest.child)
+  return _internal_child();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void AttachRequest::set_child(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.child_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.AttachRequest.child)
+}
+inline std::string* AttachRequest::mutable_child() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_child();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.AttachRequest.child)
+  return _s;
+}
+inline const std::string& AttachRequest::_internal_child() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.child_.Get();
+}
+inline void AttachRequest::_internal_set_child(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.child_.Set(value, GetArena());
+}
+inline std::string* AttachRequest::_internal_mutable_child() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.child_.Mutable( GetArena());
+}
+inline std::string* AttachRequest::release_child() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.AttachRequest.child)
+  return _impl_.child_.Release();
+}
+inline void AttachRequest::set_allocated_child(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.child_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.child_.IsDefault()) {
+          _impl_.child_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.AttachRequest.child)
+}
+
+// string parent = 2;
+inline void AttachRequest::clear_parent() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.parent_.ClearToEmpty();
+}
+inline const std::string& AttachRequest::parent() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.AttachRequest.parent)
+  return _internal_parent();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void AttachRequest::set_parent(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.parent_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.AttachRequest.parent)
+}
+inline std::string* AttachRequest::mutable_parent() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_parent();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.AttachRequest.parent)
+  return _s;
+}
+inline const std::string& AttachRequest::_internal_parent() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.parent_.Get();
+}
+inline void AttachRequest::_internal_set_parent(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.parent_.Set(value, GetArena());
+}
+inline std::string* AttachRequest::_internal_mutable_parent() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.parent_.Mutable( GetArena());
+}
+inline std::string* AttachRequest::release_parent() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.AttachRequest.parent)
+  return _impl_.parent_.Release();
+}
+inline void AttachRequest::set_allocated_parent(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.parent_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.parent_.IsDefault()) {
+          _impl_.parent_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.AttachRequest.parent)
+}
+
+// string socket = 3;
+inline void AttachRequest::clear_socket() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.socket_.ClearToEmpty();
+}
+inline const std::string& AttachRequest::socket() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.AttachRequest.socket)
+  return _internal_socket();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void AttachRequest::set_socket(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.socket_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.AttachRequest.socket)
+}
+inline std::string* AttachRequest::mutable_socket() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_socket();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.AttachRequest.socket)
+  return _s;
+}
+inline const std::string& AttachRequest::_internal_socket() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.socket_.Get();
+}
+inline void AttachRequest::_internal_set_socket(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.socket_.Set(value, GetArena());
+}
+inline std::string* AttachRequest::_internal_mutable_socket() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.socket_.Mutable( GetArena());
+}
+inline std::string* AttachRequest::release_socket() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.AttachRequest.socket)
+  return _impl_.socket_.Release();
+}
+inline void AttachRequest::set_allocated_socket(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.socket_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.socket_.IsDefault()) {
+          _impl_.socket_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.AttachRequest.socket)
+}
+
+// .AgentBridgeServer.AttachmentRule location_rule = 4;
+inline void AttachRequest::clear_location_rule() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.location_rule_ = 0;
+}
+inline ::AgentBridgeServer::AttachmentRule AttachRequest::location_rule() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.AttachRequest.location_rule)
+  return _internal_location_rule();
+}
+inline void AttachRequest::set_location_rule(::AgentBridgeServer::AttachmentRule value) {
+  _internal_set_location_rule(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.AttachRequest.location_rule)
+}
+inline ::AgentBridgeServer::AttachmentRule AttachRequest::_internal_location_rule() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return static_cast<::AgentBridgeServer::AttachmentRule>(_impl_.location_rule_);
+}
+inline void AttachRequest::_internal_set_location_rule(::AgentBridgeServer::AttachmentRule value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.location_rule_ = value;
+}
+
+// .AgentBridgeServer.AttachmentRule rotation_rule = 5;
+inline void AttachRequest::clear_rotation_rule() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.rotation_rule_ = 0;
+}
+inline ::AgentBridgeServer::AttachmentRule AttachRequest::rotation_rule() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.AttachRequest.rotation_rule)
+  return _internal_rotation_rule();
+}
+inline void AttachRequest::set_rotation_rule(::AgentBridgeServer::AttachmentRule value) {
+  _internal_set_rotation_rule(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.AttachRequest.rotation_rule)
+}
+inline ::AgentBridgeServer::AttachmentRule AttachRequest::_internal_rotation_rule() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return static_cast<::AgentBridgeServer::AttachmentRule>(_impl_.rotation_rule_);
+}
+inline void AttachRequest::_internal_set_rotation_rule(::AgentBridgeServer::AttachmentRule value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.rotation_rule_ = value;
+}
+
+// .AgentBridgeServer.AttachmentRule scale_rule = 6;
+inline void AttachRequest::clear_scale_rule() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.scale_rule_ = 0;
+}
+inline ::AgentBridgeServer::AttachmentRule AttachRequest::scale_rule() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.AttachRequest.scale_rule)
+  return _internal_scale_rule();
+}
+inline void AttachRequest::set_scale_rule(::AgentBridgeServer::AttachmentRule value) {
+  _internal_set_scale_rule(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.AttachRequest.scale_rule)
+}
+inline ::AgentBridgeServer::AttachmentRule AttachRequest::_internal_scale_rule() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return static_cast<::AgentBridgeServer::AttachmentRule>(_impl_.scale_rule_);
+}
+inline void AttachRequest::_internal_set_scale_rule(::AgentBridgeServer::AttachmentRule value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.scale_rule_ = value;
+}
+
+// -------------------------------------------------------------------
+
+// DetachRequest
+
+// string target = 1;
+inline void DetachRequest::clear_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_.ClearToEmpty();
+}
+inline const std::string& DetachRequest::target() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DetachRequest.target)
+  return _internal_target();
+}
+template <typename Arg_, typename... Args_>
+inline PROTOBUF_ALWAYS_INLINE void DetachRequest::set_target(Arg_&& arg,
+                                                     Args_... args) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DetachRequest.target)
+}
+inline std::string* DetachRequest::mutable_target() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  std::string* _s = _internal_mutable_target();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.DetachRequest.target)
+  return _s;
+}
+inline const std::string& DetachRequest::_internal_target() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.target_.Get();
+}
+inline void DetachRequest::_internal_set_target(const std::string& value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.target_.Set(value, GetArena());
+}
+inline std::string* DetachRequest::_internal_mutable_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  return _impl_.target_.Mutable( GetArena());
+}
+inline std::string* DetachRequest::release_target() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.DetachRequest.target)
+  return _impl_.target_.Release();
+}
+inline void DetachRequest::set_allocated_target(std::string* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.target_.SetAllocated(value, GetArena());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+        if (_impl_.target_.IsDefault()) {
+          _impl_.target_.Set("", GetArena());
+        }
+  #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.DetachRequest.target)
+}
+
+// bool maintain_world_transform = 2;
+inline void DetachRequest::clear_maintain_world_transform() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_.maintain_world_transform_ = false;
+}
+inline bool DetachRequest::maintain_world_transform() const {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.DetachRequest.maintain_world_transform)
+  return _internal_maintain_world_transform();
+}
+inline void DetachRequest::set_maintain_world_transform(bool value) {
+  _internal_set_maintain_world_transform(value);
+  // @@protoc_insertion_point(field_set:AgentBridgeServer.DetachRequest.maintain_world_transform)
+}
+inline bool DetachRequest::_internal_maintain_world_transform() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  return _impl_.maintain_world_transform_;
+}
+inline void DetachRequest::_internal_set_maintain_world_transform(bool value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  ;
+  _impl_.maintain_world_transform_ = value;
 }
 
 // -------------------------------------------------------------------

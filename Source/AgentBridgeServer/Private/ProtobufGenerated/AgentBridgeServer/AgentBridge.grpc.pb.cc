@@ -58,6 +58,10 @@ static const char* AgentBridgeService_method_names[] = {
   "/AgentBridgeServer.AgentBridgeService/AttachActor",
   "/AgentBridgeServer.AgentBridgeService/DetachComponent",
   "/AgentBridgeServer.AgentBridgeService/DetachActor",
+  "/AgentBridgeServer.AgentBridgeService/SetTransform",
+  "/AgentBridgeServer.AgentBridgeService/GetTransform",
+  "/AgentBridgeServer.AgentBridgeService/Attach",
+  "/AgentBridgeServer.AgentBridgeService/Detach",
   "/AgentBridgeServer.AgentBridgeService/ReadProjectFile",
   "/AgentBridgeServer.AgentBridgeService/WriteProjectFile",
   "/AgentBridgeServer.AgentBridgeService/ListProjectDirectory",
@@ -114,17 +118,21 @@ AgentBridgeService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>&
   , rpcmethod_AttachActor_(AgentBridgeService_method_names[33], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_DetachComponent_(AgentBridgeService_method_names[34], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_DetachActor_(AgentBridgeService_method_names[35], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ReadProjectFile_(AgentBridgeService_method_names[36], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_WriteProjectFile_(AgentBridgeService_method_names[37], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ListProjectDirectory_(AgentBridgeService_method_names[38], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_CopyProjectFile_(AgentBridgeService_method_names[39], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_DeleteProjectFile_(AgentBridgeService_method_names[40], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_CreateBlueprintNode_(AgentBridgeService_method_names[41], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ConnectBlueprintPins_(AgentBridgeService_method_names[42], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_DisconnectBlueprintPins_(AgentBridgeService_method_names[43], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_DeleteBlueprintNode_(AgentBridgeService_method_names[44], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ListBlueprintNodes_(AgentBridgeService_method_names[45], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ListBlueprintPins_(AgentBridgeService_method_names[46], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SetTransform_(AgentBridgeService_method_names[36], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetTransform_(AgentBridgeService_method_names[37], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Attach_(AgentBridgeService_method_names[38], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Detach_(AgentBridgeService_method_names[39], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ReadProjectFile_(AgentBridgeService_method_names[40], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_WriteProjectFile_(AgentBridgeService_method_names[41], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListProjectDirectory_(AgentBridgeService_method_names[42], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_CopyProjectFile_(AgentBridgeService_method_names[43], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_DeleteProjectFile_(AgentBridgeService_method_names[44], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_CreateBlueprintNode_(AgentBridgeService_method_names[45], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ConnectBlueprintPins_(AgentBridgeService_method_names[46], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_DisconnectBlueprintPins_(AgentBridgeService_method_names[47], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_DeleteBlueprintNode_(AgentBridgeService_method_names[48], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListBlueprintNodes_(AgentBridgeService_method_names[49], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListBlueprintPins_(AgentBridgeService_method_names[50], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AgentBridgeService::Stub::ListWorlds(::grpc::ClientContext* context, const ::AgentBridgeServer::ListWorldsRequest& request, ::AgentBridgeServer::ListWorldsResponse* response) {
@@ -955,6 +963,98 @@ void AgentBridgeService::Stub::async::DetachActor(::grpc::ClientContext* context
   return result;
 }
 
+::grpc::Status AgentBridgeService::Stub::SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::TempoScripting::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::SetTransformRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SetTransform_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::SetTransformRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetTransform_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::SetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetTransform_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AgentBridgeService::Stub::PrepareAsyncSetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::TempoScripting::Empty, ::AgentBridgeServer::SetTransformRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SetTransform_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AgentBridgeService::Stub::AsyncSetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::SetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncSetTransformRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::AgentBridgeServer::TransformResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::GetTransformRequest, ::AgentBridgeServer::TransformResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GetTransform_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::GetTransformRequest, ::AgentBridgeServer::TransformResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetTransform_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::GetTransform(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GetTransform_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::TransformResponse>* AgentBridgeService::Stub::PrepareAsyncGetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::AgentBridgeServer::TransformResponse, ::AgentBridgeServer::GetTransformRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GetTransform_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::AgentBridgeServer::TransformResponse>* AgentBridgeService::Stub::AsyncGetTransformRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::GetTransformRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncGetTransformRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::TempoScripting::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::AttachRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Attach_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::AttachRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Attach_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::Attach(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Attach_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AgentBridgeService::Stub::PrepareAsyncAttachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::TempoScripting::Empty, ::AgentBridgeServer::AttachRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Attach_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AgentBridgeService::Stub::AsyncAttachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::AttachRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncAttachRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AgentBridgeService::Stub::Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::TempoScripting::Empty* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::DetachRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Detach_, context, request, response);
+}
+
+void AgentBridgeService::Stub::async::Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::AgentBridgeServer::DetachRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Detach_, context, request, response, std::move(f));
+}
+
+void AgentBridgeService::Stub::async::Detach(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Detach_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AgentBridgeService::Stub::PrepareAsyncDetachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::TempoScripting::Empty, ::AgentBridgeServer::DetachRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Detach_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::TempoScripting::Empty>* AgentBridgeService::Stub::AsyncDetachRaw(::grpc::ClientContext* context, const ::AgentBridgeServer::DetachRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncDetachRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 ::grpc::Status AgentBridgeService::Stub::ReadProjectFile(::grpc::ClientContext* context, const ::AgentBridgeServer::ReadProjectFileRequest& request, ::AgentBridgeServer::ReadProjectFileResponse* response) {
   return ::grpc::internal::BlockingUnaryCall< ::AgentBridgeServer::ReadProjectFileRequest, ::AgentBridgeServer::ReadProjectFileResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ReadProjectFile_, context, request, response);
 }
@@ -1572,6 +1672,46 @@ AgentBridgeService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AgentBridgeService_method_names[36],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::SetTransformRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::SetTransformRequest* req,
+             ::TempoScripting::Empty* resp) {
+               return service->SetTransform(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[37],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::GetTransformRequest, ::AgentBridgeServer::TransformResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::GetTransformRequest* req,
+             ::AgentBridgeServer::TransformResponse* resp) {
+               return service->GetTransform(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[38],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::AttachRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::AttachRequest* req,
+             ::TempoScripting::Empty* resp) {
+               return service->Attach(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[39],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::DetachRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AgentBridgeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::AgentBridgeServer::DetachRequest* req,
+             ::TempoScripting::Empty* resp) {
+               return service->Detach(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AgentBridgeService_method_names[40],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ReadProjectFileRequest, ::AgentBridgeServer::ReadProjectFileResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
              ::grpc::ServerContext* ctx,
@@ -1580,7 +1720,7 @@ AgentBridgeService::Service::Service() {
                return service->ReadProjectFile(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[37],
+      AgentBridgeService_method_names[41],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::WriteProjectFileRequest, ::AgentBridgeServer::WriteProjectFileResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1590,7 +1730,7 @@ AgentBridgeService::Service::Service() {
                return service->WriteProjectFile(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[38],
+      AgentBridgeService_method_names[42],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ListProjectDirectoryRequest, ::AgentBridgeServer::ListProjectDirectoryResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1600,7 +1740,7 @@ AgentBridgeService::Service::Service() {
                return service->ListProjectDirectory(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[39],
+      AgentBridgeService_method_names[43],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::CopyProjectFileRequest, ::AgentBridgeServer::CopyProjectFileResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1610,7 +1750,7 @@ AgentBridgeService::Service::Service() {
                return service->CopyProjectFile(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[40],
+      AgentBridgeService_method_names[44],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::DeleteProjectFileRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1620,7 +1760,7 @@ AgentBridgeService::Service::Service() {
                return service->DeleteProjectFile(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[41],
+      AgentBridgeService_method_names[45],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::CreateBlueprintNodeRequest, ::AgentBridgeServer::CreateBlueprintNodeResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1630,7 +1770,7 @@ AgentBridgeService::Service::Service() {
                return service->CreateBlueprintNode(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[42],
+      AgentBridgeService_method_names[46],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ConnectBlueprintPinsRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1640,7 +1780,7 @@ AgentBridgeService::Service::Service() {
                return service->ConnectBlueprintPins(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[43],
+      AgentBridgeService_method_names[47],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::DisconnectBlueprintPinsRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1650,7 +1790,7 @@ AgentBridgeService::Service::Service() {
                return service->DisconnectBlueprintPins(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[44],
+      AgentBridgeService_method_names[48],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::DeleteBlueprintNodeRequest, ::TempoScripting::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1660,7 +1800,7 @@ AgentBridgeService::Service::Service() {
                return service->DeleteBlueprintNode(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[45],
+      AgentBridgeService_method_names[49],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ListBlueprintNodesRequest, ::AgentBridgeServer::ListBlueprintNodesResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1670,7 +1810,7 @@ AgentBridgeService::Service::Service() {
                return service->ListBlueprintNodes(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AgentBridgeService_method_names[46],
+      AgentBridgeService_method_names[50],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AgentBridgeService::Service, ::AgentBridgeServer::ListBlueprintPinsRequest, ::AgentBridgeServer::ListBlueprintPinsResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AgentBridgeService::Service* service,
@@ -1930,6 +2070,34 @@ AgentBridgeService::Service::~Service() {
 }
 
 ::grpc::Status AgentBridgeService::Service::DetachActor(::grpc::ServerContext* context, const ::AgentBridgeServer::DetachActorRequest* request, ::TempoScripting::Empty* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::SetTransform(::grpc::ServerContext* context, const ::AgentBridgeServer::SetTransformRequest* request, ::TempoScripting::Empty* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::GetTransform(::grpc::ServerContext* context, const ::AgentBridgeServer::GetTransformRequest* request, ::AgentBridgeServer::TransformResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::Attach(::grpc::ServerContext* context, const ::AgentBridgeServer::AttachRequest* request, ::TempoScripting::Empty* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AgentBridgeService::Service::Detach(::grpc::ServerContext* context, const ::AgentBridgeServer::DetachRequest* request, ::TempoScripting::Empty* response) {
   (void) context;
   (void) request;
   (void) response;

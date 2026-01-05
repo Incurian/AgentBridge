@@ -33,53 +33,65 @@ _loaded_modules: Set[str] = set()
 
 
 # =============================================================================
-# MODULE DEFINITIONS
+# MODULE DEFINITIONS (v2 - Consolidated Structure)
 # =============================================================================
 
 # Maps logical module names to tool names they provide
+# 8 modules total: core, classes, editor, world_partition, files, bp_toolkit, tempo_sim
 MODULES = {
-    # Core (always loaded) - essential for any workflow
+    # =========================================================================
+    # Core (6 tools) - Always loaded, essential operations
+    # =========================================================================
     "core": {
         "tools": [
-            "help", "list_worlds", "set_target_world",
-            "query_actors", "get_actor", "spawn_actor", "delete_actor",
-            "get_property", "set_property",
-            "list_classes", "get_class_schema",
+            "help", "list_worlds", "set_target_world", "quit",
+            "execute_console_command", "search_console_commands",
         ],
-        "description": "Essential actor and property operations",
+        "description": "Essential operations and console commands",
     },
 
-    # Standard modules - commonly needed for editor work
-    "transforms": {
-        "tools": ["set_actor_transform", "duplicate_actor"],
-        "description": "Actor transform and duplication",
-    },
-    "assets": {
-        "tools": ["create_asset", "save_asset", "duplicate_asset", "save_actor_as_blueprint"],
-        "description": "Asset creation and management",
-    },
-    "console": {
-        "tools": ["execute_console_command", "search_console_commands"],
-        "description": "Console command execution",
-    },
-    "functions": {
-        "tools": ["call_static_function", "call_asset_function"],
-        "description": "Blueprint function calls",
-    },
-    "files": {
-        "tools": ["read_project_file", "write_project_file", "list_project_directory", "copy_project_file"],
-        "description": "Project file operations",
-    },
-
-    # Extended modules - specialized functionality
-    "components": {
+    # =========================================================================
+    # Classes (17 tools) - Actors, components, transforms, assets, functions
+    # Phase 2 consolidated: 9 tools -> 4 unified tools
+    # =========================================================================
+    "classes": {
         "tools": [
-            "get_component_transform", "set_component_transform",
-            "attach_actor", "detach_actor",
-            "attach_component", "detach_component",
+            # Actor operations
+            "query_actors", "get_actor", "spawn_actor", "delete_actor", "duplicate_actor",
+            # Properties
+            "get_property", "set_property",
+            # Transforms (Phase 2 unified - works on actors AND components)
+            "set_transform", "get_transform",
+            # Attachment (Phase 2 unified - works on actors AND components)
+            "attach", "detach",
+            # Components
+            "add_component",
+            # Functions
+            "call_function",
+            # Type discovery
+            "list_classes", "get_class_schema",
+            # Assets
+            "create_asset", "save_asset", "duplicate_asset", "save_actor_as_blueprint",
         ],
-        "description": "Component transforms and attachment",
+        "description": "Actors, components, transforms, assets, and functions",
     },
+
+    # =========================================================================
+    # Editor (7 tools) - PIE, simulate, level management
+    # Note: Tool names no longer have tempo_ prefix
+    # =========================================================================
+    "editor": {
+        "tools": [
+            "play_in_editor", "simulate", "stop",
+            "save_level", "open_level", "new_level", "get_current_level",
+        ],
+        "description": "Editor PIE and level management",
+    },
+
+    # =========================================================================
+    # World Partition (7 tools) - Streaming, landscape queries
+    # Note: Will consolidate to 5 tools in Phase 2 (query_all_actors, get_actors_in_data_layer -> query_actors)
+    # =========================================================================
     "world_partition": {
         "tools": [
             "is_world_partitioned", "query_all_actors", "get_streaming_state",
@@ -88,118 +100,91 @@ MODULES = {
         ],
         "description": "Large world streaming queries",
     },
-    "blueprints": {
+
+    # =========================================================================
+    # Files (4 tools) - Project file operations
+    # Note: Phase 3 will add move_project_file, create_project_directory
+    # =========================================================================
+    "files": {
         "tools": [
-            "bp_create_node", "bp_connect_pins", "bp_disconnect_pins",
-            "bp_delete_node", "bp_list_nodes", "bp_list_pins",
+            "read_project_file", "write_project_file",
+            "list_project_directory", "copy_project_file",
         ],
-        "description": "Blueprint graph manipulation",
-    },
-    "pcg": {
-        "tools": [
-            "pcg_add_node", "pcg_connect", "pcg_disconnect",
-            "pcg_delete_node", "pcg_list_nodes", "pcg_get_input_output_nodes",
-        ],
-        "description": "PCG graph manipulation",
+        "description": "Project file operations",
     },
 
-    # Tempo simulation modules
-    "simulation": {
-        "tools": [
-            "tempo_play", "tempo_pause", "tempo_step",
-            "tempo_advance_steps", "tempo_set_time_mode", "tempo_set_sim_rate",
-        ],
-        "description": "Simulation playback control",
-    },
-    "tempo_actors": {
-        "tools": [
-            "tempo_spawn_actor",   # Unique: spawn relative to another actor
-            "tempo_add_component", # Unique: no AgentBridge equivalent
-            "tempo_call_function", # Unique: call instance methods on actors
-        ],
-        "description": "Tempo-specific actor ops (spawn relative, add component, call function)",
-    },
-    "tempo_editor": {
-        "tools": [
-            "tempo_play_in_editor", "tempo_simulate", "tempo_stop",
-            "tempo_save_level", "tempo_open_level", "tempo_new_level",
-        ],
-        "description": "Editor PIE and level management",
-    },
-    "tempo_geographic": {
-        "tools": [
-            "tempo_set_date", "tempo_set_time_of_day",
-            "tempo_set_day_cycle_rate", "tempo_get_datetime",
-            "tempo_set_geographic_reference",
-        ],
-        "description": "Date, time, and geographic settings",
-    },
-    "tempo_movement": {
-        "tools": [
-            "tempo_get_commandable_vehicles", "tempo_command_vehicle",
-            "tempo_get_commandable_pawns", "tempo_pawn_move_to",
-            "tempo_rebuild_navigation",
-        ],
-        "description": "Vehicle and pawn movement",
-    },
-    "tempo_state": {
-        "tools": ["tempo_get_actor_state", "tempo_get_actors_near"],
-        "description": "Actor state queries",
-    },
-    "tempo_levels": {
-        "tools": [
-            "tempo_load_level", "tempo_finish_loading_level",
-            "tempo_get_current_level", "tempo_quit",
-            "tempo_set_viewport_render", "tempo_set_control_mode",
-        ],
-        "description": "Level loading and control",
-    },
-    "tempo_misc": {
-        "tools": [
-            "tempo_get_label_map", "tempo_get_available_sensors",
-            "tempo_get_lanes", "tempo_get_lane_accessibility", "tempo_get_zones",
-            "tempo_run_zone_graph_builder",
-        ],
-        "description": "Labels, sensors, and map queries",
-    },
-
-    # Optional bp_toolkit module (only if submodule present)
+    # =========================================================================
+    # bp_toolkit (26 tools) - Blueprint, PCG, and offline asset manipulation
+    # =========================================================================
     "bp_toolkit": {
         "tools": [
+            # Live Blueprint graph editing (6)
+            "bp_create_node", "bp_connect_pins", "bp_disconnect_pins",
+            "bp_delete_node", "bp_list_nodes", "bp_list_pins",
+            # Live PCG graph editing (6)
+            "pcg_add_node", "pcg_connect", "pcg_disconnect",
+            "pcg_delete_node", "pcg_list_nodes", "pcg_get_input_output_nodes",
+            # Offline asset manipulation (14)
             "bp_export_asset", "bp_import_asset", "bp_detect_type", "bp_get_info",
             "bp_list_properties", "bp_get_property", "bp_set_property",
             "bp_clone_asset", "bp_list_graphs", "bp_add_comment",
             "bp_clone_node", "bp_find", "bp_query", "bp_parse",
         ],
-        "description": "Offline asset manipulation via UAssetGUI",
+        "description": "Blueprint and PCG graphs, offline asset manipulation",
+    },
+
+    # =========================================================================
+    # tempo_sim (28 tools) - All Tempo simulation features
+    # =========================================================================
+    "tempo_sim": {
+        "tools": [
+            # Simulation control (10)
+            "tempo_play", "tempo_pause", "tempo_step",
+            "tempo_advance_steps", "tempo_set_time_mode", "tempo_set_sim_rate",
+            "tempo_set_control_mode",
+            "tempo_load_level", "tempo_finish_loading_level",
+            "tempo_set_viewport_render",
+            # Time/Geographic (5)
+            "tempo_set_date", "tempo_set_time_of_day",
+            "tempo_set_day_cycle_rate", "tempo_get_datetime",
+            "tempo_set_geographic_reference",
+            # State (2)
+            "tempo_get_actor_state", "tempo_get_actors_near",
+            # AI/Movement (6)
+            "tempo_get_commandable_vehicles", "tempo_command_vehicle",
+            "tempo_get_commandable_pawns", "tempo_pawn_move_to",
+            "tempo_rebuild_navigation", "tempo_run_zone_graph_builder",
+            # Sensors/Labels (2)
+            "tempo_get_available_sensors", "tempo_get_label_map",
+            # Map (3)
+            "tempo_get_lanes", "tempo_get_lane_accessibility", "tempo_get_zones",
+        ],
+        "description": "Tempo simulation, time, AI, sensors, and map queries",
     },
 }
 
 
 # =============================================================================
-# PROFILE DEFINITIONS
+# PROFILE DEFINITIONS (v2)
 # =============================================================================
 
 PROFILES = {
-    # Absolute minimum - 11 tools
+    # Absolute minimum - 6 tools
     "core": ["core"],
 
-    # Level editing - 25 tools (DEFAULT)
-    "standard": ["core", "transforms", "assets", "console", "functions", "files"],
+    # Level editing - 35 tools (DEFAULT for editor work)
+    "standard": ["core", "classes", "editor", "files"],
 
-    # Full editor work - 38 tools
-    "editor": ["core", "transforms", "assets", "console", "functions", "files",
-               "components", "world_partition"],
+    # Full editor work - 42 tools
+    "editor": ["core", "classes", "editor", "world_partition", "files"],
 
-    # Blueprint/PCG editing - 37 tools
-    "scripting": ["core", "transforms", "assets", "console", "functions", "files",
-                  "blueprints", "pcg"],
+    # Blueprint/PCG editing - 61 tools
+    "scripting": ["core", "classes", "editor", "files", "bp_toolkit"],
 
-    # Runtime/PIE testing - 48 tools
-    "simulation": ["core", "simulation", "tempo_actors", "tempo_editor",
-                   "tempo_state", "tempo_levels"],
+    # Runtime/PIE testing - 34 tools
+    "simulation": ["core", "classes", "tempo_sim"],
 
-    # Everything - all modules
+    # Everything - all modules (~100 tools)
     "full": list(MODULES.keys()),
 }
 

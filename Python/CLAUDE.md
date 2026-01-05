@@ -9,6 +9,37 @@ This package provides the Python-side tools for AI agents to interact with Unrea
 - gRPC client for Tempo integration
 - HTTP client as fallback
 
+---
+
+## IMPORTANT: Adding New MCP Tools
+
+When adding new gRPC-based MCP tools, there are multiple places that must be updated.
+**Missing any step will cause tools to hang or fail silently!**
+
+### Full Checklist (8 Steps)
+
+| Step | File | What to do |
+|------|------|------------|
+| 1 | `AgentBridge.proto` | Add proto message + RPC definition |
+| 2 | Tempo scripts | Run `GenProtos.sh` to regenerate proto files |
+| 3 | `AgentBridgeServiceSubsystem.h` | Add handler method declaration |
+| 4 | `AgentBridgeServiceSubsystem.cpp` | Implement handler method |
+| 5 | `AgentBridgeServiceSubsystem.cpp` | **Register in `RegisterScriptingServices()`** ⚠️ |
+| 6 | `agentbridge.py` | Add client method and MCP tool definition |
+| 7 | `services/__init__.py` | Add tool to `MODULES` dict if modular |
+| 8 | Rebuild C++ | Kill editor → Build → Restart |
+
+### Common Mistake: Missing Registration
+
+**Bug found 2026-01-03:** Phase 2 unified tools (`set_transform`, `get_transform`, `attach`,
+`detach`) had C++ handlers implemented but were never registered in `RegisterScriptingServices()`.
+Result: gRPC calls hung forever waiting for a response.
+
+**Always remember:** Just having the handler method isn't enough - Tempo requires explicit
+registration via `SimpleRequestHandler()` for each RPC.
+
+---
+
 ## CRITICAL: Use TempoEnv Python
 
 **Must use the TempoEnv Python**, not system Python:

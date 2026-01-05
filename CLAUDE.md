@@ -3,6 +3,8 @@
 > UE 5.6 plugin exposing editor/runtime state to external AI agents via gRPC + MCP.
 > Primary use case: "Build me a level" - agents need full read/write/discover capabilities.
 
+---
+
 ## Core Design Philosophy
 
 **THE MOST IMPORTANT PRINCIPLE:**
@@ -55,35 +57,6 @@ be minimal and obvious. If something "should just work," make it work automatica
 
 ---
 
-## MCP Tool Size Reduction Project
-
-**Goal:** Reduce MCP tool context usage by ~75% while preserving ALL functionality.
-
-**Planning Documents:**
-- `MCP_SHRINK_STRATEGY.md` - Overview and impact analysis
-- `MCP_PHASE1_COMPRESSION.md` - Description compression + token bloat investigation
-- `MCP_PHASE2_MODULAR.md` - Modular loading architecture
-- `MCP_PHASE3_CONSOLIDATION.md` - Tool consolidation deep dive
-
-**Critical Requirements:**
-
-1. **Preserve ALL functionality** - Tools may do significant work under the hood. Similar names
-   don't mean redundant functionality. Before consolidating, analyze what each tool actually does.
-
-2. **Identify downstream changes** - Consolidating MCP tools may require changes in:
-   - `AgentBridgeServer` (proto definitions, gRPC handlers)
-   - `AgentBridgeScripting` (CommandExecutor dispatch)
-   - `AgentBridgeRuntime` (actual operation logic)
-   - Proto files (`AgentBridge.proto`)
-
-3. **User/Agent ergonomics** - Modular loading should be easy to configure. Default should
-   be sensible for common use cases.
-
-4. **Investigate token bloat** - Tools are consuming ~600 tokens each in Claude's context.
-   This is 6x higher than the ~90 token estimate. Find the actual sources.
-
----
-
 ## Quick Reference
 
 | What | Where |
@@ -115,102 +88,10 @@ be minimal and obvious. If something "should just work," make it work automatica
 | World Partition | **WORKING** | Query streaming actors, landscape bounds |
 | Console commands | **WORKING** | Execute and search 5000+ commands |
 | bp_toolkit (offline) | **WORKING** | 14 tools for JSON asset manipulation |
-| **Blueprint nodes** | **COMPLETE** | 6 MCP tools for BP graph manipulation |
-| **PCG graphs** | **COMPLETE** | 6 MCP tools for PCG graph manipulation |
+| Blueprint nodes | **WORKING** | 6 MCP tools for BP graph manipulation |
+| PCG graphs | **WORKING** | 6 MCP tools for PCG graph manipulation |
 
-**Tool Count:** 116 MCP tools across 13 services (102 core + 14 bp_toolkit when present)
-
----
-
-## Blueprint Node Manipulation - COMPLETE
-
-**Status:** Full implementation complete across all layers. Ready for testing.
-
-### Implementation Complete
-
-- **C++ Commands** (`AgentCommands.h`): 6 command/response structs
-- **C++ Executor** (`CommandExecutor.cpp`): Full implementations with K2Node creation
-- **gRPC Protos** (`AgentBridge.proto`): 6 new messages and RPCs
-- **gRPC Handlers** (`AgentBridgeServiceSubsystem.cpp`): Proto-to-command conversion
-- **Python MCP** (`agentbridge.py`): 6 tools with full response handling
-- **Build verified**: Project compiles successfully
-
-### Next Step
-
-**Testing** - Create a Blueprint with BeginPlay → PrintString flow to verify end-to-end
-
-### Supported Node Types
-
-`CallFunction`, `Event`, `VariableGet`, `VariableSet`, `Branch`, `Sequence`, `Comment`
-
-### Example Usage (once complete)
-
-```python
-# Create BeginPlay event
-event = bp_create_node(
-    blueprint_path="/Game/Test/BP_Test.BP_Test",
-    node_type="Event",
-    event_name="ReceiveBeginPlay",
-    pos_x=0, pos_y=0
-)
-
-# Create PrintString call
-print_node = bp_create_node(
-    blueprint_path="/Game/Test/BP_Test.BP_Test",
-    node_type="CallFunction",
-    function_reference="KismetSystemLibrary.PrintString",
-    pos_x=300, pos_y=0
-)
-
-# Connect them
-bp_connect_pins(
-    blueprint_path="/Game/Test/BP_Test.BP_Test",
-    source_node=event["guid"],
-    source_pin="then",
-    target_node=print_node["guid"],
-    target_pin="execute"
-)
-```
-
----
-
-## PCG Graph Manipulation - COMPLETE
-
-**Status:** Full implementation complete. 6 MCP tools for PCG graph manipulation.
-
-### Available Tools
-
-| Tool | Description |
-|------|-------------|
-| `pcg_add_node` | Add a node to a PCG graph (SurfaceSampler, StaticMeshSpawner, etc.) |
-| `pcg_connect` | Connect two PCG nodes via pins |
-| `pcg_disconnect` | Disconnect two PCG nodes |
-| `pcg_delete_node` | Delete a node from a PCG graph |
-| `pcg_list_nodes` | List all nodes in a PCG graph with their pins |
-| `pcg_get_input_output_nodes` | Get the InputNode and OutputNode of a PCG graph |
-
-### Example Usage
-
-```python
-# Create a PCG graph pipeline
-graph = "/Game/MyPCG.MyPCG"
-
-# Add nodes
-sampler = pcg_add_node(graph_path=graph, node_type="SurfaceSampler")
-spawner = pcg_add_node(graph_path=graph, node_type="StaticMeshSpawner", pos_x=300)
-
-# Get input/output nodes  
-io = pcg_get_input_output_nodes(graph_path=graph)
-
-# Connect: Input -> Sampler -> Spawner -> Output
-pcg_connect(graph, io["input_node"], "In", sampler["node_path"], "In")
-pcg_connect(graph, sampler["node_path"], "Out", spawner["node_path"], "In")
-pcg_connect(graph, spawner["node_path"], "Out", io["output_node"], "Out")
-
-save_asset(graph)
-```
-
-**NOTE:** Pin labels are not always intuitive - InputNode output is "In", OutputNode input is "Out". Use `pcg_list_nodes` to discover actual pin labels.
+**Tool Count:** ~100 MCP tools across modular services (+ 14 bp_toolkit when present)
 
 ---
 
@@ -220,7 +101,7 @@ save_asset(graph)
 External Agents (Claude, LLMs)
          |
          v
-MCP Server (Python) --- 116 tools across 13 services
+MCP Server (Python) --- Modular tool loading
          |
          v
 gRPC (port 10001) / HTTP (port 8080)
@@ -251,6 +132,8 @@ Each module has its own CLAUDE.md with detailed context:
 | bp_toolkit | UAsset parsing, Blueprint modification (optional) | `bp_toolkit/CLAUDE.md` |
 
 **User-Facing Documentation:** `README.md` - comprehensive guide with tool reference.
+
+---
 
 ## Critical Rules
 
@@ -287,6 +170,26 @@ When doing human-AI collaborative testing with visual verification:
 - `IImageWrapper.h`
 
 Put such functionality in AgentBridgeScripting/CommandExecutor.cpp instead.
+
+---
+
+## Adding New gRPC RPCs
+
+When adding new gRPC RPCs to AgentBridge, follow this checklist:
+
+1. Add proto message + RPC to `AgentBridge.proto`
+2. Regenerate proto files (`GenProtos.sh`)
+3. Add handler method to `AgentBridgeServiceSubsystem.h`
+4. Implement handler in `AgentBridgeServiceSubsystem.cpp`
+5. ⚠️ **Register in `RegisterScriptingServices()`** ← EASY TO FORGET!
+6. Add Python client method in `agentbridge.py`
+7. Add MCP tool wrapper
+8. Add to `MODULES` dict in `__init__.py`
+
+**Tempo Proto Gotcha:** Tempo's `TempoScripting::Rotation` proto uses SHORT field names:
+- `.r` = roll, `.p` = pitch, `.y` = yaw (NOT `.roll`, `.pitch`, `.yaw`)
+
+---
 
 ## Build Commands
 
@@ -366,7 +269,6 @@ D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_client.py
 | Tempo Plugin | `D:/tempo/TempoSample/Plugins/Tempo` |
 | bp_toolkit | `D:/tempo/TempoSample/Plugins/AgentBridge/bp_toolkit` (submodule) |
 | bp_toolkit GitHub | https://github.com/Incurian/BP_Toolkit |
-| bp_toolkit local | `D:/repos/bp_toolkit.git` (backup bare repo) |
 | UAssetGUI.exe | `bp_toolkit/vendor/UAssetGUI/UAssetGUI/bin/Release/net8.0-windows/UAssetGUI.exe` |
 
 ## Documentation Process
@@ -470,21 +372,14 @@ cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 
 ## Archived Documentation
 
-Historical development notes are preserved in `.old.claude/` for reference:
+Historical development notes and planning documents are preserved in `.old.claude/` (gitignored):
 
-| File | Contents |
-|------|----------|
-| `IMPROVEMENT_PLAN.md` | Detailed fix documentation for Sessions 22-25 (TArray, GET/SET, struct schema, element_type) |
-| `RESEARCH.md` | UAssetAPI round-trip research, Blueprint/PCG creation approaches validated |
-| `BP_JSON_WORKFLOW.md` | Step-by-step guide for exporting/parsing Blueprint JSON with UAssetAPI |
-| `UASSET_DISSECTION_GUIDE.md` | Comprehensive AI agent guide for analyzing Blueprint assets |
-| `HANDOVER.md` | Session-by-session development log with testing plans |
-
-**Key findings preserved here:**
+**Key findings from development:**
 
 - **UAssetAPI round-trip validated**: Export→JSON→modify→reimport works for Blueprints, PCG Graphs, Behavior Trees
 - **MetaDataMap workaround**: UE 5.7 Blueprints need MetaDataMap nulled before reimport (FName key issue)
 - **All major bugs fixed**: TArray SET, GET returns empty, struct schema, element_type, asset path normalization
+- **MCP size reduction**: Modular loading architecture, tool consolidation (transform/attach/detach unified)
 
 ---
 
@@ -498,27 +393,4 @@ Historical development notes are preserved in `.old.claude/` for reference:
 
 ---
 
-*39 RPCs, 116 MCP Tools (102 + 14 bp_toolkit), Self-Documenting Help System*
-
----
-
-## Recent Addition: call_asset_function (2026-01-02)
-
-New tool for calling instance methods on UObject assets:
-
-```python
-# Works - parameterless functions
-call_asset_function(
-    asset_path='/Game/MyPCG.MyPCG',
-    function_name='GetInputNode'
-)
-
-# Crashes - TSubclassOf<> parameters need FFunctionInvoker fix
-call_asset_function(
-    asset_path='/Game/MyPCG.MyPCG',
-    function_name='AddNodeOfType',
-    parameters={'InSettingsClass': '/Script/PCG.PCGSurfaceSamplerSettings'}
-)
-```
-
-**Status:** COMPLETE - All parameter types now work including TSubclassOf<>. Used by PCG MCP tools.
+*Self-Documenting Help System • Modular Tool Loading • Full Actor/Property/Asset Control*

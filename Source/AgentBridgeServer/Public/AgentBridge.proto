@@ -601,6 +601,49 @@ message DetachActorRequest {
 }
 
 //=============================================================================
+// Unified Transform/Attachment (Phase 2 Consolidation)
+//=============================================================================
+
+message SetTransformRequest {
+  string target = 1;                   // "Actor" or "Actor->Component"
+  TempoScripting.Vector location = 2;
+  TempoScripting.Rotation rotation = 3;
+  Scale scale = 4;
+  bool set_location = 5;               // Explicit optional flags (avoid has_* collision)
+  bool set_rotation = 6;
+  bool set_scale = 7;
+  bool world_space = 8;                // true = world coords, false = relative
+  bool offset = 9;                     // true = add to current, false = replace
+}
+
+message GetTransformRequest {
+  string target = 1;                   // "Actor" or "Actor->Component"
+  bool world_space = 2;                // true = world coords, false = relative
+}
+
+message TransformResponse {
+  bool success = 1;
+  string error_message = 2;
+  TempoScripting.Vector location = 3;
+  TempoScripting.Rotation rotation = 4;
+  Scale scale = 5;
+}
+
+message AttachRequest {
+  string child = 1;                    // "Actor" or "Actor->Component"
+  string parent = 2;                   // "Actor" or "Actor->Component"
+  string socket = 3;                   // Optional socket name
+  AttachmentRule location_rule = 4;
+  AttachmentRule rotation_rule = 5;
+  AttachmentRule scale_rule = 6;
+}
+
+message DetachRequest {
+  string target = 1;                   // "Actor" or "Actor->Component"
+  bool maintain_world_transform = 2;
+}
+
+//=============================================================================
 // File Operations (P1) - Constrained to project directory
 //=============================================================================
 
@@ -820,6 +863,12 @@ service AgentBridgeService {
   rpc AttachActor(AttachActorRequest) returns (TempoScripting.Empty);
   rpc DetachComponent(DetachComponentRequest) returns (TempoScripting.Empty);
   rpc DetachActor(DetachActorRequest) returns (TempoScripting.Empty);
+
+  //--- Unified Transform/Attachment (Phase 2) ---
+  rpc SetTransform(SetTransformRequest) returns (TempoScripting.Empty);
+  rpc GetTransform(GetTransformRequest) returns (TransformResponse);
+  rpc Attach(AttachRequest) returns (TempoScripting.Empty);
+  rpc Detach(DetachRequest) returns (TempoScripting.Empty);
 
   //--- File Operations (P1) ---
   rpc ReadProjectFile(ReadProjectFileRequest) returns (ReadProjectFileResponse);

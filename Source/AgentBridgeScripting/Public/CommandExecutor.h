@@ -184,6 +184,14 @@ public:
 	static void Execute(const FDetachActorCommand& Command, FAgentResponseBase& Response);
 
 	//~==============================================================================
+	// Typed Execution - Unified Transform/Attachment Commands (Phase 2)
+	//~==============================================================================
+	static void Execute(const FSetTransformCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FGetTransformCommand& Command, FGetTransformResponse& Response);
+	static void Execute(const FAttachCommand& Command, FAgentResponseBase& Response);
+	static void Execute(const FDetachCommand& Command, FAgentResponseBase& Response);
+
+	//~==============================================================================
 	// Typed Execution - File Commands (P1)
 	//~==============================================================================
 

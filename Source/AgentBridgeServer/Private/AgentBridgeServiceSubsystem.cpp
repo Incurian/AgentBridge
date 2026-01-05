@@ -186,7 +186,17 @@ void UAgentBridgeServiceSubsystem::RegisterScriptingServices(FTempoScriptingServ
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestListBlueprintNodes,
 			&UAgentBridgeServiceSubsystem::ListBlueprintNodes),
 		SimpleRequestHandler(&AgentBridgeAsyncService::RequestListBlueprintPins,
-			&UAgentBridgeServiceSubsystem::ListBlueprintPins)
+			&UAgentBridgeServiceSubsystem::ListBlueprintPins),
+
+		// Unified Transform/Attachment (Phase 2 consolidation)
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestSetTransform,
+			&UAgentBridgeServiceSubsystem::SetTransform),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestGetTransform,
+			&UAgentBridgeServiceSubsystem::GetTransform),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestAttach,
+			&UAgentBridgeServiceSubsystem::Attach),
+		SimpleRequestHandler(&AgentBridgeAsyncService::RequestDetach,
+			&UAgentBridgeServiceSubsystem::Detach)
 	);
 }
 
@@ -2038,6 +2048,134 @@ void UAgentBridgeServiceSubsystem::DetachActor(
 	FDetachActorCommand Cmd;
 	Cmd.ActorId = UTF8_TO_TCHAR(Request.actor_id().c_str());
 	Cmd.bMaintainWorldPosition = Request.maintain_world_position();
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+//~==============================================================================
+// Unified Transform/Attachment (Phase 2)
+//~==============================================================================
+
+void UAgentBridgeServiceSubsystem::SetTransform(
+	const SetTransformRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FSetTransformCommand Cmd;
+	Cmd.Target = UTF8_TO_TCHAR(Request.target().c_str());
+
+	if (Request.set_location())
+	{
+		Cmd.Location = FVector(Request.location().x(), Request.location().y(), Request.location().z());
+	}
+	if (Request.set_rotation())
+	{
+		// TempoScripting::Rotation uses r, p, y (roll, pitch, yaw) ordering
+		Cmd.Rotation = FRotator(Request.rotation().p(), Request.rotation().y(), Request.rotation().r());
+	}
+	if (Request.set_scale())
+	{
+		Cmd.Scale = FVector(Request.scale().x(), Request.scale().y(), Request.scale().z());
+	}
+
+	Cmd.bWorldSpace = Request.world_space();
+	Cmd.bOffset = Request.offset();
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+void UAgentBridgeServiceSubsystem::GetTransform(
+	const GetTransformRequest& Request,
+	const TResponseDelegate<TransformResponse>& ResponseContinuation)
+{
+	FGetTransformCommand Cmd;
+	Cmd.Target = UTF8_TO_TCHAR(Request.target().c_str());
+	Cmd.bWorldSpace = Request.world_space();
+
+	FGetTransformResponse CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TransformResponse Response;
+	Response.set_success(CmdResponse.bSuccess);
+	Response.set_error_message(TCHAR_TO_UTF8(*CmdResponse.ErrorMessage));
+
+	auto* Location = Response.mutable_location();
+	Location->set_x(CmdResponse.Location.X);
+	Location->set_y(CmdResponse.Location.Y);
+	Location->set_z(CmdResponse.Location.Z);
+
+	auto* Rotation = Response.mutable_rotation();
+	Rotation->set_p(CmdResponse.Rotation.Pitch);
+	Rotation->set_y(CmdResponse.Rotation.Yaw);
+	Rotation->set_r(CmdResponse.Rotation.Roll);
+
+	auto* Scale = Response.mutable_scale();
+	Scale->set_x(CmdResponse.Scale.X);
+	Scale->set_y(CmdResponse.Scale.Y);
+	Scale->set_z(CmdResponse.Scale.Z);
+
+	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+}
+
+void UAgentBridgeServiceSubsystem::Attach(
+	const AttachRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FAttachCommand Cmd;
+	Cmd.Child = UTF8_TO_TCHAR(Request.child().c_str());
+	Cmd.Parent = UTF8_TO_TCHAR(Request.parent().c_str());
+	Cmd.Socket = UTF8_TO_TCHAR(Request.socket().c_str());
+
+	// Reuse existing ProtoToAttachmentRule helper from anonymous namespace
+	Cmd.LocationRule = ProtoToAttachmentRule(Request.location_rule());
+	Cmd.RotationRule = ProtoToAttachmentRule(Request.rotation_rule());
+	Cmd.ScaleRule = ProtoToAttachmentRule(Request.scale_rule());
+
+	FAgentResponseBase CmdResponse;
+	FCommandExecutor::Execute(Cmd, CmdResponse);
+
+	TempoScripting::Empty Response;
+	if (!CmdResponse.bSuccess)
+	{
+		ResponseContinuation.ExecuteIfBound(Response,
+			grpc::Status(grpc::INTERNAL, TCHAR_TO_UTF8(*CmdResponse.ErrorMessage)));
+	}
+	else
+	{
+		ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);
+	}
+}
+
+void UAgentBridgeServiceSubsystem::Detach(
+	const DetachRequest& Request,
+	const TResponseDelegate<TempoScripting::Empty>& ResponseContinuation)
+{
+	FDetachCommand Cmd;
+	Cmd.Target = UTF8_TO_TCHAR(Request.target().c_str());
+	Cmd.bMaintainWorldTransform = Request.maintain_world_transform();
 
 	FAgentResponseBase CmdResponse;
 	FCommandExecutor::Execute(Cmd, CmdResponse);

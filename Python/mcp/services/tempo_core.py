@@ -14,11 +14,11 @@ from TempoCore import TempoCore_pb2_grpc as pb_grpc
 from TempoScripting import Empty_pb2
 
 
+# Note: tempo_get_current_level moved to editor module as get_current_level
+# Note: tempo_quit moved to agentbridge.py as quit
 TOOLS = [
     {"name": "tempo_load_level", "description": "Load a level/map in Unreal Engine. Can optionally defer loading and start paused.", "inputSchema": {"type": "object", "properties": {"level": {"type": "string"}, "deferred": {"type": "boolean", "default": False}, "start_paused": {"type": "boolean", "default": False}}, "required": ["level"]}},
     {"name": "tempo_finish_loading_level", "description": "Complete a deferred level load. Call after tempo_load_level with deferred=true.", "inputSchema": {"type": "object"}},
-    {"name": "tempo_get_current_level", "description": "Get the name of the currently loaded level.", "inputSchema": {"type": "object"}},
-    {"name": "tempo_quit", "description": "Quit the Unreal Engine application.", "inputSchema": {"type": "object"}},
     {"name": "tempo_set_viewport_render", "description": "Enable or disable main viewport rendering. Disabling can improve performance for headless simulation.", "inputSchema": {"type": "object", "properties": {"enabled": {"type": "boolean"}}, "required": ["enabled"]}},
     {"name": "tempo_set_control_mode", "description": "Set the simulation control mode: NONE (0), USER (1), OPEN_LOOP (2), CLOSED_LOOP (3).", "inputSchema": {"type": "object", "properties": {"mode": {"type": "string", "enum": ["NONE", "USER", "OPEN_LOOP", "CLOSED_LOOP"]}}, "required": ["mode"]}},
 ]
@@ -66,6 +66,8 @@ def execute(client: TempoCoreClient, tool_name: str, args: Dict[str, Any]) -> st
 
 
 def _execute_impl(client: TempoCoreClient, tool_name: str, args: Dict[str, Any]) -> Any:
+    # Note: tempo_get_current_level and tempo_quit moved to other modules
+
     if tool_name == "tempo_load_level":
         safe_call(
             client.load_level,
@@ -78,16 +80,6 @@ def _execute_impl(client: TempoCoreClient, tool_name: str, args: Dict[str, Any])
     elif tool_name == "tempo_finish_loading_level":
         safe_call(client.finish_loading_level)
         return {"success": True, "action": "finish_loading_level"}
-
-    elif tool_name == "tempo_get_current_level":
-        result = safe_call(client.get_current_level_name)
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {"level": result.level}
-
-    elif tool_name == "tempo_quit":
-        safe_call(client.quit)
-        return {"success": True, "action": "quit"}
 
     elif tool_name == "tempo_set_viewport_render":
         safe_call(client.set_main_viewport_render_enabled, args["enabled"])

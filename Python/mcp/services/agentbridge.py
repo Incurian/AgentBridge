@@ -16,6 +16,92 @@ from AgentBridgeServer import AgentBridge_pb2_grpc as pb_grpc
 from TempoScripting import Geometry_pb2
 
 
+# =============================================================================
+# Lazy Tempo Clients (for features that route to Tempo backend)
+# =============================================================================
+_tempo_client = None
+_tempo_client_host_port = None
+_tempo_core_client = None
+_tempo_core_client_host_port = None
+
+def _get_tempo_client(host: str, port: int):
+    """Get or create a Tempo ActorControl client for routing operations."""
+    global _tempo_client, _tempo_client_host_port
+    if _tempo_client is None or _tempo_client_host_port != (host, port):
+        from .tempo_actor_control import TempoActorControlClient
+        _tempo_client = TempoActorControlClient(host, port)
+        _tempo_client_host_port = (host, port)
+    return _tempo_client
+
+def _get_tempo_core_client(host: str, port: int):
+    """Get or create a Tempo Core client for quit operation."""
+    global _tempo_core_client, _tempo_core_client_host_port
+    if _tempo_core_client is None or _tempo_core_client_host_port != (host, port):
+        from .tempo_core import TempoCoreClient
+        _tempo_core_client = TempoCoreClient(host, port)
+        _tempo_core_client_host_port = (host, port)
+    return _tempo_core_client
+
+
+def _parse_call_syntax(call: str) -> dict:
+    """
+    Parse C++ style call syntax into routing information.
+
+    Syntax:
+      - Class::Function         -> static function on Blueprint library class
+      - /Path/Asset::Function   -> function on loaded asset
+      - Actor.Function          -> function on actor instance
+      - Actor.Component.Func    -> function on actor's component
+
+    Returns dict with keys: type, target, function, component (optional), subobject (optional)
+    """
+    if "::" in call:
+        # Static or asset function
+        parts = call.split("::", 1)
+        target = parts[0]
+        function = parts[1]
+
+        if target.startswith("/"):
+            # Asset path - check for subobject (e.g., /Game/MyPCG.MyPCG.Graph::Func)
+            # Asset paths have format /Game/Folder/Asset.Asset or /Game/Folder/Asset.Asset.SubObject
+            # We need to find where the asset path ends and subobject begins
+            # The asset path always has exactly one dot for the object name
+            path_parts = target.split("/")
+            last_segment = path_parts[-1]  # e.g., "MyPCG.MyPCG" or "MyPCG.MyPCG.Graph"
+            dot_parts = last_segment.split(".")
+
+            if len(dot_parts) > 2:
+                # Has subobject path
+                asset_name = dot_parts[0] + "." + dot_parts[1]
+                subobject = ".".join(dot_parts[2:])
+                asset_path = "/".join(path_parts[:-1]) + "/" + asset_name
+                return {"type": "asset", "target": asset_path, "function": function, "subobject": subobject}
+            else:
+                return {"type": "asset", "target": target, "function": function}
+        else:
+            # Static class function
+            return {"type": "static", "target": target, "function": function}
+
+    elif "." in call:
+        # Instance method on actor (possibly with component)
+        # Split on last dot to get function name
+        last_dot = call.rfind(".")
+        target_path = call[:last_dot]
+        function = call[last_dot + 1:]
+
+        # Check if target_path has a component (another dot)
+        if "." in target_path:
+            first_dot = target_path.find(".")
+            actor = target_path[:first_dot]
+            component = target_path[first_dot + 1:]
+            return {"type": "actor", "target": actor, "function": function, "component": component}
+        else:
+            return {"type": "actor", "target": target_path, "function": function}
+
+    else:
+        # No separator - invalid syntax
+        return {"type": "error", "message": f"Invalid call syntax '{call}'. Use Class::Function for static, Actor.Function for instance, or /Asset/Path::Function for assets."}
+
 
 TOOLS = [
     # =========================================================================
@@ -49,13 +135,14 @@ TOOLS = [
             "required": ["world_identifier"]
         }
     },
+    {"name": "quit", "description": "Quit the Unreal Engine application.", "inputSchema": {"type": "object"}},
 
     # =========================================================================
     # Actor Discovery
     # =========================================================================
     {
         "name": "query_actors",
-        "description": "Find actors by class, name, label, or tag.",
+        "description": "Find actors by class, name, label, tag, or data layer. Use include_unloaded=True for World Partition streaming actors.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -63,8 +150,10 @@ TOOLS = [
                 "name_pattern": {"type": "string"},
                 "label_pattern": {"type": "string"},
                 "tag": {"type": "string"},
-                "limit": {"type": "integer", "default": 100},
-                "include_hidden": {"type": "boolean", "default": False}
+                "data_layer": {"type": "string", "description": "Filter by data layer name"},
+                "include_unloaded": {"type": "boolean", "default": False, "description": "Include actors in unloaded streaming cells (World Partition)"},
+                "include_hidden": {"type": "boolean", "default": False},
+                "limit": {"type": "integer", "default": 100}
             }
         }
     },
@@ -96,7 +185,8 @@ TOOLS = [
                 "rotation": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
                 "scale": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
                 "label": {"type": "string"},
-                "folder_path": {"type": "string"}
+                "folder_path": {"type": "string"},
+                "relative_to": {"type": "string"}
             },
             "required": ["class_name"]
         }
@@ -126,17 +216,44 @@ TOOLS = [
         }
     },
     {
-        "name": "set_actor_transform",
-        "description": "Move, rotate, or scale an actor. You can set any combination of location, rotation, and scale.",
+        "name": "add_component",
+        "description": "Add a component to an actor dynamically.",
         "inputSchema": {
             "type": "object",
             "properties": {
                 "actor_id": {"type": "string"},
+                "component_type": {"type": "string"},
+                "component_name": {"type": "string"}
+            },
+            "required": ["actor_id", "component_type"]
+        }
+    },
+    {
+        "name": "set_transform",
+        "description": "Set transform (location/rotation/scale) on actors or components. Use 'Actor->Component' syntax for components, or just actor name for actors.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "target": {"type": "string", "description": "Actor name or 'Actor->Component' for components"},
                 "location": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
                 "rotation": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
-                "scale": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3}
+                "scale": {"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+                "world_space": {"type": "boolean", "default": True, "description": "True for world coords, False for relative"},
+                "offset": {"type": "boolean", "default": False, "description": "True to add to current transform, False to replace"}
             },
-            "required": ["actor_id"]
+            "required": ["target"]
+        }
+    },
+    {
+        "name": "get_transform",
+        "description": "Get transform of an actor or component. Use 'Actor->Component' syntax for components.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "target": {"type": "string", "description": "Actor name or 'Actor->Component' for components"},
+                "world_space": {"type": "boolean", "default": True}
+            },
+            "required": ["target"]
         }
     },
 
@@ -200,33 +317,18 @@ TOOLS = [
     },
 
     # =========================================================================
-    # Static Function Invocation
+    # Function Invocation (unified)
     # =========================================================================
     {
-        "name": "call_static_function",
-        "description": "Call a static Blueprint library function. Examples: KismetRenderingLibrary::CreateRenderTarget2D, KismetSystemLibrary::PrintString, KismetMathLibrary::Abs.",
+        "name": "call_function",
+        "description": "Call a function using C++ syntax: Class::Function (static), Actor.Function (instance), /Asset/Path::Function (asset). Examples: KismetSystemLibrary::PrintString, MyActor.ToggleVisibility, MyActor.LightComponent0.SetIntensity, /Game/MyPCG.MyPCG::GetInputNode",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "class_name": {"type": "string"},
-                "function_name": {"type": "string"},
+                "call": {"type": "string", "description": "Target::Function or Target.Function syntax"},
                 "parameters": {"type": "object", "additionalProperties": True}
             },
-            "required": ["class_name", "function_name"]
-        }
-    },
-    {
-        "name": "call_asset_function",
-        "description": "Call a function on a loaded UObject asset. Works with PCGGraph, Blueprint CDO, DataAsset, etc. Use subobject_path for nested objects (e.g., 'Graph' in PCG assets).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "asset_path": {"type": "string"},
-                "function_name": {"type": "string"},
-                "subobject_path": {"type": "string"},
-                "parameters": {"type": "object", "additionalProperties": True}
-            },
-            "required": ["asset_path", "function_name"]
+            "required": ["call"]
         }
     },
 
@@ -234,21 +336,6 @@ TOOLS = [
     # World Partition & Streaming
     # =========================================================================
     {"name": "is_world_partitioned", "description": "Check if the current world uses World Partition (UE5's streaming system for large worlds).", "inputSchema": {"type": "object"}},
-    {
-        "name": "query_all_actors",
-        "description": "Query actors including those in unloaded streaming cells. Unlike query_actors, this can find actors that aren't currently loaded in memory.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "class_name": {"type": "string"},
-                "name_pattern": {"type": "string"},
-                "include_loaded": {"type": "boolean", "default": True},
-                "include_unloaded": {"type": "boolean", "default": True},
-                "data_layer": {"type": "string"},
-                "limit": {"type": "integer", "default": 100}
-            }
-        }
-    },
     {
         "name": "get_streaming_state",
         "description": "Get the streaming state of an actor by GUID. Returns whether the actor is Loaded, Unloaded, or Invalid.",
@@ -268,19 +355,6 @@ TOOLS = [
     },
     {"name": "get_landscape_bounds", "description": "Get complete landscape bounds in world space. Returns min/max corners, center point, and half-extents. Use this to size PCG volumes or other actors to cover the entire landscape.", "inputSchema": {"type": "object"}},
     {"name": "get_data_layers", "description": "Get all data layers defined in the world. Data layers are used to group actors for streaming.", "inputSchema": {"type": "object"}},
-    {
-        "name": "get_actors_in_data_layer",
-        "description": "Get all actors in a specific data layer.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "data_layer": {"type": "string"},
-                "include_unloaded": {"type": "boolean", "default": True},
-                "limit": {"type": "integer", "default": 100}
-            },
-            "required": ["data_layer"]
-        }
-    },
 
     # =========================================================================
     # Console Commands
@@ -368,92 +442,34 @@ TOOLS = [
     },
 
     # =========================================================================
-    # Component Operations
+    # Attachment Operations (Phase 2 - unified)
     # =========================================================================
     {
-        "name": "get_component_transform",
-        "description": "Get the transform of a specific component on an actor.",
+        "name": "attach",
+        "description": "Attach an actor or component to a parent. Use 'Actor->Component' syntax for component targets.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {"type": "string"},
-                "component_name": {"type": "string"},
-                "world_space": {"type": "boolean", "default": True}
+                "child": {"type": "string", "description": "Child actor or 'Actor->Component'"},
+                "parent": {"type": "string", "description": "Parent actor or 'Actor->Component'"},
+                "socket": {"type": "string", "description": "Optional socket name"},
+                "location_rule": {"type": "string", "enum": ["KeepRelative", "KeepWorld", "SnapToTarget"], "default": "KeepWorld"},
+                "rotation_rule": {"type": "string", "enum": ["KeepRelative", "KeepWorld", "SnapToTarget"], "default": "KeepWorld"},
+                "scale_rule": {"type": "string", "enum": ["KeepRelative", "KeepWorld", "SnapToTarget"], "default": "KeepWorld"}
             },
-            "required": ["actor_id", "component_name"]
+            "required": ["child", "parent"]
         }
     },
     {
-        "name": "set_component_transform",
-        "description": "Set the transform of a specific component.",
+        "name": "detach",
+        "description": "Detach an actor or component from its parent. Use 'Actor->Component' syntax for components.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "actor_id": {"type": "string"},
-                "component_name": {"type": "string"},
-                "location": {"type": "array"},
-                "rotation": {"type": "array"},
-                "scale": {"type": "array"},
-                "world_space": {"type": "boolean", "default": True}
-            },
-            "required": ["actor_id", "component_name"]
-        }
-    },
-    {
-        "name": "attach_actor",
-        "description": "Attach one actor to another (parent-child relationship).",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "child_actor_id": {"type": "string"},
-                "parent_actor_id": {"type": "string"},
-                "parent_component_name": {"type": "string"},
-                "socket_name": {"type": "string"},
-                "location_rule": {"type": "string", "enum": ["KeepRelative", "KeepWorld", "SnapToTarget"], "default": "KeepWorld"}
-            },
-            "required": ["child_actor_id", "parent_actor_id"]
-        }
-    },
-    {
-        "name": "detach_actor",
-        "description": "Detach an actor from its parent.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor_id": {"type": "string"},
-                "maintain_world_position": {"type": "boolean", "default": True}
-            },
-            "required": ["actor_id"]
-        }
-    },
-    {
-        "name": "attach_component",
-        "description": "Attach a component to another component within the same actor.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor_id": {"type": "string"},
-                "component_name": {"type": "string"},
-                "parent_component_name": {"type": "string"},
-                "socket_name": {"type": "string"},
-                "location_rule": {"type": "string", "enum": ["keep_relative", "keep_world", "snap_to_target"], "default": "keep_relative"},
-                "rotation_rule": {"type": "string", "enum": ["keep_relative", "keep_world", "snap_to_target"], "default": "keep_relative"},
-                "scale_rule": {"type": "string", "enum": ["keep_relative", "keep_world", "snap_to_target"], "default": "keep_relative"}
-            },
-            "required": ["actor_id", "component_name", "parent_component_name"]
-        }
-    },
-    {
-        "name": "detach_component",
-        "description": "Detach a component from its parent, making it a root component.",
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "actor_id": {"type": "string"},
-                "component_name": {"type": "string"},
+                "target": {"type": "string", "description": "Actor or 'Actor->Component' to detach"},
                 "maintain_world_transform": {"type": "boolean", "default": True}
             },
-            "required": ["actor_id", "component_name"]
+            "required": ["target"]
         }
     },
 
@@ -998,6 +1014,61 @@ class AgentBridgeClient:
         return self.stub.DetachActor(pb.DetachActorRequest(
             actor_id=actor_id,
             maintain_world_position=maintain_world_position,
+        ))
+
+    # -------------------------------------------------------------------------
+    # Unified Transform/Attachment (Phase 2)
+    # -------------------------------------------------------------------------
+
+    def set_transform(self, target: str, location=None, rotation=None, scale=None,
+                      world_space: bool = True, offset: bool = False):
+        """Set transform on actor or component. Target: 'ActorName' or 'Actor->Component'."""
+        request = pb.SetTransformRequest(
+            target=target,
+            world_space=world_space,
+            offset=offset,
+        )
+        if location:
+            request.location.CopyFrom(self._make_vector(*location))
+            request.set_location = True
+        if rotation:
+            request.rotation.CopyFrom(self._make_rotation(*rotation))
+            request.set_rotation = True
+        if scale:
+            request.scale.CopyFrom(pb.Scale(x=scale[0], y=scale[1], z=scale[2]))
+            request.set_scale = True
+        return self.stub.SetTransform(request)
+
+    def get_transform(self, target: str, world_space: bool = True):
+        """Get transform of actor or component. Target: 'ActorName' or 'Actor->Component'."""
+        return self.stub.GetTransform(pb.GetTransformRequest(
+            target=target,
+            world_space=world_space,
+        ))
+
+    def attach(self, child: str, parent: str, socket: str = "",
+               location_rule: str = "KeepWorld", rotation_rule: str = "KeepWorld",
+               scale_rule: str = "KeepWorld"):
+        """Attach actor/component. Use 'Actor->Component' syntax for components."""
+        rule_map = {
+            "KeepRelative": pb.ATTACHMENT_RULE_KEEP_RELATIVE,
+            "KeepWorld": pb.ATTACHMENT_RULE_KEEP_WORLD,
+            "SnapToTarget": pb.ATTACHMENT_RULE_SNAP_TO_TARGET,
+        }
+        return self.stub.Attach(pb.AttachRequest(
+            child=child,
+            parent=parent,
+            socket=socket,
+            location_rule=rule_map.get(location_rule, pb.ATTACHMENT_RULE_KEEP_WORLD),
+            rotation_rule=rule_map.get(rotation_rule, pb.ATTACHMENT_RULE_KEEP_WORLD),
+            scale_rule=rule_map.get(scale_rule, pb.ATTACHMENT_RULE_KEEP_WORLD),
+        ))
+
+    def detach(self, target: str, maintain_world_transform: bool = True):
+        """Detach actor/component. Use 'Actor->Component' syntax for components."""
+        return self.stub.Detach(pb.DetachRequest(
+            target=target,
+            maintain_world_transform=maintain_world_transform,
         ))
 
     # File Operations (P1)
@@ -1611,7 +1682,7 @@ def _property_value_to_dict(pv) -> Any:
         tf = pv.transform_value
         return {
             "location": [tf.location.x, tf.location.y, tf.location.z],
-            "rotation": [tf.rotation.pitch, tf.rotation.yaw, tf.rotation.roll],
+            "rotation": [tf.rotation.p, tf.rotation.y, tf.rotation.r],
             "scale": [tf.scale.x, tf.scale.y, tf.scale.z],
         }
     elif t == PT_COLOR:
@@ -2401,11 +2472,57 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             return result
         return {"success": True}
 
+    elif tool_name == "quit":
+        # Route to Tempo Core client
+        tempo_core = _get_tempo_core_client(client.host, client.port)
+        safe_call(tempo_core.quit)
+        return {"success": True, "action": "quit"}
+
     elif tool_name == "query_actors":
         # Normalize Blueprint class names if filtering by class (auto-append _C suffix if needed)
         class_name = args.get("class_name", "")
         if class_name:
             class_name = _normalize_blueprint_class(class_name)
+
+        # Route to World Partition query if streaming features requested
+        include_unloaded = args.get("include_unloaded", False)
+        data_layer = args.get("data_layer", "")
+
+        if include_unloaded or data_layer:
+            # Use QueryAllActors RPC for World Partition queries
+            result = safe_call(
+                client.query_all_actors,
+                class_name=class_name,
+                name_pattern=args.get("name_pattern", ""),
+                include_loaded=True,
+                include_unloaded=include_unloaded,
+                data_layer=data_layer,
+                limit=args.get("limit", 100),
+            )
+            if isinstance(result, dict) and "error" in result:
+                return result
+            return {
+                "count": len(result.actors),
+                "total_loaded": result.total_loaded,
+                "total_unloaded": result.total_unloaded,
+                "actors": [
+                    {
+                        "name": a.actor_info.name,
+                        "label": a.actor_info.label,
+                        "class_name": a.actor_info.class_name,
+                        "guid": a.actor_info.guid,
+                        "streaming_state": ["NOT_APPLICABLE", "LOADED", "UNLOADED", "INVALID"][a.streaming_state],
+                        "is_spatially_loaded": a.is_spatially_loaded,
+                        "data_layers": list(a.data_layers),
+                        "location": [a.actor_info.transform.location.x,
+                                     a.actor_info.transform.location.y,
+                                     a.actor_info.transform.location.z] if a.actor_info.HasField("transform") else None,
+                    }
+                    for a in result.actors
+                ],
+            }
+
+        # Standard query for loaded actors only
         result = safe_call(
             client.query_actors,
             class_name=class_name,
@@ -2475,6 +2592,32 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
     elif tool_name == "spawn_actor":
         # Normalize Blueprint class names (auto-append _C suffix if needed)
         class_name = _normalize_blueprint_class(args["class_name"])
+
+        # Route to Tempo backend if relative_to is specified
+        if args.get("relative_to"):
+            tempo = _get_tempo_client(client.host, client.port)
+            result = safe_call(
+                tempo.spawn_actor,
+                type=class_name,
+                location=args.get("location"),
+                rotation=args.get("rotation"),
+                relative_to=args["relative_to"],
+            )
+            if isinstance(result, dict) and "error" in result:
+                return result
+            return {
+                "success": True,
+                "actor": {
+                    "name": result.spawned_name,
+                    "location": [
+                        result.spawned_transform.location.x,
+                        result.spawned_transform.location.y,
+                        result.spawned_transform.location.z,
+                    ],
+                },
+            }
+
+        # Standard AgentBridge spawn
         result = safe_call(
             client.spawn_actor,
             class_name=class_name,
@@ -2518,17 +2661,46 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             return {"success": True, "actor": _actor_to_dict(actor)}
         return {"success": False, "error": "Failed to duplicate actor"}
 
-    elif tool_name == "set_actor_transform":
+    elif tool_name == "add_component":
+        # Routes to Tempo backend (AgentBridge doesn't have this)
+        tempo = _get_tempo_client(client.host, client.port)
         result = safe_call(
-            client.set_actor_transform,
-            actor_id=args["actor_id"],
+            tempo.add_component,
+            actor=args["actor_id"],
+            type=args["component_type"],
+            name=args.get("component_name", ""),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True, "component_name": result.name}
+
+    elif tool_name == "set_transform":
+        result = safe_call(
+            client.set_transform,
+            target=args["target"],
             location=tuple(args["location"]) if "location" in args else None,
             rotation=tuple(args["rotation"]) if "rotation" in args else None,
             scale=tuple(args["scale"]) if "scale" in args else None,
+            world_space=args.get("world_space", True),
+            offset=args.get("offset", False),
         )
         if isinstance(result, dict) and "error" in result:
             return result
         return {"success": True}
+
+    elif tool_name == "get_transform":
+        result = safe_call(
+            client.get_transform,
+            target=args["target"],
+            world_space=args.get("world_space", True),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {
+            "location": {"x": result.location.x, "y": result.location.y, "z": result.location.z},
+            "rotation": {"pitch": result.rotation.p, "yaw": result.rotation.y, "roll": result.rotation.r},
+            "scale": {"x": result.scale.x, "y": result.scale.y, "z": result.scale.z},
+        }
 
     elif tool_name == "get_property":
         # Normalize asset paths: /Game/Foo/Asset -> /Game/Foo/Asset.Asset
@@ -2639,56 +2811,73 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             ],
         }
 
-    # Static Function Invocation
-    elif tool_name == "call_static_function":
-        result = safe_call(
-            client.call_static_function,
-            class_name=args["class_name"],
-            function_name=args["function_name"],
-            parameters=args.get("parameters", {}),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        response = {"success": True}
+    # Unified Function Invocation (C++ syntax routing)
+    elif tool_name == "call_function":
+        parsed = _parse_call_syntax(args["call"])
 
-        # Parse return value if present
-        if result.HasField("return_value") and result.return_value.type != 0:
-            response["return_value"] = _property_value_to_dict(result.return_value)
+        if parsed["type"] == "error":
+            return {"error": parsed["message"]}
 
-        # Parse out parameters if present
-        if result.out_parameters:
-            response["out_parameters"] = {
-                kv.key: _property_value_to_dict(kv.value)
-                for kv in result.out_parameters
+        elif parsed["type"] == "static":
+            # Static Blueprint library function: Class::Function
+            result = safe_call(
+                client.call_static_function,
+                class_name=parsed["target"],
+                function_name=parsed["function"],
+                parameters=args.get("parameters", {}),
+            )
+            if isinstance(result, dict) and "error" in result:
+                return result
+            response = {"success": True, "call_type": "static", "target": parsed["target"]}
+
+            if result.HasField("return_value") and result.return_value.type != 0:
+                response["return_value"] = _property_value_to_dict(result.return_value)
+            if result.out_parameters:
+                response["out_parameters"] = {
+                    kv.key: _property_value_to_dict(kv.value)
+                    for kv in result.out_parameters
+                }
+            return response
+
+        elif parsed["type"] == "asset":
+            # Asset method: /Path/Asset::Function
+            result = safe_call(
+                client.call_asset_function,
+                asset_path=parsed["target"],
+                function_name=parsed["function"],
+                subobject_path=parsed.get("subobject", ""),
+                parameters=args.get("parameters", {}),
+            )
+            if isinstance(result, dict) and "error" in result:
+                return result
+            response = {"success": True, "call_type": "asset", "target": parsed["target"]}
+
+            if result.HasField("return_value") and result.return_value.type != 0:
+                response["return_value"] = _property_value_to_dict(result.return_value)
+            if result.out_parameters:
+                response["out_parameters"] = {
+                    kv.key: _property_value_to_dict(kv.value)
+                    for kv in result.out_parameters
+                }
+            return response
+
+        elif parsed["type"] == "actor":
+            # Actor instance method: Actor.Function or Actor.Component.Function
+            tempo = _get_tempo_client(client.host, client.port)
+            result = safe_call(
+                tempo.call_function,
+                actor=parsed["target"],
+                function=parsed["function"],
+                component=parsed.get("component", ""),
+            )
+            if isinstance(result, dict) and "error" in result:
+                return result
+            return {
+                "success": True,
+                "call_type": "actor",
+                "target": parsed["target"],
+                "function": parsed["function"],
             }
-
-        return response
-
-
-    elif tool_name == "call_asset_function":
-        result = safe_call(
-            client.call_asset_function,
-            asset_path=args["asset_path"],
-            function_name=args["function_name"],
-            subobject_path=args.get("subobject_path", ""),
-            parameters=args.get("parameters", {}),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        response = {"success": True}
-
-        # Parse return value if present
-        if result.HasField("return_value") and result.return_value.type != 0:
-            response["return_value"] = _property_value_to_dict(result.return_value)
-
-        # Parse out parameters if present
-        if result.out_parameters:
-            response["out_parameters"] = {
-                kv.key: _property_value_to_dict(kv.value)
-                for kv in result.out_parameters
-            }
-
-        return response
     # World Partition & Streaming
     elif tool_name == "is_world_partitioned":
         result = safe_call(client.is_world_partitioned)
@@ -2697,38 +2886,6 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         return {
             "is_partitioned": result.is_partitioned,
             "world_name": result.world_name,
-        }
-
-    elif tool_name == "query_all_actors":
-        result = safe_call(
-            client.query_all_actors,
-            class_name=args.get("class_name", ""),
-            name_pattern=args.get("name_pattern", ""),
-            include_loaded=args.get("include_loaded", True),
-            include_unloaded=args.get("include_unloaded", True),
-            data_layer=args.get("data_layer", ""),
-            limit=args.get("limit", 100),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {
-            "total_loaded": result.total_loaded,
-            "total_unloaded": result.total_unloaded,
-            "actors": [
-                {
-                    "name": a.actor_info.name,
-                    "label": a.actor_info.label,
-                    "class_name": a.actor_info.class_name,
-                    "guid": a.actor_info.guid,
-                    "streaming_state": ["NOT_APPLICABLE", "LOADED", "UNLOADED", "INVALID"][a.streaming_state],
-                    "is_spatially_loaded": a.is_spatially_loaded,
-                    "data_layers": list(a.data_layers),
-                    "location": [a.actor_info.transform.location.x,
-                                 a.actor_info.transform.location.y,
-                                 a.actor_info.transform.location.z] if a.actor_info.HasField("transform") else None,
-                }
-                for a in result.actors
-            ],
         }
 
     elif tool_name == "get_streaming_state":
@@ -2785,29 +2942,6 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
             return result
         return {
             "data_layers": list(result.data_layers),
-        }
-
-    elif tool_name == "get_actors_in_data_layer":
-        result = safe_call(
-            client.get_actors_in_data_layer,
-            data_layer=args["data_layer"],
-            include_unloaded=args.get("include_unloaded", True),
-            limit=args.get("limit", 100),
-        )
-        if isinstance(result, dict) and "error" in result:
-            return result
-        return {
-            "total_count": result.total_count,
-            "actors": [
-                {
-                    "name": a.actor_info.name,
-                    "label": a.actor_info.label,
-                    "class_name": a.actor_info.class_name,
-                    "guid": a.actor_info.guid,
-                    "streaming_state": ["NOT_APPLICABLE", "LOADED", "UNLOADED", "INVALID"][a.streaming_state],
-                }
-                for a in result.actors
-            ],
         }
 
     elif tool_name == "execute_console_command":
@@ -2919,22 +3053,31 @@ def _execute_impl(client: AgentBridgeClient, tool_name: str, args: Dict[str, Any
         }
 
     # =========================================================================
-    # Component Operations (P1)
+    # Attachment Operations (Phase 2 - unified)
     # =========================================================================
-    elif tool_name == "get_component_transform":
+    elif tool_name == "attach":
         result = safe_call(
-            client.get_component_transform,
-            args["actor_id"],
-            args["component_name"],
-            args.get("world_space", True),
+            client.attach,
+            child=args["child"],
+            parent=args["parent"],
+            socket=args.get("socket", ""),
+            location_rule=args.get("location_rule", "KeepWorld"),
+            rotation_rule=args.get("rotation_rule", "KeepWorld"),
+            scale_rule=args.get("scale_rule", "KeepWorld"),
         )
         if isinstance(result, dict) and "error" in result:
             return result
-        return {
-            "location": [result.location.x, result.location.y, result.location.z],
-            "rotation": [result.rotation.pitch, result.rotation.yaw, result.rotation.roll],
-            "scale": [result.scale.x, result.scale.y, result.scale.z],
-        }
+        return {"success": True}
+
+    elif tool_name == "detach":
+        result = safe_call(
+            client.detach,
+            target=args["target"],
+            maintain_world_transform=args.get("maintain_world_transform", True),
+        )
+        if isinstance(result, dict) and "error" in result:
+            return result
+        return {"success": True}
 
     # =========================================================================
     # PCG Graph Operations

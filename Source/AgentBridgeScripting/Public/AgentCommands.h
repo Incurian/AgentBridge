@@ -83,6 +83,12 @@ enum class EAgentCommandType : uint8
 	DetachComponent,
 	DetachActor,
 
+	// Unified Transform/Attachment Commands (Phase 2 Consolidation)
+	SetTransform,    // Unified actor/component transform
+	GetTransform,    // Unified actor/component transform
+	Attach,          // Unified actor/component attachment
+	Detach,          // Unified actor/component detachment
+
 	// File Commands (P1)
 	ReadProjectFile,
 	WriteProjectFile,
@@ -1116,6 +1122,99 @@ struct AGENTBRIDGESCRIPTING_API FDetachActorCommand : FAgentCommandBase
 };
 
 //~==============================================================================
+// Unified Transform/Attachment Commands (Phase 2 Consolidation)
+//~==============================================================================
+
+/**
+ * FSetTransformCommand - Unified transform setting for actors and components.
+ *
+ * Supports the "Actor->Component" syntax for targeting:
+ * - "MyActor" - Target the actor's root component
+ * - "MyActor->LightComponent0" - Target a specific component
+ */
+struct AGENTBRIDGESCRIPTING_API FSetTransformCommand : FAgentCommandBase
+{
+	FSetTransformCommand() { Type = EAgentCommandType::SetTransform; }
+
+	/** Target: actor label/name, or "Actor->Component" for component. */
+	FString Target;
+
+	/** New location (optional). */
+	TOptional<FVector> Location;
+
+	/** New rotation (optional). */
+	TOptional<FRotator> Rotation;
+
+	/** New scale (optional). */
+	TOptional<FVector> Scale;
+
+	/** Transform space: true = world space, false = relative/local. */
+	bool bWorldSpace = true;
+
+	/** Apply mode: true = add to current transform, false = replace. */
+	bool bOffset = false;
+};
+
+/**
+ * FGetTransformCommand - Unified transform retrieval for actors and components.
+ */
+struct AGENTBRIDGESCRIPTING_API FGetTransformCommand : FAgentCommandBase
+{
+	FGetTransformCommand() { Type = EAgentCommandType::GetTransform; }
+
+	/** Target: actor label/name, or "Actor->Component" for component. */
+	FString Target;
+
+	/** Transform space: true = world space, false = relative/local. */
+	bool bWorldSpace = true;
+};
+
+/**
+ * FAttachCommand - Unified attachment for actors and components.
+ *
+ * Supports the "Actor->Component" syntax:
+ * - Child="MyActor" - Attach the actor
+ * - Child="MyActor->Mesh" - Attach a specific component
+ * - Parent="ParentActor->AttachPoint" - Attach to a specific parent component
+ */
+struct AGENTBRIDGESCRIPTING_API FAttachCommand : FAgentCommandBase
+{
+	FAttachCommand() { Type = EAgentCommandType::Attach; }
+
+	/** Child target: actor or "Actor->Component". */
+	FString Child;
+
+	/** Parent target: actor or "Actor->Component". */
+	FString Parent;
+
+	/** Optional socket name on parent. */
+	FString Socket;
+
+	/** Location attachment rule. */
+	EAttachmentRuleType LocationRule = EAttachmentRuleType::KeepWorld;
+
+	/** Rotation attachment rule. */
+	EAttachmentRuleType RotationRule = EAttachmentRuleType::KeepWorld;
+
+	/** Scale attachment rule. */
+	EAttachmentRuleType ScaleRule = EAttachmentRuleType::KeepWorld;
+};
+
+/**
+ * FDetachCommand - Unified detachment for actors and components.
+ */
+struct AGENTBRIDGESCRIPTING_API FDetachCommand : FAgentCommandBase
+{
+	FDetachCommand() { Type = EAgentCommandType::Detach; }
+
+	/** Target: actor or "Actor->Component" to detach. */
+	FString Target;
+
+	/** Whether to maintain world-space transform after detach. */
+	bool bMaintainWorldTransform = true;
+};
+
+//~==============================================================================
 // File Commands (P1 - Constrained to Project Directory)
 //~==============================================================================
 
@@ -2069,6 +2168,21 @@ struct AGENTBRIDGESCRIPTING_API FGetComponentTransformResponse : FAgentResponseB
 
 	/** Parent component name (if attached). */
 	FString ParentComponentName;
+};
+
+/**
+ * FGetTransformResponse - Response to unified GetTransform command (Phase 2).
+ */
+struct AGENTBRIDGESCRIPTING_API FGetTransformResponse : FAgentResponseBase
+{
+	/** Location. */
+	FVector Location = FVector::ZeroVector;
+
+	/** Rotation. */
+	FRotator Rotation = FRotator::ZeroRotator;
+
+	/** Scale. */
+	FVector Scale = FVector::OneVector;
 };
 
 //~==============================================================================

@@ -374,6 +374,7 @@ AActor* FActorOperations::DuplicateActor(
 			// Skip internal/structural properties
 			FString PropName = Property->GetName();
 			if (PropName == TEXT("ActorGuid") ||
+				PropName == TEXT("ActorLabel") ||  // Already set by SpawnActor from NewLabel param
 				PropName == TEXT("AttachParent") ||
 				PropName == TEXT("AttachSocketName") ||
 				PropName == TEXT("AttachChildren") ||

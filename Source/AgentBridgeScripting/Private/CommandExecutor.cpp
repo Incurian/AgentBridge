@@ -2,6 +2,7 @@
 #include "ActorOperations.h"
 #include "WorldContextManager.h"
 #include "AgentPropertyPath.h"
+#include "TargetResolution.h"
 #include "FunctionInvoker.h"
 #include "TypeDiscovery.h"
 #include "PropertyAccessor.h"
@@ -3213,6 +3214,308 @@ void FCommandExecutor::Execute(const FDetachActorCommand& Command, FAgentRespons
 	);
 
 	Actor->DetachFromActor(Rules);
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+//~==============================================================================
+// Unified Transform/Attachment Commands (Phase 2 Consolidation)
+//~==============================================================================
+
+void FCommandExecutor::Execute(const FSetTransformCommand& Command, FAgentResponseBase& Response)
+{
+	using namespace AgentBridge;
+
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	if (Command.Target.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Target is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Resolve the target
+	FString Error;
+	FResolvedTarget Target = TargetResolution::Resolve(nullptr, Command.Target, &Error);
+
+	if (!Target.IsValid())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Get the scene component to operate on
+	USceneComponent* SceneComp = Target.GetSceneComponent();
+	if (!SceneComp)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("No scene component found");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Get current transform
+	FTransform CurrentTransform = Command.bWorldSpace
+		? SceneComp->GetComponentTransform()
+		: SceneComp->GetRelativeTransform();
+
+	FVector NewLocation = CurrentTransform.GetLocation();
+	FRotator NewRotation = CurrentTransform.Rotator();
+	FVector NewScale = CurrentTransform.GetScale3D();
+
+	// Apply location
+	if (Command.Location.IsSet())
+	{
+		if (Command.bOffset)
+		{
+			NewLocation += Command.Location.GetValue();
+		}
+		else
+		{
+			NewLocation = Command.Location.GetValue();
+		}
+	}
+
+	// Apply rotation
+	if (Command.Rotation.IsSet())
+	{
+		if (Command.bOffset)
+		{
+			NewRotation += Command.Rotation.GetValue();
+		}
+		else
+		{
+			NewRotation = Command.Rotation.GetValue();
+		}
+	}
+
+	// Apply scale
+	if (Command.Scale.IsSet())
+	{
+		if (Command.bOffset)
+		{
+			NewScale += Command.Scale.GetValue();
+		}
+		else
+		{
+			NewScale = Command.Scale.GetValue();
+		}
+	}
+
+	// Build new transform
+	FTransform NewTransform;
+	NewTransform.SetLocation(NewLocation);
+	NewTransform.SetRotation(NewRotation.Quaternion());
+	NewTransform.SetScale3D(NewScale);
+
+	// Apply the transform
+	if (Target.IsComponent())
+	{
+		// Target is a specific component
+		if (Command.bWorldSpace)
+		{
+			SceneComp->SetWorldTransform(NewTransform);
+		}
+		else
+		{
+			SceneComp->SetRelativeTransform(NewTransform);
+		}
+	}
+	else
+	{
+		// Target is an actor - set actor transform
+		Target.Actor->SetActorTransform(NewTransform);
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FGetTransformCommand& Command, FGetTransformResponse& Response)
+{
+	using namespace AgentBridge;
+
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	if (Command.Target.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Target is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Resolve the target
+	FString Error;
+	FResolvedTarget Target = TargetResolution::Resolve(nullptr, Command.Target, &Error);
+
+	if (!Target.IsValid())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Get the scene component to read from
+	USceneComponent* SceneComp = Target.GetSceneComponent();
+	if (!SceneComp)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("No scene component found");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Get transform in requested space
+	FTransform Transform = Command.bWorldSpace
+		? SceneComp->GetComponentTransform()
+		: SceneComp->GetRelativeTransform();
+
+	Response.Location = Transform.GetLocation();
+	Response.Rotation = Transform.Rotator();
+	Response.Scale = Transform.GetScale3D();
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FAttachCommand& Command, FAgentResponseBase& Response)
+{
+	using namespace AgentBridge;
+
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	if (Command.Child.IsEmpty() || Command.Parent.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Both child and parent targets are required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Resolve both targets
+	FResolvedTarget ChildTarget, ParentTarget;
+	FString Error;
+
+	if (!TargetResolution::ResolveAttachmentTargets(nullptr, Command.Child, Command.Parent,
+		ChildTarget, ParentTarget, &Error))
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Get scene components
+	USceneComponent* ChildComp = ChildTarget.GetSceneComponent();
+	USceneComponent* ParentComp = ParentTarget.GetSceneComponent();
+
+	if (!ChildComp)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Child has no scene component");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	if (!ParentComp)
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Parent has no scene component");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Convert attachment rules
+	auto ToAttachmentRule = [](EAttachmentRuleType Rule) -> EAttachmentRule
+	{
+		switch (Rule)
+		{
+		case EAttachmentRuleType::KeepRelative: return EAttachmentRule::KeepRelative;
+		case EAttachmentRuleType::SnapToTarget: return EAttachmentRule::SnapToTarget;
+		case EAttachmentRuleType::KeepWorld:
+		default: return EAttachmentRule::KeepWorld;
+		}
+	};
+
+	FAttachmentTransformRules Rules(
+		ToAttachmentRule(Command.LocationRule),
+		ToAttachmentRule(Command.RotationRule),
+		ToAttachmentRule(Command.ScaleRule),
+		true // bWeldSimulatedBodies
+	);
+
+	// Perform attachment
+	FName SocketName = Command.Socket.IsEmpty() ? NAME_None : FName(*Command.Socket);
+
+	if (ChildTarget.IsComponent())
+	{
+		// Attaching a component
+		ChildComp->AttachToComponent(ParentComp, Rules, SocketName);
+	}
+	else
+	{
+		// Attaching an actor
+		ChildTarget.Actor->AttachToComponent(ParentComp, Rules, SocketName);
+	}
+
+	Response.bSuccess = true;
+	Response.ExecutionTimeMs = EndTiming(StartTime);
+}
+
+void FCommandExecutor::Execute(const FDetachCommand& Command, FAgentResponseBase& Response)
+{
+	using namespace AgentBridge;
+
+	double StartTime = StartTiming();
+	Response.CommandId = Command.CommandId;
+
+	if (Command.Target.IsEmpty())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = TEXT("Target is required");
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Resolve the target
+	FString Error;
+	FResolvedTarget Target = TargetResolution::Resolve(nullptr, Command.Target, &Error);
+
+	if (!Target.IsValid())
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = Error;
+		Response.ExecutionTimeMs = EndTiming(StartTime);
+		return;
+	}
+
+	// Build detachment rules
+	EDetachmentRule Rule = Command.bMaintainWorldTransform
+		? EDetachmentRule::KeepWorld
+		: EDetachmentRule::KeepRelative;
+
+	FDetachmentTransformRules Rules(Rule, Rule, Rule, true);
+
+	if (Target.IsComponent())
+	{
+		// Detaching a component
+		Target.Component->DetachFromComponent(Rules);
+	}
+	else
+	{
+		// Detaching an actor
+		Target.Actor->DetachFromActor(Rules);
+	}
 
 	Response.bSuccess = true;
 	Response.ExecutionTimeMs = EndTiming(StartTime);
