@@ -5,7 +5,8 @@
 ## Purpose
 
 This package provides the Python-side tools for AI agents to interact with Unreal:
-- MCP server with 104 tools across 13 services (90 core + 14 bp_toolkit when submodule present)
+- MCP server with ~100 tools across 7 modules (organized into profiles)
+- Modular loading: load only the tools you need, or use a profile
 - gRPC client for Tempo integration
 - HTTP client as fallback
 
@@ -66,21 +67,20 @@ Python/
 │   ├── server.py           # MCP server entry point
 │   ├── client.py           # Legacy gRPC client
 │   └── services/           # Modular service modules
-│       ├── __init__.py     # Service registry
+│       ├── __init__.py     # Service registry, MODULES dict, profiles
 │       ├── base.py         # Shared utilities
-│       ├── agentbridge.py  # AgentBridge service (37 tools)
+│       ├── agentbridge.py  # AgentBridge service (~57 tools)
 │       ├── tempo_time.py   # TimeService (6 tools)
-│       ├── tempo_actor_control.py  # 17 tools
-│       ├── tempo_core.py           # 6 tools
-│       ├── tempo_core_editor.py    # 6 tools
-│       ├── tempo_geographic.py     # 5 tools
-│       ├── tempo_movement.py       # 5 tools
-│       ├── tempo_world_state.py    # 2 tools
-│       ├── tempo_labels.py         # 1 tool
-│       ├── tempo_sensors.py        # 1 tool
-│       ├── tempo_map_query.py      # 3 tools
-│       ├── tempo_agents_editor.py  # 1 tool
-│       └── bp_toolkit.py           # 14 tools (optional, requires submodule)
+│       ├── tempo_core.py           # Core simulation (4 tools)
+│       ├── tempo_core_editor.py    # Editor PIE/level (7 tools)
+│       ├── tempo_geographic.py     # Time/geographic (5 tools)
+│       ├── tempo_movement.py       # AI/vehicle control (6 tools)
+│       ├── tempo_world_state.py    # Actor state (2 tools)
+│       ├── tempo_labels.py         # Segmentation labels (1 tool)
+│       ├── tempo_sensors.py        # Cameras (1 tool)
+│       ├── tempo_map_query.py      # Lanes/zones (3 tools)
+│       ├── tempo_agents_editor.py  # Zone graph (1 tool)
+│       └── bp_toolkit.py           # 26 tools (6 BP + 6 PCG + 14 offline)
 ├── agentbridge/            # HTTP client package
 │   ├── __init__.py
 │   └── client.py
@@ -115,13 +115,17 @@ Add to Claude Code settings (`~/.claude/settings.json`):
 The MCP server has a self-documenting help system:
 
 ```python
-help()                    # Overview
-help(topic="actors")      # Actor operations
-help(topic="properties")  # Property access
-help(topic="classes")     # Type discovery
-help(topic="console")     # Console commands
-help(topic="workflows")   # Common workflows
-help(topic="components")  # Component operations
+help()                        # Overview
+help(topic="actors")          # Actor operations
+help(topic="properties")      # Property access
+help(topic="classes")         # Type discovery
+help(topic="assets")          # Asset/file operations
+help(topic="components")      # Component transforms, attachment
+help(topic="console")         # Console commands
+help(topic="workflows")       # Common workflows (includes PCG biome)
+help(topic="pcg_volume")      # PCG volume types and sizing
+help(topic="volume_sizing")   # BoxComponent sizing details
+help(topic="bp_toolkit")      # Offline asset manipulation (if available)
 ```
 
 ### Keeping Help In Sync
@@ -184,47 +188,50 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
   D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -c "from mcp.services import agentbridge; print('OK')"
 ```
 
-## Available Tools (90 core + 14 optional)
+## Available Tools (~100 tools across 7 modules)
 
-### AgentBridge Service (37 tools)
-- `help`, `list_worlds`, `set_target_world`
-- `query_actors`, `get_actor`, `spawn_actor`, `delete_actor`
-- `set_actor_transform`, `get_property`, `set_property`
-- `list_classes`, `get_class_schema`, `call_static_function`
-- `is_world_partitioned`, `query_all_actors`, `get_streaming_state`
-- `query_landscape`, `get_landscape_bounds`, `get_data_layers`
+### Module Organization
+
+| Module | Tools | Description |
+|--------|-------|-------------|
+| `core` | 6 | help, list_worlds, quit, console commands |
+| `classes` | ~20 | Actors, properties, transforms, assets |
+| `editor` | 7 | PIE, simulate, level management |
+| `world_partition` | 7 | Streaming actors, landscape bounds |
+| `files` | 4 | Project file operations |
+| `bp_toolkit` | 26 | Blueprint/PCG graph editing, offline tools |
+| `tempo_sim` | 28 | Simulation, time, AI, sensors, maps |
+
+### Core AgentBridge Tools
+- `help`, `list_worlds`, `set_target_world`, `quit`
+- `query_actors`, `get_actor`, `spawn_actor`, `delete_actor`, `duplicate_actor`
+- `get_property`, `set_property` (works with actors AND DataAssets)
+- `set_transform`, `get_transform`, `attach`, `detach` (unified for actors/components)
+- `list_classes`, `get_class_schema`, `call_function`
 - `execute_console_command`, `search_console_commands`
 - Asset/file/component operations...
 
-### Tempo Services (53 tools)
+### Tempo Services (~30 tools)
 - Time control: `tempo_play`, `tempo_pause`, `tempo_step`
-- Actor properties: `tempo_set_float_property`, `tempo_set_color_property`, etc.
-- Level control: `tempo_load_level`, `tempo_save_level`
+- Simulation: `tempo_load_level`, `tempo_set_time_mode`
 - Geographic: `tempo_set_date`, `tempo_set_time_of_day`
 - Movement: `tempo_command_vehicle`, `tempo_pawn_move_to`
 - And more...
 
-### bp_toolkit Service (14 tools, optional)
+### bp_toolkit Module (26 tools)
 
-**Only available when bp_toolkit submodule is present.** These are LOCAL operations
-(no Unreal connectivity required) for offline asset manipulation using UAssetGUI.
+**Requires bp_toolkit submodule.** Contains both live editing and offline tools.
 
-| Tool | Description |
-|------|-------------|
-| `bp_export_asset` | Export .uasset to JSON via UAssetGUI |
-| `bp_import_asset` | Import JSON back to .uasset |
-| `bp_detect_type` | Detect asset type (Blueprint, PCG, DataAsset, etc.) |
-| `bp_get_info` | Get asset summary (exports, imports, graphs) |
-| `bp_list_properties` | List all properties with types/values |
-| `bp_get_property` | Get property by path (`BiomeDefinition.BiomePriority`) |
-| `bp_set_property` | Set property by path |
-| `bp_clone_asset` | Clone asset with new name |
-| `bp_list_graphs` | List graphs in Blueprint/PCG |
-| `bp_add_comment` | Add comment node to Blueprint graph |
-| `bp_clone_node` | Clone existing Blueprint node |
-| `bp_find` | Search asset namemap and exports |
-| `bp_query` | Type-specific queries (list-events, list-tasks, textures) |
-| `bp_parse` | Full Blueprint parsing with call graphs |
+**Live Blueprint Graph Editing (6):**
+`bp_create_node`, `bp_connect_pins`, `bp_disconnect_pins`, `bp_delete_node`, `bp_list_nodes`, `bp_list_pins`
+
+**Live PCG Graph Editing (6):**
+`pcg_add_node`, `pcg_connect`, `pcg_disconnect`, `pcg_delete_node`, `pcg_list_nodes`, `pcg_get_input_output_nodes`
+
+**Offline Asset Manipulation (14 - no Unreal needed):**
+`bp_export_asset`, `bp_import_asset`, `bp_detect_type`, `bp_get_info`, `bp_list_properties`,
+`bp_get_property`, `bp_set_property`, `bp_clone_asset`, `bp_list_graphs`, `bp_add_comment`,
+`bp_clone_node`, `bp_find`, `bp_query`, `bp_parse`
 
 **Submodule setup:**
 ```bash

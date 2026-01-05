@@ -290,8 +290,12 @@ Help topics in `agentbridge.py`:
 - `actors` - Finding, creating, modifying actors
 - `properties` - Reading/writing properties with paths
 - `classes` - Type discovery
+- `assets` - Asset creation, saving, file operations
+- `components` - Component transforms, attachment
 - `console` - Console commands
-- `workflows` - Common multi-step operations
+- `workflows` - Common multi-step operations (includes PCG biome workflow)
+- `pcg_volume` - PCG volume types and sizing
+- `volume_sizing` - BoxComponent sizing details
 - `bp_toolkit` - Offline asset manipulation (when submodule present)
 
 ---
@@ -305,8 +309,12 @@ Works offline without Unreal running.
 
 **Location:** `bp_toolkit/` (submodule from https://github.com/Incurian/BP_Toolkit)
 
-**MCP Integration:** When bp_toolkit is present, the MCP server automatically exposes 14 additional
-tools for offline asset manipulation. Use `help(topic="bp_toolkit")` for tool reference.
+**MCP Integration:** When bp_toolkit is present, the MCP server exposes 26 additional tools:
+- 6 live Blueprint graph editing tools (bp_create_node, bp_connect_pins, etc.)
+- 6 live PCG graph editing tools (pcg_add_node, pcg_connect, etc.)
+- 14 offline asset manipulation tools (bp_export_asset, bp_import_asset, etc.)
+
+Use `help(topic="bp_toolkit")` for tool reference.
 
 #### Setup
 
@@ -342,8 +350,15 @@ cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 | MetaSound | YES | - | - |
 | Niagara | YES | - | - |
 
-#### MCP Tools (14 tools)
+#### MCP Tools (26 tools total)
 
+**Live Blueprint Editing (6):**
+`bp_create_node`, `bp_connect_pins`, `bp_disconnect_pins`, `bp_delete_node`, `bp_list_nodes`, `bp_list_pins`
+
+**Live PCG Editing (6):**
+`pcg_add_node`, `pcg_connect`, `pcg_disconnect`, `pcg_delete_node`, `pcg_list_nodes`, `pcg_get_input_output_nodes`
+
+**Offline Asset Manipulation (14):**
 | Tool | Description |
 |------|-------------|
 | `bp_export_asset` | Export .uasset to JSON |
