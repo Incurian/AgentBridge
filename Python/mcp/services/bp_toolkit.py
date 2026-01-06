@@ -37,7 +37,7 @@ def _find_bp_toolkit() -> Optional[Path]:
     bp_toolkit_path = services_dir.parent.parent.parent / "bp_toolkit"
 
     # Check for key file to ensure submodule is initialized
-    if (bp_toolkit_path / "bp_builder.py").exists():
+    if (bp_toolkit_path / "scripts" / "bp_builder.py").exists():
         return bp_toolkit_path
 
     return None
@@ -51,8 +51,9 @@ BP_TOOLKIT_PATH = _find_bp_toolkit()
 
 if BP_TOOLKIT_PATH:
     # Add bp_toolkit to path for imports
-    if str(BP_TOOLKIT_PATH) not in sys.path:
-        sys.path.insert(0, str(BP_TOOLKIT_PATH))
+    scripts_path = BP_TOOLKIT_PATH / "scripts"
+    if str(scripts_path) not in sys.path:
+        sys.path.insert(0, str(scripts_path))
 
     TOOLS = [
         {"name": "bp_export_asset", "description": "Export a uasset file to JSON using UAssetGUI. Returns the JSON path on success.", "inputSchema": {"type": "object", "properties": {"uasset_path": {"type": "string"}, "ue_version": {"type": "string"}}, "required": ["uasset_path"]}},
@@ -253,9 +254,13 @@ if BP_TOOLKIT_PATH:
 
     def _handle_find(args: Dict[str, Any]) -> Dict[str, Any]:
         """Search for pattern in asset."""
-        from asset_parser import search_asset
+        from asset_parser import find_in_asset
+        import json
 
-        results = search_asset(args["json_path"], args["pattern"])
+        json_path = Path(args["json_path"])
+        with open(json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        results = find_in_asset(data, args["pattern"])
         return {
             "success": True,
             "pattern": args["pattern"],

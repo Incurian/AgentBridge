@@ -1100,6 +1100,18 @@ class AgentBridgeClient:
 
     def copy_project_file(self, source_path: str, dest_path: str,
                           overwrite: bool = False):
+        # Validate paths are relative (not absolute)
+        import os.path
+        if os.path.isabs(source_path):
+            raise ValueError(
+                f"source_path must be relative to project root, got absolute path: '{source_path}'. "
+                f"Use a relative path like 'Content/MyAsset.uasset' instead."
+            )
+        if os.path.isabs(dest_path):
+            raise ValueError(
+                f"dest_path must be relative to project root, got absolute path: '{dest_path}'. "
+                f"Use a relative path like 'Content/NewAsset.uasset' instead."
+            )
         return self.stub.CopyProjectFile(pb.CopyProjectFileRequest(
             source_path=source_path,
             dest_path=dest_path,
@@ -1207,11 +1219,11 @@ class AgentBridgeClient:
         ))
 
     def detach_component(self, actor_id: str, component_name: str,
-                         maintain_world_transform: bool = True):
+                         maintain_world_position: bool = True):
         return self.stub.DetachComponent(pb.DetachComponentRequest(
             actor_id=actor_id,
             component_name=component_name,
-            maintain_world_transform=maintain_world_transform,
+            maintain_world_position=maintain_world_position,
         ))
 
 
@@ -2028,7 +2040,7 @@ Attaching components within an actor:
 
 Detaching:
 - detach_actor(actor_id="MovingLight")  # Keep world position
-- detach_component(actor_id, component_name, maintain_world_transform=True)
+- detach_component(actor_id, component_name, maintain_world_position=True)
 
 Common use cases:
 - Attach light to moving vehicle: attach_actor(light, vehicle)

@@ -59,6 +59,7 @@
 #include "EdGraph/EdGraphNode.h"
 #include "EdGraphNode_Comment.h"
 #include "Kismet2/KismetEditorUtilities.h"
+#include "ObjectTools.h"
 #endif
 
 // Forward declaration - implementation in JSON Serialization section
@@ -2695,10 +2696,56 @@ void FCommandExecutor::Execute(const FSaveActorAsBlueprintCommand& Command, FSav
 		return;
 	}
 
-	// Use FKismetEditorUtilities if available
-	// For now, provide a stub implementation
-	Response.bSuccess = false;
-	Response.ErrorMessage = TEXT("SaveActorAsBlueprint requires FKismetEditorUtilities. Implementation pending.");
+	// Handle existing asset if replace requested
+	if (Command.bReplaceExisting && ExistingAsset)
+	{
+		ObjectTools::DeleteSingleObject(ExistingAsset);
+	}
+
+	// Create blueprint from actor
+	FKismetEditorUtilities::FCreateBlueprintFromActorParams Params;
+	Params.bReplaceActor = false;  // Don't replace actor automatically
+	Params.bOpenBlueprint = false; // Don't open editor
+	Params.bKeepMobility = false;  // Use blueprint defaults for mobility
+	Params.bDeferCompilation = false;
+
+	UBlueprint* Blueprint = FKismetEditorUtilities::CreateBlueprintFromActor(PackageName, Actor, Params);
+	if (Blueprint)
+	{
+		// Compile the blueprint
+		FKismetEditorUtilities::CompileBlueprint(Blueprint);
+
+		// Save the package
+		UPackage* Package = Cast<UPackage>(Blueprint->GetOutermost());
+		if (Package)
+		{
+			FString PackageFileName = FPackageName::LongPackageNameToFilename(Package->GetName(), FPackageName::GetAssetPackageExtension());
+			FSavePackageArgs SaveArgs;
+			SaveArgs.TopLevelFlags = RF_Public | RF_Standalone;
+			bool bSaved = UPackage::SavePackage(Package, Blueprint, *PackageFileName, SaveArgs);
+			
+			if (bSaved)
+			{
+				Response.BlueprintPath = Blueprint->GetPathName();
+				Response.bSuccess = true;
+			}
+			else
+			{
+				Response.bSuccess = false;
+				Response.ErrorMessage = FString::Printf(TEXT("Failed to save blueprint package '%s'"), *PackageName);
+			}
+		}
+		else
+		{
+			Response.bSuccess = false;
+			Response.ErrorMessage = FString::Printf(TEXT("Invalid package for blueprint '%s'"), *PackageName);
+		}
+	}
+	else
+	{
+		Response.bSuccess = false;
+		Response.ErrorMessage = FString::Printf(TEXT("FKismetEditorUtilities::CreateBlueprintFromActor failed for '%s'"), *PackageName);
+	}
 #else
 	Response.bSuccess = false;
 	Response.ErrorMessage = TEXT("SaveActorAsBlueprint is only available in Editor builds");
