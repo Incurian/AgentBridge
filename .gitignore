@@ -31,6 +31,9 @@ nul
 # Archived AI development docs (local only)
 .old.claude/
 
+# Claude Code local settings (user-specific paths)
+.claude/settings.local.json
+
 # Test/demo assets (large JSON exports)
 *.json
 pcg_parsed/

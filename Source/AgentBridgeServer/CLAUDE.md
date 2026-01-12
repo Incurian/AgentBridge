@@ -70,7 +70,7 @@ void UAgentBridgeServiceSubsystem::CreateAsset(...)
 Protos are generated via Tempo's `GenProtos.sh`:
 
 ```bash
-cd D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Scripts
+cd <PROJECT_ROOT>/Plugins/Tempo/TempoCore/Scripts
 ./GenProtos.sh
 ```
 
