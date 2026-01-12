@@ -109,7 +109,7 @@ Add to Claude Code settings (`~/.claude/settings.json`):
     "agentbridge": {
       "command": "<YourProject>/TempoEnv/Scripts/python.exe",
       "args": ["-m", "mcp", "--host", "localhost", "--port", "10001"],
-      "cwd": "<YourProject>/Plugins/AgentBridge/Python",
+      "cwd": "<YourProject>/Plugins/AgentBridge",
       "env": {
         "PYTHONPATH": "<YourProject>/Plugins/Tempo/TempoCore/Content/Python/API/tempo"
       }
@@ -117,6 +117,8 @@ Add to Claude Code settings (`~/.claude/settings.json`):
   }
 }
 ```
+
+> **Note:** The `cwd` is `AgentBridge/` (parent of `mcp/`), not `AgentBridge/mcp/`. The MCP server is in a git submodule at `mcp/`.
 
 **Replace `<YourProject>` with your actual project path** (e.g., `D:/MyGame` or `/home/user/MyGame`).
 
@@ -581,12 +583,14 @@ Ctrl+Alt+F11
 ### Testing
 
 ```bash
-cd <YourProject>/Plugins/AgentBridge/Python
+cd <YourProject>/Plugins/AgentBridge
 
 # Use TempoEnv Python (required for grpcio/protobuf)
-<YourProject>/TempoEnv/Scripts/python.exe test_grpc.py   # gRPC tests
-<YourProject>/TempoEnv/Scripts/python.exe test_client.py # HTTP tests
+<YourProject>/TempoEnv/Scripts/python.exe -m mcp.tests.test_grpc   # gRPC tests
+<YourProject>/TempoEnv/Scripts/python.exe -m mcp.tests.test_client # HTTP tests
 ```
+
+> **Note:** The MCP server is in the `mcp/` submodule. Run tests from the AgentBridge directory (parent of `mcp/`).
 
 ### Console Commands
 
@@ -607,8 +611,9 @@ Debug commands available in the editor:
 2. **Implement handler** in `AgentBridgeScripting/CommandExecutor.cpp`
 3. **Add RPC** in `AgentBridge.proto`
 4. **Add thin handler** in `AgentBridgeServer/AgentBridgeServiceSubsystem.cpp`
-5. **Add MCP tool** in `Python/mcp/services/agentbridge.py`
-6. **Update help** in `_get_help_text()`
+5. **Add MCP tool** in `mcp/services/agentbridge.py`
+6. **Add execute handler** in the `execute()` function (easy to forget!)
+7. **Update help** in `_get_help_text()`
 
 See `CLAUDE.md` for detailed patterns and examples.
 
