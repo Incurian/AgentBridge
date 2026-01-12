@@ -61,20 +61,15 @@ be minimal and obvious. If something "should just work," make it work automatica
 
 | What | Where |
 |------|-------|
-| GitHub (private) | https://github.com/Incurian/AgentBridge |
 | gRPC Port | 10001 (via Tempo) |
 | HTTP Port | 8080 (fallback) |
-| Python Env | `D:/tempo/TempoSample/TempoEnv/Scripts/python.exe` |
-| Build Script | `D:/tempo/TempoSample/Scripts/Build.sh` |
-| Run Editor (GUI) | `cd D:/tempo/TempoSample && ./Plugins/Tempo/Scripts/Run.sh` |
-| Kill Editor | `cmd //c "taskkill /F /IM UnrealEditor.exe"` |
+| Python Env | `<PROJECT_ROOT>/TempoEnv/Scripts/python.exe` |
+| Build Script | `<PROJECT_ROOT>/Scripts/Build.sh` (if using Tempo build) |
+| Run Editor (GUI) | `cd <PROJECT_ROOT> && ./Plugins/Tempo/Scripts/Run.sh` |
+| Kill Editor | `cmd //c "taskkill /F /IM UnrealEditor.exe"` (Windows) |
 | User Docs | `README.md` |
-| **Testing** | |
-| Test Level | `Content/freshtest/FreshMap_1` |
-| Generated Content | `Content/freshtest/CreatedThings/` |
-| Trash/Experiments | `Content/freshtest/Trash/` |
-| Test Results Log | `Content/freshtest/TEST_RESULTS.md` |
-| bp_toolkit Assets | `D:/tempo/uassets/` |
+
+Replace `<PROJECT_ROOT>` with your Unreal project directory (e.g., `/home/user/MyGame` or `D:/MyGame`).
 
 ## Current Status
 
@@ -197,15 +192,16 @@ When adding new gRPC RPCs to AgentBridge, follow this checklist:
 
 ```bash
 # STEP 1: Kill editor first (REQUIRED for full builds)
-cmd //c "taskkill /F /IM UnrealEditor.exe"
+cmd //c "taskkill /F /IM UnrealEditor.exe"  # Windows
+# pkill -f UnrealEditor                       # Linux/Mac
 
 # STEP 2: Full build (~1 min)
-cd D:/tempo/TempoSample/Scripts && ./Build.sh
+cd <PROJECT_ROOT>/Scripts && ./Build.sh
 
-# Or direct UBT
-"D:/EL_UE/UE_5.6/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe" \
-  TempoSampleEditor Win64 Development \
-  -Project="D:/tempo/TempoSample/TempoSample.uproject" -WaitMutex
+# Or direct UBT (adjust paths for your engine location)
+"<ENGINE_ROOT>/Engine/Binaries/DotNET/UnrealBuildTool/UnrealBuildTool.exe" \
+  YourProjectEditor Win64 Development \
+  -Project="<PROJECT_ROOT>/YourProject.uproject" -WaitMutex
 
 # ALTERNATIVE: Live Coding (editor stays running, for small changes only)
 Ctrl+Alt+F11
@@ -222,16 +218,16 @@ Ctrl+Alt+F11
 
 ```bash
 # Start editor with full GUI (Run.sh uses UnrealEditor.exe)
-cd D:/tempo/TempoSample && ./Plugins/Tempo/Scripts/Run.sh
+cd <PROJECT_ROOT> && ./Plugins/Tempo/Scripts/Run.sh
 
 # Wait ~30 seconds for gRPC server to be ready on port 10001
 
-# Force-quit GUI editor (IMPORTANT: use cmd wrapper in Git Bash)
+# Force-quit GUI editor (IMPORTANT: use cmd wrapper in Git Bash on Windows)
 cmd //c "taskkill /F /IM UnrealEditor.exe"
 
-# Headless mode for automation (separate executable, not Run.sh)
-"D:/EL_UE/UE_5.6/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" \
-  "D:/tempo/TempoSample/TempoSample.uproject" \
+# Headless mode for automation
+"<ENGINE_ROOT>/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" \
+  "<PROJECT_ROOT>/YourProject.uproject" \
   -ExecCmds="AgentBridge.ListWorlds,Quit" -unattended -NullRHI -nosplash
 ```
 
@@ -249,26 +245,25 @@ cmd //c "taskkill /F /IM UnrealEditor.exe"
 
 ```bash
 # Use TempoEnv Python (required for grpcio/protobuf)
-cd D:/tempo/TempoSample/Plugins/AgentBridge/Python
+cd <PROJECT_ROOT>/Plugins/AgentBridge
 
-# gRPC tests (port 10001)
-D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_grpc.py
+# gRPC tests (port 10001) - auto-detects Tempo API path
+python -m mcp.tests.test_grpc
 
 # HTTP tests (port 8080)
-D:/tempo/TempoSample/TempoEnv/Scripts/python.exe test_client.py
+python -m mcp.tests.test_client
 ```
 
 ## Key Paths
 
 | Purpose | Path |
 |---------|------|
-| Project Root | `D:/tempo/TempoSample` |
-| Plugin Root | `D:/tempo/TempoSample/Plugins/AgentBridge` |
-| Engine | `D:/EL_UE/UE_5.6` |
-| Project Logs | `D:/tempo/TempoSample/Saved/Logs/TempoSample.log` |
-| Tempo Plugin | `D:/tempo/TempoSample/Plugins/Tempo` |
-| bp_toolkit | `D:/tempo/TempoSample/Plugins/AgentBridge/bp_toolkit` (submodule) |
-| bp_toolkit GitHub | https://github.com/Incurian/BP_Toolkit |
+| Project Root | `<PROJECT_ROOT>` (your Unreal project directory) |
+| Plugin Root | `<PROJECT_ROOT>/Plugins/AgentBridge` |
+| Engine | `<ENGINE_ROOT>` (your UE installation) |
+| Project Logs | `<PROJECT_ROOT>/Saved/Logs/<ProjectName>.log` |
+| Tempo Plugin | `<PROJECT_ROOT>/Plugins/Tempo` |
+| bp_toolkit | `Plugins/AgentBridge/bp_toolkit` (submodule) |
 | UAssetGUI.exe | `bp_toolkit/vendor/UAssetGUI/UAssetGUI/bin/Release/net8.0-windows/UAssetGUI.exe` |
 
 ## Documentation Process
@@ -306,20 +301,25 @@ Help topics in `agentbridge.py`:
 
 Python MCP server providing ~100 tools for AI agent integration.
 
-**Location:** `mcp/` (submodule from https://github.com/Incurian/agentbridge-mcp)
+**Location:** `mcp/` (git submodule)
 
 **Setup:**
 ```bash
-cd D:/tempo/TempoSample/Plugins/AgentBridge
+cd <PROJECT_ROOT>/Plugins/AgentBridge
 git submodule update --init --recursive
 ```
 
 **Running:**
 ```bash
 # From AgentBridge directory (parent of mcp/)
-cd D:/tempo/TempoSample/Plugins/AgentBridge
-PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo" \
-  D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -m mcp --host localhost --port 10001
+cd <PROJECT_ROOT>/Plugins/AgentBridge
+
+# Auto-detection finds Tempo API path automatically
+python -m mcp --host localhost --port 10001
+
+# Or explicitly set the path
+TEMPO_API_PATH="<PROJECT_ROOT>/Plugins/Tempo/TempoCore/Content/Python/API/tempo" \
+  python -m mcp --host localhost --port 10001
 ```
 
 **Documentation:** See `mcp/CLAUDE.md` for Python development details.
@@ -331,7 +331,7 @@ PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/temp
 A Python toolkit for parsing, modifying, and creating Unreal Engine assets via JSON manipulation.
 Works offline without Unreal running.
 
-**Location:** `bp_toolkit/` (submodule from https://github.com/Incurian/BP_Toolkit)
+**Location:** `bp_toolkit/` (git submodule)
 
 **MCP Integration:** When bp_toolkit is present, the MCP server exposes 26 additional tools:
 - 6 live Blueprint graph editing tools (bp_create_node, bp_connect_pins, etc.)
@@ -344,7 +344,7 @@ Use `help(topic="bp_toolkit")` for tool reference.
 
 ```bash
 # Initialize submodules (includes UAssetGUI with UAssetAPI)
-cd D:/tempo/TempoSample/Plugins/AgentBridge
+cd <PROJECT_ROOT>/Plugins/AgentBridge
 git submodule update --init --recursive
 
 # Build UAssetGUI (.NET 8+ required)

@@ -1,6 +1,6 @@
 [submodule "bp_toolkit"]
 	path = bp_toolkit
-	url = https://github.com/Incurian/BP_Toolkit.git
+	url = https://github.com/your-org/BP_Toolkit.git
 [submodule "mcp"]
 	path = mcp
-	url = git@github.com:Incurian/agentbridge-mcp.git
+	url = https://github.com/your-org/agentbridge-mcp.git
