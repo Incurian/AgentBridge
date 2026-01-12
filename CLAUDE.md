@@ -128,8 +128,8 @@ Each module has its own CLAUDE.md with detailed context:
 | AgentBridgeRuntime | World context, actor ops, property paths | `Source/AgentBridgeRuntime/CLAUDE.md` |
 | AgentBridgeScripting | Command layer, JSON serialization | `Source/AgentBridgeScripting/CLAUDE.md` |
 | AgentBridgeServer | gRPC/HTTP server, proto definitions | `Source/AgentBridgeServer/CLAUDE.md` |
-| Python | MCP server, gRPC client, tests | `Python/CLAUDE.md` |
-| bp_toolkit | UAsset parsing, Blueprint modification (optional) | `bp_toolkit/CLAUDE.md` |
+| mcp (Python) | MCP server, gRPC client, tests | `mcp/CLAUDE.md` (submodule) |
+| bp_toolkit | UAsset parsing, Blueprint modification (optional) | `bp_toolkit/CLAUDE.md` (submodule) |
 
 **User-Facing Documentation:** `README.md` - comprehensive guide with tool reference.
 
@@ -300,9 +300,33 @@ Help topics in `agentbridge.py`:
 
 ---
 
-## Optional Submodules
+## Submodules
 
-### bp_toolkit - Blueprint/Asset Toolkit
+### mcp - MCP Server (Python)
+
+Python MCP server providing ~100 tools for AI agent integration.
+
+**Location:** `mcp/` (submodule from https://github.com/Incurian/agentbridge-mcp)
+
+**Setup:**
+```bash
+cd D:/tempo/TempoSample/Plugins/AgentBridge
+git submodule update --init --recursive
+```
+
+**Running:**
+```bash
+# From AgentBridge directory (parent of mcp/)
+cd D:/tempo/TempoSample/Plugins/AgentBridge
+PYTHONPATH="D:/tempo/TempoSample/Plugins/Tempo/TempoCore/Content/Python/API/tempo" \
+  D:/tempo/TempoSample/TempoEnv/Scripts/python.exe -m mcp --host localhost --port 10001
+```
+
+**Documentation:** See `mcp/CLAUDE.md` for Python development details.
+
+---
+
+### bp_toolkit - Blueprint/Asset Toolkit (Optional)
 
 A Python toolkit for parsing, modifying, and creating Unreal Engine assets via JSON manipulation.
 Works offline without Unreal running.
