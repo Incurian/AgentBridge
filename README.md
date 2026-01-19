@@ -160,6 +160,14 @@ git submodule update --init --recursive
 cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 ```
 
+> **Note on MCP package naming:** The MCP server package is named `agentbridge-mcp` (for pip/PyPI), but the Python import is `mcp`:
+> ```python
+> # pip install agentbridge-mcp
+> from mcp import serve
+> from mcp.services import agentbridge
+> ```
+> This follows common Python convention (like `pip install Pillow` → `import PIL`).
+
 ### Dependencies
 
 | Dependency | Version | Purpose |
