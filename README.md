@@ -298,6 +298,81 @@ See `help(topic="pcg_volume")` and `help(topic="workflows")` for more details.
 
 ---
 
+## Integrations
+
+### LangChain
+
+AgentBridge works with LangChain via the `langchain-mcp-adapters` package. This enables using AgentBridge tools with LangChain agents and LangGraph workflows.
+
+#### Installation
+
+```bash
+pip install langchain-mcp-adapters langgraph langchain-anthropic
+# or langchain-openai for GPT models
+```
+
+#### Quick Start
+
+```python
+import asyncio
+from langchain_mcp_adapters.client import MultiServerMCPClient
+from langgraph.prebuilt import create_react_agent
+from langchain_anthropic import ChatAnthropic
+
+async def main():
+    # Configure connection (spawns MCP server as subprocess)
+    async with MultiServerMCPClient({
+        "agentbridge": {
+            "command": "<YourProject>/TempoEnv/Scripts/python.exe",
+            "args": ["-m", "mcp", "--host", "localhost", "--port", "10001", "--profile", "full"],
+            "cwd": "<YourProject>/Plugins/AgentBridge",
+            "transport": "stdio",
+        }
+    }) as client:
+        # Get all AgentBridge tools as LangChain tools
+        tools = await client.get_tools()
+        print(f"Loaded {len(tools)} tools")
+
+        # Create agent
+        llm = ChatAnthropic(model="claude-sonnet-4-20250514")
+        agent = create_react_agent(llm, tools)
+
+        # Run queries
+        result = await agent.ainvoke({
+            "messages": [("user", "Spawn a PointLight at 0,0,500")]
+        })
+        print(result["messages"][-1].content)
+
+asyncio.run(main())
+```
+
+#### Usage Patterns
+
+**Interactive Session:**
+```bash
+python -m mcp.examples.langchain_integration
+```
+
+**Single Query:**
+```bash
+python -m mcp.examples.langchain_integration "List all actors in the scene"
+```
+
+**Direct Tool Calls (Programmatic):**
+```python
+async with MultiServerMCPClient(config) as client:
+    tools = await client.get_tools()
+    spawn_tool = next(t for t in tools if t.name == "spawn_actor")
+    result = await spawn_tool.ainvoke({
+        "class_name": "PointLight",
+        "location": [0, 0, 500]
+    })
+```
+
+See `mcp/examples/langchain_integration.py` for complete examples including batch operations and interactive sessions.
+
+---
+
 ## Tool Reference
 
 ### Help System
