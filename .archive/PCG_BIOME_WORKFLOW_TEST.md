@@ -32,6 +32,10 @@
 | 18 | Info | Default scale lives in different places (Core: component, Texture: actor) but same world result | Schema Reference |
 | 19 | **CRITICAL** | `save_asset` on duplicated biome definition crashes the editor. Error: "Asset cannot be saved as it has only been partially loaded". Known UE5 bug — `duplicate_asset` uses async loading, duplicate inherits partial-load state. Fix: AgentBridge needs `FlushAsyncLoading()` or `LoadSynchronous()` before duplicating. Workaround: skip `save_asset`, use in-memory assets. | Phase 4, AgentBridge C++ fix needed |
 | 20 | **CRITICAL+WORKAROUND** | `save_asset` crash is SOURCE-PATH dependent. Duplicating from `/Game/` works fine; only plugin content (`/PCGBiomeCore/...`) crashes. Workaround: pre-copy templates to `/Game/` first. | Phase 4, Phase 0 (new) |
+| 21 | **Medium** | Array-type object ref properties (`Assets`) require JSON array format `["/path"]` — plain string fails | Property Access |
+| 22 | **Medium** | Struct array `set_property` fails at array level, works at element level (`BiomeAssets[0].Mesh`) | Property Access |
+| 23 | **Info** | Full workflow completes end-to-end with `/Game/` source assets (~35 tool calls) | _(validation)_ |
+| 24 | **Medium** | Default color tolerance too strict for non-ideal textures — zero spawn points with no error. Increasing tolerance fixes it. | PCG Biome Workflow (new troubleshooting note) |
 | 12 | **HIGH** | `call_function` tool is completely broken — `'AgentBridgeClient' object has no attribute 'host'` on every call | Function Calls section (mark as broken or fix) |
 | 13 | **HIGH** | `set_property` on `BoxExtent` stores value but doesn't trigger visual update (no `UpdateBounds()`/`MarkRenderStateDirty()`) | Volume & Bounds, Critical Rules |
 | 14 | **HIGH** | BiomeCore Volume has immutable Blueprint-defined world scale [512,512,128] — cannot be overridden via `set_property` or `set_transform` | PCG Biome Workflow Phase 7 |
@@ -443,3 +447,78 @@ save_asset(asset_path="/Game/FreshTest/TestDupe.TestDupe") → SUCCESS (no crash
 **Workaround for AGENTS.md workflow:** Step 0 — manually copy template assets from plugin to `/Game/` folder first, THEN use `duplicate_asset` + `save_asset` from the `/Game/` copies. Or: AgentBridge C++ fix to call `FlushAsyncLoading()` before `DuplicateAsset()`.
 
 **Updated recommendation:** Add to Recommendations section — workflow should document that template assets must be pre-copied to `/Game/` before programmatic duplication.
+
+---
+
+## Session 3: Full Workflow with /Game/ Source Assets (SUCCESS)
+
+**Setup:** User manually copied BP_PCGBiomeCore, BP_PCGBiomeTexture, DefaultBiome (definition), and DefaultAsset (assets) from plugin to `/Game/FreshTest/`.
+
+### Phase 1: Duplicate Templates — All 4 succeeded
+```
+duplicate_asset("/Game/FreshTest/DefaultBiome.DefaultBiome") → RedBiomeDefinition, GreenBiomeDefinition
+duplicate_asset("/Game/FreshTest/DefaultAsset.DefaultAsset") → RedBiomeAssets, GreenBiomeAssets
+```
+
+### Phase 2: Configure Definitions — All 6 succeeded
+Used `set_property` on asset paths (not actors). All BiomeName, BiomeColor, BiomePriority set correctly.
+
+### Phase 3: Configure Assets — Element-level required
+- **Array-level `set_property` on `BiomeAssets` FAILED** with `{"Generator": ..., "Enabled": true}` JSON object format
+- **Element-level `set_property` on `BiomeAssets[0].Mesh` SUCCEEDED** — set Cube for Red, Sphere for Green
+- Default generator and other fields from template were fine as-is
+
+### Phase 4: Save Assets — All 4 succeeded (NO CRASH!)
+Finding 20 fully confirmed: `/Game/`-sourced duplicates save without issues.
+
+### Phase 6: Spawn Actors — 3/3 succeeded
+- Used full paths from `/Game/FreshTest/` — all worked
+- BP_PCGBiomeTexture spawns with actor scale [512,512,128] as expected (Finding 18 confirmed)
+- BP_PCGBiomeCore spawns with actor scale [1,1,1] (scale on component)
+
+### Phase 7: Size Volumes — 3/3 succeeded
+```
+set_transform(target="BiomeCore->Volume", scale=[1008, 1008, 175.45], world_space=true)
+set_transform(target="RedBiomeTexture->BiomeTextureVolume", scale=[1008, 1008, 175.45], world_space=true)
+set_transform(target="GreenBiomeTexture->BiomeTextureVolume", scale=[1008, 1008, 175.45], world_space=true)
+```
+
+### Phase 8: Assign References — 8/8 succeeded
+- `Definition` (object ref) — plain string path ✓
+- `Assets` (array of object refs) — **must use JSON array format** `["/Game/..."]`, plain string fails
+- `BiomeTexture` (object ref) — plain string path to a real Texture2D ✓
+
+### Phase 9: Verify — All correct
+All refs read back correctly, all volume scales at [1008, 1008, 175.45].
+
+### New Findings
+
+## Finding 21: Array-type object ref properties require JSON array format
+
+`set_property` on `Assets` (an Array of object refs on BP_PCGBiomeTexture):
+- Plain string `"/Game/FreshTest/RedBiomeAssets.RedBiomeAssets"` → **FAILS** (INVALID_ARGUMENT)
+- JSON array `["/Game/FreshTest/RedBiomeAssets.RedBiomeAssets"]` → **SUCCEEDS**
+
+This is distinct from Finding 6 (struct arrays). Object ref arrays need the `["path"]` format.
+
+## Finding 22: Struct array set_property fails at array level, works at element level
+
+`set_property` on `BiomeAssets` (Array of structs on DataAsset):
+- Array-level with JSON objects `[{"Generator": "...", "Enabled": true}]` → **FAILS** (INVALID_ARGUMENT)
+- Element-level `BiomeAssets[0].Mesh = "/Engine/BasicShapes/Cube.Cube"` → **SUCCEEDS**
+
+**Workaround:** Template already has one entry. Modify individual fields with `BiomeAssets[0].FieldName` syntax. To add more entries, may need to duplicate the template with multiple default entries pre-configured.
+
+## Finding 24: Default color tolerance too strict for non-ideal textures
+
+PCG biome system did NOT generate any spawn points after full workflow completion. Root cause: the `DefaultTexture` (gray/white) never matched pure red `(1,0,0)` or green `(0,1,0)` biome colors within the default color tolerance. After user manually increased the color tolerance, points spawned correctly.
+
+**Impact for AGENTS.md:** Add a troubleshooting note: "If zero points spawn after completing the workflow, verify your BiomeTexture has regions whose colors match your biome colors within the configured color tolerance. Adjust tolerance if needed." In real usage, the user chooses a meaningful terrain texture with distinct color regions and defines biome colors to match — this is only a pitfall when testing with placeholder textures.
+
+## Finding 23: Workflow completes end-to-end with /Game/ source assets
+
+Full 9-phase workflow completed successfully using assets pre-copied to `/Game/FreshTest/`:
+- 4 DataAssets duplicated, configured, and **saved to disk**
+- 3 actors spawned, sized, and fully referenced
+- Total tool calls: ~35 (close to theoretical minimum)
+- PCG generation not triggered (under investigation — likely unrelated to MCP workflow)

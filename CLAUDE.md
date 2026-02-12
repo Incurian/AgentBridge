@@ -324,6 +324,59 @@ TEMPO_API_PATH="<PROJECT_ROOT>/Plugins/Tempo/TempoCore/Content/Python/API/tempo"
 
 **Documentation:** See `mcp/CLAUDE.md` for Python development details.
 
+#### Claude Code MCP Integration (WSL)
+
+When connecting the AgentBridge MCP server to Claude Code running in WSL, there are several gotchas:
+
+**1. Config file location:** Claude Code MCP servers go in `~/.claude.json` under the top-level `mcpServers` key — NOT in `~/.claude/mcp.json` (that path is ignored). Use `claude mcp add` CLI or edit `~/.claude.json` directly.
+
+**2. CWD is required:** The `python.exe -m mcp` command must run from the AgentBridge directory so Python can find the `mcp` package. The `claude mcp add` CLI doesn't support a `cwd` field, so either edit `~/.claude.json` to add `"cwd"` manually, or use a wrapper script (recommended).
+
+**3. Use a shell wrapper script:** The most reliable approach on WSL is a bash wrapper that handles CWD and exec. Claude Code spawns this natively, and `exec` replaces the shell with the Windows Python process for clean stdio piping:
+
+```bash
+# ~/.claude/agentbridge-mcp.sh
+#!/bin/bash
+cd /mnt/d/tempo/TempoSample/Plugins/AgentBridge
+exec /mnt/d/tempo/TempoSample/TempoEnv/Scripts/python.exe -m mcp --host localhost --port 10001 --profile full "$@"
+```
+
+Then in `~/.claude.json`:
+```json
+{
+  "mcpServers": {
+    "agentbridge": {
+      "type": "stdio",
+      "command": "/home/inc/.claude/agentbridge-mcp.sh",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+
+**4. localhost works from Windows Python:** Even though WSL's `localhost` is different from Windows' `localhost`, this isn't an issue because the MCP server runs as a **Windows Python process** (`.exe`), which connects to gRPC via the Windows network stack where Unreal is listening.
+
+**5. Editor must be running first:** The MCP server connects to gRPC on port 10001 during `initialize`. Start the Unreal Editor and wait ~30 seconds for gRPC before starting/restarting Claude Code.
+
+**6. Restart Claude Code after config changes:** MCP server configs are read at Claude Code startup. After editing `~/.claude.json` or the wrapper script, restart Claude Code and verify with `/mcp`.
+
+---
+
+### Known Tool Issues (TODO)
+
+Issues discovered during AGENTS.md testing (2026-02-12). These require C++ fixes in the
+AgentBridge gRPC backend. Documented with workarounds in AGENTS.md for now.
+
+| # | Issue | Workaround in AGENTS.md | Fix Location |
+|---|-------|------------------------|--------------|
+| 1 | `list_classes(name_pattern=...)` is case-insensitive **exact match** only, not substring like `query_actors` | Changed examples to use `base_class_name` for discovery | gRPC handler for ListClasses |
+| 2 | `query_actors` has no `folder_path` filter parameter (silently ignored if passed) | Changed examples to use `label_pattern` instead | gRPC handler for QueryActors — add folder_path filter |
+| 3 | `query_actors(include_unloaded=true)` ignores `class_name` filter — returns all actor types | Added warning note; suggest client-side filtering | gRPC handler for QueryActors (unloaded path) |
+
+**Full test findings:** See `AGENTS_MD_TEST_FINDINGS.md` for complete details including
+reproduction steps and screenshots of each issue.
+
 ---
 
 ### bp_toolkit - Blueprint/Asset Toolkit (Optional)
@@ -407,20 +460,191 @@ cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 - **JSON files can be large** - 40-100MB for complex Blueprints, gitignored by default
 - **GitHub is primary** - `git push` goes to GitHub, `local` remote is backup
 
----
-
-## Archived Documentation
-
-Historical development notes and planning documents are preserved in `.old.claude/` (gitignored):
-
-**Key findings from development:**
-
-- **UAssetAPI round-trip validated**: Export→JSON→modify→reimport works for Blueprints, PCG Graphs, Behavior Trees
-- **MetaDataMap workaround**: UE 5.7 Blueprints need MetaDataMap nulled before reimport (FName key issue)
-- **All major bugs fixed**: TArray SET, GET returns empty, struct schema, element_type, asset path normalization
-- **MCP size reduction**: Modular loading architecture, tool consolidation (transform/attach/detach unified)
+<!-- PART III: DEVELOPMENT GUIDE -->
 
 ---
+
+## Development SOPs
+
+| SOP | Description |
+|-----|-------------|
+| **Plan First** | **Non-trivial features require a plan in `docs/plans/`. See Feature Planning SOP below.** |
+| Fail Fast | Errors surface immediately. No swallowed exceptions. Return meaningful error messages. |
+| Live Test | **Automated tests are not sufficient. Always live test with Unreal Editor + MCP before committing.** |
+| Document | Each phase updates this file and module CLAUDE.md files. |
+| **Commit Often** | **Commit after each phase/logical unit. Don't wait for "everything done."** |
+| **Branch per Plan** | **One feature branch per plan. Merge only after checklist complete + user sign-off.** |
+| **Don't Revert Unrelated Changes** | **Only stage files YOU modified. NEVER use `git checkout` or `git restore` on files you didn't change.** |
+| No Dead Code | Delete unused code. Clean up after yourself. |
+| **Zero Build Failures** | **All builds must succeed. If a failure is introduced, document it in Known Issues below.** |
+
+### Live Testing Requirement (MANDATORY)
+
+**Automated tests alone are NOT sufficient to commit changes.** Before any commit that affects MCP tools, gRPC handlers, property access, or actor operations:
+
+1. Start the Unreal Editor and wait for gRPC (port 10001)
+2. Connect MCP server (Claude Code or manual)
+3. Test the changed functionality with real actors/assets
+4. Verify results visually in the editor viewport when applicable
+5. Check for silent failures — `set_property` can report success but not actually work
+
+This catches issues that unit tests miss, such as:
+- `set_property` storing values but not triggering visual updates
+- Type mismatches silently failing on object references
+- Plugin content assets behaving differently from `/Game/` assets
+- Class loading differences between fresh and warm editor sessions
+
+### Version Control
+
+#### Commit Frequency
+
+Commit after each completed phase or logical unit. Don't wait for "everything done."
+
+- **After each checklist phase** (P1, P2, etc.) — phases are designed as atomic units
+- **Before switching modules** — if you've been in Runtime and need to touch Server, commit first
+- **When builds pass** — green build = safe checkpoint
+- **Before risky changes** — about to refactor? commit the working state first
+- **Rule of thumb**: if you'd be upset losing the work, commit it
+
+Commit messages should reference the plan and checklist item when applicable:
+```
+feat(runtime): add PostEditChangeProperty after BoxExtent set (AGENTBRIDGE-BUGS P1.3)
+```
+
+#### Branching
+
+- **One branch per plan** — `feature/<plan-name>` (e.g., `feature/call-function-fix`, `feature/volume-sizing`)
+- **Branch before starting implementation** — not during exploration/planning
+- **Keep branches focused** — don't mix unrelated changes
+
+#### Pushing
+
+- **Feature branches:** Push after each commit — provides backup, enables CI, no downside
+- **Main/master:** Only via PR merge or with user sign-off
+
+#### Merging
+
+- **Merge when:** Plan checklist complete + builds pass + live testing done + user sign-off
+- **Don't merge:** Partial implementations, broken builds, untested changes
+- **Merge strategy:** Squash for small plans, regular merge for large plans
+
+### Feature Planning SOP
+
+All non-trivial features should follow this planning process. Plans live in `docs/plans/` as markdown files. Completed plans are moved to `.archive/`.
+
+#### Planning Process
+
+| Phase | Description |
+|-------|-------------|
+| 1. Intent | Discuss what the feature should accomplish, user-facing behavior |
+| 2. Explore | Research relevant code, understand existing patterns |
+| 3. Feasibility | Discuss technical approach, identify blockers or concerns |
+| 4. Scope | Define what's included, deferred, and explicitly excluded |
+| 5. General Plan | High-level architecture, design decisions with rationale |
+| 6. Validate | Validate plan against actual codebase patterns |
+| 7. Detailed Plan | Concrete implementation with exact file paths, code snippets |
+| 8. Checklist | Implementation checklist with task IDs for parallel execution |
+| 9. Documentation | Document what changed for users and future developers |
+
+**CRITICAL: Update plan file after EVERY phase.** Planning sessions can be interrupted. Write findings to `docs/plans/<PLAN-NAME>.md` incrementally. A partial plan with 4 phases completed is far better than losing everything.
+
+#### Plan Document Structure
+
+```markdown
+# Plan: Feature Name
+
+## Overview
+Brief description, current state, goal.
+
+## Scope
+### Included in v1
+### Deferred to Future
+### Explicitly Excluded
+
+## Design Decisions
+| Question | Decision | Rationale |
+Record WHY choices were made, not just what.
+
+## Architecture
+Affected modules, file paths, integration points.
+
+## Implementation Details
+Concrete code, exact file paths.
+
+## Testing Strategy
+Unit tests, live testing plan, visual verification steps.
+
+## Implementation Checklist
+Phased checklist with task IDs (P1.1, P1.2, etc.)
+Must include a Documentation phase.
+```
+
+#### Implementation Checklist Format
+
+Checklists are designed for parallelization:
+
+```markdown
+### Phase 1: Foundation (Required First)
+- [ ] **P1.1** Create base types
+- [ ] **P1.2** Implement core logic (requires P1.1)
+
+### Phase 2: Features (After Phase 1)
+- [ ] **P2.1** Feature A (can parallel with P2.2)
+- [ ] **P2.2** Feature B (can parallel with P2.1)
+- [ ] **P2.3** Integration (requires P2.1, P2.2)
+
+### Phase 3: Documentation (After Implementation)
+- [ ] **P3.1** Update CLAUDE.md with changes
+- [ ] **P3.2** Update AGENTS.md workflow sections
+- [ ] **P3.3** Update MCP tool descriptions/help text
+```
+
+**Parallelization rules:**
+- Items in the same phase can run in parallel unless noted
+- Different phases are sequential (Phase 2 waits for Phase 1)
+- Note dependencies explicitly: `(requires P1.3)` or `(can parallel with P2.1)`
+- Avoid multiple agents editing the same file simultaneously
+
+#### Documentation Phase (Required)
+
+Every implementation checklist MUST include a documentation phase:
+
+| Type | What to Update |
+|------|----------------|
+| **MCP tools** | Tool descriptions, help text in `agentbridge.py`, AGENTS.md |
+| **gRPC changes** | Proto comments, module CLAUDE.md, README.md |
+| **Workflows** | AGENTS.md workflow sections, troubleshooting tips |
+| **Bug fixes** | Remove/update warnings in AGENTS.md, update Known Issues |
+
+---
+
+## Project Organization
+
+```
+docs/
+├── plans/              # Active plans and actionable items
+│   ├── AGENTS_MD_CHANGES.md    # Pending AGENTS.md documentation updates
+│   └── AGENTBRIDGE_BUGS.md     # Pending code fixes with priorities
+.archive/               # Completed plans, test logs, historical reference
+│   ├── PCG_BIOME_WORKFLOW_TEST.md  # Full test log from 2026-02-12
+│   └── AGENTS_MD_TEST_FINDINGS.md  # Earlier AGENTS.md test findings
+.old.claude/            # Legacy development notes (pre-2026-02)
+```
+
+---
+
+## Known Issues
+
+Issues discovered during testing. See `docs/plans/AGENTBRIDGE_BUGS.md` for full details and fix plans.
+
+| # | Severity | Issue | Workaround |
+|---|----------|-------|------------|
+| 1 | **CRITICAL** | `call_function` broken — `'AgentBridgeClient' object has no attribute 'host'` | None — tool is non-functional |
+| 2 | **CRITICAL** | `save_asset` crashes on assets duplicated from plugin content | Pre-copy templates to `/Game/` first |
+| 3 | **HIGH** | `set_property` on BoxExtent doesn't trigger visual update | Use `set_transform` on component scale instead |
+| 4 | **HIGH** | `set_property` silently fails on type-mismatched object refs | Always verify with `get_property` after setting |
+| 5 | **MEDIUM** | `list_classes` can't find plugin Blueprint classes | Use full asset paths for `spawn_actor` |
+| 6 | **MEDIUM** | Struct array `set_property` fails at array level | Use element-level access (`Array[0].Field`) |
 
 ## Known Limitations
 
@@ -429,6 +653,21 @@ Historical development notes and planning documents are preserved in `.old.claud
 | `TSoftObjectPtr` assignment | Won't fix | Use `TObjectPtr` properties |
 | gRPC header conflicts | By design | Business logic in Scripting module |
 | FunctionInvoker struct returns | Auto-fixed | Redirected to property access |
+
+---
+
+## Archived Documentation
+
+Historical development notes are preserved in:
+- `.archive/` — Completed plans and test logs from 2026-02 onward
+- `.old.claude/` — Legacy development notes (pre-2026-02, gitignored)
+
+**Key findings from early development:**
+
+- **UAssetAPI round-trip validated**: Export→JSON→modify→reimport works for Blueprints, PCG Graphs, Behavior Trees
+- **MetaDataMap workaround**: UE 5.7 Blueprints need MetaDataMap nulled before reimport (FName key issue)
+- **All major bugs fixed**: TArray SET, GET returns empty, struct schema, element_type, asset path normalization
+- **MCP size reduction**: Modular loading architecture, tool consolidation (transform/attach/detach unified)
 
 ---
 
