@@ -146,6 +146,12 @@ Each module has its own CLAUDE.md with detailed context:
 - Use `WITH_EDITOR` for editor-only code, `GIsEditor` for runtime branching
 - Use `TWeakObjectPtr` for stored UObject references
 - Bounce UObject operations to game thread from async contexts
+- **Verify line endings after editing source files** - the Edit tool on WSL converts LF to CRLF on
+  Windows mounts (`/mnt/d/`). After editing, run `file <path>` to check. If it shows "CRLF line
+  terminators", fix with `sed -i 's/\r$//' <path>`. **Proto files are especially sensitive** -
+  protoc silently fails on CRLF and GenProtos.sh suppresses the error with `|| true`.
+- **Use ASCII only in source files** - avoid em dashes (`—`), smart quotes, etc. in comments.
+  Use regular dashes (`-`) instead. Check with `file <path>` — should say "ASCII text" not "UTF-8".
 
 ### Centaur Testing Protocol
 
@@ -337,8 +343,8 @@ When connecting the AgentBridge MCP server to Claude Code running in WSL, there 
 ```bash
 # ~/.claude/agentbridge-mcp.sh
 #!/bin/bash
-cd /mnt/d/tempo/TempoSample/Plugins/AgentBridge
-exec /mnt/d/tempo/TempoSample/TempoEnv/Scripts/python.exe -m mcp --host localhost --port 10001 --profile full "$@"
+cd /mnt/d/tempofresh/TempoSample/Plugins/AgentBridge
+exec /mnt/d/tempofresh/TempoSample/TempoEnv/Scripts/python.exe -m mcp --host localhost --port 10001 --profile full "$@"
 ```
 
 Then in `~/.claude.json`:
@@ -623,11 +629,15 @@ Every implementation checklist MUST include a documentation phase:
 ```
 docs/
 ├── plans/              # Active plans and actionable items
-│   ├── AGENTS_MD_CHANGES.md    # Pending AGENTS.md documentation updates
-│   └── AGENTBRIDGE_BUGS.md     # Pending code fixes with priorities
+├── tests/              # Active test plans
 .archive/               # Completed plans, test logs, historical reference
-│   ├── PCG_BIOME_WORKFLOW_TEST.md  # Full test log from 2026-02-12
-│   └── AGENTS_MD_TEST_FINDINGS.md  # Earlier AGENTS.md test findings
+│   ├── AGENTBRIDGE_BUGS.md             # Bug fix plan (completed)
+│   ├── AGENTBRIDGE_BUGS_LIVE_TEST.md   # Test plan (completed)
+│   ├── LIVE_TEST_RESULTS.md            # Test results (27 tests)
+│   ├── agents_md_corrections.md        # AGENTS.md corrections list
+│   ├── AGENTS_MD_CHANGES.md            # Earlier AGENTS.md changes
+│   ├── AGENTS_MD_TEST_FINDINGS.md      # Earlier test findings
+│   └── PCG_BIOME_WORKFLOW_TEST.md      # PCG workflow test log
 .old.claude/            # Legacy development notes (pre-2026-02)
 ```
 
@@ -635,16 +645,19 @@ docs/
 
 ## Known Issues
 
-Issues discovered during testing. See `docs/plans/AGENTBRIDGE_BUGS.md` for full details and fix plans.
+Tested 2026-02-13 on `feature/agentbridge-bugs` branch. Full results: `.archive/LIVE_TEST_RESULTS.md`
 
-| # | Severity | Issue | Workaround |
-|---|----------|-------|------------|
-| 1 | **CRITICAL** | `call_function` broken — `'AgentBridgeClient' object has no attribute 'host'` | None — tool is non-functional |
-| 2 | **CRITICAL** | `save_asset` crashes on assets duplicated from plugin content | Pre-copy templates to `/Game/` first |
-| 3 | **HIGH** | `set_property` on BoxExtent doesn't trigger visual update | Use `set_transform` on component scale instead |
-| 4 | **HIGH** | `set_property` silently fails on type-mismatched object refs | Always verify with `get_property` after setting |
-| 5 | **MEDIUM** | `list_classes` can't find plugin Blueprint classes | Use full asset paths for `spawn_actor` |
-| 6 | **MEDIUM** | Struct array `set_property` fails at array level | Use element-level access (`Array[0].Field`) |
+| # | Severity | Issue | Status | Workaround |
+|---|----------|-------|--------|------------|
+| 1 | ~~CRITICAL~~ | `call_function` broken - missing `self.host`/`self.port` | **FIXED** (Python) | N/A - fixed in agentbridge.py:722-723 |
+| 2 | ~~CRITICAL~~ | `duplicate_asset` crashes on engine/plugin content paths | **Limitation** | See Known Limitations below |
+| 3 | ~~HIGH~~ | `set_property` on BoxExtent doesn't trigger visual update | **Limitation** | See Known Limitations below. Bug 3 fix was REVERTED (caused regression - zeroed vector properties). |
+| 4 | ~~HIGH~~ | `set_property` silently fails on type-mismatched object refs | **FIXED** (C++) | N/A - now properly rejects with error |
+| 5 | ~~MEDIUM~~ | `get_landscape_bounds` missing `biome_volume_scale` field | **FIXED** (Python) | N/A - field was in C++ all along, Python response dict was missing it. |
+| 6 | ~~MEDIUM~~ | `list_classes` can't find plugin Blueprint classes | **FIXED** (C++) | N/A - discovery works. Also acts as class loader for `spawn_actor`. |
+| 7 | ~~MEDIUM~~ | Multi-element string array `set_property` fails | **FIXED** (Python) | String arrays of any length now work. Multi-element object ref arrays still fail on C++ side — use element-level access (`Assets[0]`, `Assets[1]`). |
+| 8 | ~~MEDIUM~~ | `spawn_actor` with `relative_to` creates ghost actor | **Limitation** | See Known Limitations below |
+| 9 | ~~LOW~~ | `call_function` only supports zero-arg void functions | **Limitation** | See Known Limitations below |
 
 ## Known Limitations
 
@@ -653,6 +666,11 @@ Issues discovered during testing. See `docs/plans/AGENTBRIDGE_BUGS.md` for full 
 | `TSoftObjectPtr` assignment | Won't fix | Use `TObjectPtr` properties |
 | gRPC header conflicts | By design | Business logic in Scripting module |
 | FunctionInvoker struct returns | Auto-fixed | Redirected to property access |
+| WSL Edit tool corrupts line endings | **Known** | Run `sed -i 's/\r$//'` after editing; TODO: investigate Claude Code PostToolUse hook to automate |
+| Plugin content duplication | **Engine limit** | `duplicate_asset` from engine/plugin content paths crashes editor. Always duplicate from `/Game/` paths. Pre-copy plugin templates to `/Game/` first. |
+| BoxExtent visual update | **Won't fix** | `set_property` on BoxExtent stores value but wireframe doesn't update. PostEditChangeProperty approach was attempted and reverted (zeroed vector/struct properties). Use `set_transform` on component scale for sizing. |
+| `call_function` arg support | **Deferred** | gRPC `CallFunction` only supports zero-arg void return UFunctions. Use `set_property`/`get_property` for parameterized operations. Full arg support is a future feature. |
+| `spawn_actor` `relative_to` | **Broken** | Routes through Tempo's ActorControlService (different backend), creates ghost actors in wrong world context. Spawn normally then use `set_transform` to position relative to another actor. |
 
 ---
 

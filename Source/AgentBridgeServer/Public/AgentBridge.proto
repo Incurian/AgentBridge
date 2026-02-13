@@ -417,6 +417,7 @@ message GetLandscapeBoundsResponse {
   TempoScripting.Vector extent = 5;    // Half-extents (distance from center to edge)
   int32 proxy_count = 6;               // Number of landscape proxies sampled
   string landscape_name = 7;           // Name of the main landscape actor
+  Scale biome_volume_scale = 8;        // Scale factor for BoxComponent to match landscape bounds
 }
 
 message GetDataLayersRequest {}

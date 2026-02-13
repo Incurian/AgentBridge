@@ -596,10 +596,52 @@ namespace
 		case PROPERTY_TYPE_ROTATOR:
 			return FString::Printf(TEXT("{\"Pitch\":%f,\"Yaw\":%f,\"Roll\":%f}"),
 				Value.rotation_value().p(), Value.rotation_value().y(), Value.rotation_value().r());
+		case PROPERTY_TYPE_TRANSFORM:
+		{
+			const auto& T = Value.transform_value();
+			return FString::Printf(
+				TEXT("{\"Location\":{\"X\":%f,\"Y\":%f,\"Z\":%f},"
+				     "\"Rotation\":{\"Pitch\":%f,\"Yaw\":%f,\"Roll\":%f},"
+				     "\"Scale\":{\"X\":%f,\"Y\":%f,\"Z\":%f}}"),
+				T.location().x(), T.location().y(), T.location().z(),
+				T.rotation().p(), T.rotation().y(), T.rotation().r(),
+				T.scale().x(), T.scale().y(), T.scale().z());
+		}
 		case PROPERTY_TYPE_COLOR:
 			return FString::Printf(TEXT("{\"r\":%f,\"g\":%f,\"b\":%f,\"a\":%f}"),
 				Value.color_value().r() / 255.0, Value.color_value().g() / 255.0,
 				Value.color_value().b() / 255.0, Value.color_value().a() / 255.0);
+		case PROPERTY_TYPE_OBJECT:
+		case PROPERTY_TYPE_CLASS:
+			return FString::Printf(TEXT("\"%s\""), UTF8_TO_TCHAR(Value.object_path().c_str()));
+		case PROPERTY_TYPE_STRUCT:
+		case PROPERTY_TYPE_MAP:
+		{
+			FString Result = TEXT("{");
+			bool bFirst = true;
+			for (const auto& KV : Value.struct_values())
+			{
+				if (!bFirst) Result += TEXT(",");
+				bFirst = false;
+				Result += FString::Printf(TEXT("\"%s\":"), UTF8_TO_TCHAR(KV.key().c_str()));
+				Result += ProtoPropertyValueToJson(KV.value());
+			}
+			Result += TEXT("}");
+			return Result;
+		}
+		case PROPERTY_TYPE_ARRAY:
+		{
+			FString Result = TEXT("[");
+			for (int32 i = 0; i < Value.array_values_size(); i++)
+			{
+				if (i > 0) Result += TEXT(",");
+				Result += ProtoPropertyValueToJson(Value.array_values(i));
+			}
+			Result += TEXT("]");
+			return Result;
+		}
+		case PROPERTY_TYPE_ENUM:
+			return FString::Printf(TEXT("\"%s\""), UTF8_TO_TCHAR(Value.enum_name().c_str()));
 		default:
 			return UTF8_TO_TCHAR(Value.string_value().c_str());
 		}
@@ -1466,6 +1508,11 @@ void UAgentBridgeServiceSubsystem::GetLandscapeBounds(
 
 		Response.set_proxy_count(Bounds.ProxyCount);
 		Response.set_landscape_name(TCHAR_TO_UTF8(*Bounds.LandscapeName));
+
+		auto* BiomeScale = Response.mutable_biome_volume_scale();
+		BiomeScale->set_x(Bounds.BiomeVolumeScale.X);
+		BiomeScale->set_y(Bounds.BiomeVolumeScale.Y);
+		BiomeScale->set_z(Bounds.BiomeVolumeScale.Z);
 	}
 
 	ResponseContinuation.ExecuteIfBound(Response, grpc::Status_OK);

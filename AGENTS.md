@@ -1,4 +1,4 @@
-# AGENTS.md — AgentBridge MCP Tool Guide
+# AGENTS.md - AgentBridge MCP Tool Guide
 
 > **For AI agents using AgentBridge to interact with Unreal Engine.**
 > This document encodes hard-won lessons from real-world testing. Following these rules
@@ -23,19 +23,19 @@ Instead of clicking in the GUI, you call tools like `spawn_actor`, `set_property
 | **Actor** | An object placed in a level (light, mesh, volume, Blueprint instance) |
 | **Component** | A sub-object on an actor (LightComponent, MeshComponent, BoxComponent) |
 | **Property** | A named value on an actor or component (Intensity, Color, Location) |
-| **Blueprint (BP)** | A visual scripting class — like a template for actors, created in the editor |
+| **Blueprint (BP)** | A visual scripting class - like a template for actors, created in the editor |
 | **Asset** | A saved file in the project (mesh, texture, material, DataAsset, Blueprint) |
 | **Asset Path** | How you reference assets: `/Game/Folder/AssetName.AssetName` |
-| **DataAsset** | A pure-data asset (no visual representation) — used for configuration |
-| **PCG** | Procedural Content Generation — spawns content from rules instead of manual placement |
-| **World Partition** | Large-world streaming system — not all actors are loaded at once |
-| **PIE** | Play-In-Editor — runs the game inside the editor for testing |
+| **DataAsset** | A pure-data asset (no visual representation) - used for configuration |
+| **PCG** | Procedural Content Generation - spawns content from rules instead of manual placement |
+| **World Partition** | Large-world streaming system - not all actors are loaded at once |
+| **PIE** | Play-In-Editor - runs the game inside the editor for testing |
 
 ---
 
 ## Table of Contents
 
-**Essentials — read these first:**
+**Essentials - read these first:**
 1. [Getting Started](#getting-started)
 2. [Module Profiles](#module-profiles)
 3. [Critical Rules](#critical-rules)
@@ -52,7 +52,7 @@ Instead of clicking in the GUI, you call tools like `spawn_actor`, `set_property
 10. [Editor & Levels](#editor--levels)
 11. [World Partition](#world-partition)
 12. [Tempo Simulation](#tempo-simulation)
-13. [bp_toolkit — Blueprint & Asset Tools](#bp_toolkit--blueprint--asset-tools)
+13. [bp_toolkit - Blueprint & Asset Tools](#bp_toolkit--blueprint--asset-tools)
 14. [Function Calls](#function-calls)
 15. [Type Discovery](#type-discovery)
 
@@ -82,15 +82,15 @@ cd <PROJECT_ROOT> && ./Plugins/Tempo/Scripts/Run.sh
 # Wait ~30 seconds for gRPC to be ready on port 10001
 ```
 
-**Killing the editor** (Windows — must use `cmd` wrapper in Git Bash):
+**Killing the editor** (Windows - must use `cmd` wrapper in Git Bash):
 ```bash
 cmd //c "taskkill /F /IM UnrealEditor.exe"
 ```
 
 **Gotchas:**
-- gRPC is NOT ready immediately — wait ~30 seconds after Run.sh starts
-- `tempo_quit` may hang on a save dialog — use `taskkill /F` for guaranteed termination
-- Git Bash interprets `/F` as a path — always wrap with `cmd //c "..."`
+- gRPC is NOT ready immediately - wait ~30 seconds after Run.sh starts
+- `tempo_quit` may hang on a save dialog - use `taskkill /F` for guaranteed termination
+- Git Bash interprets `/F` as a path - always wrap with `cmd //c "..."`
 - If the editor is already running, kill it first before rebuilding
 
 ### First Steps
@@ -113,7 +113,7 @@ Tools are organized into modules loaded via profiles. Not all tools are availabl
 | Profile | Modules | ~Tools | Use Case |
 |---------|---------|--------|----------|
 | `core` | core | 6 | Minimal: help, console, worlds, quit |
-| `standard` | core, classes, editor, files | ~35 | **DEFAULT** — level editing |
+| `standard` | core, classes, editor, files | ~35 | **DEFAULT** - level editing |
 | `editor` | standard + world_partition | ~42 | Large worlds, landscape queries |
 | `scripting` | standard + bp_toolkit | ~61 | Blueprint/PCG graph editing |
 | `simulation` | core, classes, tempo_sim | ~34 | PIE testing, vehicle/pawn control |
@@ -156,17 +156,23 @@ This applies to ALL struct types:
 | FColor | `"(R=255,G=0,B=0,A=255)"` |
 | FTransform | `"(Rotation=(X=0,Y=0,Z=0,W=1),Translation=(X=0,Y=0,Z=0),Scale3D=(X=1,Y=1,Z=1))"` |
 
-### Rule 2: Reset Scale Before Setting BoxExtent
+### Rule 2: Use set_transform for Volume Sizing
 
-Volume components may have non-unit default scales (e.g., 512). Large BoxExtent values
-multiplied by large scales cause integer overflow, producing tiny or inverted volumes.
+**Do NOT use `set_property` on BoxExtent** - it stores the value in UE reflection but does NOT
+trigger `UpdateBounds()` / `MarkRenderStateDirty()`. The visual wireframe never changes.
+
+Use `set_transform` on the volume component with `world_space=true` instead. Scale is
+calculated as `desired_half_extent / 100` (the default BoxExtent is 100 for both BP types).
 
 ```python
-# ALWAYS do this first:
-set_property(actor_id="MyActor", path="Volume.RelativeScale3D", value="(X=1,Y=1,Z=1)")
+# Formula: scale = desired_world_half_extent / default_box_extent(100)
+bounds = get_landscape_bounds()
+sx = bounds["extent"][0] / 100   # e.g., 100800 / 100 = 1008
+sy = bounds["extent"][1] / 100
+sz = (bounds["extent"][2] + 10000) / 100  # Z with headroom
 
-# THEN set extent:
-set_property(actor_id="MyActor", path="Volume.BoxExtent", value="(X=408000,Y=408000,Z=60000)")
+# Set volume size via component scale (the ONLY reliable approach)
+set_transform(target="BiomeCore->Volume", scale=[sx, sy, sz], world_space=true)
 ```
 
 ### Rule 3: duplicate_asset Destination Must Be Under /Game/
@@ -191,22 +197,57 @@ set_property(..., path="Definition", value="/Game/PCGBiomes/Definitions/RedBiome
 set_property(..., path="Definition", value="/Game/PCGBiomes/Definitions/RedBiome")
 ```
 
-### Rule 5: Some Blueprint Classes Require Full Paths
+### Rule 5: Always Use Full Paths for Plugin Blueprint Classes
 
-Short names work for some BP classes but not all. If `spawn_actor` fails with a short name,
-use the full class path with `_C` suffix:
+Short names only work if the Blueprint is already loaded in memory. On a fresh level, they
+fail with "Class not found". **Always use full class paths** for plugin Blueprints:
 
 ```python
-# Short name works:
+# UNRELIABLE - only works if already loaded:
 spawn_actor(class_name="BP_PCGBiomeCore", ...)
 
-# Short name may NOT work — use full path:
+# RELIABLE - always works:
+spawn_actor(class_name="/PCGBiomeCore/Blueprints/BP_PCGBiomeCore.BP_PCGBiomeCore_C", ...)
 spawn_actor(class_name="/PCGBiomeCore/Blueprints/BP_PCGBiomeTexture.BP_PCGBiomeTexture_C", ...)
 ```
+
+If using `/Game/` copies (recommended for `save_asset` compatibility):
+```python
+spawn_actor(class_name="/Game/<YourFolder>/BP_PCGBiomeCore.BP_PCGBiomeCore_C", ...)
+```
+
+### Rule 6: Verify Object References After Setting
+
+`set_property` on object reference properties now rejects type mismatches with an error
+(e.g., setting a DataAsset on a Texture2D property returns "value type mismatch"). However,
+it's still good practice to verify references after setting:
+
+```python
+# Verify object references after setting:
+set_property(actor_id="MyActor", path="Definition", value="/Game/MyDef.MyDef")
+get_property(actor_id="MyActor", path="Definition")  # Confirm it took effect!
+```
+
+If the value reads back empty, check that the asset class matches the property's expected type.
 
 ---
 
 ## Property Access
+
+### Read/Write Format Asymmetry
+
+**IMPORTANT:** Struct values are WRITTEN in Unreal string format but READ BACK as lowercase
+JSON objects. This is by design - don't be confused by the difference:
+
+| Type | Write Format | Read Format |
+|------|-------------|-------------|
+| FVector | `"(X=100,Y=200,Z=300)"` | `{"x": 100.0, "y": 200.0, "z": 300.0}` |
+| FLinearColor | `"(R=1.0,G=0.0,B=0.0,A=1.0)"` | `{"r": 1.0, "g": 0.0, "b": 0.0, "a": 1.0}` |
+| FRotator | `"(Pitch=0,Yaw=90,Roll=0)"` | `{"pitch": 0.0, "yaw": 90.0, "roll": 0.0}` |
+
+**Note:** FLinearColor values are written in 0-1 range but may read back in 0-255 range
+(FColor). For example, writing `"(R=1,G=0,B=0,A=1)"` reads back as `{"r": 255, "g": 0, "b": 0, "a": 255}`.
+This is expected -- UE stores some color properties as FColor internally.
 
 ### Reading Properties
 
@@ -239,13 +280,15 @@ set_property(actor_id="MyActor", path="RootComponent.RelativeLocation",
 set_property(actor_id="MyActor", path="BiomeTexture",
     value="/Game/Textures/MyTexture.MyTexture")
 
-# Arrays of object references
+# Arrays of object references (JSON array format required)
 set_property(actor_id="MyActor", path="Assets",
     value='["/Game/Assets/Asset1.Asset1", "/Game/Assets/Asset2.Asset2"]')
+# NOTE: Plain string fails for arrays - must use JSON array format
 
-# Arrays of structs (JSON array with struct fields)
-set_property(actor_id="/Game/MyAsset.MyAsset", path="BiomeAssets",
-    value='[{"Enabled": true, "Weight": 1, "Mesh": "/Game/Meshes/Mesh1.Mesh1"}]')
+# Arrays of structs - use element-level access for reliability
+set_property(actor_id="/Game/MyAsset.MyAsset", path="BiomeAssets[0].Mesh",
+    value="/Game/Meshes/Mesh1.Mesh1")
+set_property(actor_id="/Game/MyAsset.MyAsset", path="BiomeAssets[0].Enabled", value=true)
 ```
 
 ### Property Path Rules
@@ -256,32 +299,33 @@ set_property(actor_id="/Game/MyAsset.MyAsset", path="BiomeAssets",
 - Array elements: `ArrayProperty[0]`
 - Data assets work with asset paths as `actor_id`
 
-### Struct Arrays with Object References
+### Array Property Rules
 
-Setting an entire struct array in one call (with object refs inline) generally works:
+Two distinct behaviors for array properties:
 
+**Object reference arrays** (e.g., `Assets` on BiomeTexture actors):
 ```python
-set_property(actor_id="/Game/MyAsset.MyAsset", path="BiomeAssets",
-    value='[{"Enabled": true, "Mesh": "/Game/Meshes/Mesh1.Mesh1"}]')
+# Plain string FAILS - use JSON array format:
+set_property(actor_id="MyActor", path="Assets", value="/Game/Path.Path")           # WRONG
+set_property(actor_id="MyActor", path="Assets", value='["/Game/Path.Path"]')       # RIGHT
 ```
 
-**If object references don't persist** in a single-call array set, use the two-step approach:
-1. Set the array with simple properties only (bools, numbers, strings)
-2. Set each object reference individually with indexed paths
-
+**Struct arrays** (e.g., `BiomeAssets` on DataAssets):
+Array-level set with JSON works for simple cases. For complex nested structs, element-level
+access is more reliable:
 ```python
-# Step 1: Create array structure without object refs
-set_property(actor_id="/Game/MyAsset.MyAsset", path="MyArray",
-    value='[{"Enabled": true, "Weight": 1}, {"Enabled": true, "Weight": 1}]')
-
-# Step 2: Set object refs individually
-set_property(actor_id="/Game/MyAsset.MyAsset", path="MyArray[0].Mesh",
+# Element-level access is reliable:
+set_property(actor_id="/Game/MyAsset.MyAsset", path="BiomeAssets[0].Mesh",
     value="/Game/Meshes/Mesh1.Mesh1")
-set_property(actor_id="/Game/MyAsset.MyAsset", path="MyArray[1].Mesh",
+set_property(actor_id="/Game/MyAsset.MyAsset", path="BiomeAssets[0].Enabled", value=true)
+set_property(actor_id="/Game/MyAsset.MyAsset", path="BiomeAssets[1].Mesh",
     value="/Game/Meshes/Mesh2.Mesh2")
 ```
 
-### Component Naming — Use Instance Names
+**Note:** Array-level readback may show `"(complex)"` for bools and nested structs. The actual
+values are correct - this is a display limitation. Use element-level `get_property` for full data.
+
+### Component Naming - Use Instance Names
 
 **Use component instance names, NOT class names.** Find them with `get_actor`:
 
@@ -290,10 +334,10 @@ set_property(actor_id="/Game/MyAsset.MyAsset", path="MyArray[1].Mesh",
 get_actor(actor_id="MyLight", include_components=true)
 # Returns: components: [{name: "LightComponent0", class: "PointLightComponent"}, ...]
 
-# RIGHT — instance name:
+# RIGHT - instance name:
 get_property(actor_id="MyLight", path="LightComponent0.Intensity")
 
-# WRONG — class name:
+# WRONG - class name:
 get_property(actor_id="MyLight", path="PointLightComponent.Intensity")
 ```
 
@@ -318,7 +362,7 @@ spawn_actor(
 **Gotchas:**
 - The `_C` suffix is auto-added for BP classes, but sometimes you need to provide it explicitly
   in the full path form
-- `folder_path` creates the outliner folder if it doesn't exist — use it to organize your work
+- `folder_path` creates the outliner folder if it doesn't exist - use it to organize your work
 - `relative_to` spawns at an offset from another actor (Tempo feature)
 
 ### Querying
@@ -327,10 +371,10 @@ spawn_actor(
 # By class
 query_actors(class_name="PointLight")
 
-# By label (substring match — no wildcards needed)
+# By label (substring match - no wildcards needed)
 query_actors(label_pattern="Biome")
 
-# By internal name (substring match — no wildcards)
+# By internal name (substring match - no wildcards)
 query_actors(name_pattern="Light")
 
 # By tag
@@ -340,12 +384,12 @@ query_actors(tag="MyTag")
 query_actors(class_name="StaticMeshActor", include_unloaded=true)
 ```
 
-**Prefer `label_pattern` over `name_pattern`** — labels are what you set, names are
+**Prefer `label_pattern` over `name_pattern`** - labels are what you set, names are
 auto-generated and ugly (e.g., `BP_PCGBiomeTexture_C_2`).
 
 **Pattern matching is substring-based.** Use `"Light"` not `"*Light*"`. Wildcards like
 `*` are treated as literal characters and will match nothing. `list_classes(name_pattern=...)`
-is case-insensitive exact match only — use `base_class_name` for discovery instead.
+is case-insensitive exact match only - use `base_class_name` for discovery instead.
 
 ### Getting Actor Details
 
@@ -353,8 +397,9 @@ is case-insensitive exact match only — use `base_class_name` for discovery ins
 # Basic info
 get_actor(actor_id="MyActor")
 
-# With all properties listed (useful for discovering paths)
+# With all properties listed (returns 150+ properties - mostly UE engine defaults)
 get_actor(actor_id="MyActor", include_properties=true)
+# TIP: Prefer targeted get_property() calls over include_properties=true
 
 # With component instance names (CRITICAL for property paths)
 get_actor(actor_id="MyActor", include_components=true)
@@ -406,7 +451,7 @@ get_transform(target="MyActor->LightComponent0", world_space=false)
 ```
 
 **Note:** `set_actor_transform` is the older form that only works on actors. Prefer
-`set_transform` for new work — it handles both actors and components.
+`set_transform` for new work - it handles both actors and components.
 
 ### Attachment
 
@@ -433,7 +478,7 @@ detach(target="Lamp", maintain_world_transform=false)  # keep relative offset
 ### Creating Assets
 
 ```python
-# Duplicate from template (PREFERRED — inherits all setup)
+# Duplicate from template (PREFERRED - inherits all setup)
 duplicate_asset(
     source_path="/PluginName/Path/To/Template",
     dest_package_path="/Game/MyFolder",
@@ -454,10 +499,10 @@ save_actor_as_blueprint(actor_id="MyConfiguredActor",
 ```
 
 ### Key Constraints
-- **Destination must be under `/Game/`** — cannot duplicate to plugin content folders
-- **Always `save_asset` after modification** — changes are in-memory only until saved
+- **Destination must be under `/Game/`** - cannot duplicate to plugin content folders
+- **Always `save_asset` after modification** - changes are in-memory only until saved
 - **Use `PackageName.AssetName`** format when referencing assets in properties
-- **`create_asset` makes empty shells** — for Blueprints prefer `save_actor_as_blueprint`
+- **`create_asset` makes empty shells** - for Blueprints prefer `save_actor_as_blueprint`
 
 ---
 
@@ -496,20 +541,32 @@ copy_project_file(source_path="Config/DefaultGame.ini",
 
 ```python
 bounds = get_landscape_bounds()
-# Returns: center [x, y, z] and extent [x, y, z]
+# Returns: center, extent, min, max, proxy_count, landscape_name, biome_volume_scale
+# biome_volume_scale: pre-computed scale factors for sizing a 100-unit-extent
+#   BoxComponent to cover the landscape (Z includes +10000 headroom)
 ```
 
 ### Setting Volume Size
 
-**Critical two-step process:**
+**Use `set_transform` on the volume component.** Do NOT use `set_property` on BoxExtent -
+it stores the value but doesn't trigger visual updates.
+
+The default BoxExtent is `[100, 100, 100]` for both BP_PCGBiomeCore and BP_PCGBiomeTexture.
+Scale = desired_half_extent / 100.
 
 ```python
-# Step 1: Reset component scale (prevents overflow)
-set_property(actor_id="MyActor", path="Volume.RelativeScale3D", value="(X=1,Y=1,Z=1)")
+# Calculate scale from landscape bounds
+bounds = get_landscape_bounds()
+sx = bounds["extent"][0] / 100
+sy = bounds["extent"][1] / 100
+sz = (bounds["extent"][2] + 10000) / 100  # Z with headroom
 
-# Step 2: Set box extent
-set_property(actor_id="MyActor", path="Volume.BoxExtent",
-    value="(X=408000,Y=408000,Z=60000)")
+# BiomeCore - scale on component
+set_transform(target="BiomeCore->Volume", scale=[sx, sy, sz], world_space=true)
+
+# Each BiomeTexture - scale on component
+set_transform(target="ForestBiomeTexture->BiomeTextureVolume",
+    scale=[sx, sy, sz], world_space=true)
 ```
 
 ### Volume Component Names by Blueprint
@@ -529,23 +586,23 @@ color channel in a texture to a set of meshes spawned via PCG.
 
 ```
 BiomeCore (1 per level)          BiomeTexture (1 per biome)
-├── Volume (box bounds)          ├── BiomeTextureVolume (box bounds)
-└── PCG Component                ├── BiomeTexture (texture ref)
-                                 ├── Definition → BiomeDefinitionTemplate
-                                 │   ├── BiomeName
-                                 │   ├── BiomeColor
-                                 │   └── BiomePriority
-                                 └── Assets[] → BiomeAssetTemplate[]
-                                     └── BiomeAssets[]
-                                         ├── Enabled
-                                         ├── Weight
-                                         ├── Generator
-                                         └── Mesh
++-- Volume (box bounds)          +-- BiomeTextureVolume (box bounds)
++-- PCG Component                +-- BiomeTexture (texture ref)
+                                 +-- Definition -> BiomeDefinitionTemplate
+                                 |   +-- BiomeName
+                                 |   +-- BiomeColor
+                                 |   +-- BiomePriority
+                                 +-- Assets[] -> BiomeAssetTemplate[]
+                                     +-- BiomeAssets[]
+                                         +-- Enabled
+                                         +-- Weight
+                                         +-- Generator
+                                         +-- Mesh
 ```
 
 **Key relationships:**
-- One **BiomeCore** per level — owns the PCG component that drives generation
-- One **BiomeTexture** per biome — reads a color from the shared texture and spawns meshes
+- One **BiomeCore** per level - owns the PCG component that drives generation
+- One **BiomeTexture** per biome - reads a color from the shared texture and spawns meshes
 - Each BiomeTexture references one **Definition** (name, color, priority) and one or more **Asset configs** (mesh lists)
 - Definitions and Assets are **Data Assets** (duplicated from templates, stored under `/Game/`)
 
@@ -571,9 +628,9 @@ BiomeCore (1 per level)          BiomeTexture (1 per biome)
 | `ActorLabel` | FString | Display name in outliner |
 | `FolderPath` | FName | Outliner folder |
 
-Volume sizing:
+Volume sizing (use `set_transform`, NOT `set_property` on BoxExtent):
 ```python
-set_property(actor_id="BiomeCore", path="Volume.BoxExtent", value="(X=408000,Y=408000,Z=60000)")
+set_transform(target="BiomeCore->Volume", scale=[sx, sy, sz], world_space=true)
 ```
 
 #### BP_PCGBiomeBaseActor_C (Parent Class)
@@ -597,13 +654,26 @@ Properties beyond those inherited from BP_PCGBiomeBaseActor:
 
 | Path | Type | Description | Default |
 |------|------|-------------|---------|
-| `BiomeTexture` | UTexture2D* | Texture to sample for biome placement | — |
+| `BiomeTexture` | UTexture2D* | Texture to sample for biome placement | - |
 | `BiomeColorTolerance` | float | Color matching tolerance | 0.01 |
 | `LocalCacheTexelSize` | int32 | Cache resolution | 800 |
 | `LocalCacheZExtents` | float | Z bounds for cache | 1600 |
 | `LocalCacheSnapToSurface` | bool | Snap to terrain | true |
-| `BiomeTextureVolume.BoxExtent` | FVector | Volume bounds | — |
-| `BiomeTextureVolume.RelativeScale3D` | FVector | Volume scale (**reset to 1,1,1!**) | — |
+| `BiomeTextureVolume.BoxExtent` | FVector | Volume bounds (default: 100,100,100) | - |
+| `PCG_LocalBiomeCore` | UPCGComponent* | Local PCG component | - |
+
+#### Default Scale Architecture
+
+BiomeCore and BiomeTexture achieve the same world-space volume size differently:
+
+| Property | BiomeCore | BiomeTexture |
+|----------|-----------|--------------|
+| Actor scale | [1, 1, 1] | [512, 512, 128] |
+| Component RelativeScale3D | [512, 512, 128] | [1, 1, 1] |
+| Component world scale | [512, 512, 128] | [512, 512, 128] |
+
+This is why `set_transform` with `world_space=true` on the component is the uniform approach -
+it produces the same result regardless of where the default scale lives.
 
 #### Volume Component Names
 
@@ -632,7 +702,7 @@ with asset path as `actor_id`:
 | `BiomeDefinition.BiomeColor` | FLinearColor | `"(R=1,G=0,B=0,A=1)"` |
 | `BiomeDefinition.BiomePriority` | int32 | `1` |
 
-**Internal GUID-suffixed names** (for reference only — use display names in property paths):
+**Internal GUID-suffixed names** (for reference only - use display names in property paths):
 
 | Display Name | Internal Name |
 |-------------|---------------|
@@ -653,7 +723,7 @@ duplicate_asset(source_path="/PCGBiomeCore/BiomeAssets/DefaultAsset",
 
 Contains the `BiomeAssets` array (type `TArray<FBiomeAsset>`).
 
-##### FBiomeAsset — Full Field List
+##### FBiomeAsset - Full Field List
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -694,15 +764,87 @@ Contains the `BiomeAssets` array (type `TArray<FBiomeAsset>`).
 | `ZMax` | float | 500.0 |
 | `InfluenceRadius` | float | 100.0 |
 
+##### FBiomeAsset_MeshOptions
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `Material` | UMaterialInterface* | "" | Override material |
+| `AllowCollision` | bool | false | Enable collision on spawned meshes |
+| `Visible` | bool | true | Mesh visibility |
+| `CastShadow` | bool | true | Shadow casting |
+| `CastHiddenShadow` | bool | false | Cast shadow even when hidden |
+| `AffectDistanceFieldLighting` | bool | true | DFAO contribution |
+| `DetailMode` | float | 0 | LOD detail mode |
+| `StartCullDistance` | float | 0 | Begin distance culling |
+| `EndCullDistance` | float | 0 | End distance culling |
+| `WorldPositionOffsetDisableDistance` | float | 0 | WPO disable distance |
+| `IncludeInHLOD` | bool | false | Include in HLOD generation |
+
+##### FBiomeAsset_AssetOptions
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `OverlapWithChildren` | bool | false | Allow overlap with child assets |
+| `ForceAssetScale` | bool | false | Force scale override |
+| `ExtentsMultiplier` | FVector | (1,1,1) | Bounds extents multiplier |
+| `BoundsOffset` | FVector | (0,0,0) | Bounds offset |
+| `Translation` | FVector | (0,0,0) | Position offset |
+| `Rotation` | FRotator | (0,0,0) | Rotation offset |
+| `Scale` | FVector | (1,1,1) | Mesh scale -- controls spawned asset size |
+| `OrientUpward` | float | 0 | Upward orientation strength |
+| `SelfPrune` | bool | false | Enable self-pruning |
+| `SelfPruningExtentsMultiplier` | float | 1.0 | Self-prune extents multiplier |
+
+**Common tasks:**
+- To change mesh scale: `BiomeAssets[0].AssetOptions.Scale` (not `RuntimeOptions.ScaleMultiplier`)
+- To offset placement: `BiomeAssets[0].AssetOptions.Translation` and `.Rotation`
+
+##### FBiomeAsset_AssemblyOptions
+
+| Field | Type | Default |
+|-------|------|---------|
+| `AllowCollision` | bool | false |
+
+##### FBiomeAsset_DebugOptions
+
+| Field | Type | Default |
+|-------|------|---------|
+| `Isolate` | bool | false |
+| `ShowBounds` | bool | false |
+
 ### Step-by-Step Workflow
 
 Follow these phases in order for each biome setup. Your instruction file provides the
 biome-specific data (names, colors, meshes, paths); this workflow provides the procedure.
 
+#### Phase 0: Prepare Template Assets
+
+Copy template Blueprints and DataAssets from the plugin to `/Game/` before duplicating them.
+`duplicate_asset` + `save_asset` only works reliably on assets already in `/Game/`, not
+plugin content paths (which create partially-loaded duplicates that crash on save).
+
+```python
+# Copy templates to /Game/ (one-time setup)
+duplicate_asset(source_path="/PCGBiomeCore/Blueprints/BP_PCGBiomeCore",
+    dest_package_path="/Game/PCGBiomes/Templates", dest_asset_name="BP_PCGBiomeCore")
+duplicate_asset(source_path="/PCGBiomeCore/Blueprints/BP_PCGBiomeTexture",
+    dest_package_path="/Game/PCGBiomes/Templates", dest_asset_name="BP_PCGBiomeTexture")
+duplicate_asset(source_path="/PCGBiomeCore/BiomeDefinitions/DefaultBiome",
+    dest_package_path="/Game/PCGBiomes/Templates", dest_asset_name="DefaultBiome")
+duplicate_asset(source_path="/PCGBiomeCore/BiomeAssets/DefaultAsset",
+    dest_package_path="/Game/PCGBiomes/Templates", dest_asset_name="DefaultAsset")
+
+# Save all templates
+save_asset(asset_path="/Game/PCGBiomes/Templates/BP_PCGBiomeCore")
+save_asset(asset_path="/Game/PCGBiomes/Templates/BP_PCGBiomeTexture")
+save_asset(asset_path="/Game/PCGBiomes/Templates/DefaultBiome")
+save_asset(asset_path="/Game/PCGBiomes/Templates/DefaultAsset")
+```
+
 #### Phase 1: Duplicate Templates
 
-Create one Definition and one Asset data asset per biome. Source from your template paths,
-destination under `/Game/`.
+Create one Definition and one Asset data asset per biome. Source from your `/Game/` templates
+(created in Phase 0), destination under `/Game/`.
 
 ```python
 # For each biome:
@@ -756,9 +898,31 @@ save_asset(asset_path="/Game/PCGBiomes/Definitions/<Name>Biome")
 save_asset(asset_path="/Game/PCGBiomes/Assets/<Name>Assets")
 ```
 
+#### Modifying Biome Assets After Creation
+
+Common property modifications on existing BiomeAsset data assets:
+
+```python
+# Change mesh
+set_property(actor_id="/Game/PCGBiomes/Assets/<Name>Assets.<Name>Assets",
+    path="BiomeAssets[0].Mesh", value="/Game/Meshes/NewMesh.NewMesh")
+
+# Change weight
+set_property(actor_id="/Game/PCGBiomes/Assets/<Name>Assets.<Name>Assets",
+    path="BiomeAssets[0].Weight", value=2.5)
+
+# Change scale (3-level nested path: Array[index].Struct.Field)
+set_property(actor_id="/Game/PCGBiomes/Assets/<Name>Assets.<Name>Assets",
+    path="BiomeAssets[0].AssetOptions.Scale", value="(X=3,Y=3,Z=3)")
+
+# After modifying, save and trigger regeneration:
+save_asset(asset_path="/Game/PCGBiomes/Assets/<Name>Assets")
+call_function(call="<Name>BiomeTexture.PCG_LocalBiomeCore.NotifyPropertiesChangedFromBlueprint")
+```
+
 #### Phase 5: Get Landscape Bounds
 
-Query the landscape for center and extent — used for actor placement and volume sizing:
+Query the landscape for center and extent - used for actor placement and volume sizing:
 
 ```python
 bounds = get_landscape_bounds()
@@ -767,41 +931,59 @@ bounds = get_landscape_bounds()
 
 #### Phase 6: Spawn Level Actors
 
-Spawn ONE BiomeCore and ONE BiomeTexture per biome, all at landscape center:
+Spawn ONE BiomeCore and ONE BiomeTexture per biome, all at landscape center.
+**Always use full class paths** - short names only work if the Blueprint is already loaded.
 
 ```python
-# One shared BiomeCore
-spawn_actor(class_name="BP_PCGBiomeCore",
+# One shared BiomeCore (full path required on fresh level)
+spawn_actor(
+    class_name="/PCGBiomeCore/Blueprints/BP_PCGBiomeCore.BP_PCGBiomeCore_C",
     location=[center_x, center_y, center_z],
     label="BiomeCore", folder_path="PCGBiomes")
 
-# One BiomeTexture per biome (may require full class path — see Rule 5)
+# One BiomeTexture per biome (full path required)
 spawn_actor(
     class_name="/PCGBiomeCore/Blueprints/BP_PCGBiomeTexture.BP_PCGBiomeTexture_C",
     location=[center_x, center_y, center_z],
     label="<Name>BiomeTexture", folder_path="PCGBiomes")
 ```
 
-#### Phase 7: Fix Volume Bounds (CRITICAL)
-
-**You MUST reset component scale to (1,1,1) BEFORE setting BoxExtent.**
-Default scales can be very large (e.g. 512), causing overflow with large extents.
-
+If using `/Game/` copies from Phase 0:
 ```python
-# BiomeCore
-set_property(actor_id="BiomeCore", path="Volume.RelativeScale3D",
-    value="(X=1,Y=1,Z=1)")
-set_property(actor_id="BiomeCore", path="Volume.BoxExtent",
-    value=f"(X={extent_x},Y={extent_y},Z={extent_z + 10000})")
-
-# Each BiomeTexture
-set_property(actor_id="<Name>BiomeTexture", path="BiomeTextureVolume.RelativeScale3D",
-    value="(X=1,Y=1,Z=1)")
-set_property(actor_id="<Name>BiomeTexture", path="BiomeTextureVolume.BoxExtent",
-    value=f"(X={extent_x},Y={extent_y},Z={extent_z + 10000})")
+spawn_actor(
+    class_name="/Game/PCGBiomes/Templates/BP_PCGBiomeCore.BP_PCGBiomeCore_C", ...)
+spawn_actor(
+    class_name="/Game/PCGBiomes/Templates/BP_PCGBiomeTexture.BP_PCGBiomeTexture_C", ...)
 ```
 
-The `+ 10000` on Z gives headroom above the landscape. Adjust as needed.
+#### Phase 7: Set Volume Bounds (CRITICAL)
+
+**Use `set_transform` on the volume component.** Do NOT use `set_property` on BoxExtent -
+it stores the value but doesn't visually update (no `UpdateBounds()` / `MarkRenderStateDirty()`
+trigger). The default BoxExtent is 100 for both BP types.
+
+```python
+# Formula: scale = desired_world_half_extent / default_box_extent(100)
+sx = extent_x / 100
+sy = extent_y / 100
+sz = (extent_z + 10000) / 100  # +10000 gives Z headroom above landscape
+
+# BiomeCore - scale on component with world_space
+set_transform(target="BiomeCore->Volume", scale=[sx, sy, sz], world_space=true)
+
+# Each BiomeTexture - same approach, different component name
+set_transform(target="<Name>BiomeTexture->BiomeTextureVolume",
+    scale=[sx, sy, sz], world_space=true)
+```
+
+**Simplified with `biome_volume_scale`** (recommended):
+```python
+bounds = get_landscape_bounds()
+scale = bounds["biome_volume_scale"]  # e.g. [2040, 2040, 101]
+set_transform(target="BiomeCore->Volume", scale=scale, world_space=true)
+set_transform(target="<Name>BiomeTexture->BiomeTextureVolume", scale=scale, world_space=true)
+```
+No manual calculation needed -- the Z headroom (+10000) is already baked in.
 
 #### Phase 8: Assign References
 
@@ -827,26 +1009,54 @@ set_property(actor_id="<Name>BiomeTexture", path="Assets",
 # Confirm all actors exist (label_pattern is substring match)
 query_actors(label_pattern="Biome")
 
-# Spot-check references on one biome
-get_property(actor_id="<Name>BiomeTexture", path="BiomeTexture")
-get_property(actor_id="<Name>BiomeTexture", path="Definition")
-get_property(actor_id="<Name>BiomeTexture", path="Assets")
+# Spot-check ALL references on one biome (verify object refs took effect!)
+get_property(actor_id="<Name>BiomeTexture", path="BiomeTexture")   # Texture ref
+get_property(actor_id="<Name>BiomeTexture", path="Definition")     # Definition ref
+get_property(actor_id="<Name>BiomeTexture", path="Assets")         # Assets array
+
+# Verify volume transform was applied
+get_transform(target="<Name>BiomeTexture->BiomeTextureVolume")
 ```
+
+**If any reference reads back empty**, the asset type was wrong (see Rule 6). Verify the
+asset class matches the expected property type.
+
+#### Phase 10: Trigger Regeneration
+
+PCG does not automatically regenerate when DataAsset properties change. Trigger regeneration
+on each BiomeTexture's local PCG component:
+
+```python
+# Save modified assets first
+save_asset(asset_path="/Game/PCGBiomes/Assets/<Name>Assets")
+
+# Trigger regeneration per BiomeTexture
+call_function(call="<Name>BiomeTexture.PCG_LocalBiomeCore.NotifyPropertiesChangedFromBlueprint")
+```
+
+**Important:** The trigger must be on the BiomeTexture's `PCG_LocalBiomeCore` component,
+NOT on the top-level BiomeCore actor. Each BiomeTexture has its own local PCG component
+that drives generation for that biome.
+
+**If no generation occurs after triggering**, check BiomeColorTolerance on the BiomeTexture
+actor. The default (0.01) is very tight. Try increasing to 0.1 or higher as a debugging step.
 
 ### Estimated Tool Calls (per biome count)
 
 | Phase | Per Biome | 4 Biomes |
 |-------|-----------|----------|
+| Prepare templates | - | 8 (one-time) |
 | Duplicate | 2 | 8 |
 | Configure defs | 3 | 12 |
 | Configure assets | 1 | 4 |
 | Save | 2 | 8 |
-| Get bounds | — | 1 |
+| Get bounds | - | 1 |
 | Spawn actors | 1 (+1 core) | 5 |
-| Fix volumes | 2 (+2 core) | 10 |
+| Set volumes | 1 (+1 core) | 5 |
 | Assign refs | 3 | 12 |
-| Verify | — | 3 |
-| **Total** | | **~63** |
+| Verify | - | 4 |
+| Trigger regen | 1 | 4 |
+| **Total** | | **~71** |
 
 ---
 
@@ -903,7 +1113,7 @@ search_console_commands(keyword="pcg", search_help=true)  # Also search help tex
 
 ## World Partition
 
-**Module:** `world_partition` — load with `load_modules(modules=["world_partition"])` if
+**Module:** `world_partition` - load with `load_modules(modules=["world_partition"])` if
 not in your profile.
 
 Large worlds use World Partition for streaming. Standard `query_actors` only finds loaded
@@ -945,7 +1155,7 @@ actors. Filter results client-side if needed.
 
 ## Tempo Simulation
 
-**Module:** `tempo_sim` — requires `play_in_editor()` first! These tools control the running
+**Module:** `tempo_sim` - requires `play_in_editor()` first! These tools control the running
 simulation, not the editor.
 
 ### Time Control
@@ -1003,7 +1213,7 @@ tempo_pawn_move_to(pawn_name="NPC_01", location=[1000, 2000, 0])
 ```
 
 **Common mistake:** Calling vehicle/pawn tools without PIE running. These only work during
-simulation — call `play_in_editor()` first.
+simulation - call `play_in_editor()` first.
 
 ### Navigation & Map
 
@@ -1043,9 +1253,9 @@ tempo_set_control_mode(mode="OPEN_LOOP")
 
 ---
 
-## bp_toolkit — Blueprint & Asset Tools
+## bp_toolkit - Blueprint & Asset Tools
 
-**Module:** `bp_toolkit` — load with `load_modules(modules=["bp_toolkit"])`. Requires the
+**Module:** `bp_toolkit` - load with `load_modules(modules=["bp_toolkit"])`. Requires the
 `bp_toolkit` submodule to be initialized.
 
 26 tools split into three categories: live Blueprint editing, live PCG editing, and offline
@@ -1078,7 +1288,7 @@ bp_delete_node(blueprint_path="/Game/BP_Enemy", node_id="<GUID>")
 `Sequence`, `Comment`
 
 **Gotcha:** The Blueprint must have an initialized EventGraph. Freshly `create_asset`'d
-Blueprints may not — prefer `save_actor_as_blueprint` or duplicating existing BPs.
+Blueprints may not - prefer `save_actor_as_blueprint` or duplicating existing BPs.
 
 ### Live PCG Graph Editing (6 tools)
 
@@ -1106,14 +1316,14 @@ pcg_delete_node(graph_path="/Game/MyPCG", node_path="<path>")
 `TransformPoints`, `Branch`, `Difference`, `Union`, `Intersection`, and more.
 
 **Pin naming gotcha:** InputNode's output pin is named `In`, OutputNode's input pin is
-named `Out`. Yes, it's backwards — that's UE's convention.
+named `Out`. Yes, it's backwards - that's UE's convention.
 
 ### Offline Asset Manipulation (14 tools)
 
 Parse and modify `.uasset` files as JSON without the editor. Works on Blueprints, PCG
 Graphs, DataAssets, Behavior Trees, Materials, and more.
 
-**Workflow:** Export to JSON → modify → reimport:
+**Workflow:** Export to JSON -> modify -> reimport:
 
 ```python
 # Export .uasset to JSON (MUST use Windows paths, not WSL paths)
@@ -1151,7 +1361,7 @@ bp_parse(json_path="...", output_dir="D:/Project/docs/")
 bp_import_asset(json_path="D:/Project/Content/BP_Enemy.json")
 ```
 
-**CRITICAL gotcha — Windows paths only!** The offline tools shell out to UAssetGUI.exe,
+**CRITICAL gotcha - Windows paths only!** The offline tools shell out to UAssetGUI.exe,
 which requires Windows paths:
 ```python
 # WRONG (WSL path):
@@ -1166,6 +1376,11 @@ bp_export_asset(uasset_path="D:/Project/Content/BP.uasset")
 ---
 
 ## Function Calls
+
+> **Note:** `call_function` currently only supports functions with **no parameters and void
+> return type**. This covers useful cases like `NotifyPropertiesChangedFromBlueprint()` for
+> PCG regeneration. For parameterized operations, use `set_property`, `set_transform`, or
+> console commands.
 
 Call Blueprint and C++ functions directly:
 
@@ -1195,7 +1410,7 @@ operations, prefer `set_property` or console commands.
 When documentation isn't available and you need to explore:
 
 ```python
-# Search for classes by base class hierarchy (preferred — name_pattern is exact match only)
+# Search for classes by base class hierarchy (preferred - name_pattern is exact match only)
 list_classes(base_class_name="PrimaryDataAsset")
 list_classes(base_class_name="DataAsset")
 
@@ -1209,7 +1424,11 @@ get_actor(actor_id="MyActor", include_properties=true, include_components=true)
 
 **Best practice:** Use `get_actor(include_components=true)` first to learn component instance
 names, then `get_class_schema` on the component class if you need the full property list.
-Avoid calling `get_class_schema` repeatedly — the results don't change.
+Avoid calling `get_class_schema` repeatedly - the results don't change.
+
+**Plugin Blueprint discovery:** `list_classes(name_pattern=...)` can find plugin Blueprint
+classes and also acts as a class loader -- after calling `list_classes`, `spawn_actor` can
+use short names for those classes. For broader class discovery, prefer `base_class_name`.
 
 ---
 
@@ -1295,9 +1514,9 @@ delete_actor(actor_id="TestInstance")
 **Cause:** You used a JSON object for a struct value.
 **Fix:** Use Unreal string format: `"(X=1,Y=2,Z=3)"` instead of `{"X": 1, "Y": 2, "Z": 3}`.
 
-### Volume appears tiny or inverted after setting BoxExtent
-**Cause:** Component had a large default scale (e.g. 512). Scale * Extent overflowed.
-**Fix:** Reset `RelativeScale3D` to `(X=1,Y=1,Z=1)` before setting BoxExtent.
+### Volume wireframe doesn't change after setting BoxExtent
+**Cause:** `set_property` on BoxExtent stores the value but doesn't trigger `UpdateBounds()`.
+**Fix:** Use `set_transform` on the volume component instead. Scale = desired_extent / 100.
 
 ### spawn_actor fails with "class not found"
 **Cause:** Blueprint short name not resolvable.
@@ -1336,6 +1555,32 @@ delete_actor(actor_id="TestInstance")
 **Fix:** Use `get_actor(include_components=true)` to find instance names like
 `LightComponent0`, not class names like `PointLightComponent`.
 
+### call_function fails on functions with parameters
+**Cause:** `call_function` currently only supports zero-arg void return functions.
+**Fix:** Use `set_property` or console commands for parameterized operations. Zero-arg
+functions like `NotifyPropertiesChangedFromBlueprint()` work correctly.
+
+### Object reference set successfully but reads back empty
+**Cause:** Type mismatch - the asset's UClass doesn't match the property's expected type.
+**Fix:** Verify the asset type matches (e.g., Texture2D for Texture2D properties). Always
+confirm with `get_property` after setting object references.
+
+### save_asset crashes on duplicated plugin assets
+**Cause:** Assets duplicated from plugin content paths are only partially loaded.
+**Fix:** Copy template assets to `/Game/` first (Phase 0), then duplicate from there.
+This is an engine limitation, not an AgentBridge bug.
+
+### Zero points spawn after completing biome workflow
+**Cause:** BiomeTexture color regions don't match biome colors within tolerance.
+**Fix:** Use a debugging ladder to isolate the issue:
+1. Set `BiomeColorTolerance = 0.1` on the BiomeTexture actor (catches minor imprecision)
+2. If still nothing, try `0.5` (catches major mismatches)
+3. If still nothing, try `0.99` (sanity check -- if this fails, it's not a color issue)
+
+If `0.99` works but `0.01` doesn't, your texture colors don't exactly match `BiomeColor`.
+Adjust tolerance or fix colors. If `0.99` doesn't work, check references and volume bounds.
+The default tolerance of `0.01` is very tight -- `0.1` is often more practical.
+
 ---
 
 ## Performance Tips
@@ -1357,6 +1602,8 @@ delete_actor(actor_id="TestInstance")
 
 ## Value Format Cheat Sheet
 
+**Write format** (what you pass to `set_property`):
+
 | Type | Example | Notes |
 |------|---------|-------|
 | bool | `true` / `false` | Lowercase |
@@ -1372,3 +1619,12 @@ delete_actor(actor_id="TestInstance")
 | Asset ref | `"/Game/Path/Asset.Asset"` | PackageName.AssetName |
 | Asset array | `'["/Game/A.A", "/Game/B.B"]'` | JSON array string |
 | Struct array | `'[{"Key": "val", ...}]'` | JSON array with fields |
+
+**Read format** (what `get_property` returns - note lowercase keys):
+
+| Type | Write | Read |
+|------|-------|------|
+| FVector | `"(X=1,Y=2,Z=3)"` | `{"x": 1.0, "y": 2.0, "z": 3.0}` |
+| FLinearColor | `"(R=1,G=0,B=0,A=1)"` | `{"r": 1.0, "g": 0.0, "b": 0.0, "a": 1.0}` |
+| FRotator | `"(Pitch=0,Yaw=90,Roll=0)"` | `{"pitch": 0.0, "yaw": 90.0, "roll": 0.0}` |
+| Array of bools | - | `"(complex)"` (display limitation) |

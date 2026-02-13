@@ -527,6 +527,14 @@ FLandscapeBounds FWorldPartitionOps::GetLandscapeBounds(UWorld* World)
 	Result.Max = MaxBounds;
 	Result.Center = (MinBounds + MaxBounds) * 0.5;
 	Result.Extent = (MaxBounds - MinBounds) * 0.5;
+
+	// BoxComponent default half-extent is (100, 100, 100).
+	// Scale factor: extent / 100.  Z gets +10000 for elevation headroom.
+	Result.BiomeVolumeScale = FVector(
+		Result.Extent.X / 100.0,
+		Result.Extent.Y / 100.0,
+		(Result.Extent.Z + 10000.0) / 100.0);
+
 	Result.ProxyCount = ProxyCount;
 
 	UE_LOG(LogAgentBridgeWP, Log, TEXT("GetLandscapeBounds: %s with %d proxies, bounds [%.0f, %.0f, %.0f] to [%.0f, %.0f, %.0f]"),

@@ -35,6 +35,10 @@ struct AGENTBRIDGERUNTIME_API FLandscapeBounds
 	/** Half-extents (distance from center to edge) */
 	FVector Extent = FVector::ZeroVector;
 
+	/** Scale factor to make a 100-unit-extent BoxComponent match landscape bounds.
+	 *  XY = Extent / 100. Z = (Extent.Z + 10000) / 100 for elevation headroom. */
+	FVector BiomeVolumeScale = FVector::OneVector;
+
 	/** Number of landscape proxies sampled */
 	int32 ProxyCount = 0;
 
