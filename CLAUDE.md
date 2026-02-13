@@ -629,11 +629,15 @@ Every implementation checklist MUST include a documentation phase:
 ```
 docs/
 ├── plans/              # Active plans and actionable items
-│   ├── AGENTS_MD_CHANGES.md    # Pending AGENTS.md documentation updates
-│   └── AGENTBRIDGE_BUGS.md     # Pending code fixes with priorities
+├── tests/              # Active test plans
 .archive/               # Completed plans, test logs, historical reference
-│   ├── PCG_BIOME_WORKFLOW_TEST.md  # Full test log from 2026-02-12
-│   └── AGENTS_MD_TEST_FINDINGS.md  # Earlier AGENTS.md test findings
+│   ├── AGENTBRIDGE_BUGS.md             # Bug fix plan (completed)
+│   ├── AGENTBRIDGE_BUGS_LIVE_TEST.md   # Test plan (completed)
+│   ├── LIVE_TEST_RESULTS.md            # Test results (27 tests)
+│   ├── agents_md_corrections.md        # AGENTS.md corrections list
+│   ├── AGENTS_MD_CHANGES.md            # Earlier AGENTS.md changes
+│   ├── AGENTS_MD_TEST_FINDINGS.md      # Earlier test findings
+│   └── PCG_BIOME_WORKFLOW_TEST.md      # PCG workflow test log
 .old.claude/            # Legacy development notes (pre-2026-02)
 ```
 
@@ -641,7 +645,7 @@ docs/
 
 ## Known Issues
 
-Tested 2026-02-13 on `feature/agentbridge-bugs` branch. Full results: `docs/tests/LIVE_TEST_RESULTS.md`
+Tested 2026-02-13 on `feature/agentbridge-bugs` branch. Full results: `.archive/LIVE_TEST_RESULTS.md`
 
 | # | Severity | Issue | Status | Workaround |
 |---|----------|-------|--------|------------|
@@ -649,7 +653,7 @@ Tested 2026-02-13 on `feature/agentbridge-bugs` branch. Full results: `docs/test
 | 2 | ~~CRITICAL~~ | `duplicate_asset` crashes on engine/plugin content paths | **Limitation** | See Known Limitations below |
 | 3 | ~~HIGH~~ | `set_property` on BoxExtent doesn't trigger visual update | **Limitation** | See Known Limitations below. Bug 3 fix was REVERTED (caused regression - zeroed vector properties). |
 | 4 | ~~HIGH~~ | `set_property` silently fails on type-mismatched object refs | **FIXED** (C++) | N/A - now properly rejects with error |
-| 5 | **MEDIUM** | `get_landscape_bounds` missing `biome_volume_scale` field | Not applied | Proto regen not run during build. Need `GenProtos.sh` + rebuild. |
+| 5 | ~~MEDIUM~~ | `get_landscape_bounds` missing `biome_volume_scale` field | **FIXED** (Python) | N/A - field was in C++ all along, Python response dict was missing it. |
 | 6 | ~~MEDIUM~~ | `list_classes` can't find plugin Blueprint classes | **FIXED** (C++) | N/A - discovery works. Also acts as class loader for `spawn_actor`. |
 | 7 | ~~MEDIUM~~ | Multi-element string array `set_property` fails | **FIXED** (Python) | String arrays of any length now work. Multi-element object ref arrays still fail on C++ side — use element-level access (`Assets[0]`, `Assets[1]`). |
 | 8 | ~~MEDIUM~~ | `spawn_actor` with `relative_to` creates ghost actor | **Limitation** | See Known Limitations below |
