@@ -868,6 +868,25 @@ bool FPropertyAccessor::WriteObjectProperty(void* ValuePtr, FObjectPropertyBase*
 	if (FSoftObjectProperty* SoftProp = CastField<FSoftObjectProperty>(Property))
 	{
 		FSoftObjectPath SoftPath(Value.StringValue);
+
+		// Validate the asset class matches the property's expected type
+		if (!Value.StringValue.IsEmpty() && SoftProp->PropertyClass)
+		{
+			UObject* ResolvedObject = SoftPath.ResolveObject();
+			if (!ResolvedObject)
+			{
+				ResolvedObject = SoftPath.TryLoad();
+			}
+			if (ResolvedObject && !ResolvedObject->IsA(SoftProp->PropertyClass))
+			{
+				UE_LOG(LogTemp, Warning,
+					TEXT("WriteObjectProperty: Asset '%s' (class %s) is not compatible with property type '%s'"),
+					*Value.StringValue, *ResolvedObject->GetClass()->GetName(),
+					*SoftProp->PropertyClass->GetName());
+				return false;
+			}
+		}
+
 		FSoftObjectPtr SoftPtr(SoftPath);
 		SoftProp->SetPropertyValue(ValuePtr, SoftPtr);
 		return true;
@@ -877,6 +896,21 @@ bool FPropertyAccessor::WriteObjectProperty(void* ValuePtr, FObjectPropertyBase*
 	if (FSoftClassProperty* SoftClassProp = CastField<FSoftClassProperty>(Property))
 	{
 		FSoftObjectPath SoftPath(Value.StringValue);
+
+		// Validate the class matches the property's expected meta class
+		// NOTE: FSoftClassProperty uses MetaClass, not PropertyClass
+		if (!Value.StringValue.IsEmpty() && SoftClassProp->MetaClass)
+		{
+			UObject* LoadedClass = SoftPath.TryLoad();
+			if (LoadedClass && !LoadedClass->IsA(SoftClassProp->MetaClass))
+			{
+				UE_LOG(LogTemp, Warning,
+					TEXT("WriteObjectProperty: Soft class '%s' is not a subclass of '%s'"),
+					*Value.StringValue, *SoftClassProp->MetaClass->GetName());
+				return false;
+			}
+		}
+
 		FSoftObjectPtr SoftPtr(SoftPath);
 		SoftClassProp->SetPropertyValue(ValuePtr, SoftPtr);
 		return true;

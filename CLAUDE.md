@@ -146,6 +146,12 @@ Each module has its own CLAUDE.md with detailed context:
 - Use `WITH_EDITOR` for editor-only code, `GIsEditor` for runtime branching
 - Use `TWeakObjectPtr` for stored UObject references
 - Bounce UObject operations to game thread from async contexts
+- **Verify line endings after editing source files** - the Edit tool on WSL converts LF to CRLF on
+  Windows mounts (`/mnt/d/`). After editing, run `file <path>` to check. If it shows "CRLF line
+  terminators", fix with `sed -i 's/\r$//' <path>`. **Proto files are especially sensitive** -
+  protoc silently fails on CRLF and GenProtos.sh suppresses the error with `|| true`.
+- **Use ASCII only in source files** - avoid em dashes (`—`), smart quotes, etc. in comments.
+  Use regular dashes (`-`) instead. Check with `file <path>` — should say "ASCII text" not "UTF-8".
 
 ### Centaur Testing Protocol
 
@@ -653,6 +659,7 @@ Issues discovered during testing. See `docs/plans/AGENTBRIDGE_BUGS.md` for full 
 | `TSoftObjectPtr` assignment | Won't fix | Use `TObjectPtr` properties |
 | gRPC header conflicts | By design | Business logic in Scripting module |
 | FunctionInvoker struct returns | Auto-fixed | Redirected to property access |
+| WSL Edit tool corrupts line endings | **Known** | Run `sed -i 's/\r$//'` after editing; TODO: investigate Claude Code PostToolUse hook to automate |
 
 ---
 

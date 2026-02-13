@@ -749,7 +749,10 @@ void FCommandExecutor::Execute(const FSetPropertyPathCommand& Command, FAgentRes
 	Response.bSuccess = FAgentPropertyPath::SetValue(Object, Command.Path, Value);
 	if (!Response.bSuccess)
 	{
-		Response.ErrorMessage = FString::Printf(TEXT("Failed to set path '%s'"), *Command.Path);
+		Response.ErrorMessage = FString::Printf(
+			TEXT("Failed to set path '%s': value type mismatch or invalid format. "
+			     "For arrays, use JSON array syntax: [\"value1\", \"value2\"]"),
+			*Command.Path);
 	}
 	Response.ExecutionTimeMs = EndTiming(StartTime);
 }
@@ -1332,6 +1335,40 @@ void FCommandExecutor::Execute(const FListClassesCommand& Command, FListClassesR
 		AddedClassPaths.Add(Info.ClassPath);
 		Response.Classes.Add(Info);
 		Count++;
+	}
+
+	// Phase 1.5: Try FindClassByName for exact pattern to load unloaded plugin classes
+	// This mirrors what spawn_actor does  - uses FTypeDiscovery which has LoadClass fallback
+	if (!Command.NamePattern.IsEmpty() && Count < Command.Limit)
+	{
+		UClass* PatternClass = FTypeDiscovery::FindClassByName(Command.NamePattern);
+		if (PatternClass && PatternClass->IsChildOf(BaseClass))
+		{
+			FString ClassPath = PatternClass->GetPathName();
+			if (!AddedClassPaths.Contains(ClassPath))
+			{
+				bool bIsBP = PatternClass->HasAnyClassFlags(CLASS_CompiledFromBlueprint);
+				if ((Command.bIncludeBlueprint || !bIsBP) &&
+					(Command.bIncludeAbstract || !PatternClass->HasAnyClassFlags(CLASS_Abstract)))
+				{
+					FClassInfo Info;
+					Info.ClassName = PatternClass->GetName();
+					Info.DisplayName = PatternClass->GetName();
+					Info.ClassPath = ClassPath;
+					Info.bIsBlueprint = bIsBP;
+					Info.bIsAbstract = PatternClass->HasAnyClassFlags(CLASS_Abstract);
+
+					if (PatternClass->GetSuperClass())
+					{
+						Info.ParentClassName = PatternClass->GetSuperClass()->GetName();
+					}
+
+					AddedClassPaths.Add(ClassPath);
+					Response.Classes.Add(Info);
+					Count++;
+				}
+			}
+		}
 	}
 
 	// Phase 2: If requesting Blueprints and we have room, check AssetRegistry for unloaded BP classes
@@ -2793,6 +2830,13 @@ void FCommandExecutor::Execute(const FDuplicateAssetCommand& Command, FDuplicate
 		Response.ErrorMessage = FString::Printf(TEXT("Source asset '%s' not found"), *Command.SourcePath);
 		Response.ExecutionTimeMs = EndTiming(StartTime);
 		return;
+	}
+
+	// Ensure fully loaded (critical for plugin content with async loading)
+	UPackage* SourcePackage = SourceAsset->GetOutermost();
+	if (SourcePackage)
+	{
+		SourcePackage->FullyLoad();
 	}
 
 	// Create destination package

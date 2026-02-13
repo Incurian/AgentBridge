@@ -1691,6 +1691,7 @@ inline constexpr GetLandscapeBoundsResponse::Impl_::Impl_(
         max_{nullptr},
         center_{nullptr},
         extent_{nullptr},
+        biome_volume_scale_{nullptr},
         valid_{false},
         proxy_count_{0} {}
 
@@ -3326,6 +3327,7 @@ const ::uint32_t TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets[] 
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetLandscapeBoundsResponse, _impl_.extent_),
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetLandscapeBoundsResponse, _impl_.proxy_count_),
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetLandscapeBoundsResponse, _impl_.landscape_name_),
+    PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetLandscapeBoundsResponse, _impl_.biome_volume_scale_),
     ~0u,
     0,
     1,
@@ -3333,6 +3335,7 @@ const ::uint32_t TableStruct_AgentBridgeServer_2fAgentBridge_2eproto::offsets[] 
     3,
     ~0u,
     ~0u,
+    4,
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::AgentBridgeServer::GetDataLayersRequest, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -4029,59 +4032,59 @@ static const ::_pbi::MigrationSchema
         {657, -1, -1, sizeof(::AgentBridgeServer::QueryLandscapeRequest)},
         {666, -1, -1, sizeof(::AgentBridgeServer::QueryLandscapeResponse)},
         {676, -1, -1, sizeof(::AgentBridgeServer::GetLandscapeBoundsRequest)},
-        {684, 699, -1, sizeof(::AgentBridgeServer::GetLandscapeBoundsResponse)},
-        {706, -1, -1, sizeof(::AgentBridgeServer::GetDataLayersRequest)},
-        {714, -1, -1, sizeof(::AgentBridgeServer::GetDataLayersResponse)},
-        {723, -1, -1, sizeof(::AgentBridgeServer::GetActorsInDataLayerRequest)},
-        {734, -1, -1, sizeof(::AgentBridgeServer::GetActorsInDataLayerResponse)},
-        {744, -1, -1, sizeof(::AgentBridgeServer::ExecuteConsoleCommandRequest)},
-        {753, -1, -1, sizeof(::AgentBridgeServer::ExecuteConsoleCommandResponse)},
-        {763, -1, -1, sizeof(::AgentBridgeServer::ConsoleCommandInfo)},
-        {776, -1, -1, sizeof(::AgentBridgeServer::SearchConsoleCommandsRequest)},
-        {788, -1, -1, sizeof(::AgentBridgeServer::SearchConsoleCommandsResponse)},
-        {799, -1, -1, sizeof(::AgentBridgeServer::CreateAssetRequest)},
-        {812, -1, -1, sizeof(::AgentBridgeServer::CreateAssetResponse)},
-        {824, -1, -1, sizeof(::AgentBridgeServer::SaveAssetRequest)},
-        {834, -1, -1, sizeof(::AgentBridgeServer::SaveAssetResponse)},
-        {845, -1, -1, sizeof(::AgentBridgeServer::SaveActorAsBlueprintRequest)},
-        {857, -1, -1, sizeof(::AgentBridgeServer::SaveActorAsBlueprintResponse)},
-        {868, -1, -1, sizeof(::AgentBridgeServer::DuplicateAssetRequest)},
-        {879, -1, -1, sizeof(::AgentBridgeServer::DuplicateAssetResponse)},
-        {890, -1, -1, sizeof(::AgentBridgeServer::GetAssetThumbnailRequest)},
-        {901, -1, -1, sizeof(::AgentBridgeServer::GetAssetThumbnailResponse)},
-        {914, -1, -1, sizeof(::AgentBridgeServer::GetComponentTransformRequest)},
-        {925, 936, -1, sizeof(::AgentBridgeServer::GetComponentTransformResponse)},
-        {939, 952, -1, sizeof(::AgentBridgeServer::SetComponentTransformRequest)},
-        {957, -1, -1, sizeof(::AgentBridgeServer::AttachComponentRequest)},
-        {972, -1, -1, sizeof(::AgentBridgeServer::AttachActorRequest)},
-        {987, -1, -1, sizeof(::AgentBridgeServer::DetachComponentRequest)},
-        {998, -1, -1, sizeof(::AgentBridgeServer::DetachActorRequest)},
-        {1008, 1025, -1, sizeof(::AgentBridgeServer::SetTransformRequest)},
-        {1034, -1, -1, sizeof(::AgentBridgeServer::GetTransformRequest)},
-        {1044, 1057, -1, sizeof(::AgentBridgeServer::TransformResponse)},
-        {1062, -1, -1, sizeof(::AgentBridgeServer::AttachRequest)},
-        {1076, -1, -1, sizeof(::AgentBridgeServer::DetachRequest)},
-        {1086, -1, -1, sizeof(::AgentBridgeServer::ReadProjectFileRequest)},
-        {1097, -1, -1, sizeof(::AgentBridgeServer::ReadProjectFileResponse)},
-        {1110, -1, -1, sizeof(::AgentBridgeServer::WriteProjectFileRequest)},
-        {1123, -1, -1, sizeof(::AgentBridgeServer::WriteProjectFileResponse)},
-        {1134, -1, -1, sizeof(::AgentBridgeServer::FileInfo)},
-        {1147, -1, -1, sizeof(::AgentBridgeServer::ListProjectDirectoryRequest)},
-        {1159, -1, -1, sizeof(::AgentBridgeServer::ListProjectDirectoryResponse)},
-        {1171, -1, -1, sizeof(::AgentBridgeServer::CopyProjectFileRequest)},
-        {1182, -1, -1, sizeof(::AgentBridgeServer::CopyProjectFileResponse)},
-        {1193, -1, -1, sizeof(::AgentBridgeServer::DeleteProjectFileRequest)},
-        {1203, -1, -1, sizeof(::AgentBridgeServer::BlueprintPinInfo)},
-        {1218, -1, -1, sizeof(::AgentBridgeServer::BlueprintNodeInfo)},
-        {1236, -1, -1, sizeof(::AgentBridgeServer::CreateBlueprintNodeRequest)},
-        {1253, 1264, -1, sizeof(::AgentBridgeServer::CreateBlueprintNodeResponse)},
-        {1267, -1, -1, sizeof(::AgentBridgeServer::ConnectBlueprintPinsRequest)},
-        {1280, -1, -1, sizeof(::AgentBridgeServer::DisconnectBlueprintPinsRequest)},
-        {1293, -1, -1, sizeof(::AgentBridgeServer::DeleteBlueprintNodeRequest)},
-        {1303, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintNodesRequest)},
-        {1314, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintNodesResponse)},
-        {1325, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintPinsRequest)},
-        {1335, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintPinsResponse)},
+        {684, 700, -1, sizeof(::AgentBridgeServer::GetLandscapeBoundsResponse)},
+        {708, -1, -1, sizeof(::AgentBridgeServer::GetDataLayersRequest)},
+        {716, -1, -1, sizeof(::AgentBridgeServer::GetDataLayersResponse)},
+        {725, -1, -1, sizeof(::AgentBridgeServer::GetActorsInDataLayerRequest)},
+        {736, -1, -1, sizeof(::AgentBridgeServer::GetActorsInDataLayerResponse)},
+        {746, -1, -1, sizeof(::AgentBridgeServer::ExecuteConsoleCommandRequest)},
+        {755, -1, -1, sizeof(::AgentBridgeServer::ExecuteConsoleCommandResponse)},
+        {765, -1, -1, sizeof(::AgentBridgeServer::ConsoleCommandInfo)},
+        {778, -1, -1, sizeof(::AgentBridgeServer::SearchConsoleCommandsRequest)},
+        {790, -1, -1, sizeof(::AgentBridgeServer::SearchConsoleCommandsResponse)},
+        {801, -1, -1, sizeof(::AgentBridgeServer::CreateAssetRequest)},
+        {814, -1, -1, sizeof(::AgentBridgeServer::CreateAssetResponse)},
+        {826, -1, -1, sizeof(::AgentBridgeServer::SaveAssetRequest)},
+        {836, -1, -1, sizeof(::AgentBridgeServer::SaveAssetResponse)},
+        {847, -1, -1, sizeof(::AgentBridgeServer::SaveActorAsBlueprintRequest)},
+        {859, -1, -1, sizeof(::AgentBridgeServer::SaveActorAsBlueprintResponse)},
+        {870, -1, -1, sizeof(::AgentBridgeServer::DuplicateAssetRequest)},
+        {881, -1, -1, sizeof(::AgentBridgeServer::DuplicateAssetResponse)},
+        {892, -1, -1, sizeof(::AgentBridgeServer::GetAssetThumbnailRequest)},
+        {903, -1, -1, sizeof(::AgentBridgeServer::GetAssetThumbnailResponse)},
+        {916, -1, -1, sizeof(::AgentBridgeServer::GetComponentTransformRequest)},
+        {927, 938, -1, sizeof(::AgentBridgeServer::GetComponentTransformResponse)},
+        {941, 954, -1, sizeof(::AgentBridgeServer::SetComponentTransformRequest)},
+        {959, -1, -1, sizeof(::AgentBridgeServer::AttachComponentRequest)},
+        {974, -1, -1, sizeof(::AgentBridgeServer::AttachActorRequest)},
+        {989, -1, -1, sizeof(::AgentBridgeServer::DetachComponentRequest)},
+        {1000, -1, -1, sizeof(::AgentBridgeServer::DetachActorRequest)},
+        {1010, 1027, -1, sizeof(::AgentBridgeServer::SetTransformRequest)},
+        {1036, -1, -1, sizeof(::AgentBridgeServer::GetTransformRequest)},
+        {1046, 1059, -1, sizeof(::AgentBridgeServer::TransformResponse)},
+        {1064, -1, -1, sizeof(::AgentBridgeServer::AttachRequest)},
+        {1078, -1, -1, sizeof(::AgentBridgeServer::DetachRequest)},
+        {1088, -1, -1, sizeof(::AgentBridgeServer::ReadProjectFileRequest)},
+        {1099, -1, -1, sizeof(::AgentBridgeServer::ReadProjectFileResponse)},
+        {1112, -1, -1, sizeof(::AgentBridgeServer::WriteProjectFileRequest)},
+        {1125, -1, -1, sizeof(::AgentBridgeServer::WriteProjectFileResponse)},
+        {1136, -1, -1, sizeof(::AgentBridgeServer::FileInfo)},
+        {1149, -1, -1, sizeof(::AgentBridgeServer::ListProjectDirectoryRequest)},
+        {1161, -1, -1, sizeof(::AgentBridgeServer::ListProjectDirectoryResponse)},
+        {1173, -1, -1, sizeof(::AgentBridgeServer::CopyProjectFileRequest)},
+        {1184, -1, -1, sizeof(::AgentBridgeServer::CopyProjectFileResponse)},
+        {1195, -1, -1, sizeof(::AgentBridgeServer::DeleteProjectFileRequest)},
+        {1205, -1, -1, sizeof(::AgentBridgeServer::BlueprintPinInfo)},
+        {1220, -1, -1, sizeof(::AgentBridgeServer::BlueprintNodeInfo)},
+        {1238, -1, -1, sizeof(::AgentBridgeServer::CreateBlueprintNodeRequest)},
+        {1255, 1266, -1, sizeof(::AgentBridgeServer::CreateBlueprintNodeResponse)},
+        {1269, -1, -1, sizeof(::AgentBridgeServer::ConnectBlueprintPinsRequest)},
+        {1282, -1, -1, sizeof(::AgentBridgeServer::DisconnectBlueprintPinsRequest)},
+        {1295, -1, -1, sizeof(::AgentBridgeServer::DeleteBlueprintNodeRequest)},
+        {1305, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintNodesRequest)},
+        {1316, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintNodesResponse)},
+        {1327, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintPinsRequest)},
+        {1337, -1, -1, sizeof(::AgentBridgeServer::ListBlueprintPinsResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -4357,314 +4360,316 @@ const char descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto[] P
     " \001(\010\"o\n\026QueryLandscapeResponse\022@\n\021landsc"
     "ape_proxies\030\001 \003(\0132%.AgentBridgeServer.St"
     "reamingActorInfo\022\023\n\013total_count\030\002 \001(\005\"\033\n"
-    "\031GetLandscapeBoundsRequest\"\362\001\n\032GetLandsc"
+    "\031GetLandscapeBoundsRequest\"\250\002\n\032GetLandsc"
     "apeBoundsResponse\022\r\n\005valid\030\001 \001(\010\022#\n\003min\030"
     "\002 \001(\0132\026.TempoScripting.Vector\022#\n\003max\030\003 \001"
     "(\0132\026.TempoScripting.Vector\022&\n\006center\030\004 \001"
     "(\0132\026.TempoScripting.Vector\022&\n\006extent\030\005 \001"
     "(\0132\026.TempoScripting.Vector\022\023\n\013proxy_coun"
-    "t\030\006 \001(\005\022\026\n\016landscape_name\030\007 \001(\t\"\026\n\024GetDa"
-    "taLayersRequest\",\n\025GetDataLayersResponse"
-    "\022\023\n\013data_layers\030\001 \003(\t\"Z\n\033GetActorsInData"
-    "LayerRequest\022\022\n\ndata_layer\030\001 \001(\t\022\030\n\020incl"
-    "ude_unloaded\030\002 \001(\010\022\r\n\005limit\030\003 \001(\005\"j\n\034Get"
-    "ActorsInDataLayerResponse\0225\n\006actors\030\001 \003("
-    "\0132%.AgentBridgeServer.StreamingActorInfo"
-    "\022\023\n\013total_count\030\002 \001(\005\"/\n\034ExecuteConsoleC"
-    "ommandRequest\022\017\n\007command\030\001 \001(\t\"@\n\035Execut"
-    "eConsoleCommandResponse\022\017\n\007success\030\001 \001(\010"
-    "\022\016\n\006output\030\002 \001(\t\"p\n\022ConsoleCommandInfo\022\014"
-    "\n\004name\030\001 \001(\t\022\014\n\004help\030\002 \001(\t\022\023\n\013is_variabl"
-    "e\030\003 \001(\010\022\022\n\nvalue_type\030\004 \001(\t\022\025\n\rcurrent_v"
-    "alue\030\005 \001(\t\"c\n\034SearchConsoleCommandsReque"
-    "st\022\017\n\007keyword\030\001 \001(\t\022\r\n\005limit\030\002 \001(\005\022\023\n\013se"
-    "arch_help\030\003 \001(\010\022\016\n\006offset\030\004 \001(\005\"\206\001\n\035Sear"
-    "chConsoleCommandsResponse\0227\n\010commands\030\001 "
-    "\003(\0132%.AgentBridgeServer.ConsoleCommandIn"
-    "fo\022\025\n\rtotal_scanned\030\002 \001(\005\022\025\n\rtotal_match"
-    "es\030\003 \001(\005\"\247\001\n\022CreateAssetRequest\022\023\n\013asset"
-    "_class\030\001 \001(\t\022\024\n\014package_path\030\002 \001(\t\022\022\n\nas"
-    "set_name\030\003 \001(\t\022\031\n\021parent_asset_path\030\004 \001("
-    "\t\0227\n\nproperties\030\005 \003(\0132#.AgentBridgeServe"
-    "r.PropertyKeyValue\"f\n\023CreateAssetRespons"
-    "e\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_message\030\002 \001("
-    "\t\022\022\n\nasset_path\030\003 \001(\t\022\023\n\013asset_class\030\004 \001"
-    "(\t\"C\n\020SaveAssetRequest\022\022\n\nasset_path\030\001 \001"
-    "(\t\022\033\n\023prompt_for_checkout\030\002 \001(\010\"N\n\021SaveA"
-    "ssetResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_m"
-    "essage\030\002 \001(\t\022\021\n\tfile_path\030\003 \001(\t\"w\n\033SaveA"
-    "ctorAsBlueprintRequest\022\020\n\010actor_id\030\001 \001(\t"
-    "\022\024\n\014package_path\030\002 \001(\t\022\026\n\016blueprint_name"
-    "\030\003 \001(\t\022\030\n\020replace_existing\030\004 \001(\010\"^\n\034Save"
-    "ActorAsBlueprintResponse\022\017\n\007success\030\001 \001("
-    "\010\022\025\n\rerror_message\030\002 \001(\t\022\026\n\016blueprint_pa"
-    "th\030\003 \001(\t\"`\n\025DuplicateAssetRequest\022\023\n\013sou"
-    "rce_path\030\001 \001(\t\022\031\n\021dest_package_path\030\002 \001("
-    "\t\022\027\n\017dest_asset_name\030\003 \001(\t\"X\n\026DuplicateA"
-    "ssetResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_m"
-    "essage\030\002 \001(\t\022\026\n\016new_asset_path\030\003 \001(\t\"M\n\030"
-    "GetAssetThumbnailRequest\022\022\n\nasset_path\030\001"
-    " \001(\t\022\r\n\005width\030\002 \001(\005\022\016\n\006height\030\003 \001(\005\"v\n\031G"
-    "etAssetThumbnailResponse\022\017\n\007success\030\001 \001("
-    "\010\022\025\n\rerror_message\030\002 \001(\t\022\022\n\nimage_data\030\003"
-    " \001(\014\022\r\n\005width\030\004 \001(\005\022\016\n\006height\030\005 \001(\005\"]\n\034G"
-    "etComponentTransformRequest\022\020\n\010actor_id\030"
-    "\001 \001(\t\022\026\n\016component_name\030\002 \001(\t\022\023\n\013world_s"
-    "pace\030\003 \001(\010\"}\n\035GetComponentTransformRespo"
-    "nse\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_message\030\002 "
-    "\001(\t\0224\n\ttransform\030\003 \001(\0132!.AgentBridgeServ"
-    "er.ActorTransform\"\242\001\n\034SetComponentTransf"
-    "ormRequest\022\020\n\010actor_id\030\001 \001(\t\022\026\n\016componen"
-    "t_name\030\002 \001(\t\0224\n\ttransform\030\003 \001(\0132!.AgentB"
-    "ridgeServer.ActorTransform\022\023\n\013world_spac"
-    "e\030\004 \001(\010\022\r\n\005sweep\030\005 \001(\010\"\241\002\n\026AttachCompone"
+    "t\030\006 \001(\005\022\026\n\016landscape_name\030\007 \001(\t\0224\n\022biome"
+    "_volume_scale\030\010 \001(\0132\030.AgentBridgeServer."
+    "Scale\"\026\n\024GetDataLayersRequest\",\n\025GetData"
+    "LayersResponse\022\023\n\013data_layers\030\001 \003(\t\"Z\n\033G"
+    "etActorsInDataLayerRequest\022\022\n\ndata_layer"
+    "\030\001 \001(\t\022\030\n\020include_unloaded\030\002 \001(\010\022\r\n\005limi"
+    "t\030\003 \001(\005\"j\n\034GetActorsInDataLayerResponse\022"
+    "5\n\006actors\030\001 \003(\0132%.AgentBridgeServer.Stre"
+    "amingActorInfo\022\023\n\013total_count\030\002 \001(\005\"/\n\034E"
+    "xecuteConsoleCommandRequest\022\017\n\007command\030\001"
+    " \001(\t\"@\n\035ExecuteConsoleCommandResponse\022\017\n"
+    "\007success\030\001 \001(\010\022\016\n\006output\030\002 \001(\t\"p\n\022Consol"
+    "eCommandInfo\022\014\n\004name\030\001 \001(\t\022\014\n\004help\030\002 \001(\t"
+    "\022\023\n\013is_variable\030\003 \001(\010\022\022\n\nvalue_type\030\004 \001("
+    "\t\022\025\n\rcurrent_value\030\005 \001(\t\"c\n\034SearchConsol"
+    "eCommandsRequest\022\017\n\007keyword\030\001 \001(\t\022\r\n\005lim"
+    "it\030\002 \001(\005\022\023\n\013search_help\030\003 \001(\010\022\016\n\006offset\030"
+    "\004 \001(\005\"\206\001\n\035SearchConsoleCommandsResponse\022"
+    "7\n\010commands\030\001 \003(\0132%.AgentBridgeServer.Co"
+    "nsoleCommandInfo\022\025\n\rtotal_scanned\030\002 \001(\005\022"
+    "\025\n\rtotal_matches\030\003 \001(\005\"\247\001\n\022CreateAssetRe"
+    "quest\022\023\n\013asset_class\030\001 \001(\t\022\024\n\014package_pa"
+    "th\030\002 \001(\t\022\022\n\nasset_name\030\003 \001(\t\022\031\n\021parent_a"
+    "sset_path\030\004 \001(\t\0227\n\nproperties\030\005 \003(\0132#.Ag"
+    "entBridgeServer.PropertyKeyValue\"f\n\023Crea"
+    "teAssetResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rerro"
+    "r_message\030\002 \001(\t\022\022\n\nasset_path\030\003 \001(\t\022\023\n\013a"
+    "sset_class\030\004 \001(\t\"C\n\020SaveAssetRequest\022\022\n\n"
+    "asset_path\030\001 \001(\t\022\033\n\023prompt_for_checkout\030"
+    "\002 \001(\010\"N\n\021SaveAssetResponse\022\017\n\007success\030\001 "
+    "\001(\010\022\025\n\rerror_message\030\002 \001(\t\022\021\n\tfile_path\030"
+    "\003 \001(\t\"w\n\033SaveActorAsBlueprintRequest\022\020\n\010"
+    "actor_id\030\001 \001(\t\022\024\n\014package_path\030\002 \001(\t\022\026\n\016"
+    "blueprint_name\030\003 \001(\t\022\030\n\020replace_existing"
+    "\030\004 \001(\010\"^\n\034SaveActorAsBlueprintResponse\022\017"
+    "\n\007success\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\022\026"
+    "\n\016blueprint_path\030\003 \001(\t\"`\n\025DuplicateAsset"
+    "Request\022\023\n\013source_path\030\001 \001(\t\022\031\n\021dest_pac"
+    "kage_path\030\002 \001(\t\022\027\n\017dest_asset_name\030\003 \001(\t"
+    "\"X\n\026DuplicateAssetResponse\022\017\n\007success\030\001 "
+    "\001(\010\022\025\n\rerror_message\030\002 \001(\t\022\026\n\016new_asset_"
+    "path\030\003 \001(\t\"M\n\030GetAssetThumbnailRequest\022\022"
+    "\n\nasset_path\030\001 \001(\t\022\r\n\005width\030\002 \001(\005\022\016\n\006hei"
+    "ght\030\003 \001(\005\"v\n\031GetAssetThumbnailResponse\022\017"
+    "\n\007success\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\022\022"
+    "\n\nimage_data\030\003 \001(\014\022\r\n\005width\030\004 \001(\005\022\016\n\006hei"
+    "ght\030\005 \001(\005\"]\n\034GetComponentTransformReques"
+    "t\022\020\n\010actor_id\030\001 \001(\t\022\026\n\016component_name\030\002 "
+    "\001(\t\022\023\n\013world_space\030\003 \001(\010\"}\n\035GetComponent"
+    "TransformResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rer"
+    "ror_message\030\002 \001(\t\0224\n\ttransform\030\003 \001(\0132!.A"
+    "gentBridgeServer.ActorTransform\"\242\001\n\034SetC"
+    "omponentTransformRequest\022\020\n\010actor_id\030\001 \001"
+    "(\t\022\026\n\016component_name\030\002 \001(\t\0224\n\ttransform\030"
+    "\003 \001(\0132!.AgentBridgeServer.ActorTransform"
+    "\022\023\n\013world_space\030\004 \001(\010\022\r\n\005sweep\030\005 \001(\010\"\241\002\n"
+    "\026AttachComponentRequest\022\020\n\010actor_id\030\001 \001("
+    "\t\022\026\n\016component_name\030\002 \001(\t\022\035\n\025parent_comp"
+    "onent_name\030\003 \001(\t\022\023\n\013socket_name\030\004 \001(\t\0228\n"
+    "\rlocation_rule\030\005 \001(\0162!.AgentBridgeServer"
+    ".AttachmentRule\0228\n\rrotation_rule\030\006 \001(\0162!"
+    ".AgentBridgeServer.AttachmentRule\0225\n\nsca"
+    "le_rule\030\007 \001(\0162!.AgentBridgeServer.Attach"
+    "mentRule\"\244\002\n\022AttachActorRequest\022\026\n\016child"
+    "_actor_id\030\001 \001(\t\022\027\n\017parent_actor_id\030\002 \001(\t"
+    "\022\035\n\025parent_component_name\030\003 \001(\t\022\023\n\013socke"
+    "t_name\030\004 \001(\t\0228\n\rlocation_rule\030\005 \001(\0162!.Ag"
+    "entBridgeServer.AttachmentRule\0228\n\rrotati"
+    "on_rule\030\006 \001(\0162!.AgentBridgeServer.Attach"
+    "mentRule\0225\n\nscale_rule\030\007 \001(\0162!.AgentBrid"
+    "geServer.AttachmentRule\"c\n\026DetachCompone"
     "ntRequest\022\020\n\010actor_id\030\001 \001(\t\022\026\n\016component"
-    "_name\030\002 \001(\t\022\035\n\025parent_component_name\030\003 \001"
-    "(\t\022\023\n\013socket_name\030\004 \001(\t\0228\n\rlocation_rule"
-    "\030\005 \001(\0162!.AgentBridgeServer.AttachmentRul"
-    "e\0228\n\rrotation_rule\030\006 \001(\0162!.AgentBridgeSe"
-    "rver.AttachmentRule\0225\n\nscale_rule\030\007 \001(\0162"
-    "!.AgentBridgeServer.AttachmentRule\"\244\002\n\022A"
-    "ttachActorRequest\022\026\n\016child_actor_id\030\001 \001("
-    "\t\022\027\n\017parent_actor_id\030\002 \001(\t\022\035\n\025parent_com"
-    "ponent_name\030\003 \001(\t\022\023\n\013socket_name\030\004 \001(\t\0228"
-    "\n\rlocation_rule\030\005 \001(\0162!.AgentBridgeServe"
-    "r.AttachmentRule\0228\n\rrotation_rule\030\006 \001(\0162"
-    "!.AgentBridgeServer.AttachmentRule\0225\n\nsc"
-    "ale_rule\030\007 \001(\0162!.AgentBridgeServer.Attac"
-    "hmentRule\"c\n\026DetachComponentRequest\022\020\n\010a"
-    "ctor_id\030\001 \001(\t\022\026\n\016component_name\030\002 \001(\t\022\037\n"
-    "\027maintain_world_position\030\003 \001(\010\"G\n\022Detach"
-    "ActorRequest\022\020\n\010actor_id\030\001 \001(\t\022\037\n\027mainta"
-    "in_world_position\030\002 \001(\010\"\210\002\n\023SetTransform"
-    "Request\022\016\n\006target\030\001 \001(\t\022(\n\010location\030\002 \001("
-    "\0132\026.TempoScripting.Vector\022*\n\010rotation\030\003 "
-    "\001(\0132\030.TempoScripting.Rotation\022\'\n\005scale\030\004"
-    " \001(\0132\030.AgentBridgeServer.Scale\022\024\n\014set_lo"
-    "cation\030\005 \001(\010\022\024\n\014set_rotation\030\006 \001(\010\022\021\n\tse"
-    "t_scale\030\007 \001(\010\022\023\n\013world_space\030\010 \001(\010\022\016\n\006of"
-    "fset\030\t \001(\010\":\n\023GetTransformRequest\022\016\n\006tar"
-    "get\030\001 \001(\t\022\023\n\013world_space\030\002 \001(\010\"\272\001\n\021Trans"
-    "formResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_m"
-    "essage\030\002 \001(\t\022(\n\010location\030\003 \001(\0132\026.TempoSc"
-    "ripting.Vector\022*\n\010rotation\030\004 \001(\0132\030.Tempo"
-    "Scripting.Rotation\022\'\n\005scale\030\005 \001(\0132\030.Agen"
-    "tBridgeServer.Scale\"\351\001\n\rAttachRequest\022\r\n"
-    "\005child\030\001 \001(\t\022\016\n\006parent\030\002 \001(\t\022\016\n\006socket\030\003"
-    " \001(\t\0228\n\rlocation_rule\030\004 \001(\0162!.AgentBridg"
-    "eServer.AttachmentRule\0228\n\rrotation_rule\030"
-    "\005 \001(\0162!.AgentBridgeServer.AttachmentRule"
-    "\0225\n\nscale_rule\030\006 \001(\0162!.AgentBridgeServer"
-    ".AttachmentRule\"A\n\rDetachRequest\022\016\n\006targ"
-    "et\030\001 \001(\t\022 \n\030maintain_world_transform\030\002 \001"
-    "(\010\"U\n\026ReadProjectFileRequest\022\025\n\rrelative"
-    "_path\030\001 \001(\t\022\021\n\tas_base64\030\002 \001(\010\022\021\n\tmax_by"
-    "tes\030\003 \001(\003\"x\n\027ReadProjectFileResponse\022\017\n\007"
-    "success\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\022\017\n\007"
-    "content\030\003 \001(\t\022\021\n\tfile_size\030\004 \001(\003\022\021\n\tis_b"
-    "inary\030\005 \001(\010\"\200\001\n\027WriteProjectFileRequest\022"
-    "\025\n\rrelative_path\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022"
-    "\021\n\tis_base64\030\003 \001(\010\022\032\n\022create_directories"
-    "\030\004 \001(\010\022\016\n\006append\030\005 \001(\010\"Y\n\030WriteProjectFi"
+    "_name\030\002 \001(\t\022\037\n\027maintain_world_position\030\003"
+    " \001(\010\"G\n\022DetachActorRequest\022\020\n\010actor_id\030\001"
+    " \001(\t\022\037\n\027maintain_world_position\030\002 \001(\010\"\210\002"
+    "\n\023SetTransformRequest\022\016\n\006target\030\001 \001(\t\022(\n"
+    "\010location\030\002 \001(\0132\026.TempoScripting.Vector\022"
+    "*\n\010rotation\030\003 \001(\0132\030.TempoScripting.Rotat"
+    "ion\022\'\n\005scale\030\004 \001(\0132\030.AgentBridgeServer.S"
+    "cale\022\024\n\014set_location\030\005 \001(\010\022\024\n\014set_rotati"
+    "on\030\006 \001(\010\022\021\n\tset_scale\030\007 \001(\010\022\023\n\013world_spa"
+    "ce\030\010 \001(\010\022\016\n\006offset\030\t \001(\010\":\n\023GetTransform"
+    "Request\022\016\n\006target\030\001 \001(\t\022\023\n\013world_space\030\002"
+    " \001(\010\"\272\001\n\021TransformResponse\022\017\n\007success\030\001 "
+    "\001(\010\022\025\n\rerror_message\030\002 \001(\t\022(\n\010location\030\003"
+    " \001(\0132\026.TempoScripting.Vector\022*\n\010rotation"
+    "\030\004 \001(\0132\030.TempoScripting.Rotation\022\'\n\005scal"
+    "e\030\005 \001(\0132\030.AgentBridgeServer.Scale\"\351\001\n\rAt"
+    "tachRequest\022\r\n\005child\030\001 \001(\t\022\016\n\006parent\030\002 \001"
+    "(\t\022\016\n\006socket\030\003 \001(\t\0228\n\rlocation_rule\030\004 \001("
+    "\0162!.AgentBridgeServer.AttachmentRule\0228\n\r"
+    "rotation_rule\030\005 \001(\0162!.AgentBridgeServer."
+    "AttachmentRule\0225\n\nscale_rule\030\006 \001(\0162!.Age"
+    "ntBridgeServer.AttachmentRule\"A\n\rDetachR"
+    "equest\022\016\n\006target\030\001 \001(\t\022 \n\030maintain_world"
+    "_transform\030\002 \001(\010\"U\n\026ReadProjectFileReque"
+    "st\022\025\n\rrelative_path\030\001 \001(\t\022\021\n\tas_base64\030\002"
+    " \001(\010\022\021\n\tmax_bytes\030\003 \001(\003\"x\n\027ReadProjectFi"
     "leResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_mes"
-    "sage\030\002 \001(\t\022\025\n\rbytes_written\030\003 \001(\003\"j\n\010Fil"
-    "eInfo\022\014\n\004name\030\001 \001(\t\022\025\n\rrelative_path\030\002 \001"
-    "(\t\022\024\n\014is_directory\030\003 \001(\010\022\014\n\004size\030\004 \001(\003\022\025"
-    "\n\rlast_modified\030\005 \001(\t\"g\n\033ListProjectDire"
-    "ctoryRequest\022\025\n\rrelative_path\030\001 \001(\t\022\017\n\007p"
-    "attern\030\002 \001(\t\022\021\n\trecursive\030\003 \001(\010\022\r\n\005limit"
-    "\030\004 \001(\005\"\207\001\n\034ListProjectDirectoryResponse\022"
-    "\017\n\007success\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\022"
-    "*\n\005files\030\003 \003(\0132\033.AgentBridgeServer.FileI"
-    "nfo\022\023\n\013total_count\030\004 \001(\005\"S\n\026CopyProjectF"
-    "ileRequest\022\023\n\013source_path\030\001 \001(\t\022\021\n\tdest_"
-    "path\030\002 \001(\t\022\021\n\toverwrite\030\003 \001(\010\"Y\n\027CopyPro"
-    "jectFileResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rerr"
-    "or_message\030\002 \001(\t\022\026\n\016dest_full_path\030\003 \001(\t"
-    "\"Q\n\030DeleteProjectFileRequest\022\025\n\rrelative"
-    "_path\030\001 \001(\t\022\036\n\026allow_directory_delete\030\002 "
-    "\001(\010\"\237\001\n\020BlueprintPinInfo\022\014\n\004name\030\001 \001(\t\022\021"
-    "\n\tdirection\030\002 \001(\t\022\014\n\004type\030\003 \001(\t\022\031\n\021type_"
-    "display_name\030\004 \001(\t\022\024\n\014is_connected\030\005 \001(\010"
-    "\022\025\n\rdefault_value\030\006 \001(\t\022\024\n\014connected_to\030"
-    "\007 \003(\t\"\355\001\n\021BlueprintNodeInfo\022\014\n\004guid\030\001 \001("
-    "\t\022\022\n\nclass_name\030\002 \001(\t\022\r\n\005title\030\003 \001(\t\022\r\n\005"
-    "pos_x\030\004 \001(\005\022\r\n\005pos_y\030\005 \001(\005\022\017\n\007comment\030\006 "
-    "\001(\t\022\032\n\022function_reference\030\007 \001(\t\022\022\n\nevent"
-    "_name\030\010 \001(\t\022\025\n\rvariable_name\030\t \001(\t\0221\n\004pi"
-    "ns\030\n \003(\0132#.AgentBridgeServer.BlueprintPi"
-    "nInfo\"\321\001\n\032CreateBlueprintNodeRequest\022\026\n\016"
-    "blueprint_path\030\001 \001(\t\022\022\n\ngraph_name\030\002 \001(\t"
-    "\022\021\n\tnode_type\030\003 \001(\t\022\032\n\022function_referenc"
-    "e\030\004 \001(\t\022\022\n\nevent_name\030\005 \001(\t\022\025\n\rvariable_"
-    "name\030\006 \001(\t\022\017\n\007comment\030\007 \001(\t\022\r\n\005pos_x\030\010 \001"
-    "(\005\022\r\n\005pos_y\030\t \001(\005\"y\n\033CreateBlueprintNode"
-    "Response\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_messa"
-    "ge\030\002 \001(\t\0222\n\004node\030\003 \001(\0132$.AgentBridgeServ"
-    "er.BlueprintNodeInfo\"\207\001\n\033ConnectBlueprin"
-    "tPinsRequest\022\026\n\016blueprint_path\030\001 \001(\t\022\023\n\013"
-    "source_node\030\002 \001(\t\022\022\n\nsource_pin\030\003 \001(\t\022\023\n"
-    "\013target_node\030\004 \001(\t\022\022\n\ntarget_pin\030\005 \001(\t\"\212"
-    "\001\n\036DisconnectBlueprintPinsRequest\022\026\n\016blu"
-    "eprint_path\030\001 \001(\t\022\023\n\013source_node\030\002 \001(\t\022\022"
-    "\n\nsource_pin\030\003 \001(\t\022\023\n\013target_node\030\004 \001(\t\022"
-    "\022\n\ntarget_pin\030\005 \001(\t\"E\n\032DeleteBlueprintNo"
-    "deRequest\022\026\n\016blueprint_path\030\001 \001(\t\022\017\n\007nod"
-    "e_id\030\002 \001(\t\"b\n\031ListBlueprintNodesRequest\022"
-    "\026\n\016blueprint_path\030\001 \001(\t\022\022\n\ngraph_name\030\002 "
-    "\001(\t\022\031\n\021node_class_filter\030\003 \001(\t\"y\n\032ListBl"
-    "ueprintNodesResponse\022\017\n\007success\030\001 \001(\010\022\025\n"
-    "\rerror_message\030\002 \001(\t\0223\n\005nodes\030\003 \003(\0132$.Ag"
-    "entBridgeServer.BlueprintNodeInfo\"C\n\030Lis"
-    "tBlueprintPinsRequest\022\026\n\016blueprint_path\030"
-    "\001 \001(\t\022\017\n\007node_id\030\002 \001(\t\"v\n\031ListBlueprintP"
-    "insResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_me"
-    "ssage\030\002 \001(\t\0221\n\004pins\030\003 \003(\0132#.AgentBridgeS"
-    "erver.BlueprintPinInfo*\240\003\n\014PropertyType\022"
-    "\026\n\022PROPERTY_TYPE_NONE\020\000\022\026\n\022PROPERTY_TYPE"
-    "_BOOL\020\001\022\025\n\021PROPERTY_TYPE_INT\020\002\022\027\n\023PROPER"
-    "TY_TYPE_FLOAT\020\003\022\030\n\024PROPERTY_TYPE_STRING\020"
-    "\004\022\026\n\022PROPERTY_TYPE_NAME\020\005\022\030\n\024PROPERTY_TY"
-    "PE_VECTOR\020\006\022\031\n\025PROPERTY_TYPE_ROTATOR\020\007\022\033"
-    "\n\027PROPERTY_TYPE_TRANSFORM\020\010\022\027\n\023PROPERTY_"
-    "TYPE_COLOR\020\t\022\030\n\024PROPERTY_TYPE_OBJECT\020\n\022\027"
-    "\n\023PROPERTY_TYPE_CLASS\020\013\022\030\n\024PROPERTY_TYPE"
-    "_STRUCT\020\014\022\027\n\023PROPERTY_TYPE_ARRAY\020\r\022\025\n\021PR"
-    "OPERTY_TYPE_MAP\020\016\022\026\n\022PROPERTY_TYPE_ENUM\020"
-    "\017*\213\001\n\016StreamingState\022\"\n\036STREAMING_STATE_"
-    "NOT_APPLICABLE\020\000\022\032\n\026STREAMING_STATE_LOAD"
-    "ED\020\001\022\034\n\030STREAMING_STATE_UNLOADED\020\002\022\033\n\027ST"
-    "REAMING_STATE_INVALID\020\003*w\n\016AttachmentRul"
-    "e\022!\n\035ATTACHMENT_RULE_KEEP_RELATIVE\020\000\022\036\n\032"
-    "ATTACHMENT_RULE_KEEP_WORLD\020\001\022\"\n\036ATTACHME"
-    "NT_RULE_SNAP_TO_TARGET\020\0022\335\'\n\022AgentBridge"
-    "Service\022Y\n\nListWorlds\022$.AgentBridgeServe"
-    "r.ListWorldsRequest\032%.AgentBridgeServer."
-    "ListWorldsResponse\022Q\n\016SetTargetWorld\022(.A"
-    "gentBridgeServer.SetTargetWorldRequest\032\025"
-    ".TempoScripting.Empty\022\\\n\013QueryActors\022%.A"
-    "gentBridgeServer.QueryActorsRequest\032&.Ag"
-    "entBridgeServer.QueryActorsResponse\022S\n\010G"
-    "etActor\022\".AgentBridgeServer.GetActorRequ"
-    "est\032#.AgentBridgeServer.GetActorResponse"
-    "\022Y\n\nSpawnActor\022$.AgentBridgeServer.Spawn"
-    "ActorRequest\032%.AgentBridgeServer.SpawnAc"
-    "torResponse\022K\n\013DeleteActor\022%.AgentBridge"
-    "Server.DeleteActorRequest\032\025.TempoScripti"
-    "ng.Empty\022e\n\016DuplicateActor\022(.AgentBridge"
-    "Server.DuplicateActorRequest\032).AgentBrid"
-    "geServer.DuplicateActorResponse\022W\n\021SetAc"
-    "torTransform\022+.AgentBridgeServer.SetActo"
-    "rTransformRequest\032\025.TempoScripting.Empty"
-    "\022q\n\022SetActorProperties\022,.AgentBridgeServ"
-    "er.SetActorPropertiesRequest\032-.AgentBrid"
-    "geServer.SetActorPropertiesResponse\022h\n\017G"
-    "etPropertyPath\022).AgentBridgeServer.GetPr"
-    "opertyPathRequest\032*.AgentBridgeServer.Ge"
-    "tPropertyPathResponse\022S\n\017SetPropertyPath"
-    "\022).AgentBridgeServer.SetPropertyPathRequ"
-    "est\032\025.TempoScripting.Empty\022_\n\014CallFuncti"
-    "on\022&.AgentBridgeServer.CallFunctionReque"
-    "st\032\'.AgentBridgeServer.CallFunctionRespo"
-    "nse\022n\n\021CallAssetFunction\022+.AgentBridgeSe"
-    "rver.CallAssetFunctionRequest\032,.AgentBri"
-    "dgeServer.CallAssetFunctionResponse\022V\n\tF"
-    "indClass\022#.AgentBridgeServer.FindClassRe"
-    "quest\032$.AgentBridgeServer.FindClassRespo"
-    "nse\022e\n\016GetClassSchema\022(.AgentBridgeServe"
-    "r.GetClassSchemaRequest\032).AgentBridgeSer"
-    "ver.GetClassSchemaResponse\022\\\n\013ListClasse"
-    "s\022%.AgentBridgeServer.ListClassesRequest"
-    "\032&.AgentBridgeServer.ListClassesResponse"
-    "\022q\n\022IsWorldPartitioned\022,.AgentBridgeServ"
-    "er.IsWorldPartitionedRequest\032-.AgentBrid"
-    "geServer.IsWorldPartitionedResponse\022e\n\016Q"
-    "ueryAllActors\022(.AgentBridgeServer.QueryA"
-    "llActorsRequest\032).AgentBridgeServer.Quer"
-    "yAllActorsResponse\022n\n\021GetStreamingState\022"
-    "+.AgentBridgeServer.GetStreamingStateReq"
-    "uest\032,.AgentBridgeServer.GetStreamingSta"
-    "teResponse\022e\n\016QueryLandscape\022(.AgentBrid"
-    "geServer.QueryLandscapeRequest\032).AgentBr"
-    "idgeServer.QueryLandscapeResponse\022q\n\022Get"
-    "LandscapeBounds\022,.AgentBridgeServer.GetL"
-    "andscapeBoundsRequest\032-.AgentBridgeServe"
-    "r.GetLandscapeBoundsResponse\022b\n\rGetDataL"
-    "ayers\022\'.AgentBridgeServer.GetDataLayersR"
-    "equest\032(.AgentBridgeServer.GetDataLayers"
-    "Response\022w\n\024GetActorsInDataLayer\022..Agent"
-    "BridgeServer.GetActorsInDataLayerRequest"
-    "\032/.AgentBridgeServer.GetActorsInDataLaye"
-    "rResponse\022z\n\025ExecuteConsoleCommand\022/.Age"
-    "ntBridgeServer.ExecuteConsoleCommandRequ"
-    "est\0320.AgentBridgeServer.ExecuteConsoleCo"
-    "mmandResponse\022z\n\025SearchConsoleCommands\022/"
-    ".AgentBridgeServer.SearchConsoleCommands"
-    "Request\0320.AgentBridgeServer.SearchConsol"
-    "eCommandsResponse\022\\\n\013CreateAsset\022%.Agent"
-    "BridgeServer.CreateAssetRequest\032&.AgentB"
-    "ridgeServer.CreateAssetResponse\022V\n\tSaveA"
-    "sset\022#.AgentBridgeServer.SaveAssetReques"
-    "t\032$.AgentBridgeServer.SaveAssetResponse\022"
-    "w\n\024SaveActorAsBlueprint\022..AgentBridgeSer"
-    "ver.SaveActorAsBlueprintRequest\032/.AgentB"
-    "ridgeServer.SaveActorAsBlueprintResponse"
-    "\022e\n\016DuplicateAsset\022(.AgentBridgeServer.D"
-    "uplicateAssetRequest\032).AgentBridgeServer"
-    ".DuplicateAssetResponse\022n\n\021GetAssetThumb"
-    "nail\022+.AgentBridgeServer.GetAssetThumbna"
-    "ilRequest\032,.AgentBridgeServer.GetAssetTh"
-    "umbnailResponse\022z\n\025GetComponentTransform"
-    "\022/.AgentBridgeServer.GetComponentTransfo"
-    "rmRequest\0320.AgentBridgeServer.GetCompone"
-    "ntTransformResponse\022_\n\025SetComponentTrans"
-    "form\022/.AgentBridgeServer.SetComponentTra"
-    "nsformRequest\032\025.TempoScripting.Empty\022S\n\017"
-    "AttachComponent\022).AgentBridgeServer.Atta"
-    "chComponentRequest\032\025.TempoScripting.Empt"
-    "y\022K\n\013AttachActor\022%.AgentBridgeServer.Att"
-    "achActorRequest\032\025.TempoScripting.Empty\022S"
-    "\n\017DetachComponent\022).AgentBridgeServer.De"
-    "tachComponentRequest\032\025.TempoScripting.Em"
-    "pty\022K\n\013DetachActor\022%.AgentBridgeServer.D"
-    "etachActorRequest\032\025.TempoScripting.Empty"
-    "\022M\n\014SetTransform\022&.AgentBridgeServer.Set"
-    "TransformRequest\032\025.TempoScripting.Empty\022"
-    "\\\n\014GetTransform\022&.AgentBridgeServer.GetT"
-    "ransformRequest\032$.AgentBridgeServer.Tran"
-    "sformResponse\022A\n\006Attach\022 .AgentBridgeSer"
-    "ver.AttachRequest\032\025.TempoScripting.Empty"
-    "\022A\n\006Detach\022 .AgentBridgeServer.DetachReq"
-    "uest\032\025.TempoScripting.Empty\022h\n\017ReadProje"
-    "ctFile\022).AgentBridgeServer.ReadProjectFi"
-    "leRequest\032*.AgentBridgeServer.ReadProjec"
-    "tFileResponse\022k\n\020WriteProjectFile\022*.Agen"
-    "tBridgeServer.WriteProjectFileRequest\032+."
-    "AgentBridgeServer.WriteProjectFileRespon"
-    "se\022w\n\024ListProjectDirectory\022..AgentBridge"
-    "Server.ListProjectDirectoryRequest\032/.Age"
-    "ntBridgeServer.ListProjectDirectoryRespo"
-    "nse\022h\n\017CopyProjectFile\022).AgentBridgeServ"
-    "er.CopyProjectFileRequest\032*.AgentBridgeS"
-    "erver.CopyProjectFileResponse\022W\n\021DeleteP"
-    "rojectFile\022+.AgentBridgeServer.DeletePro"
-    "jectFileRequest\032\025.TempoScripting.Empty\022t"
-    "\n\023CreateBlueprintNode\022-.AgentBridgeServe"
-    "r.CreateBlueprintNodeRequest\032..AgentBrid"
-    "geServer.CreateBlueprintNodeResponse\022]\n\024"
-    "ConnectBlueprintPins\022..AgentBridgeServer"
-    ".ConnectBlueprintPinsRequest\032\025.TempoScri"
-    "pting.Empty\022c\n\027DisconnectBlueprintPins\0221"
-    ".AgentBridgeServer.DisconnectBlueprintPi"
-    "nsRequest\032\025.TempoScripting.Empty\022[\n\023Dele"
-    "teBlueprintNode\022-.AgentBridgeServer.Dele"
-    "teBlueprintNodeRequest\032\025.TempoScripting."
-    "Empty\022q\n\022ListBlueprintNodes\022,.AgentBridg"
-    "eServer.ListBlueprintNodesRequest\032-.Agen"
-    "tBridgeServer.ListBlueprintNodesResponse"
-    "\022n\n\021ListBlueprintPins\022+.AgentBridgeServe"
-    "r.ListBlueprintPinsRequest\032,.AgentBridge"
-    "Server.ListBlueprintPinsResponseb\006proto3"
+    "sage\030\002 \001(\t\022\017\n\007content\030\003 \001(\t\022\021\n\tfile_size"
+    "\030\004 \001(\003\022\021\n\tis_binary\030\005 \001(\010\"\200\001\n\027WriteProje"
+    "ctFileRequest\022\025\n\rrelative_path\030\001 \001(\t\022\017\n\007"
+    "content\030\002 \001(\t\022\021\n\tis_base64\030\003 \001(\010\022\032\n\022crea"
+    "te_directories\030\004 \001(\010\022\016\n\006append\030\005 \001(\010\"Y\n\030"
+    "WriteProjectFileResponse\022\017\n\007success\030\001 \001("
+    "\010\022\025\n\rerror_message\030\002 \001(\t\022\025\n\rbytes_writte"
+    "n\030\003 \001(\003\"j\n\010FileInfo\022\014\n\004name\030\001 \001(\t\022\025\n\rrel"
+    "ative_path\030\002 \001(\t\022\024\n\014is_directory\030\003 \001(\010\022\014"
+    "\n\004size\030\004 \001(\003\022\025\n\rlast_modified\030\005 \001(\t\"g\n\033L"
+    "istProjectDirectoryRequest\022\025\n\rrelative_p"
+    "ath\030\001 \001(\t\022\017\n\007pattern\030\002 \001(\t\022\021\n\trecursive\030"
+    "\003 \001(\010\022\r\n\005limit\030\004 \001(\005\"\207\001\n\034ListProjectDire"
+    "ctoryResponse\022\017\n\007success\030\001 \001(\010\022\025\n\rerror_"
+    "message\030\002 \001(\t\022*\n\005files\030\003 \003(\0132\033.AgentBrid"
+    "geServer.FileInfo\022\023\n\013total_count\030\004 \001(\005\"S"
+    "\n\026CopyProjectFileRequest\022\023\n\013source_path\030"
+    "\001 \001(\t\022\021\n\tdest_path\030\002 \001(\t\022\021\n\toverwrite\030\003 "
+    "\001(\010\"Y\n\027CopyProjectFileResponse\022\017\n\007succes"
+    "s\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\022\026\n\016dest_f"
+    "ull_path\030\003 \001(\t\"Q\n\030DeleteProjectFileReque"
+    "st\022\025\n\rrelative_path\030\001 \001(\t\022\036\n\026allow_direc"
+    "tory_delete\030\002 \001(\010\"\237\001\n\020BlueprintPinInfo\022\014"
+    "\n\004name\030\001 \001(\t\022\021\n\tdirection\030\002 \001(\t\022\014\n\004type\030"
+    "\003 \001(\t\022\031\n\021type_display_name\030\004 \001(\t\022\024\n\014is_c"
+    "onnected\030\005 \001(\010\022\025\n\rdefault_value\030\006 \001(\t\022\024\n"
+    "\014connected_to\030\007 \003(\t\"\355\001\n\021BlueprintNodeInf"
+    "o\022\014\n\004guid\030\001 \001(\t\022\022\n\nclass_name\030\002 \001(\t\022\r\n\005t"
+    "itle\030\003 \001(\t\022\r\n\005pos_x\030\004 \001(\005\022\r\n\005pos_y\030\005 \001(\005"
+    "\022\017\n\007comment\030\006 \001(\t\022\032\n\022function_reference\030"
+    "\007 \001(\t\022\022\n\nevent_name\030\010 \001(\t\022\025\n\rvariable_na"
+    "me\030\t \001(\t\0221\n\004pins\030\n \003(\0132#.AgentBridgeServ"
+    "er.BlueprintPinInfo\"\321\001\n\032CreateBlueprintN"
+    "odeRequest\022\026\n\016blueprint_path\030\001 \001(\t\022\022\n\ngr"
+    "aph_name\030\002 \001(\t\022\021\n\tnode_type\030\003 \001(\t\022\032\n\022fun"
+    "ction_reference\030\004 \001(\t\022\022\n\nevent_name\030\005 \001("
+    "\t\022\025\n\rvariable_name\030\006 \001(\t\022\017\n\007comment\030\007 \001("
+    "\t\022\r\n\005pos_x\030\010 \001(\005\022\r\n\005pos_y\030\t \001(\005\"y\n\033Creat"
+    "eBlueprintNodeResponse\022\017\n\007success\030\001 \001(\010\022"
+    "\025\n\rerror_message\030\002 \001(\t\0222\n\004node\030\003 \001(\0132$.A"
+    "gentBridgeServer.BlueprintNodeInfo\"\207\001\n\033C"
+    "onnectBlueprintPinsRequest\022\026\n\016blueprint_"
+    "path\030\001 \001(\t\022\023\n\013source_node\030\002 \001(\t\022\022\n\nsourc"
+    "e_pin\030\003 \001(\t\022\023\n\013target_node\030\004 \001(\t\022\022\n\ntarg"
+    "et_pin\030\005 \001(\t\"\212\001\n\036DisconnectBlueprintPins"
+    "Request\022\026\n\016blueprint_path\030\001 \001(\t\022\023\n\013sourc"
+    "e_node\030\002 \001(\t\022\022\n\nsource_pin\030\003 \001(\t\022\023\n\013targ"
+    "et_node\030\004 \001(\t\022\022\n\ntarget_pin\030\005 \001(\t\"E\n\032Del"
+    "eteBlueprintNodeRequest\022\026\n\016blueprint_pat"
+    "h\030\001 \001(\t\022\017\n\007node_id\030\002 \001(\t\"b\n\031ListBlueprin"
+    "tNodesRequest\022\026\n\016blueprint_path\030\001 \001(\t\022\022\n"
+    "\ngraph_name\030\002 \001(\t\022\031\n\021node_class_filter\030\003"
+    " \001(\t\"y\n\032ListBlueprintNodesResponse\022\017\n\007su"
+    "ccess\030\001 \001(\010\022\025\n\rerror_message\030\002 \001(\t\0223\n\005no"
+    "des\030\003 \003(\0132$.AgentBridgeServer.BlueprintN"
+    "odeInfo\"C\n\030ListBlueprintPinsRequest\022\026\n\016b"
+    "lueprint_path\030\001 \001(\t\022\017\n\007node_id\030\002 \001(\t\"v\n\031"
+    "ListBlueprintPinsResponse\022\017\n\007success\030\001 \001"
+    "(\010\022\025\n\rerror_message\030\002 \001(\t\0221\n\004pins\030\003 \003(\0132"
+    "#.AgentBridgeServer.BlueprintPinInfo*\240\003\n"
+    "\014PropertyType\022\026\n\022PROPERTY_TYPE_NONE\020\000\022\026\n"
+    "\022PROPERTY_TYPE_BOOL\020\001\022\025\n\021PROPERTY_TYPE_I"
+    "NT\020\002\022\027\n\023PROPERTY_TYPE_FLOAT\020\003\022\030\n\024PROPERT"
+    "Y_TYPE_STRING\020\004\022\026\n\022PROPERTY_TYPE_NAME\020\005\022"
+    "\030\n\024PROPERTY_TYPE_VECTOR\020\006\022\031\n\025PROPERTY_TY"
+    "PE_ROTATOR\020\007\022\033\n\027PROPERTY_TYPE_TRANSFORM\020"
+    "\010\022\027\n\023PROPERTY_TYPE_COLOR\020\t\022\030\n\024PROPERTY_T"
+    "YPE_OBJECT\020\n\022\027\n\023PROPERTY_TYPE_CLASS\020\013\022\030\n"
+    "\024PROPERTY_TYPE_STRUCT\020\014\022\027\n\023PROPERTY_TYPE"
+    "_ARRAY\020\r\022\025\n\021PROPERTY_TYPE_MAP\020\016\022\026\n\022PROPE"
+    "RTY_TYPE_ENUM\020\017*\213\001\n\016StreamingState\022\"\n\036ST"
+    "REAMING_STATE_NOT_APPLICABLE\020\000\022\032\n\026STREAM"
+    "ING_STATE_LOADED\020\001\022\034\n\030STREAMING_STATE_UN"
+    "LOADED\020\002\022\033\n\027STREAMING_STATE_INVALID\020\003*w\n"
+    "\016AttachmentRule\022!\n\035ATTACHMENT_RULE_KEEP_"
+    "RELATIVE\020\000\022\036\n\032ATTACHMENT_RULE_KEEP_WORLD"
+    "\020\001\022\"\n\036ATTACHMENT_RULE_SNAP_TO_TARGET\020\0022\335"
+    "\'\n\022AgentBridgeService\022Y\n\nListWorlds\022$.Ag"
+    "entBridgeServer.ListWorldsRequest\032%.Agen"
+    "tBridgeServer.ListWorldsResponse\022Q\n\016SetT"
+    "argetWorld\022(.AgentBridgeServer.SetTarget"
+    "WorldRequest\032\025.TempoScripting.Empty\022\\\n\013Q"
+    "ueryActors\022%.AgentBridgeServer.QueryActo"
+    "rsRequest\032&.AgentBridgeServer.QueryActor"
+    "sResponse\022S\n\010GetActor\022\".AgentBridgeServe"
+    "r.GetActorRequest\032#.AgentBridgeServer.Ge"
+    "tActorResponse\022Y\n\nSpawnActor\022$.AgentBrid"
+    "geServer.SpawnActorRequest\032%.AgentBridge"
+    "Server.SpawnActorResponse\022K\n\013DeleteActor"
+    "\022%.AgentBridgeServer.DeleteActorRequest\032"
+    "\025.TempoScripting.Empty\022e\n\016DuplicateActor"
+    "\022(.AgentBridgeServer.DuplicateActorReque"
+    "st\032).AgentBridgeServer.DuplicateActorRes"
+    "ponse\022W\n\021SetActorTransform\022+.AgentBridge"
+    "Server.SetActorTransformRequest\032\025.TempoS"
+    "cripting.Empty\022q\n\022SetActorProperties\022,.A"
+    "gentBridgeServer.SetActorPropertiesReque"
+    "st\032-.AgentBridgeServer.SetActorPropertie"
+    "sResponse\022h\n\017GetPropertyPath\022).AgentBrid"
+    "geServer.GetPropertyPathRequest\032*.AgentB"
+    "ridgeServer.GetPropertyPathResponse\022S\n\017S"
+    "etPropertyPath\022).AgentBridgeServer.SetPr"
+    "opertyPathRequest\032\025.TempoScripting.Empty"
+    "\022_\n\014CallFunction\022&.AgentBridgeServer.Cal"
+    "lFunctionRequest\032\'.AgentBridgeServer.Cal"
+    "lFunctionResponse\022n\n\021CallAssetFunction\022+"
+    ".AgentBridgeServer.CallAssetFunctionRequ"
+    "est\032,.AgentBridgeServer.CallAssetFunctio"
+    "nResponse\022V\n\tFindClass\022#.AgentBridgeServ"
+    "er.FindClassRequest\032$.AgentBridgeServer."
+    "FindClassResponse\022e\n\016GetClassSchema\022(.Ag"
+    "entBridgeServer.GetClassSchemaRequest\032)."
+    "AgentBridgeServer.GetClassSchemaResponse"
+    "\022\\\n\013ListClasses\022%.AgentBridgeServer.List"
+    "ClassesRequest\032&.AgentBridgeServer.ListC"
+    "lassesResponse\022q\n\022IsWorldPartitioned\022,.A"
+    "gentBridgeServer.IsWorldPartitionedReque"
+    "st\032-.AgentBridgeServer.IsWorldPartitione"
+    "dResponse\022e\n\016QueryAllActors\022(.AgentBridg"
+    "eServer.QueryAllActorsRequest\032).AgentBri"
+    "dgeServer.QueryAllActorsResponse\022n\n\021GetS"
+    "treamingState\022+.AgentBridgeServer.GetStr"
+    "eamingStateRequest\032,.AgentBridgeServer.G"
+    "etStreamingStateResponse\022e\n\016QueryLandsca"
+    "pe\022(.AgentBridgeServer.QueryLandscapeReq"
+    "uest\032).AgentBridgeServer.QueryLandscapeR"
+    "esponse\022q\n\022GetLandscapeBounds\022,.AgentBri"
+    "dgeServer.GetLandscapeBoundsRequest\032-.Ag"
+    "entBridgeServer.GetLandscapeBoundsRespon"
+    "se\022b\n\rGetDataLayers\022\'.AgentBridgeServer."
+    "GetDataLayersRequest\032(.AgentBridgeServer"
+    ".GetDataLayersResponse\022w\n\024GetActorsInDat"
+    "aLayer\022..AgentBridgeServer.GetActorsInDa"
+    "taLayerRequest\032/.AgentBridgeServer.GetAc"
+    "torsInDataLayerResponse\022z\n\025ExecuteConsol"
+    "eCommand\022/.AgentBridgeServer.ExecuteCons"
+    "oleCommandRequest\0320.AgentBridgeServer.Ex"
+    "ecuteConsoleCommandResponse\022z\n\025SearchCon"
+    "soleCommands\022/.AgentBridgeServer.SearchC"
+    "onsoleCommandsRequest\0320.AgentBridgeServe"
+    "r.SearchConsoleCommandsResponse\022\\\n\013Creat"
+    "eAsset\022%.AgentBridgeServer.CreateAssetRe"
+    "quest\032&.AgentBridgeServer.CreateAssetRes"
+    "ponse\022V\n\tSaveAsset\022#.AgentBridgeServer.S"
+    "aveAssetRequest\032$.AgentBridgeServer.Save"
+    "AssetResponse\022w\n\024SaveActorAsBlueprint\022.."
+    "AgentBridgeServer.SaveActorAsBlueprintRe"
+    "quest\032/.AgentBridgeServer.SaveActorAsBlu"
+    "eprintResponse\022e\n\016DuplicateAsset\022(.Agent"
+    "BridgeServer.DuplicateAssetRequest\032).Age"
+    "ntBridgeServer.DuplicateAssetResponse\022n\n"
+    "\021GetAssetThumbnail\022+.AgentBridgeServer.G"
+    "etAssetThumbnailRequest\032,.AgentBridgeSer"
+    "ver.GetAssetThumbnailResponse\022z\n\025GetComp"
+    "onentTransform\022/.AgentBridgeServer.GetCo"
+    "mponentTransformRequest\0320.AgentBridgeSer"
+    "ver.GetComponentTransformResponse\022_\n\025Set"
+    "ComponentTransform\022/.AgentBridgeServer.S"
+    "etComponentTransformRequest\032\025.TempoScrip"
+    "ting.Empty\022S\n\017AttachComponent\022).AgentBri"
+    "dgeServer.AttachComponentRequest\032\025.Tempo"
+    "Scripting.Empty\022K\n\013AttachActor\022%.AgentBr"
+    "idgeServer.AttachActorRequest\032\025.TempoScr"
+    "ipting.Empty\022S\n\017DetachComponent\022).AgentB"
+    "ridgeServer.DetachComponentRequest\032\025.Tem"
+    "poScripting.Empty\022K\n\013DetachActor\022%.Agent"
+    "BridgeServer.DetachActorRequest\032\025.TempoS"
+    "cripting.Empty\022M\n\014SetTransform\022&.AgentBr"
+    "idgeServer.SetTransformRequest\032\025.TempoSc"
+    "ripting.Empty\022\\\n\014GetTransform\022&.AgentBri"
+    "dgeServer.GetTransformRequest\032$.AgentBri"
+    "dgeServer.TransformResponse\022A\n\006Attach\022 ."
+    "AgentBridgeServer.AttachRequest\032\025.TempoS"
+    "cripting.Empty\022A\n\006Detach\022 .AgentBridgeSe"
+    "rver.DetachRequest\032\025.TempoScripting.Empt"
+    "y\022h\n\017ReadProjectFile\022).AgentBridgeServer"
+    ".ReadProjectFileRequest\032*.AgentBridgeSer"
+    "ver.ReadProjectFileResponse\022k\n\020WriteProj"
+    "ectFile\022*.AgentBridgeServer.WriteProject"
+    "FileRequest\032+.AgentBridgeServer.WritePro"
+    "jectFileResponse\022w\n\024ListProjectDirectory"
+    "\022..AgentBridgeServer.ListProjectDirector"
+    "yRequest\032/.AgentBridgeServer.ListProject"
+    "DirectoryResponse\022h\n\017CopyProjectFile\022).A"
+    "gentBridgeServer.CopyProjectFileRequest\032"
+    "*.AgentBridgeServer.CopyProjectFileRespo"
+    "nse\022W\n\021DeleteProjectFile\022+.AgentBridgeSe"
+    "rver.DeleteProjectFileRequest\032\025.TempoScr"
+    "ipting.Empty\022t\n\023CreateBlueprintNode\022-.Ag"
+    "entBridgeServer.CreateBlueprintNodeReque"
+    "st\032..AgentBridgeServer.CreateBlueprintNo"
+    "deResponse\022]\n\024ConnectBlueprintPins\022..Age"
+    "ntBridgeServer.ConnectBlueprintPinsReque"
+    "st\032\025.TempoScripting.Empty\022c\n\027DisconnectB"
+    "lueprintPins\0221.AgentBridgeServer.Disconn"
+    "ectBlueprintPinsRequest\032\025.TempoScripting"
+    ".Empty\022[\n\023DeleteBlueprintNode\022-.AgentBri"
+    "dgeServer.DeleteBlueprintNodeRequest\032\025.T"
+    "empoScripting.Empty\022q\n\022ListBlueprintNode"
+    "s\022,.AgentBridgeServer.ListBlueprintNodes"
+    "Request\032-.AgentBridgeServer.ListBlueprin"
+    "tNodesResponse\022n\n\021ListBlueprintPins\022+.Ag"
+    "entBridgeServer.ListBlueprintPinsRequest"
+    "\032,.AgentBridgeServer.ListBlueprintPinsRe"
+    "sponseb\006proto3"
 };
 static const ::_pbi::DescriptorTable* const descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_deps[2] =
     {
@@ -4675,7 +4680,7 @@ static ::absl_tempo::once_flag descriptor_table_AgentBridgeServer_2fAgentBridge_
 const ::_pbi::DescriptorTable descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto = {
     false,
     false,
-    18920,
+    18974,
     descriptor_table_protodef_AgentBridgeServer_2fAgentBridge_2eproto,
     "AgentBridgeServer/AgentBridge.proto",
     &descriptor_table_AgentBridgeServer_2fAgentBridge_2eproto_once,
@@ -18361,6 +18366,10 @@ class GetLandscapeBoundsResponse::_Internal {
   static void set_has_extent(HasBits* has_bits) {
     (*has_bits)[0] |= 8u;
   }
+  static const ::AgentBridgeServer::Scale& biome_volume_scale(const GetLandscapeBoundsResponse* msg);
+  static void set_has_biome_volume_scale(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
+  }
 };
 
 const ::TempoScripting::Vector& GetLandscapeBoundsResponse::_Internal::min(const GetLandscapeBoundsResponse* msg) {
@@ -18374,6 +18383,9 @@ const ::TempoScripting::Vector& GetLandscapeBoundsResponse::_Internal::center(co
 }
 const ::TempoScripting::Vector& GetLandscapeBoundsResponse::_Internal::extent(const GetLandscapeBoundsResponse* msg) {
   return *msg->_impl_.extent_;
+}
+const ::AgentBridgeServer::Scale& GetLandscapeBoundsResponse::_Internal::biome_volume_scale(const GetLandscapeBoundsResponse* msg) {
+  return *msg->_impl_.biome_volume_scale_;
 }
 void GetLandscapeBoundsResponse::clear_min() {
   PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
@@ -18429,6 +18441,9 @@ GetLandscapeBoundsResponse::GetLandscapeBoundsResponse(
   _impl_.extent_ = (cached_has_bits & 0x00000008u)
                 ? CreateMaybeMessage<::TempoScripting::Vector>(arena, *from._impl_.extent_)
                 : nullptr;
+  _impl_.biome_volume_scale_ = (cached_has_bits & 0x00000010u)
+                ? CreateMaybeMessage<::AgentBridgeServer::Scale>(arena, *from._impl_.biome_volume_scale_)
+                : nullptr;
   ::memcpy(reinterpret_cast<char *>(&_impl_) +
                offsetof(Impl_, valid_),
            reinterpret_cast<const char *>(&from._impl_) +
@@ -18466,6 +18481,7 @@ inline void GetLandscapeBoundsResponse::SharedDtor() {
   delete _impl_.max_;
   delete _impl_.center_;
   delete _impl_.extent_;
+  delete _impl_.biome_volume_scale_;
   _impl_.~Impl_();
 }
 
@@ -18478,7 +18494,7 @@ PROTOBUF_NOINLINE void GetLandscapeBoundsResponse::Clear() {
 
   _impl_.landscape_name_.ClearToEmpty();
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       ABSL_DCHECK(_impl_.min_ != nullptr);
       _impl_.min_->Clear();
@@ -18494,6 +18510,10 @@ PROTOBUF_NOINLINE void GetLandscapeBoundsResponse::Clear() {
     if (cached_has_bits & 0x00000008u) {
       ABSL_DCHECK(_impl_.extent_ != nullptr);
       _impl_.extent_->Clear();
+    }
+    if (cached_has_bits & 0x00000010u) {
+      ABSL_DCHECK(_impl_.biome_volume_scale_ != nullptr);
+      _impl_.biome_volume_scale_->Clear();
     }
   }
   ::memset(&_impl_.valid_, 0, static_cast<::size_t>(
@@ -18511,21 +18531,23 @@ const char* GetLandscapeBoundsResponse::_InternalParse(
 
 
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<3, 7, 4, 67, 2> GetLandscapeBoundsResponse::_table_ = {
+const ::_pbi::TcParseTable<3, 8, 5, 75, 2> GetLandscapeBoundsResponse::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(GetLandscapeBoundsResponse, _impl_._has_bits_),
     0, // no _extensions_
-    7, 56,  // max_field_number, fast_idx_mask
+    8, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967168,  // skipmap
+    4294967040,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    7,  // num_field_entries
-    4,  // num_aux_entries
+    8,  // num_field_entries
+    5,  // num_aux_entries
     offsetof(decltype(_table_), aux_entries),
     &_GetLandscapeBoundsResponse_default_instance_._instance,
     ::_pbi::TcParser::GenericFallback,  // fallback
   }, {{
-    {::_pbi::TcParser::MiniParse, {}},
+    // .AgentBridgeServer.Scale biome_volume_scale = 8;
+    {::_pbi::TcParser::FastMtS1,
+     {66, 4, 4, PROTOBUF_FIELD_OFFSET(GetLandscapeBoundsResponse, _impl_.biome_volume_scale_)}},
     // bool valid = 1;
     {::_pbi::TcParser::SingularVarintNoZag1<bool, offsetof(GetLandscapeBoundsResponse, _impl_.valid_), 63>(),
      {8, 63, 0, PROTOBUF_FIELD_OFFSET(GetLandscapeBoundsResponse, _impl_.valid_)}},
@@ -18571,13 +18593,17 @@ const ::_pbi::TcParseTable<3, 7, 4, 67, 2> GetLandscapeBoundsResponse::_table_ =
     // string landscape_name = 7;
     {PROTOBUF_FIELD_OFFSET(GetLandscapeBoundsResponse, _impl_.landscape_name_), -1, 0,
     (0 | ::_fl::kFcSingular | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .AgentBridgeServer.Scale biome_volume_scale = 8;
+    {PROTOBUF_FIELD_OFFSET(GetLandscapeBoundsResponse, _impl_.biome_volume_scale_), _Internal::kHasBitsOffset + 4, 4,
+    (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }}, {{
     {::_pbi::TcParser::GetTable<::TempoScripting::Vector>()},
     {::_pbi::TcParser::GetTable<::TempoScripting::Vector>()},
     {::_pbi::TcParser::GetTable<::TempoScripting::Vector>()},
     {::_pbi::TcParser::GetTable<::TempoScripting::Vector>()},
+    {::_pbi::TcParser::GetTable<::AgentBridgeServer::Scale>()},
   }}, {{
-    "\54\0\0\0\0\0\0\16"
+    "\54\0\0\0\0\0\0\16\0\0\0\0\0\0\0\0"
     "AgentBridgeServer.GetLandscapeBoundsResponse"
     "landscape_name"
   }},
@@ -18641,6 +18667,13 @@ const ::_pbi::TcParseTable<3, 7, 4, 67, 2> GetLandscapeBoundsResponse::_table_ =
     target = stream->WriteStringMaybeAliased(7, _s, target);
   }
 
+  // .AgentBridgeServer.Scale biome_volume_scale = 8;
+  if (cached_has_bits & 0x00000010u) {
+    target = ::google::protobuf_tempo::internal::WireFormatLite::InternalWriteMessage(
+        8, _Internal::biome_volume_scale(this),
+        _Internal::biome_volume_scale(this).GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target =
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -18665,7 +18698,7 @@ const ::_pbi::TcParseTable<3, 7, 4, 67, 2> GetLandscapeBoundsResponse::_table_ =
   }
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     // .TempoScripting.Vector min = 2;
     if (cached_has_bits & 0x00000001u) {
       total_size +=
@@ -18688,6 +18721,12 @@ const ::_pbi::TcParseTable<3, 7, 4, 67, 2> GetLandscapeBoundsResponse::_table_ =
     if (cached_has_bits & 0x00000008u) {
       total_size +=
           1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.extent_);
+    }
+
+    // .AgentBridgeServer.Scale biome_volume_scale = 8;
+    if (cached_has_bits & 0x00000010u) {
+      total_size +=
+          1 + ::google::protobuf_tempo::internal::WireFormatLite::MessageSize(*_impl_.biome_volume_scale_);
     }
 
   }
@@ -18725,7 +18764,7 @@ void GetLandscapeBoundsResponse::MergeImpl(::google::protobuf_tempo::Message& to
     _this->_internal_set_landscape_name(from._internal_landscape_name());
   }
   cached_has_bits = from._impl_._has_bits_[0];
-  if (cached_has_bits & 0x0000000fu) {
+  if (cached_has_bits & 0x0000001fu) {
     if (cached_has_bits & 0x00000001u) {
       _this->_internal_mutable_min()->::TempoScripting::Vector::MergeFrom(
           from._internal_min());
@@ -18741,6 +18780,10 @@ void GetLandscapeBoundsResponse::MergeImpl(::google::protobuf_tempo::Message& to
     if (cached_has_bits & 0x00000008u) {
       _this->_internal_mutable_extent()->::TempoScripting::Vector::MergeFrom(
           from._internal_extent());
+    }
+    if (cached_has_bits & 0x00000010u) {
+      _this->_internal_mutable_biome_volume_scale()->::AgentBridgeServer::Scale::MergeFrom(
+          from._internal_biome_volume_scale());
     }
   }
   if (from._internal_valid() != 0) {

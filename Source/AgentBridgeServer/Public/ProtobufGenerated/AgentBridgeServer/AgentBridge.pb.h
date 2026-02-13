@@ -15144,6 +15144,7 @@ class AGENTBRIDGESERVER_API GetLandscapeBoundsResponse final :
     kMaxFieldNumber = 3,
     kCenterFieldNumber = 4,
     kExtentFieldNumber = 5,
+    kBiomeVolumeScaleFieldNumber = 8,
     kValidFieldNumber = 1,
     kProxyCountFieldNumber = 6,
   };
@@ -15223,6 +15224,21 @@ class AGENTBRIDGESERVER_API GetLandscapeBoundsResponse final :
   ::TempoScripting::Vector* _internal_mutable_extent();
 
   public:
+  // .AgentBridgeServer.Scale biome_volume_scale = 8;
+  bool has_biome_volume_scale() const;
+  void clear_biome_volume_scale() ;
+  const ::AgentBridgeServer::Scale& biome_volume_scale() const;
+  PROTOBUF_NODISCARD ::AgentBridgeServer::Scale* release_biome_volume_scale();
+  ::AgentBridgeServer::Scale* mutable_biome_volume_scale();
+  void set_allocated_biome_volume_scale(::AgentBridgeServer::Scale* value);
+  void unsafe_arena_set_allocated_biome_volume_scale(::AgentBridgeServer::Scale* value);
+  ::AgentBridgeServer::Scale* unsafe_arena_release_biome_volume_scale();
+
+  private:
+  const ::AgentBridgeServer::Scale& _internal_biome_volume_scale() const;
+  ::AgentBridgeServer::Scale* _internal_mutable_biome_volume_scale();
+
+  public:
   // bool valid = 1;
   void clear_valid() ;
   bool valid() const;
@@ -15249,8 +15265,8 @@ class AGENTBRIDGESERVER_API GetLandscapeBoundsResponse final :
 
   friend class ::google::protobuf_tempo::internal::TcParser;
   static const ::google::protobuf_tempo::internal::TcParseTable<
-      3, 7, 4,
-      67, 2>
+      3, 8, 5,
+      75, 2>
       _table_;
   friend class ::google::protobuf_tempo::MessageLite;
   friend class ::google::protobuf_tempo::Arena;
@@ -15273,6 +15289,7 @@ class AGENTBRIDGESERVER_API GetLandscapeBoundsResponse final :
     ::TempoScripting::Vector* max_;
     ::TempoScripting::Vector* center_;
     ::TempoScripting::Vector* extent_;
+    ::AgentBridgeServer::Scale* biome_volume_scale_;
     bool valid_;
     ::int32_t proxy_count_;
     PROTOBUF_TSAN_DECLARE_MEMBER
@@ -33466,6 +33483,102 @@ inline void GetLandscapeBoundsResponse::set_allocated_landscape_name(std::string
         }
   #endif  // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.landscape_name)
+}
+
+// .AgentBridgeServer.Scale biome_volume_scale = 8;
+inline bool GetLandscapeBoundsResponse::has_biome_volume_scale() const {
+  bool value = (_impl_._has_bits_[0] & 0x00000010u) != 0;
+  PROTOBUF_ASSUME(!value || _impl_.biome_volume_scale_ != nullptr);
+  return value;
+}
+inline void GetLandscapeBoundsResponse::clear_biome_volume_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (_impl_.biome_volume_scale_ != nullptr) _impl_.biome_volume_scale_->Clear();
+  _impl_._has_bits_[0] &= ~0x00000010u;
+}
+inline const ::AgentBridgeServer::Scale& GetLandscapeBoundsResponse::_internal_biome_volume_scale() const {
+  PROTOBUF_TSAN_READ(&_impl_._tsan_detect_race);
+  const ::AgentBridgeServer::Scale* p = _impl_.biome_volume_scale_;
+  return p != nullptr ? *p : reinterpret_cast<const ::AgentBridgeServer::Scale&>(::AgentBridgeServer::_Scale_default_instance_);
+}
+inline const ::AgentBridgeServer::Scale& GetLandscapeBoundsResponse::biome_volume_scale() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:AgentBridgeServer.GetLandscapeBoundsResponse.biome_volume_scale)
+  return _internal_biome_volume_scale();
+}
+inline void GetLandscapeBoundsResponse::unsafe_arena_set_allocated_biome_volume_scale(::AgentBridgeServer::Scale* value) {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf_tempo::MessageLite*>(_impl_.biome_volume_scale_);
+  }
+  _impl_.biome_volume_scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(value);
+  if (value != nullptr) {
+    _impl_._has_bits_[0] |= 0x00000010u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000010u;
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.biome_volume_scale)
+}
+inline ::AgentBridgeServer::Scale* GetLandscapeBoundsResponse::release_biome_volume_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+
+  _impl_._has_bits_[0] &= ~0x00000010u;
+  ::AgentBridgeServer::Scale* released = _impl_.biome_volume_scale_;
+  _impl_.biome_volume_scale_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old = reinterpret_cast<::google::protobuf_tempo::MessageLite*>(released);
+  released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  if (GetArena() == nullptr) {
+    delete old;
+  }
+#else   // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArena() != nullptr) {
+    released = ::google::protobuf_tempo::internal::DuplicateIfNonNull(released);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return released;
+}
+inline ::AgentBridgeServer::Scale* GetLandscapeBoundsResponse::unsafe_arena_release_biome_volume_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  // @@protoc_insertion_point(field_release:AgentBridgeServer.GetLandscapeBoundsResponse.biome_volume_scale)
+
+  _impl_._has_bits_[0] &= ~0x00000010u;
+  ::AgentBridgeServer::Scale* temp = _impl_.biome_volume_scale_;
+  _impl_.biome_volume_scale_ = nullptr;
+  return temp;
+}
+inline ::AgentBridgeServer::Scale* GetLandscapeBoundsResponse::_internal_mutable_biome_volume_scale() {
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  _impl_._has_bits_[0] |= 0x00000010u;
+  if (_impl_.biome_volume_scale_ == nullptr) {
+    auto* p = CreateMaybeMessage<::AgentBridgeServer::Scale>(GetArena());
+    _impl_.biome_volume_scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(p);
+  }
+  return _impl_.biome_volume_scale_;
+}
+inline ::AgentBridgeServer::Scale* GetLandscapeBoundsResponse::mutable_biome_volume_scale() ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  ::AgentBridgeServer::Scale* _msg = _internal_mutable_biome_volume_scale();
+  // @@protoc_insertion_point(field_mutable:AgentBridgeServer.GetLandscapeBoundsResponse.biome_volume_scale)
+  return _msg;
+}
+inline void GetLandscapeBoundsResponse::set_allocated_biome_volume_scale(::AgentBridgeServer::Scale* value) {
+  ::google::protobuf_tempo::Arena* message_arena = GetArena();
+  PROTOBUF_TSAN_WRITE(&_impl_._tsan_detect_race);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::AgentBridgeServer::Scale*>(_impl_.biome_volume_scale_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf_tempo::Arena* submessage_arena = reinterpret_cast<::AgentBridgeServer::Scale*>(value)->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf_tempo::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    _impl_._has_bits_[0] |= 0x00000010u;
+  } else {
+    _impl_._has_bits_[0] &= ~0x00000010u;
+  }
+
+  _impl_.biome_volume_scale_ = reinterpret_cast<::AgentBridgeServer::Scale*>(value);
+  // @@protoc_insertion_point(field_set_allocated:AgentBridgeServer.GetLandscapeBoundsResponse.biome_volume_scale)
 }
 
 // -------------------------------------------------------------------
