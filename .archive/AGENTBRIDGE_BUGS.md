@@ -10,7 +10,20 @@ Bug 3 Option A redesigned after finding architectural flaw (component recursion 
 All proto field names, line numbers, and insertion points double-checked.
 
 **Implementation completed 2026-02-12** — all 8 bugs fixed on branch `feature/agentbridge-bugs`.
-Pending: code review validation, proto regeneration (Bug 5), build + live testing.
+**Live tested 2026-02-13** — results in `docs/tests/LIVE_TEST_RESULTS.md`.
+
+### Test Results Summary
+
+| Bug | Result | Action |
+|-----|--------|--------|
+| 1 | **FIXED** during testing (Python) | `self.host`/`self.port` added to AgentBridgeClient |
+| 2 | **KNOWN LIMITATION** | Engine crashes on plugin content dup. Not fixable on our end. |
+| 3 | **REVERTED / KNOWN LIMITATION** | PostEditChangeProperty zeroed vector properties. Fix reverted. BoxExtent visual update deferred. |
+| 4 | **FIXED** (C++) | Type mismatch correctly rejected |
+| 5 | Not applied | Proto regen needed. Pending rebuild. |
+| 6 | **FIXED** (C++) | Blueprint discovery works |
+| 7+8 | Partial | C++ type handling works. Python multi-element array serialization still broken. |
+| 9 (new) | **KNOWN LIMITATION** | call_function only supports zero-arg void. Deferred as feature request. |
 
 ---
 
@@ -82,7 +95,9 @@ class AgentBridgeClient:
 
 ### 2. `duplicate_asset` + `save_asset` — Crash on Plugin Content Sources
 
-**Status:** Validated. Fix is correct and well-positioned.
+**Status:** KNOWN LIMITATION. FullyLoad() fix was applied but engine still crashes on
+engine/plugin content paths (e.g., `/Script/Engine.*`). `/Game/` paths work fine.
+Workaround: pre-copy plugin templates to `/Game/` before duplicating.
 
 **Symptom:** `save_asset` crashes the editor with "Asset cannot be saved as it has only been
 partially loaded" when the asset was duplicated from a plugin content path.
@@ -158,8 +173,11 @@ save_asset(asset_path="/Game/Test/TestDef.TestDef")  # Should succeed, not crash
 
 ### 3. `set_property` on BoxExtent — No Visual Update
 
-**Status:** Validated. Two options provided. Option A (recommended) works at the right
-architectural level. Option B is a future enhancement requiring refactoring.
+**Status:** KNOWN LIMITATION / REVERT REQUIRED. Option A (MarkRenderStateDirty + UpdateBounds)
+was implemented but caused a REGRESSION: vector/struct properties (BoxExtent, RelativeLocation)
+get zeroed out after set. Float properties (Intensity) work fine. The fix must be reverted.
+Original behavior (value stores correctly, wireframe doesn't update) is preferable.
+Workaround: use `set_transform` on component scale for sizing.
 
 **Symptom:** `set_property` on `UBoxComponent::BoxExtent` stores the value (verified via
 `get_property` readback) but the visual wireframe in the editor never updates.

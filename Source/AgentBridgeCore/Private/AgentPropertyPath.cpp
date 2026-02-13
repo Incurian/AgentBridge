@@ -4,29 +4,6 @@
 #include "UObject/UnrealType.h"
 #include "GameFramework/Actor.h"
 #include "Components/ActorComponent.h"
-#include "Components/SceneComponent.h"
-
-static void NotifyPropertyChanged(UObject* Object)
-{
-	if (!Object) return;
-
-	// Handle component properties - trigger visual updates (bounds, wireframes)
-	if (USceneComponent* SceneComp = Cast<USceneComponent>(Object))
-	{
-		SceneComp->MarkRenderStateDirty();
-		SceneComp->UpdateBounds();
-	}
-	else if (UActorComponent* Component = Cast<UActorComponent>(Object))
-	{
-		Component->MarkRenderStateDirty();
-	}
-
-	// Handle actor properties - mark all components for visual refresh
-	if (AActor* Actor = Cast<AActor>(Object))
-	{
-		Actor->MarkComponentsRenderStateDirty();
-	}
-}
 
 //~==============================================================================
 // Path Parsing
@@ -434,12 +411,7 @@ bool FAgentPropertyPath::SetValue(
 	// If this is the only segment, write directly
 	if (Segments.Num() == 1)
 	{
-		bool bSuccess = FPropertyAccessor::WriteProperty(Object, FirstProp, Value);
-		if (bSuccess)
-		{
-			NotifyPropertyChanged(Object);
-		}
-		return bSuccess;
+		return FPropertyAccessor::WriteProperty(Object, FirstProp, Value);
 	}
 
 	// Resolve to get the container and final property
@@ -453,12 +425,7 @@ bool FAgentPropertyPath::SetValue(
 	// Write the value to the resolved location
 	// CRITICAL: Use WritePropertyDirect because Resolution.ValuePtr is already the resolved
 	// value pointer, NOT a container. WriteProperty would incorrectly call ContainerPtrToValuePtr again.
-	bool bSuccess = FPropertyAccessor::WritePropertyDirect(Resolution.ValuePtr, Resolution.FinalProperty, Value);
-	if (bSuccess)
-	{
-		NotifyPropertyChanged(Object);
-	}
-	return bSuccess;
+	return FPropertyAccessor::WritePropertyDirect(Resolution.ValuePtr, Resolution.FinalProperty, Value);
 }
 
 //~==============================================================================
