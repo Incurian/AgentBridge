@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.2.0",
+	"FriendlyName": "AgentBridge Core",
+	"Description": "Reflection primitives for AgentBridge (FProperty, UFunction, type discovery)",
+	"Category": "Editor",
+	"CreatedBy": "AgentBridge",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": true,
+	"Installed": false,
+	"EnabledByDefault": true,
+	"Modules": [
+		{
+			"Name": "AgentBridgeCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

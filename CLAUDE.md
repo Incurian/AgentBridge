@@ -102,16 +102,20 @@ MCP Server (Python) --- Modular tool loading
 gRPC (port 10001) / HTTP (port 8080)
          |
          v
-+-------------------------------------------------+
-| AgentBridgeServer   | gRPC handlers, HTTP API  |
-| AgentBridgeScripting| Commands, JSON dispatch  |
-| AgentBridgeRuntime  | World ops, property paths|
-| AgentBridgeCore     | Reflection primitives    |
-+-------------------------------------------------+
++--- AgentBridge (4 UE plugins, one per module) ---------+
+| AgentBridgeServer/   | gRPC handlers, HTTP API         |
+| AgentBridgeScripting/| Commands, JSON dispatch         |
+| AgentBridgeRuntime/  | World ops, property paths       |
+| AgentBridgeCore/     | Reflection primitives           |
++---------------------------------------------------------+
          |
          v
     Unreal Engine 5.6
 ```
+
+Each module is its own UE plugin with a `.uplugin` descriptor. UBT discovers
+all 4 by recursively scanning the `Plugins/AgentBridge/` directory (following
+the Tempo multi-plugin pattern). No wrapper plugin needed.
 
 ## Module Documentation
 
@@ -119,10 +123,10 @@ Each module has its own CLAUDE.md with detailed context:
 
 | Module | Focus | Doc |
 |--------|-------|-----|
-| AgentBridgeCore | Reflection (FProperty, UFunction, TypeDiscovery) | `Source/AgentBridgeCore/CLAUDE.md` |
-| AgentBridgeRuntime | World context, actor ops, property paths | `Source/AgentBridgeRuntime/CLAUDE.md` |
-| AgentBridgeScripting | Command layer, JSON serialization | `Source/AgentBridgeScripting/CLAUDE.md` |
-| AgentBridgeServer | gRPC/HTTP server, proto definitions | `Source/AgentBridgeServer/CLAUDE.md` |
+| AgentBridgeCore | Reflection (FProperty, UFunction, TypeDiscovery) | `AgentBridgeCore/Source/AgentBridgeCore/CLAUDE.md` |
+| AgentBridgeRuntime | World context, actor ops, property paths | `AgentBridgeRuntime/Source/AgentBridgeRuntime/CLAUDE.md` |
+| AgentBridgeScripting | Command layer, JSON serialization | `AgentBridgeScripting/Source/AgentBridgeScripting/CLAUDE.md` |
+| AgentBridgeServer | gRPC/HTTP server, proto definitions | `AgentBridgeServer/Source/AgentBridgeServer/CLAUDE.md` |
 | mcp (Python) | MCP server, gRPC client, tests | `mcp/CLAUDE.md` (submodule) |
 | bp_toolkit | UAsset parsing, Blueprint modification (optional) | `bp_toolkit/CLAUDE.md` (submodule) |
 

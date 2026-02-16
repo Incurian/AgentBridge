@@ -1,0 +1,42 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.2.0",
+	"FriendlyName": "AgentBridge Server",
+	"Description": "gRPC and HTTP server exposing AgentBridge to external AI agents",
+	"Category": "Editor",
+	"CreatedBy": "AgentBridge",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": true,
+	"Installed": false,
+	"EnabledByDefault": true,
+	"Plugins": [
+		{
+			"Name": "AgentBridgeCore",
+			"Enabled": true
+		},
+		{
+			"Name": "AgentBridgeRuntime",
+			"Enabled": true
+		},
+		{
+			"Name": "AgentBridgeScripting",
+			"Enabled": true
+		},
+		{
+			"Name": "TempoCore",
+			"Enabled": true
+		}
+	],
+	"Modules": [
+		{
+			"Name": "AgentBridgeServer",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

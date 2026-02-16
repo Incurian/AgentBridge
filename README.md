@@ -618,7 +618,7 @@ AgentBridge uses a layered 4-module architecture:
 | **Scripting** | Command dispatch | `FCommandExecutor`, command/response structs |
 | **Server** | Network layer | `UAgentBridgeServiceSubsystem`, `FAgentHttpServer` |
 
-Each module has its own `CLAUDE.md` with detailed documentation in `Source/<ModuleName>/CLAUDE.md`.
+Each module has its own `CLAUDE.md` with detailed documentation in `<ModuleName>/Source/<ModuleName>/CLAUDE.md`.
 
 ---
 

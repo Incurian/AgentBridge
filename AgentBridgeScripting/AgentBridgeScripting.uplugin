@@ -1,0 +1,34 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.2.0",
+	"FriendlyName": "AgentBridge Scripting",
+	"Description": "Command dispatch, JSON serialization, and business logic for AgentBridge",
+	"Category": "Editor",
+	"CreatedBy": "AgentBridge",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": true,
+	"Installed": false,
+	"EnabledByDefault": true,
+	"Plugins": [
+		{
+			"Name": "AgentBridgeCore",
+			"Enabled": true
+		},
+		{
+			"Name": "AgentBridgeRuntime",
+			"Enabled": true
+		}
+	],
+	"Modules": [
+		{
+			"Name": "AgentBridgeScripting",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
