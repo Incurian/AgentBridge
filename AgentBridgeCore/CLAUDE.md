@@ -1,6 +1,24 @@
-# AgentBridgeCore Module
+# AgentBridgeCore Plugin
 
 > Low-level reflection primitives for reading/writing UE properties and invoking functions.
+
+**Standalone UE plugin** - split from the monolithic AgentBridge plugin (PR #3). This plugin
+has no dependencies on other AgentBridge plugins; it only depends on Engine modules (Core,
+CoreUObject, Engine). Higher-level plugins (AgentBridgeRuntime, AgentBridgeScripting,
+AgentBridgeServer) depend on this one.
+
+## Plugin Structure
+
+```
+AgentBridgeCore/
++-- AgentBridgeCore.uplugin
++-- CLAUDE.md
++-- README.md
++-- Source/AgentBridgeCore/
+    +-- AgentBridgeCore.Build.cs
+    +-- Public/   (headers)
+    +-- Private/  (implementation)
+```
 
 ## Purpose
 
@@ -106,7 +124,7 @@ if (FObjectPropertyBase* ObjProp = CastField<FObjectPropertyBase>(Property))
 
 ## Recent Fixes
 
-### Nested BP Struct Writes (Session 19)
+### Nested BP Struct Writes
 
 **Problem:** Writing to nested struct paths like `DefaultDefinition.BiomeColor` silently failed.
 
@@ -116,9 +134,7 @@ if (FObjectPropertyBase* ObjProp = CastField<FObjectPropertyBase>(Property))
 **Solution:** Added `WritePropertyDirect()` that works with pre-resolved value pointers.
 All internal write helpers now take value pointers directly, not containers.
 
-## Recent Fixes
-
-### Nested Property SET (Session 20) - FIXED
+### Nested Property SET
 
 **Problem:** SET operations on component paths (`LightComponent0.Intensity`) and nested paths
 (`RootComponent.RelativeLocation`) were failing while GET worked.
@@ -138,7 +154,7 @@ const EPropertyFlags ReadOnlyFlags = CPF_EditConst;
 
 All component and nested paths now work correctly for both GET and SET operations.
 
-### FunctionInvoker Return Values - AUTO-FIXED (Session 19)
+### FunctionInvoker Return Values
 
 Function calls were returning default/zero values for complex struct return types.
 
@@ -156,7 +172,6 @@ worked around at the command layer.
 
 | Feature | Effort | Notes |
 |---------|--------|-------|
-| UObject property access | Medium | Allow property access on DataAssets, not just actors |
 | Test struct return values | Low | May already work after WritePropertyDirect fix |
 
 ## Testing

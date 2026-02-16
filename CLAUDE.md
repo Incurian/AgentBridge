@@ -123,10 +123,10 @@ Each module has its own CLAUDE.md with detailed context:
 
 | Module | Focus | Doc |
 |--------|-------|-----|
-| AgentBridgeCore | Reflection (FProperty, UFunction, TypeDiscovery) | `AgentBridgeCore/Source/AgentBridgeCore/CLAUDE.md` |
-| AgentBridgeRuntime | World context, actor ops, property paths | `AgentBridgeRuntime/Source/AgentBridgeRuntime/CLAUDE.md` |
-| AgentBridgeScripting | Command layer, JSON serialization | `AgentBridgeScripting/Source/AgentBridgeScripting/CLAUDE.md` |
-| AgentBridgeServer | gRPC/HTTP server, proto definitions | `AgentBridgeServer/Source/AgentBridgeServer/CLAUDE.md` |
+| AgentBridgeCore | Reflection (FProperty, UFunction, TypeDiscovery) | `AgentBridgeCore/CLAUDE.md` |
+| AgentBridgeRuntime | World context, actor ops, property paths | `AgentBridgeRuntime/CLAUDE.md` |
+| AgentBridgeScripting | Command layer, JSON serialization | `AgentBridgeScripting/CLAUDE.md` |
+| AgentBridgeServer | gRPC/HTTP server, proto definitions | `AgentBridgeServer/CLAUDE.md` |
 | mcp (Python) | MCP server, gRPC client, tests | `mcp/CLAUDE.md` (submodule) |
 | bp_toolkit | UAsset parsing, Blueprint modification (optional) | `bp_toolkit/CLAUDE.md` (submodule) |
 

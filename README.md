@@ -586,9 +586,9 @@ Call `help()` for an overview, or specify a topic:
 
 ---
 
-## Module Architecture
+## Plugin Architecture
 
-AgentBridge uses a layered 4-module architecture:
+AgentBridge consists of 4 UE plugins, each with its own `.uplugin` descriptor:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -609,16 +609,16 @@ AgentBridge uses a layered 4-module architecture:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Module Details
+### Plugin Details
 
-| Module | Purpose | Key Classes |
+| Plugin | Purpose | Key Classes |
 |--------|---------|-------------|
 | **Core** | Low-level reflection | `FPropertyAccessor`, `FFunctionInvoker`, `FTypeDiscovery` |
 | **Runtime** | World operations | `FWorldContextManager`, `FActorOperations`, `FAgentPropertyPath` |
 | **Scripting** | Command dispatch | `FCommandExecutor`, command/response structs |
 | **Server** | Network layer | `UAgentBridgeServiceSubsystem`, `FAgentHttpServer` |
 
-Each module has its own `CLAUDE.md` with detailed documentation in `<ModuleName>/Source/<ModuleName>/CLAUDE.md`.
+Each plugin has its own `CLAUDE.md` and `README.md` at `<PluginName>/CLAUDE.md`.
 
 ---
 

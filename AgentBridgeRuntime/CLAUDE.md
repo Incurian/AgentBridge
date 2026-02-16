@@ -1,10 +1,27 @@
-# AgentBridgeRuntime Module
+# AgentBridgeRuntime Plugin
 
-> World context management, actor operations, and property path resolution.
+> Standalone UE plugin providing world context management, actor operations, and property path resolution.
+
+**Note:** As of the plugin split (PR #3), AgentBridgeRuntime is a standalone Unreal Engine plugin
+with its own `.uplugin` file, not just a module inside a monolithic AgentBridge plugin. It depends
+on AgentBridgeCore and is depended upon by AgentBridgeScripting.
+
+## Plugin Structure
+
+```
+AgentBridgeRuntime/
++-- AgentBridgeRuntime.uplugin    (depends on AgentBridgeCore)
++-- CLAUDE.md
++-- README.md
++-- Source/AgentBridgeRuntime/
+    +-- AgentBridgeRuntime.Build.cs
+    +-- Public/   (headers)
+    +-- Private/  (implementation)
+```
 
 ## Purpose
 
-This module provides the abstraction layer between raw reflection and high-level commands:
+This plugin provides the abstraction layer between raw reflection and high-level commands:
 - `FWorldContextManager` - Multi-world support (Editor, PIE, Game)
 - `FActorOperations` - Query, spawn, delete, transform actors
 - `FAgentPropertyPath` - Nested property resolution ("Mesh.Materials[0].Color")
@@ -16,9 +33,9 @@ This module provides the abstraction layer between raw reflection and high-level
 |------|---------|
 | `WorldContextManager.h/.cpp` | Target world selection, PIE handling |
 | `ActorOperations.h/.cpp` | Actor CRUD operations |
-| `AgentPropertyPath.h/.cpp` | Property path parsing and resolution |
 | `WorldPartitionOps.h/.cpp` | Streaming actor queries, landscape bounds |
-| `DebugCommands.cpp` | Console commands for testing |
+| `AgentBridgeDebug.h/.cpp` | Console commands for testing |
+| `TargetResolution.h/.cpp` | Actor/component target resolution from strings |
 
 ## World Context
 
@@ -130,7 +147,7 @@ AsyncTask(ENamedThreads::AnyBackgroundThread, [WeakRef]()
 
 ### Landscape Bounds Calculation
 
-Fixed in Session 18: Now uses `GetComponentsBoundingBox()` instead of `CachedLocalBox` for accurate landscape extent calculation.
+Fixed: Now uses `GetComponentsBoundingBox()` instead of `CachedLocalBox` for accurate landscape extent calculation.
 
 ## Todos
 

@@ -1,10 +1,35 @@
-# AgentBridgeServer Module
+# AgentBridgeServer Plugin
 
-> gRPC server (via Tempo) and HTTP fallback server.
+> Standalone UE plugin providing gRPC server (via Tempo) and HTTP fallback server.
+
+**Note:** As of PR #3 (plugin split), this is a standalone Unreal Engine plugin with its own
+`.uplugin` file, not just a module within a monolithic AgentBridge plugin. It sits at the top
+of the AgentBridge dependency chain, depending on AgentBridgeCore, AgentBridgeRuntime,
+AgentBridgeScripting, and TempoCore.
+
+## Plugin Structure
+
+```
+AgentBridgeServer/
++-- AgentBridgeServer.uplugin    (depends on Core, Runtime, Scripting, TempoCore)
++-- CLAUDE.md
++-- README.md
++-- Source/AgentBridgeServer/
+    +-- AgentBridgeServer.Build.cs
+    +-- Public/
+    |   +-- AgentBridge.proto          (gRPC service definition)
+    |   +-- AgentBridgeServiceSubsystem.h
+    |   +-- AgentHttpServer.h
+    |   +-- ProtobufGenerated/         (auto-generated, do not edit)
+    +-- Private/
+        +-- AgentBridgeServiceSubsystem.cpp
+        +-- AgentHttpServer.cpp
+        +-- ProtobufGenerated/         (auto-generated, do not edit)
+```
 
 ## Purpose
 
-This module exposes AgentBridge functionality over the network:
+This plugin exposes AgentBridge functionality over the network:
 - gRPC via TempoScripting infrastructure (port 10001)
 - HTTP/JSON fallback (port 8080)
 
@@ -67,16 +92,22 @@ void UAgentBridgeServiceSubsystem::CreateAsset(...)
 
 ## Proto Generation
 
-Protos are generated via Tempo's `GenProtos.sh`:
+Protos are generated via Tempo's `GenProtos.sh`, which calls `gen_protos.py`. The script
+recursively scans the project root for `.proto` files, so no path configuration is needed
+when adding or moving proto files -- it discovers them automatically during the build.
 
 ```bash
+# Manual generation (rarely needed - happens automatically during build)
 cd <PROJECT_ROOT>/Plugins/Tempo/TempoCore/Scripts
 ./GenProtos.sh
 ```
 
-Generated files go to:
-- `Public/ProtobufGenerated/AgentBridgeServer/` - Headers
-- `Private/ProtobufGenerated/AgentBridgeServer/` - Sources
+Generated files go to (paths relative to plugin root):
+- `AgentBridgeServer/Source/AgentBridgeServer/Public/ProtobufGenerated/AgentBridgeServer/` - Headers (.grpc.pb.h, .pb.h)
+- `AgentBridgeServer/Source/AgentBridgeServer/Private/ProtobufGenerated/AgentBridgeServer/` - Sources (.grpc.pb.cc, .pb.cc)
+
+Proto generation runs automatically as part of the build pipeline via Tempo's `PreBuild.bat`.
+The generated files use `REPLACE_IF_STALE` -- they are only updated when content differs.
 
 ## Value Conversions
 
@@ -103,8 +134,12 @@ FAgentHttpServer::Start(8080);
 
 ## Dependencies
 
+**Plugin-level** (in `AgentBridgeServer.uplugin`):
+- AgentBridgeCore, AgentBridgeRuntime, AgentBridgeScripting, TempoCore
+
+**Module-level** (in `AgentBridgeServer.Build.cs`, uses TempoModuleRules):
+
 ```csharp
-// AgentBridgeServer.Build.cs (uses TempoModuleRules)
 public class AgentBridgeServer : TempoModuleRules
 {
     PublicDependencyModuleNames.AddRange(new string[] {
@@ -124,7 +159,7 @@ public class AgentBridgeServer : TempoModuleRules
 
 ## Module Type
 
-Changed from `Editor` to `Runtime` in Phase 4 to support PIE:
+Module type is `Runtime` (changed from `Editor` in earlier development to support PIE):
 
 ```csharp
 Type = ModuleType.Runtime;  // NOT Editor!

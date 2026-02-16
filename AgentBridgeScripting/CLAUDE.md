@@ -1,10 +1,31 @@
-# AgentBridgeScripting Module
+# AgentBridgeScripting
 
-> Command layer with JSON serialization and dispatch to runtime operations.
+> Standalone UE plugin providing the command layer with JSON serialization and dispatch to runtime operations.
+
+**Note:** This was split from the monolithic AgentBridge plugin into its own standalone UE plugin
+as part of the plugin split (PR #3). It depends on AgentBridgeCore and AgentBridgeRuntime.
+
+## Plugin Structure
+
+```
+AgentBridgeScripting/
++-- AgentBridgeScripting.uplugin    (depends on AgentBridgeCore, AgentBridgeRuntime)
++-- CLAUDE.md
++-- README.md
++-- Source/AgentBridgeScripting/
+    +-- AgentBridgeScripting.Build.cs
+    +-- Public/
+    |   +-- AgentCommands.h           (50+ command/response structs)
+    |   +-- CommandExecutor.h         (central dispatch interface)
+    |   +-- AgentBridgeScripting.h    (module definition)
+    +-- Private/
+        +-- CommandExecutor.cpp       (all business logic, ~230KB)
+        +-- AgentBridgeScripting.cpp  (module startup/shutdown)
+```
 
 ## Purpose
 
-This module provides the command/response abstraction used by both HTTP and gRPC servers:
+This plugin provides the command/response abstraction used by both HTTP and gRPC servers:
 - `AgentCommands.h` - All command and response structs
 - `CommandExecutor.cpp` - Central dispatch, JSON handling, all business logic
 
@@ -117,9 +138,9 @@ FString PropertyValueToJson(const FAgentPropertyValue& Value);
 
 Supports: Bool, Int, Float, String, Vector, Rotator, Transform, Color, Arrays, Structs
 
-## Resolved Issues (Session 21)
+## Resolved Issues
 
-### TArray Property Setting - ✅ FIXED
+### Resolved: TArray Property Setting
 
 Setting array properties now works correctly. Two issues were fixed:
 
@@ -136,7 +157,7 @@ set_property("ArrayTestCube", "Tags", '["TestTag1", "TestTag2"]')
 # Result: Tags = [TestTag1, TestTag2]
 ```
 
-### GET Property Returns Empty - ✅ FIXED
+### Resolved: GET Property Returns Empty
 
 Reading properties now returns actual typed values instead of empty strings. Two issues fixed:
 
@@ -154,15 +175,13 @@ get_property("Cube", "RootComponent.RelativeLocation")  # → {"x": 0, "y": 0, "
 get_property("Actor", "bHidden")                        # → False
 ```
 
-## Resolved Issues (Session 19)
-
-### Nested Struct Property Writes - ✅ FIXED
+### Resolved: Nested Struct Property Writes
 
 Writing to nested struct properties now works correctly. The fix was in AgentBridgeCore:
 - Added `WritePropertyDirect()` for pre-resolved value pointers
 - Path resolution returns direct pointers, so we skip `ContainerPtrToValuePtr()` offset
 
-### UObject Property Access - ✅ IMPLEMENTED
+### Resolved: UObject Property Access
 
 Property operations (`get_property`, `set_property`) now work on **both actors AND assets**:
 - Pass actor name/label/GUID → works as before
@@ -192,7 +211,7 @@ Cannot assign `TSoftObjectPtr<>` properties directly - use `TObjectPtr<>` where 
 - [x] Nested struct property writes - fixed via `WritePropertyDirect()`
 - [x] UObject property access - unified via `ResolveObject()`
 
-## Blueprint Node Commands (P2) - COMPLETE
+## Blueprint Node Commands
 
 Full implementation complete across all layers. Ready for testing.
 
