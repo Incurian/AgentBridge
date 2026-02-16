@@ -173,23 +173,31 @@ When doing human-AI collaborative testing with visual verification:
 - `AssetRegistry/AssetRegistryModule.h`
 - `Editor.h`, `LevelEditor.h`
 - `IImageWrapper.h`
+- `ThumbnailRendering/ThumbnailManager.h`
+- Any header transitively including `IoBuffer.h`
 
 Put such functionality in AgentBridgeScripting/CommandExecutor.cpp instead.
+See `AgentBridgeServer/CLAUDE.md` for the full conflict analysis and solution pattern.
 
 ---
 
 ## Adding New gRPC RPCs
 
-When adding new gRPC RPCs to AgentBridge, follow this checklist:
+When adding new gRPC RPCs to AgentBridge, follow this checklist. Changes span 3 plugins + Python:
 
-1. Add proto message + RPC to `AgentBridge.proto`
-2. Regenerate proto files (`GenProtos.sh`)
-3. Add handler method to `AgentBridgeServiceSubsystem.h`
-4. Implement handler in `AgentBridgeServiceSubsystem.cpp`
-5. ⚠️ **Register in `RegisterScriptingServices()`** ← EASY TO FORGET!
-6. Add Python client method in `agentbridge.py`
-7. Add MCP tool wrapper
-8. Add to `MODULES` dict in `__init__.py`
+1. Add proto message + RPC to `AgentBridgeServer/.../Public/AgentBridge.proto`
+2. Regenerate proto files (`GenProtos.sh` or just build - runs automatically)
+3. Add forward declarations in `AgentBridgeServiceSubsystem.h`
+4. Add handler method declaration in `AgentBridgeServiceSubsystem.h`
+5. Implement thin handler in `AgentBridgeServiceSubsystem.cpp` (proto <-> command struct only)
+6. ⚠️ **Register in `RegisterScriptingServices()`** ← EASY TO FORGET! Code compiles but RPC returns "unimplemented"
+7. Add command/response structs in `AgentBridgeScripting/.../Public/AgentCommands.h`
+8. Implement business logic in `AgentBridgeScripting/.../Private/CommandExecutor.cpp`
+9. Add Python client method in `mcp/services/agentbridge.py`
+10. Add MCP tool wrapper
+11. Add to `MODULES` dict in `mcp/__init__.py`
+
+See `AgentBridgeServer/CLAUDE.md` for the detailed handler pattern and registration example.
 
 **Tempo Proto Gotcha:** Tempo's `TempoScripting::Rotation` proto uses SHORT field names:
 - `.r` = roll, `.p` = pitch, `.y` = yaw (NOT `.roll`, `.pitch`, `.yaw`)
@@ -347,8 +355,9 @@ When connecting the AgentBridge MCP server to Claude Code running in WSL, there 
 ```bash
 # ~/.claude/agentbridge-mcp.sh
 #!/bin/bash
-cd /mnt/d/tempofresh/TempoSample/Plugins/AgentBridge
-exec /mnt/d/tempofresh/TempoSample/TempoEnv/Scripts/python.exe -m mcp --host localhost --port 10001 --profile full "$@"
+# Replace <PROJECT_ROOT> with your actual project path (e.g., /mnt/d/MyGame)
+cd <PROJECT_ROOT>/Plugins/AgentBridge
+exec <PROJECT_ROOT>/TempoEnv/Scripts/python.exe -m mcp --host localhost --port 10001 --profile full "$@"
 ```
 
 Then in `~/.claude.json`:
@@ -357,7 +366,7 @@ Then in `~/.claude.json`:
   "mcpServers": {
     "agentbridge": {
       "type": "stdio",
-      "command": "/home/inc/.claude/agentbridge-mcp.sh",
+      "command": "<HOME>/.claude/agentbridge-mcp.sh",
       "args": [],
       "env": {}
     }
@@ -384,7 +393,7 @@ AgentBridge gRPC backend. Documented with workarounds in AGENTS.md for now.
 | 2 | `query_actors` has no `folder_path` filter parameter (silently ignored if passed) | Changed examples to use `label_pattern` instead | gRPC handler for QueryActors — add folder_path filter |
 | 3 | `query_actors(include_unloaded=true)` ignores `class_name` filter — returns all actor types | Added warning note; suggest client-side filtering | gRPC handler for QueryActors (unloaded path) |
 
-**Full test findings:** See `AGENTS_MD_TEST_FINDINGS.md` for complete details including
+**Full test findings:** See `.archive/AGENTS_MD_TEST_FINDINGS.md` for complete details including
 reproduction steps and screenshots of each issue.
 
 ---
@@ -469,8 +478,6 @@ cd bp_toolkit/vendor/UAssetGUI && dotnet build -c Release
 - **UAssetGUI requires .NET 8+** - Build once after submodule init
 - **JSON files can be large** - 40-100MB for complex Blueprints, gitignored by default
 - **GitHub is primary** - `git push` goes to GitHub, `local` remote is backup
-
-<!-- PART III: DEVELOPMENT GUIDE -->
 
 ---
 
