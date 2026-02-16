@@ -2,8 +2,8 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "0.2.0",
-	"FriendlyName": "AgentBridge",
-	"Description": "Exposes Unreal Engine editor/runtime state to external AI agents via gRPC and MCP",
+	"FriendlyName": "AgentBridge Runtime",
+	"Description": "World context, actor operations, and property paths for AgentBridge",
 	"Category": "Editor",
 	"CreatedBy": "AgentBridge",
 	"CreatedByURL": "",
@@ -16,28 +16,13 @@
 	"EnabledByDefault": true,
 	"Plugins": [
 		{
-			"Name": "TempoCore",
+			"Name": "AgentBridgeCore",
 			"Enabled": true
 		}
 	],
 	"Modules": [
 		{
-			"Name": "AgentBridgeCore",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
 			"Name": "AgentBridgeRuntime",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "AgentBridgeScripting",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "AgentBridgeServer",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

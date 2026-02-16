@@ -1,8 +1,12 @@
-# UE generated
+# UE generated (root plugin)
 Binaries/
 Intermediate/
 DerivedDataCache/
 Saved/
+
+# Per-plugin build artifacts (UBT generates these relative to each .uplugin)
+*/Binaries/
+*/Intermediate/
 
 # Python
 Python/agentbridge/generated/
