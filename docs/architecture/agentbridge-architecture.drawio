@@ -1,0 +1,491 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="AgentBridge Architecture" id="arch">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3570" pageHeight="3191" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="101" value="L0: MCP Server (Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1610" height="269" as="geometry" />
+        </mxCell>
+        <mxCell id="102" value="L1: Live Services (Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="349" width="1610" height="333" as="geometry" />
+        </mxCell>
+        <mxCell id="103" value="L2: AgentBridgeServer (C++)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="722" width="1610" height="317" as="geometry" />
+        </mxCell>
+        <mxCell id="104" value="L3: AgentBridgeScripting (C++)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1079" width="1610" height="349" as="geometry" />
+        </mxCell>
+        <mxCell id="105" value="L4: AgentBridgeRuntime (C++)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b6d7a8;strokeColor=#6d8764;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1468" width="1610" height="436" as="geometry" />
+        </mxCell>
+        <mxCell id="106" value="L5: AgentBridgeCore (C++)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1944" width="1610" height="635" as="geometry" />
+        </mxCell>
+        <mxCell id="107" value="L6: Unreal Engine APIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="2619" width="1610" height="372" as="geometry" />
+        </mxCell>
+        <mxCell id="108" value="L1: Offline Services (Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="1790" y="40" width="1580" height="333" as="geometry" />
+        </mxCell>
+        <mxCell id="109" value="Offline: bp_toolkit (Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="1790" y="413" width="1580" height="381" as="geometry" />
+        </mxCell>
+        <mxCell id="110" value="Offline: UAssetGUI (.NET 8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="1790" y="834" width="1580" height="189" as="geometry" />
+        </mxCell>
+        <mxCell id="111" value="Offline: UAssetAPI (C#)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="1790" y="1063" width="1580" height="619" as="geometry" />
+        </mxCell>
+        <mxCell id="112" value="On-Disk Files" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;dashPattern=8 8;verticalAlign=top;fontStyle=1;fontSize=13;align=left;spacingLeft=10;spacingTop=2;container=1;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="1790" y="1722" width="1580" height="173" as="geometry" />
+        </mxCell>
+        <mxCell id="113" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;MCPServer&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;-services: Dict&amp;lt;str,ServiceModule&amp;gt;&lt;br/&gt;-tool_to_service: Dict&amp;lt;str,str&amp;gt;&lt;br/&gt;-clients: Dict&amp;lt;str,Any&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+run() stdio JSON-RPC loop&lt;br/&gt;+handle_message(msg)&lt;br/&gt;-_handle_tools_call(name, args)&lt;br/&gt;-_handle_tools_list()&lt;br/&gt;-_get_client(service) Any&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="101">
+          <mxGeometry x="20" y="50" width="262" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="114" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;ServiceModule&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«dataclass»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+name: str&lt;br/&gt;+description: str&lt;br/&gt;+tools: List&amp;lt;Dict&amp;gt;&lt;br/&gt;+execute: Callable&lt;br/&gt;+connect: Callable&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="101">
+          <mxGeometry x="312" y="50" width="160" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="115" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;agentbridge.py (57 live tools)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+execute(client, tool_name, args)&lt;br/&gt;+connect(host, port) Client&lt;br/&gt;-_get_help_text(topic) str&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="102" tooltip="AgentBridgeService">
+          <mxGeometry x="20" y="50" width="255" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="116" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;AgentBridgeGrpcClient&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;-_channel: grpc.Channel&lt;br/&gt;-_stub: AgentBridgeServiceStub&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+query_actors(class_name, pattern, limit)&lt;br/&gt;+spawn_actor(class_name, location, ...)&lt;br/&gt;+get_property(actor_id, path)&lt;br/&gt;+set_property(actor_id, path, value)&lt;br/&gt;+call_function(call, parameters)&lt;br/&gt;+list_classes(base, pattern, limit)&lt;br/&gt;+get_class_schema(class_name)&lt;br/&gt;+create_blueprint_node(bp, type, ...)&lt;br/&gt;+connect_blueprint_pins(bp, src, dst)&lt;br/&gt;+list_blueprint_nodes(bp, graph)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="102">
+          <mxGeometry x="305" y="50" width="311" height="238" as="geometry" />
+        </mxCell>
+        <mxCell id="117" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;Tempo Service Clients (30 tools)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;TempoCoreClient&lt;br/&gt;TempoTimeClient&lt;br/&gt;TempoActorControlClient&lt;br/&gt;TempoWorldStateClient&lt;br/&gt;TempoGeographicClient&lt;br/&gt;TempoSensorsClient&lt;br/&gt;TempoMapQueryClient&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="102" tooltip="TempoClients">
+          <mxGeometry x="646" y="50" width="248" height="158" as="geometry" />
+        </mxCell>
+        <mxCell id="118" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;bp_toolkit.py (14 offline tools)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+execute(client, tool_name, args)&lt;br/&gt;-_find_bp_toolkit() Path&lt;br/&gt;-_handle_export_asset(args)&lt;br/&gt;-_handle_import_asset(args)&lt;br/&gt;-_handle_set_property(args)&lt;br/&gt;-_handle_get_property(args)&lt;br/&gt;-_handle_clone_asset(args)&lt;br/&gt;-_handle_add_comment(args)&lt;br/&gt;-_handle_parse(args)&lt;br/&gt;-_handle_find(args)&lt;br/&gt;-_handle_query(args)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="108" tooltip="BpToolkitService">
+          <mxGeometry x="20" y="50" width="255" height="238" as="geometry" />
+        </mxCell>
+        <mxCell id="119" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentBridgeServerModule&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«IModuleInterface»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+StartupModule()&lt;br/&gt;+ShutdownModule()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="103">
+          <mxGeometry x="20" y="50" width="192" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="120" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UAgentBridgeServiceSubsystem&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UWorldSubsystem, ITempoScriptable»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;-51 thin gRPC handlers total&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Initialize(Collection)&lt;br/&gt;+Deinitialize()&lt;br/&gt;+RegisterScriptingServices(Server)&lt;br/&gt;-HandleQueryActors(Req, Resp)&lt;br/&gt;-HandleSpawnActor(Req, Resp)&lt;br/&gt;-HandleGetPropertyPath(Req, Resp)&lt;br/&gt;-HandleSetPropertyPath(Req, Resp)&lt;br/&gt;-HandleCallFunction(Req, Resp)&lt;br/&gt;-HandleCreateBlueprintNode(Req, Resp)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="103">
+          <mxGeometry x="242" y="50" width="283" height="222" as="geometry" />
+        </mxCell>
+        <mxCell id="121" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentHttpServer&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«singleton»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;-HttpRouter: IHttpRouter&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Get()$ FAgentHttpServer&lt;br/&gt;+Start(Port)&lt;br/&gt;+Stop()&lt;br/&gt;-HandleExecute(Req, Resp)&lt;br/&gt;-HandleBatch(Req, Resp)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="103">
+          <mxGeometry x="555" y="50" width="199" height="158" as="geometry" />
+        </mxCell>
+        <mxCell id="122" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;Proto Messages (AgentBridge.proto)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;PropertyValue&lt;br/&gt;ActorDescriptor&lt;br/&gt;ActorTransform&lt;br/&gt;ClassSchema&lt;br/&gt;BlueprintNodeInfo&lt;br/&gt;StreamingActorInfo&lt;br/&gt;51 Request/Response pairs&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="103" tooltip="ProtoMessages">
+          <mxGeometry x="784" y="50" width="262" height="158" as="geometry" />
+        </mxCell>
+        <mxCell id="123" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FCommandExecutor&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«static, 7400 lines»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+50 plus overloaded Execute&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ExecuteJson(json)$ FString&lt;br/&gt;+Execute(FQueryActorsCommand)&lt;br/&gt;+Execute(FSpawnActorCommand)&lt;br/&gt;+Execute(FGetPropertyPathCommand)&lt;br/&gt;+Execute(FSetPropertyPathCommand)&lt;br/&gt;+Execute(FCallFunctionCommand)&lt;br/&gt;+Execute(FCreateBlueprintNodeCommand)&lt;br/&gt;+Execute(FConnectBlueprintPinsCommand)&lt;br/&gt;-ResolveActor(name)$ AActor*&lt;br/&gt;-ResolveObject(name)$ UObject*&lt;br/&gt;-BuildActorInfo(Actor)$ FActorInfo&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="104">
+          <mxGeometry x="20" y="50" width="290" height="254" as="geometry" />
+        </mxCell>
+        <mxCell id="124" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;EAgentCommandType&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«enum, 116 plus values»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;QueryActors&lt;br/&gt;SpawnActor&lt;br/&gt;GetPropertyPath&lt;br/&gt;SetPropertyPath&lt;br/&gt;CallFunction&lt;br/&gt;CreateBlueprintNode&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="104">
+          <mxGeometry x="340" y="50" width="185" height="158" as="geometry" />
+        </mxCell>
+        <mxCell id="125" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentCommandBase&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+CommandId: FString&lt;br/&gt;+Type: EAgentCommandType&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="104">
+          <mxGeometry x="555" y="50" width="192" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="126" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentResponseBase&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+bSuccess: bool&lt;br/&gt;+ErrorMessage: FString&lt;br/&gt;+ExecutionTimeMs: double&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="104">
+          <mxGeometry x="777" y="50" width="192" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="127" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;50+ Command Structs&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;FQueryActorsCommand&lt;br/&gt;FSpawnActorCommand&lt;br/&gt;FGetPropertyPathCommand&lt;br/&gt;FSetPropertyPathCommand&lt;br/&gt;FCallFunctionCommand&lt;br/&gt;FCreateBlueprintNodeCommand&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="104" tooltip="CommandStructs">
+          <mxGeometry x="999" y="50" width="213" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="128" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;Info and Response Structs&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;FActorInfo&lt;br/&gt;FBlueprintNodeInfo&lt;br/&gt;FBlueprintPinInfo&lt;br/&gt;FWorldInfo&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="104" tooltip="ResponseStructs">
+          <mxGeometry x="1242" y="50" width="199" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="129" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FWorldContextManager&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«singleton»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;-WorldOverride: TWeakObjectPtr&amp;lt;UWorld&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Get()$ FWorldContextManager&lt;br/&gt;+GetTargetWorld() UWorld*&lt;br/&gt;+SetTargetWorldOverride(World)&lt;br/&gt;+IsEditorWorld() bool&lt;br/&gt;+IsPIEWorld() bool&lt;br/&gt;+GetCapabilities() Caps&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="105">
+          <mxGeometry x="20" y="50" width="290" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="130" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FActorOperations&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«static»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+QueryActors(Params)$ TArray&amp;lt;FActorReference&amp;gt;&lt;br/&gt;+FindActorByName(name)$ AActor*&lt;br/&gt;+SpawnActor(Params)$ AActor*&lt;br/&gt;+DuplicateActor(Source)$ AActor*&lt;br/&gt;+DestroyActor(Actor)$ bool&lt;br/&gt;+SetActorTransform(Actor, T)$ bool&lt;br/&gt;+AttachActor(Child, Parent)$ bool&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="105">
+          <mxGeometry x="340" y="50" width="339" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="131" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;TargetResolution&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«namespace»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Parse(target)$ FTargetInfo&lt;br/&gt;+Resolve(World, target)$ FResolvedTarget&lt;br/&gt;+FindComponent(Actor, name)$ USceneComponent*&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="105">
+          <mxGeometry x="709" y="50" width="339" height="126" as="geometry" />
+        </mxCell>
+        <mxCell id="132" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FWorldPartitionOps&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«static»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+IsWorldPartitioned()$ bool&lt;br/&gt;+QueryAllActors(Params)$ TArray&lt;br/&gt;+GetActorStreamingState(Guid)$ State&lt;br/&gt;+QueryLandscapeProxies()$ TArray&lt;br/&gt;+GetLandscapeBounds()$ FLandscapeBounds&lt;br/&gt;+GetDataLayers()$ TArray&amp;lt;FName&amp;gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="105">
+          <mxGeometry x="1078" y="50" width="297" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="133" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FActorReference&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Guid: FString&lt;br/&gt;+Path: FString&lt;br/&gt;+Name: FString&lt;br/&gt;+Label: FString&lt;br/&gt;+ClassName: FString&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Resolve(World) AActor*&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="105">
+          <mxGeometry x="1405" y="50" width="185" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="134" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FStreamingActorReference&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+StreamingState: EActorStreamingState&lt;br/&gt;+EditorBounds: FBox&lt;br/&gt;+DataLayers: TArray&amp;lt;FName&amp;gt;&lt;br/&gt;+Transform: FTransform&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="105">
+          <mxGeometry x="20" y="265" width="283" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="135" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FResolvedTarget&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Actor: AActor*&lt;br/&gt;+Component: USceneComponent*&lt;br/&gt;+Error: FString&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="105">
+          <mxGeometry x="333" y="265" width="220" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="136" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentBridgeDebug&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«static, 30 console commands»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+RegisterCommands()&lt;br/&gt;+DumpObject(Object)&lt;br/&gt;+DumpClassSchema(Class)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="105">
+          <mxGeometry x="583" y="265" width="227" height="126" as="geometry" />
+        </mxCell>
+        <mxCell id="137" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FPropertyAccessor&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«static»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ReadProperty(Container, Prop)$ Value&lt;br/&gt;+WriteProperty(Container, Prop, Val)&lt;br/&gt;+WritePropertyDirect(Ptr, Prop, Val)&lt;br/&gt;+GetPropertyType(Prop)$ Type&lt;br/&gt;+SerializeObjectReference(Obj)$ str&lt;br/&gt;+ResolveObjectReference(str)$ UObject*&lt;br/&gt;-ReadStructProperty()&lt;br/&gt;-ReadArrayProperty()&lt;br/&gt;-ReadMapProperty()&lt;br/&gt;-TryReadSpecialStruct()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="20" y="50" width="290" height="238" as="geometry" />
+        </mxCell>
+        <mxCell id="138" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentPropertyPath&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«static»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ParsePath(str)$ TArray&amp;lt;Segment&amp;gt;&lt;br/&gt;+GetValue(Object, path)$ Result&lt;br/&gt;+SetValue(Object, path, val)$ bool&lt;br/&gt;+PathExists(Object, path)$ bool&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="340" y="50" width="262" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="139" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FTypeDiscovery&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«static»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+FindClassByName(name)$ UClass*&lt;br/&gt;+GetAllClassesOfType(Base)$ TArray&lt;br/&gt;+GetClassInfo(Class)$ ClassInfo&lt;br/&gt;+GetClassProperties(Class)$ TArray&lt;br/&gt;+GetClassFunctions(Class)$ TArray&lt;br/&gt;+FindStructByName(name)$ UScriptStruct*&lt;br/&gt;+NormalizeClassName(name)$ FString&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="632" y="50" width="297" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="140" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FFunctionInvoker&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«static»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+FindFunction(Class, name)$ UFunction*&lt;br/&gt;+GetFunctionSignature(Func)$ Sig&lt;br/&gt;+InvokeFunction(Target, Func, Params)$ Result&lt;br/&gt;+InvokeStaticFunction(Class, Func, Params)$ Result&lt;br/&gt;-PrepareParameters()&lt;br/&gt;-ExtractResults()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="959" y="50" width="374" height="174" as="geometry" />
+        </mxCell>
+        <mxCell id="141" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentPropertyValue&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Type: EAgentPropertyType&lt;br/&gt;+StringValue: FString&lt;br/&gt;+ArrayValue: TArray&amp;lt;FAgentPropertyValue&amp;gt;&lt;br/&gt;+StructValue: TMap&amp;lt;str,FAgentPropertyValue&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+FromBool() FromInt() FromVector()&lt;br/&gt;+AsBool() AsInt() AsVector()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="20" y="313" width="325" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="142" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;EAgentPropertyType&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«enum»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;Bool Int32 Int64&lt;br/&gt;Float Double&lt;br/&gt;String Name Text&lt;br/&gt;Vector Rotator Transform Color&lt;br/&gt;Object SoftObject Class&lt;br/&gt;Struct Enum Array Map Set&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="375" y="313" width="234" height="158" as="geometry" />
+        </mxCell>
+        <mxCell id="143" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentPropertyInfo&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+PropertyName: FString&lt;br/&gt;+Type: EAgentPropertyType&lt;br/&gt;+TypeName: FString&lt;br/&gt;+bIsReadOnly: bool&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="639" y="313" width="199" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="144" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentClassInfo&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ClassName: FString&lt;br/&gt;+ClassPath: FString&lt;br/&gt;+ParentClassName: FString&lt;br/&gt;+bIsBlueprintClass: bool&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="868" y="313" width="199" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="145" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentFunctionSignature&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+FunctionName: FString&lt;br/&gt;+Parameters: TArray&amp;lt;FAgentPropertyInfo&amp;gt;&lt;br/&gt;+ReturnValue: FAgentPropertyInfo&lt;br/&gt;+bIsStatic: bool&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="1097" y="313" width="297" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="146" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FAgentFunctionResult&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+bSuccess: bool&lt;br/&gt;+ReturnValue: FAgentPropertyValue&lt;br/&gt;+OutParams: TMap&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="20" y="496" width="255" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="147" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FPropertyPathSegment&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Type: EPropertyPathSegmentType&lt;br/&gt;+Name: FString&lt;br/&gt;+Index: int32&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="106">
+          <mxGeometry x="305" y="496" width="241" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="148" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FProperty&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Reflection»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ContainerPtrToValuePtr()&lt;br/&gt;+GetName() FName&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="20" y="50" width="199" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="149" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UClass&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Reflection»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+FindFunctionByName()&lt;br/&gt;+GetDefaultObject()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="249" y="50" width="171" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="150" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UFunction&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Reflection»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ParmsSize: int32&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ProcessEvent()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="450" y="50" width="160" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="151" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UWorld&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Engine»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+SpawnActor()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="640" y="50" width="160" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="152" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UK2Node&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Editor, WITH_EDITOR»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+AllocateDefaultPins()&lt;br/&gt;+CreateNewGuid()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="830" y="50" width="192" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="153" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UEdGraphSchema_K2&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Editor»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+TryCreateConnection(Pin1, Pin2)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="1052" y="50" width="248" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="154" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UBlueprint&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Editor»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+GeneratedClass: UClass*&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="1330" y="50" width="192" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="155" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UPCGGraph&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Engine»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+AddNodeOfType(Class)&lt;br/&gt;+AddEdge(From, Pin, To, Pin)&lt;br/&gt;+RemoveNode(Node)&lt;br/&gt;+GetInputNode()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="20" y="185" width="220" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="156" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;ALandscapeProxy&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«UE Engine»&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+GetLandscapeBounds()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="107">
+          <mxGeometry x="270" y="185" width="171" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="157" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;AssetModifier (bp_builder.py)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;-path: Path&lt;br/&gt;-data: dict&lt;br/&gt;-_namemap_set: set&lt;br/&gt;-_import_cache: dict&lt;br/&gt;+asset_type: str&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+get_property(path, export_idx) Any&lt;br/&gt;+set_property(path, value, export_idx)&lt;br/&gt;+list_properties(export_idx) List&lt;br/&gt;+list_graphs() List&lt;br/&gt;+add_comment(graph, text, x, y)&lt;br/&gt;+clone_node(node_name, offset)&lt;br/&gt;+clone_asset(new_name, folder)&lt;br/&gt;+add_name(name) int&lt;br/&gt;+find_import(class_name) int&lt;br/&gt;+save(output_path) Path&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="109" tooltip="AssetModifier">
+          <mxGeometry x="20" y="50" width="290" height="286" as="geometry" />
+        </mxCell>
+        <mxCell id="158" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;AssetParser (asset_parser.py)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+detect_asset_type(data) str&lt;br/&gt;+find_in_asset(data, pattern) List&lt;br/&gt;+query_asset(path, query_type) Any&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="109" tooltip="AssetParser">
+          <mxGeometry x="340" y="50" width="262" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="159" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;BpParser (bp_parser.py)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+parse_blueprint(json, out_dir) dict&lt;br/&gt;-extract_call_graph(nodes) List&lt;br/&gt;-categorize_namemap(names) dict&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="109" tooltip="BpParser">
+          <mxGeometry x="632" y="50" width="276" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="160" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;BpExport (bp_export.py)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+export_uasset_to_json(uasset, json, ver) bool&lt;br/&gt;+import_json_to_uasset(json, uasset, ver) bool&lt;br/&gt;+get_uassetgui_path() Path&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="109" tooltip="BpExport">
+          <mxGeometry x="938" y="50" width="346" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="161" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UAssetGUI.exe (.NET 8 CLI)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+tojson(source, dest, version)&lt;br/&gt;+fromjson(source, dest, version)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="110" tooltip="UAssetGUI_CLI">
+          <mxGeometry x="20" y="50" width="248" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="162" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;UAsset (INameMap)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+NameMap: List&amp;lt;FString&amp;gt;&lt;br/&gt;+Imports: List&amp;lt;Import&amp;gt;&lt;br/&gt;+Exports: List&amp;lt;Export&amp;gt;&lt;br/&gt;+CustomVersionContainer: List&lt;br/&gt;+PackageFlags: EPackageFlags&lt;br/&gt;+HasUnversionedProperties: bool&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+AddNameReference(str) int&lt;br/&gt;+SearchNameReference(str) int&lt;br/&gt;+Read(reader)&lt;br/&gt;+Write(writer)&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="UAsset">
+          <mxGeometry x="20" y="50" width="241" height="206" as="geometry" />
+        </mxCell>
+        <mxCell id="163" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;Import&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ObjectName: FName&lt;br/&gt;+OuterIndex: FPackageIndex&lt;br/&gt;+ClassPackage: FName&lt;br/&gt;+ClassName: FName&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="Import_CS">
+          <mxGeometry x="291" y="50" width="206" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="164" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;Export (base)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ObjectName: FName&lt;br/&gt;+ClassIndex: FPackageIndex&lt;br/&gt;+OuterIndex: FPackageIndex&lt;br/&gt;+SuperIndex: FPackageIndex&lt;br/&gt;+ObjectFlags: EObjectFlags&lt;br/&gt;+Extras: byte[]&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="Export_CS">
+          <mxGeometry x="527" y="50" width="206" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="165" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;NormalExport&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Data: List&amp;lt;PropertyData&amp;gt;&lt;br/&gt;+ObjectGuid: Guid?&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="NormalExport_CS">
+          <mxGeometry x="763" y="50" width="199" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="166" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;StructExport&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+SuperStruct: FPackageIndex&lt;br/&gt;+Children: FPackageIndex[]&lt;br/&gt;+LoadedProperties: FProperty[]&lt;br/&gt;+ScriptBytecode: KismetExpression[]&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="StructExport_CS">
+          <mxGeometry x="992" y="50" width="269" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="167" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;ClassExport&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ClassFlags: EClassFlags&lt;br/&gt;+FuncMap: TMap&amp;lt;FName,FPackageIndex&amp;gt;&lt;br/&gt;+Interfaces: InterfaceReference[]&lt;br/&gt;+ClassDefaultObject: FPackageIndex&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="ClassExport_CS">
+          <mxGeometry x="1291" y="50" width="269" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="168" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FunctionExport&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«function-specific data»&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="FunctionExport_CS">
+          <mxGeometry x="20" y="281" width="192" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="169" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;PropertyData (abstract, 60+ subtypes)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Name: FName&lt;br/&gt;+ArrayIndex: int&lt;br/&gt;+PropertyGuid: Guid?&lt;br/&gt;+PropertyTagFlags: Flags&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="PropertyData_CS">
+          <mxGeometry x="242" y="281" width="283" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="170" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;Numeric Properties&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;IntPropertyData&lt;br/&gt;FloatPropertyData&lt;br/&gt;DoublePropertyData&lt;br/&gt;BytePropertyData&lt;br/&gt;BoolPropertyData&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="NumericProps">
+          <mxGeometry x="555" y="281" width="160" height="126" as="geometry" />
+        </mxCell>
+        <mxCell id="171" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;String Properties&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;StrPropertyData&lt;br/&gt;NamePropertyData&lt;br/&gt;TextPropertyData&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="StringProps">
+          <mxGeometry x="745" y="281" width="160" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="172" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;Object Properties&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;ObjectPropertyData&lt;br/&gt;SoftObjectPropertyData&lt;br/&gt;ClassPropertyData&lt;br/&gt;WeakObjectPropertyData&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="ObjectProps">
+          <mxGeometry x="935" y="281" width="178" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="173" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;Collection Properties&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;ArrayPropertyData&lt;br/&gt;MapPropertyData&lt;br/&gt;SetPropertyData&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="CollectionProps">
+          <mxGeometry x="1143" y="281" width="171" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="174" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;StructPropertyData&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+StructType: string&lt;br/&gt;+Value: List&amp;lt;PropertyData&amp;gt;&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="StructPropertyData_CS">
+          <mxGeometry x="1344" y="281" width="206" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="175" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FName&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Value: FString&lt;br/&gt;+Index: int&lt;br/&gt;+Number: int&lt;br/&gt;+Asset: INameMap&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="FName_CS">
+          <mxGeometry x="20" y="432" width="160" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="176" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;FPackageIndex&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Index: int&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+IsImport() bool (negative)&lt;br/&gt;+IsExport() bool (positive)&lt;br/&gt;+IsNull() bool (zero)&lt;br/&gt;+ToImport(asset) Import&lt;br/&gt;+ToExport(asset) Export&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="FPackageIndex_CS">
+          <mxGeometry x="210" y="432" width="213" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="177" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;MainSerializer&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+Read(reader, name) PropertyData&lt;br/&gt;+Write(data, writer)&lt;br/&gt;+ReadFProperty(reader) FProperty&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="MainSerializer_CS">
+          <mxGeometry x="453" y="432" width="248" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="178" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;KismetSerializer&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;+ReadExpression() KismetExpression&lt;br/&gt;+WriteExpression()&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="KismetSerializer_CS">
+          <mxGeometry x="731" y="432" width="262" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="179" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;JSON Converters&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px 6px;text-align:left;font-size:11px;border-top:1px solid #ccc;&quot;&gt;FNameJsonConverter&lt;br/&gt;FNameTypeConverter&lt;br/&gt;FPackageIndexJsonConverter&lt;br/&gt;TMapJsonConverter&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="111" tooltip="JsonConverters">
+          <mxGeometry x="1023" y="432" width="206" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="180" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;.uasset / .uexp files (binary)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«binary on disk»&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="112" tooltip="UAssetFiles">
+          <mxGeometry x="20" y="50" width="234" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="181" value="&lt;p style=&quot;margin:0;padding:4px 8px;text-align:center;font-weight:bold;border-bottom:1px solid #888;&quot;&gt;.json files (intermediate)&lt;/p&gt;&lt;p style=&quot;margin:0;padding:2px;text-align:center;font-size:10px;font-style:italic;color:#666;&quot;&gt;«text on disk»&lt;/p&gt;" style="rounded=0;whiteSpace=wrap;html=1;overflow=hidden;fillColor=#ffffff;strokeColor=#333;fontSize=11;fontFamily=Helvetica;verticalAlign=top;align=center;spacingTop=0;" vertex="1" parent="112" tooltip="JsonFiles">
+          <mxGeometry x="284" y="50" width="206" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="182" value="1  loads  *" style="startArrow=diamond;startFill=0;endArrow=none;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="113" target="114">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="183" value="routes 57 tools" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="113" target="115">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="184" value="routes 14 tools" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="113" target="118">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="185" value="routes 30 tools" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="113" target="117">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="186" value="creates" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="115" target="116">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="187" value="gRPC port 10001" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="116" target="120">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="188" value="serializes/deserializes" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="116" target="122">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="189" value="starts on port 8080" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="119" target="121">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="190" value="converts to/from" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="120" target="122">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="191" value="all 51 handlers delegate" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="120" target="123">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="192" value="HTTP delegates" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="121" target="123">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="193" value="executes" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="125">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="194" value="returns" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="126">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="195" value="typed by" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="125" target="124">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="196" value="builds" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="128">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="197" value="actor CRUD" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="130">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="198" value="world selection" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="129">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="199" value="Actor to Component" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="131">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="200" value="streaming queries" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="132">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="201" value="resolves world" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="130" target="129">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="202" value="returns" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="130" target="133">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="203" value="returns" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="131" target="135">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="204" value="FindActorByName" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="131" target="130">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="205" value="resolves world" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="132" target="129">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="206" value="returns" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="132" target="134">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="207" value="uses" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="136" target="130">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="208" value="uses" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="136" target="129">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="209" value="typed by" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="141" target="142">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="210" value="typed by" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="143" target="142">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="211" value="params" style="startArrow=diamond;startFill=0;endArrow=none;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="145" target="143">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="212" value="return" style="startArrow=diamond;startFill=0;endArrow=none;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="146" target="141">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="213" value="read/write via" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="138" target="137">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="214" value="parses into" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="138" target="147">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="215" value="param marshaling" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="140" target="137">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="216" value="returns" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="140" target="146">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="217" value="returns" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="139" target="144">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="218" value="returns" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="139" target="143">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="219" value="returns" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="139" target="145">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="220" value="property GET/SET" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="138">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="221" value="class discovery" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="139">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="222" value="function calls and PCG ops" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="140">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="223" value="property access" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="130" target="137">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="224" value="class loading" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="130" target="139">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="225" value="inspection" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="136" target="137">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="226" value="schema dump" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="136" target="139">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="227" value="reads/writes via reflection" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="137" target="148">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="228" value="enumerates" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="139" target="149">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="229" value="invokes" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="140" target="150">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="230" value="spawns/queries" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="130" target="151">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="231" value="manages" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="129" target="151">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="232" value="queries bounds" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="132" target="156">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="233" value="creates (live BP tools)" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="152">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="234" value="connects pins" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="153">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="235" value="loads/modifies" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="123" target="154">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="236" value="invokes methods (live PCG tools)" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="140" target="155">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="237" value="lazy import" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="118" target="157">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="238" value="lazy import" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="118" target="158">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="239" value="lazy import" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="118" target="159">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="240" value="lazy import" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="118" target="160">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="241" value="detect_asset_type" style="dashed=1;dashPattern=8 4;endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="157" target="158">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="242" value="subprocess call" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="160" target="161">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="243" value="uses library" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="161" target="162">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="244" value="1  contains  *" style="startArrow=diamond;startFill=0;endArrow=none;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="162" target="163">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="245" value="1  contains  *" style="startArrow=diamond;startFill=0;endArrow=none;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="162" target="164">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="246" value="1  NameMap  *" style="startArrow=diamond;startFill=0;endArrow=none;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="162" target="175">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="247" value="1  Data array  *" style="startArrow=diamond;startFill=0;endArrow=none;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="165" target="169">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="248" value="1  nested Value  *" style="startArrow=diamond;startFill=0;endArrow=none;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="174" target="169">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="249" value="references names" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="163" target="175">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="250" value="OuterIndex" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="163" target="176">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="251" value="ObjectName" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="164" target="175">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="252" value="ClassIndex OuterIndex" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="164" target="176">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="253" value="Name" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="169" target="175">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="254" value="creates" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="177" target="169">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="255" value="bytecode" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="166" target="178">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="256" value="JSON serialization" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="162" target="179">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="257" value="binary serialization" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="162" target="177">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="258" value="reads/writes binary" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="162" target="180">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="259" value="reads/writes JSON" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="162" target="181">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="260" value="loads/saves" style="endArrow=open;endFill=0;strokeColor=#666;fontSize=10;fontColor=#666;edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" parent="1" source="157" target="181">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
