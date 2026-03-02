@@ -35,6 +35,9 @@ nul
 # Archived AI development docs (local only)
 .old.claude/
 
+# Validation reports (working files, not committed)
+docs/plans/validation/
+
 # Claude Code local settings (user-specific paths)
 .claude/settings.local.json
 
