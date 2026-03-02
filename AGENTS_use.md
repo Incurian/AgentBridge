@@ -282,4 +282,4 @@ If you need more detail beyond this usage guide, these module READMEs exist:
 
 Also useful:
 - Top-level overview and onboarding: `README.md`
-- Built-in help text reference: `HELP_REFERENCE.md`
+- Built-in help text reference: `docs/reference/HELP_REFERENCE.md`
